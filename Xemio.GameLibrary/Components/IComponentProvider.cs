@@ -26,7 +26,7 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Constructs this instance.
         /// </summary>
-        void Finalize();
+        void Construct();
         /// <summary>
         /// Gets a component by a specified type.
         /// </summary>

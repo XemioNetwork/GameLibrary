@@ -53,7 +53,7 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Constructs all loaded components.
         /// </summary>
-        public void Finalize()
+        public void Construct()
         {
             foreach (IComponent component in this.Components)
             {
@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Components
         public void LoadComponents()
         {
             this.LoadComponents(".");
-            this.Finalize();
+            this.Construct();
         }
         /// <summary>
         /// Loads all components found in the specified directory.
