@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Network
 {
-    public abstract class Server
+    public abstract class Server : IComponent
     {
         #region Constructors
         /// <summary>
@@ -134,6 +134,7 @@ namespace Xemio.GameLibrary.Network
                 {
                     //TODO: logging
                     this.Connections.Remove(connection);
+                    this._eventManager.Send(new ClientLeftEvent(connection));
                     break;
                 }
             }

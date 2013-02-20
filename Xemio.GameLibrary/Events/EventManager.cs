@@ -15,11 +15,13 @@ namespace Xemio.GameLibrary.Events
         /// </summary>
         public EventManager()
         {
+            this._actions = new ActionCollection<Event>();
             this._subscribers = new Dictionary<Type, ActionCollection<Event>>();
         }
         #endregion
 
         #region Fields
+        private ActionCollection<Event> _actions;
         private Dictionary<Type, ActionCollection<Event>> _subscribers;
         #endregion
 
@@ -36,11 +38,21 @@ namespace Xemio.GameLibrary.Events
                 this._subscribers.Add(eventType, new ActionCollection<Event>());
             }
 
-            ActionCollection<Event> collection = this._subscribers[eventType];
+            IEnumerable<Action<Event>> collection = this._subscribers[eventType]
+                .Concat(this._actions);
+
             foreach (Action<Event> action in collection)
             {
                 action(eventInstance);
             }
+        }
+        /// <summary>
+        /// Subscribes the specified action to all event types.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        public void Subscribe(Action<Event> action)
+        {
+            this._actions.Add(action);
         }
         /// <summary>
         /// Registers the subscriber to the specified event.

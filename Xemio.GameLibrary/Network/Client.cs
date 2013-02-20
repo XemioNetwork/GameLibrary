@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Network
 {
-    public abstract class Client
+    public abstract class Client : IComponent
     {
         #region Constructors
         /// <summary>

@@ -16,5 +16,15 @@ namespace Xemio.GameLibrary.Events
         {
         }
         #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="Event"/> is synced.
+        /// </summary>
+        public virtual bool Synced
+        {
+            get { return false; }
+        }
+        #endregion
     }
 }
