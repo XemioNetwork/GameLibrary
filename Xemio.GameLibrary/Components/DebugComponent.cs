@@ -7,7 +7,6 @@ using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Components
 {
-    [Plugin]
     public class DebugComponent : IComponent
     {
         #region Constructors

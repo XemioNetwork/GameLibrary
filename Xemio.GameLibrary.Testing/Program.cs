@@ -24,11 +24,11 @@ namespace Xemio.GameLibrary.Testing
 
             ComponentManager.Get<PackageHandler>()
                 .Subscribe<TestPackage>(this.Handle);
-            
-            TestServer server = new TestServer(new TcpServerProtocol(8000));
 
-            TestClient client = new TestClient(new TcpClientProtocol());
-            client.Protocol.Connect("127.0.0.1", 8000);
+            LocalProtocol protocol = new LocalProtocol();
+
+            TestServer server = new TestServer(protocol);
+            TestClient client = new TestClient(protocol);
 
             client.Send(new TestPackage { Message = "Hallo Welt" });
             Console.ReadLine();

@@ -5,6 +5,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary", "Xemio.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Testing", "Xemio.GameLibrary.Testing\Xemio.GameLibrary.Testing.csproj", "{29BB1BC2-85DF-4401-89BA-38C00EAE38A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rendering", "Rendering", "{B6438755-1B31-4AC3-8F7F-4F328D79227E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.GDIPlus", "Xemio.GameLibrary.Rendering.GDIPlus\Xemio.GameLibrary.Rendering.GDIPlus.csproj", "{B2587704-FF2B-4028-A43B-336A3BB8FA43}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameLibrary", "GameLibrary", "{0534896C-1686-4CE7-A78B-0E58A515D000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.Xna", "Xemio.GameLibrary.Rendering.Xna\Xemio.GameLibrary.Rendering.Xna.csproj", "{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,8 +43,34 @@ Global
 		{29BB1BC2-85DF-4401-89BA-38C00EAE38A0}.Release|Mixed Platforms.Build.0 = Release|x86
 		{29BB1BC2-85DF-4401-89BA-38C00EAE38A0}.Release|x86.ActiveCfg = Release|x86
 		{29BB1BC2-85DF-4401-89BA-38C00EAE38A0}.Release|x86.Build.0 = Release|x86
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|x86.ActiveCfg = Release|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B2587704-FF2B-4028-A43B-336A3BB8FA43} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}
+		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}
+		{474CA844-EA03-48DC-A790-5F18510799AC} = {0534896C-1686-4CE7-A78B-0E58A515D000}
+		{29BB1BC2-85DF-4401-89BA-38C00EAE38A0} = {0534896C-1686-4CE7-A78B-0E58A515D000}
 	EndGlobalSection
 EndGlobal

@@ -25,6 +25,11 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="offset">The offset.</param>
         void Offset(Vector2 offset);
         /// <summary>
+        /// Sets the rotation to the specified angle in radians.
+        /// </summary>
+        /// <param name="rotation">The rotation.</param>
+        void Rotate(float rotation);
+        /// <summary>
         /// Renders the specified texture.
         /// </summary>
         /// <param name="texture">The texture.</param>

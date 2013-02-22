@@ -30,7 +30,7 @@ namespace Xemio.GameLibrary.Network
         /// Handles the specified event.
         /// </summary>
         /// <param name="packageEvent">The event.</param>
-        protected void Handle(ReceivedPackageEvent packageEvent)
+        protected void HandleEvent(ReceivedPackageEvent packageEvent)
         {
             Type type = packageEvent.Package.GetType();
             if (this._subscribers.ContainsKey(type))
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Network
         public void Construct()
         {
             ComponentManager.Get<EventManager>()
-                .Subscribe<ReceivedPackageEvent>(this.Handle);
+                .Subscribe<ReceivedPackageEvent>(e => this.HandleEvent(e));
         }
         #endregion
     }
