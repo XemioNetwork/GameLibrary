@@ -39,6 +39,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         private Graphics _bufferGraphics;
 
         private Vector2 _offset;
+        private float _rotation;
 
         private GDIGraphicsProvider _graphicsProvider;
         #endregion
@@ -56,12 +57,12 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 int width = target.ClientSize.Width;
                 int height = target.ClientSize.Height;
 
+                PixelFormat pixelFormat = PixelFormat.Format32bppPArgb;
+
                 if (this._buffer == null ||
                     this._buffer.Width != width || this._buffer.Height != height)
                 {
-                    this._buffer = new Bitmap(
-                        width, height,
-                        PixelFormat.Format32bppPArgb);
+                    this._buffer = new Bitmap(width, height, pixelFormat);
 
                     this._bufferGraphics = Graphics.FromImage(this._buffer);
                     this._bufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
@@ -101,6 +102,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="rotation">The rotation.</param>
         public void Rotate(float rotation)
         {
+            this._rotation = rotation;
         }
         /// <summary>
         /// Clears the screen.
