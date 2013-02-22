@@ -94,6 +94,8 @@
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Color.cs" />
+    <Compile Include="Rendering\Geometry\IGeometryProvider.cs" />
+    <Compile Include="Rendering\GraphicsDevice.cs" />
     <Compile Include="Rendering\IGraphicsProvider.cs" />
     <Compile Include="Rendering\IRenderManager.cs" />
     <Compile Include="Rendering\ITexture.cs" />

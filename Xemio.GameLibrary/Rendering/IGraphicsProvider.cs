@@ -15,9 +15,9 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         string DisplayName { get; }
         /// <summary>
-        /// Gets or sets the handle.
+        /// Gets the graphics device.
         /// </summary>
-        IntPtr Handle { get; set; }
+        GraphicsDevice GraphicsDevice { get; }
         /// <summary>
         /// Gets the texture factory.
         /// </summary>

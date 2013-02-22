@@ -17,7 +17,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="providerAssembly">The provider assembly.</param>
         /// <param name="windowHandle">The window handle.</param>
-        public static void Setup(Assembly providerAssembly, IntPtr windowHandle)
+        public static void Setup(Assembly providerAssembly)
         {
             PluginLoader<IGraphicsProvider> loader = new PluginLoader<IGraphicsProvider>();
             loader.LoadAssembly(providerAssembly);
@@ -27,9 +27,6 @@ namespace Xemio.GameLibrary.Rendering
             {
                 throw new InvalidOperationException("The requested assembly does not contain any graphics providers.");
             }
-
-            //Set the window handle to enable rendering.
-            provider.Handle = windowHandle;
 
             ComponentManager.Instance.Add(new ValueProvider<ITextureFactory>(provider.TextureFactory));
             ComponentManager.Instance.Add(new ValueProvider<IRenderManager>(provider.RenderManager));

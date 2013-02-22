@@ -11,9 +11,9 @@ namespace Xemio.GameLibrary.Rendering
     public interface IRenderManager : IComponent
     {
         /// <summary>
-        /// Gets the graphics provider.
+        /// Gets the graphics device.
         /// </summary>
-        IGraphicsProvider GraphicsProvider { get; }
+        GraphicsDevice GraphicsDevice { get; }
         /// <summary>
         /// Clears the screen.
         /// </summary>
@@ -29,6 +29,11 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="rotation">The rotation.</param>
         void Rotate(float rotation);
+        /// <summary>
+        /// Tints all drawn images using the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        void Tint(Color color);
         /// <summary>
         /// Renders the specified texture.
         /// </summary>

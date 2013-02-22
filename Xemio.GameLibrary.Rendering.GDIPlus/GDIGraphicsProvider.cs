@@ -15,10 +15,12 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <summary>
         /// Initializes a new instance of the <see cref="GDIGraphicsProvider"/> class.
         /// </summary>
-        public GDIGraphicsProvider()
+        public GDIGraphicsProvider(GraphicsDevice graphicsDevice)
         {
+            this.GraphicsDevice = graphicsDevice;
+
             this.TextureFactory = new GDITextureFactory();
-            this.RenderManager = new GDIRenderManager(this);
+            this.RenderManager = new GDIRenderManager(graphicsDevice);
         }
         #endregion
 
@@ -31,9 +33,9 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             get { return "GDIPlus"; }
         }
         /// <summary>
-        /// Gets or sets the handle.
+        /// Gets the graphics device.
         /// </summary>
-        public IntPtr Handle { get; set; }
+        public GraphicsDevice GraphicsDevice { get; private set; }
         /// <summary>
         /// Gets the texture factory.
         /// </summary>

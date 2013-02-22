@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("Xemio.GameLibrary.Testing")]
+[assembly: AssemblyTitle("Xemio.GameLibrary.Rendering.SlimDX")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Xemio.GameLibrary.Testing")]
+[assembly: AssemblyProduct("Xemio.GameLibrary.Rendering.SlimDX")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("2ff65bd4-00a2-411f-ad96-08acfb8e0e88")]
+[assembly: Guid("b7386431-b79c-4ae5-82fe-1ae47e0c94b7")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

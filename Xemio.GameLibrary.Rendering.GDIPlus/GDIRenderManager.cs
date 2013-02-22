@@ -26,11 +26,11 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <summary>
         /// Initializes a new instance of the <see cref="GDIRenderManager"/> class.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        public GDIRenderManager(GDIGraphicsProvider graphicsProvider)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        public GDIRenderManager(GraphicsDevice graphicsDevice)
         {
             this._offset = Vector2.Zero;
-            this._graphicsProvider = graphicsProvider;
+            this.GraphicsDevice = graphicsDevice;
         }
         #endregion
 
@@ -39,9 +39,9 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         private Graphics _bufferGraphics;
 
         private Vector2 _offset;
-        private float _rotation;
 
-        private GDIGraphicsProvider _graphicsProvider;
+        private Xemio.GameLibrary.Rendering.Color _color;
+        private ImageAttributes _attributes;
         #endregion
 
         #region Methods
@@ -50,7 +50,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         private bool InitializeBuffer()
         {
-            Control target = Control.FromHandle(this._graphicsProvider.Handle);
+            Control target = Control.FromHandle(this.GraphicsDevice.Handle);
 
             if (target != null)
             {
@@ -82,12 +82,9 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
 
         #region IRenderProvider Member
         /// <summary>
-        /// Gets the graphics provider.
+        /// Gets the graphics device.
         /// </summary>
-        public IGraphicsProvider GraphicsProvider
-        {
-            get { return this._graphicsProvider; }
-        }
+        public GraphicsDevice GraphicsDevice { get; private set; }
         /// <summary>
         /// Offsets the screen.
         /// </summary>
@@ -102,7 +99,31 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="rotation">The rotation.</param>
         public void Rotate(float rotation)
         {
-            this._rotation = rotation;
+        }
+        /// <summary>
+        /// Sets the opacity.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        public void Tint(Xemio.GameLibrary.Rendering.Color color)
+        {
+            this._color = color;
+
+            float a = color.A / 255.0f;
+            float r = color.R / 255.0f;
+            float g = color.G / 255.0f;
+            float b = color.B / 255.0f;
+
+            ColorMatrix matrix = new ColorMatrix(new float[][]
+            {
+                new float[] { r, 0, 0, 0, 0 },
+                new float[] { 0, g, 0, 0, 0 },
+                new float[] { 0, 0, b, 0, 0 },
+                new float[] { 0, 0, 0, a, 0 },
+                new float[] { 0, 0, 0, 0, 1 }
+            });
+
+            this._attributes = new ImageAttributes();
+            this._attributes.SetColorMatrix(matrix, ColorMatrixFlag.SkipGrays, ColorAdjustType.Bitmap);
         }
         /// <summary>
         /// Clears the screen.
@@ -150,7 +171,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             if (this.InitializeBuffer())
             {
                 GDITexture gdiTexture = texture as GDITexture;
-                Control target = Control.FromHandle(this._graphicsProvider.Handle);
+                Control target = Control.FromHandle(this.GraphicsDevice.Handle);
 
                 int screenWidth = target.Width;
                 int screenHeight = target.Height;
@@ -162,12 +183,29 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
 
                 destination += this._offset;
 
-                this._bufferGraphics.DrawImage(
-                    gdiTexture.Bitmap,
-                    (int)destination.X,
-                    (int)destination.Y,
-                    (int)destination.Width,
-                    (int)destination.Height);
+                if (this._color != Xemio.GameLibrary.Rendering.Color.White)
+                {
+                    this._bufferGraphics.DrawImage(
+                        gdiTexture.Bitmap,
+                        new Drawing.Rectangle(
+                            (int)destination.X,
+                            (int)destination.Y,
+                            (int)destination.Width,
+                            (int)destination.Height),
+                        0, 0, destination.Width, destination.Height, GraphicsUnit.Pixel,
+                        this._attributes);
+                }
+                else
+                {
+                    this._bufferGraphics.DrawImage(
+                        gdiTexture.Bitmap,
+                        (int)destination.X,
+                        (int)destination.Y,
+                        (int)destination.Width,
+                        (int)destination.Height);
+                }
+
+                this._bufferGraphics.ResetTransform();
             }
         }
         /// <summary>
@@ -175,16 +213,13 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         public void Present()
         {
-            Control target = Control.FromHandle(this._graphicsProvider.Handle);
+            Control surface = Control.FromHandle(this.GraphicsDevice.Handle);
 
-            if (target != null)
+            if (surface != null)
             {
-                int screenWidth = target.Width;
-                int screenHeight = target.Height;
-
-                IntPtr windowHandle = this._graphicsProvider.Handle;
-                Control surface = Control.FromHandle(windowHandle);
-
+                int screenWidth = surface.Width;
+                int screenHeight = surface.Height;
+                
                 Drawing.Graphics graphics = surface.CreateGraphics();
 
                 IntPtr hDC = graphics.GetHdc();
