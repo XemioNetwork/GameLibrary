@@ -95,10 +95,10 @@ namespace Xemio.GameLibrary.Network.Synchronization
                 object currentValue = pair.Key.GetValue(this.Instance, null);
                 object lastValue = pair.Value;
 
-                bool equals = !object.Equals(currentValue, lastValue);
-                writer.Write(equals);
+                bool dataWritten = !object.Equals(currentValue, lastValue);
+                writer.Write(dataWritten);
 
-                if (equals)
+                if (dataWritten)
                 {
                     writer.WriteProperties(currentValue);
                 }
