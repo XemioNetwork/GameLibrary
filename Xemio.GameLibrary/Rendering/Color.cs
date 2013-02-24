@@ -213,7 +213,7 @@ namespace Xemio.GameLibrary.Rendering
         }
         public static Color CornflowerBlue
         {
-            get { return new Color(0xff, 0xed, 0x95, 0x64); }
+            get { return new Color(100, 149, 237, 255); }
         }
         public static Color Cornsilk
         {
