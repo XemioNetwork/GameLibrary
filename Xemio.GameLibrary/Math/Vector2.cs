@@ -146,6 +146,19 @@ namespace Xemio.GameLibrary.Math
                 MathHelper.Abs(a.Y));
         }
         /// <summary>
+        /// Clamps the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="min">The min.</param>
+        /// <param name="max">The max.</param>
+        /// <returns></returns>
+        public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max)
+        {
+            return new Vector2(
+                MathHelper.Clamp(value.X, min.X, max.X),
+                MathHelper.Clamp(value.Y, min.Y, max.Y));
+        }
+        /// <summary>
         /// Linear interpolation between the two values.
         /// </summary>
         /// <param name="a">The first value.</param>

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.Rendering
 {
@@ -26,5 +27,13 @@ namespace Xemio.GameLibrary.Rendering
         /// Gets the render manager.
         /// </summary>
         IRenderManager RenderManager { get; }
+        /// <summary>
+        /// Gets a value indicating whether this graphics provider supports geometry.
+        /// </summary>
+        bool IsGeometrySupported { get; }
+        /// <summary>
+        /// Gets the geometry.
+        /// </summary>
+        IGeometryProvider Geometry { get; }
     }
 }

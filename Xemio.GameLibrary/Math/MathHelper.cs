@@ -11,8 +11,17 @@ namespace Xemio.GameLibrary.Math
         /// Natural base for logarithms.
         /// </summary>
         public const float E = (float)Math.E;
+        /// <summary>
+        /// Natural base for logarithms.
+        /// </summary>
         public const float Log10E = 0.4342945f;
+        /// <summary>
+        /// Natural base for logarithms.
+        /// </summary>
         public const float Log2E = 1.442695f;
+        /// <summary>
+        /// π
+        /// </summary>
         public const float Pi = (float)Math.PI;
         /// <summary>
         /// π divided by 2.

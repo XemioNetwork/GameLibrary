@@ -16,7 +16,6 @@ namespace Xemio.GameLibrary.Game
         /// <summary>
         /// Handles render calls.
         /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        void Render(float elapsed);
+        void Render();
     }
 }

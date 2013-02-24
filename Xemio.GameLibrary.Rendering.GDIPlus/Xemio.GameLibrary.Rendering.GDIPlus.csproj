@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xemio.GameLibrary.Rendering.GDIPlus</RootNamespace>
-    <AssemblyName>GameLibrary.Rendering.GDIPlus</AssemblyName>
+    <AssemblyName>GDIPlus</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,12 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geometry\GDIBrush.cs" />
+    <Compile Include="Geometry\GDIGeometryFactory.cs" />
+    <Compile Include="Geometry\GDIGeometryProvider.cs" />
     <Compile Include="GDIGraphicsProvider.cs" />
     <Compile Include="GDIHelper.cs" />
     <Compile Include="GDIRasterOperations.cs" />
     <Compile Include="GDIRenderManager.cs" />
     <Compile Include="GDITexture.cs" />
     <Compile Include="GDITextureFactory.cs" />
+    <Compile Include="Geometry\GDIPen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

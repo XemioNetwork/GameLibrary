@@ -26,10 +26,17 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets the renderer.
         /// </summary>
-        public EntityRenderer Renderer { get; private set; }
+        public EntityRenderer Renderer { get; protected set; }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Gets a specific component by a specified type.
+        /// </summary>
+        public T GetComponent<T>() where T : EntityComponent
+        {
+            return this.Components.FirstOrDefault(component => component is T) as T;
+        }
         /// <summary>
         /// Handles a game tick.
         /// </summary>

@@ -6,6 +6,8 @@ using System.IO;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Rendering.Geometry;
+using Xemio.GameLibrary.Rendering.GDIPlus.Geometry;
 
 namespace Xemio.GameLibrary.Rendering.GDIPlus
 {
@@ -18,9 +20,11 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         public GDIGraphicsProvider(GraphicsDevice graphicsDevice)
         {
             this.GraphicsDevice = graphicsDevice;
-
             this.TextureFactory = new GDITextureFactory();
-            this.RenderManager = new GDIRenderManager(graphicsDevice);
+
+            GDIRenderManager renderManager = new GDIRenderManager(graphicsDevice);
+            this.RenderManager = renderManager;
+            this.Geometry = new GDIGeometryProvider(renderManager);
         }
         #endregion
 
@@ -44,7 +48,20 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// Gets the render provider.
         /// </summary>
         public IRenderManager RenderManager { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this graphics provider supports geometry.
+        /// </summary>
+        public bool IsGeometrySupported
+        {
+            get { return true; }
+        }
+        /// <summary>
+        /// Gets the geometry.
+        /// </summary>
+        public IGeometryProvider Geometry { get; private set; }
         #endregion
+
+
 
     }
 }

@@ -29,54 +29,58 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="graphicsDevice">The graphics device.</param>
         public GDIRenderManager(GraphicsDevice graphicsDevice)
         {
-            this._offset = Vector2.Zero;
+            this.ScreenOffset = Vector2.Zero;
+
             this.GraphicsDevice = graphicsDevice;
+            this.GraphicsDevice.ResolutionChanged += new EventHandler(GraphicsDevice_ResolutionChanged);
+
+            this.InitializeBuffer(new DisplayMode(1, 1));
         }
         #endregion
 
         #region Fields
         private Bitmap _buffer;
-        private Graphics _bufferGraphics;
-
-        private Vector2 _offset;
 
         private Xemio.GameLibrary.Rendering.Color _color;
         private ImageAttributes _attributes;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the buffer graphics.
+        /// </summary>
+        public Graphics BufferGraphics { get; private set; }
+        /// <summary>
+        /// Gets the offset.
+        /// </summary>
+        public Vector2 ScreenOffset { get; private set; }
         #endregion
 
         #region Methods
         /// <summary>
         /// Initializes the buffer.
         /// </summary>
-        private bool InitializeBuffer()
+        private void InitializeBuffer(DisplayMode mode)
         {
             Control target = Control.FromHandle(this.GraphicsDevice.Handle);
 
             if (target != null)
             {
-                int width = target.ClientSize.Width;
-                int height = target.ClientSize.Height;
+                int width = mode.Width;
+                int height = mode.Height;
 
                 PixelFormat pixelFormat = PixelFormat.Format32bppPArgb;
 
-                if (this._buffer == null ||
-                    this._buffer.Width != width || this._buffer.Height != height)
-                {
-                    this._buffer = new Bitmap(width, height, pixelFormat);
+                this._buffer = new Bitmap(width, height, pixelFormat);
 
-                    this._bufferGraphics = Graphics.FromImage(this._buffer);
-                    this._bufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-                    this._bufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
-                    this._bufferGraphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
-                    this._bufferGraphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
+                this.BufferGraphics = Graphics.FromImage(this._buffer);
+                this.BufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
+                this.BufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
+                this.BufferGraphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
+                this.BufferGraphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
-                    this._bufferGraphics.Clear(Drawing.Color.Black);
-                }
-
-                return true;
+                this.BufferGraphics.Clear(Drawing.Color.Black);
             }
-
-            return false;
         }
         #endregion
 
@@ -91,7 +95,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="offset">The offset.</param>
         public void Offset(Vector2 offset)
         {
-            this._offset = offset;
+            this.ScreenOffset = offset;
         }
         /// <summary>
         /// Sets the rotation to the specified angle in radians.
@@ -123,7 +127,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             });
 
             this._attributes = new ImageAttributes();
-            this._attributes.SetColorMatrix(matrix, ColorMatrixFlag.SkipGrays, ColorAdjustType.Bitmap);
+            this._attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
         }
         /// <summary>
         /// Clears the screen.
@@ -137,10 +141,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 color.G, 
                 color.B);
 
-            if (this.InitializeBuffer())
-            {
-                this._bufferGraphics.Clear(drawingColor);
-            }
+            this.BufferGraphics.Clear(drawingColor);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -168,45 +169,44 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="origin">The origin.</param>
         public void Render(ITexture texture, Rectangle destination, Rectangle origin)
         {
-            if (this.InitializeBuffer())
+            GDITexture gdiTexture = texture as GDITexture;
+            Control surface = Control.FromHandle(this.GraphicsDevice.Handle);
+
+            if (surface == null) return;
+
+            int screenWidth = surface.Width;
+            int screenHeight = surface.Height;
+
+            if (gdiTexture == null)
             {
-                GDITexture gdiTexture = texture as GDITexture;
-                Control target = Control.FromHandle(this.GraphicsDevice.Handle);
+                throw new InvalidOperationException("The rendered texture has to be an instance of the GDITexture class.");
+            }
 
-                int screenWidth = target.Width;
-                int screenHeight = target.Height;
+            destination += this.ScreenOffset;
 
-                if (gdiTexture == null)
-                {
-                    throw new InvalidOperationException("The rendered texture has to be an instance of the GDITexture class.");
-                }
-
-                destination += this._offset;
-
-                if (this._color != Xemio.GameLibrary.Rendering.Color.White)
-                {
-                    this._bufferGraphics.DrawImage(
-                        gdiTexture.Bitmap,
-                        new Drawing.Rectangle(
-                            (int)destination.X,
-                            (int)destination.Y,
-                            (int)destination.Width,
-                            (int)destination.Height),
-                        0, 0, destination.Width, destination.Height, GraphicsUnit.Pixel,
-                        this._attributes);
-                }
-                else
-                {
-                    this._bufferGraphics.DrawImage(
-                        gdiTexture.Bitmap,
+            if (this._color != Xemio.GameLibrary.Rendering.Color.White)
+            {
+                this.BufferGraphics.DrawImage(
+                    gdiTexture.Bitmap,
+                    new Drawing.Rectangle(
                         (int)destination.X,
                         (int)destination.Y,
                         (int)destination.Width,
-                        (int)destination.Height);
-                }
-
-                this._bufferGraphics.ResetTransform();
+                        (int)destination.Height),
+                    0, 0, destination.Width, destination.Height, GraphicsUnit.Pixel,
+                    this._attributes);
             }
+            else
+            {
+                this.BufferGraphics.DrawImage(
+                    gdiTexture.Bitmap,
+                    (int)destination.X,
+                    (int)destination.Y,
+                    (int)destination.Width,
+                    (int)destination.Height);
+            }
+
+            this.BufferGraphics.ResetTransform();
         }
         /// <summary>
         /// Presents this instance.
@@ -217,8 +217,8 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
 
             if (surface != null)
             {
-                int screenWidth = surface.Width;
-                int screenHeight = surface.Height;
+                int screenWidth = surface.ClientSize.Width;
+                int screenHeight = surface.ClientSize.Height;
                 
                 Drawing.Graphics graphics = surface.CreateGraphics();
 
@@ -231,10 +231,12 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 GDIHelper.StretchBlt
                 (
                     hDC, 0, 0,
-                    surface.Width,
-                    surface.Height,
+                    screenWidth,
+                    screenHeight,
                     hMemDC,
-                    0, 0, screenWidth, screenHeight,
+                    0, 0,
+                    this.GraphicsDevice.DisplayMode.Width, 
+                    this.GraphicsDevice.DisplayMode.Height,
                     GDIRasterOperations.SRCCOPY
                 );
 
@@ -244,8 +246,20 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 graphics.ReleaseHdc(hDC);
             }
 
-            this._offset = Vector2.Zero;
-            this._bufferGraphics.Clear(Drawing.Color.Black);
+            this.ScreenOffset = Vector2.Zero;
+            this.BufferGraphics.Clear(Drawing.Color.Black);
+        }
+        #endregion
+
+        #region Event Handlers
+        /// <summary>
+        /// Handles the ResolutionChanged event of the GraphicsDevice.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void GraphicsDevice_ResolutionChanged(object sender, EventArgs e)
+        {
+            this.InitializeBuffer(this.GraphicsDevice.DisplayMode);
         }
         #endregion
     }

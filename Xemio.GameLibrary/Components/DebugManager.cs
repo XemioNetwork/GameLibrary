@@ -7,15 +7,15 @@ using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Components
 {
-    public class DebugComponent : IComponent
+    public class DebugManager : IComponent
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DebugComponent"/> class.
+        /// Initializes a new instance of the <see cref="DebugManager"/> class.
         /// </summary>
-        public DebugComponent()
+        public DebugManager()
         {
-            this.Debug = false;
+            this.DebugMode = false;
         }
         #endregion
 
@@ -23,16 +23,16 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Gets or sets a value indicating whether the game is debugging.
         /// </summary>
-        public bool Debug { get; set; }
+        public bool DebugMode { get; set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Toggles this instance.
+        /// Toggles the debug mode.
         /// </summary>
-        public void Toggle()
+        public void ToggleDebugMode()
         {
-            this.Debug = !this.Debug;
+            this.DebugMode = !this.DebugMode;
         }
         #endregion
     }

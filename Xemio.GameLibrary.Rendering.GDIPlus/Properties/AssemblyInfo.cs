@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("Xemio.GameLibrary.Rendering.GDIPlus")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("GDIPlus Renderer")]
+[assembly: AssemblyDescription("Rendering pipeline extension for the xemio gamelibrary.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Xemio.GameLibrary.Rendering.GDIPlus")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("xemiogames")]
+[assembly: AssemblyProduct("GDIPlus Renderer")]
+[assembly: AssemblyCopyright("Copyright © xemio.net 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.Entities
 {
@@ -31,6 +32,13 @@ namespace Xemio.GameLibrary.Entities
         /// Gets the render manager.
         /// </summary>
         public IRenderManager RenderManager { get; private set; }
+        /// <summary>
+        /// Gets the geometry.
+        /// </summary>
+        public IGeometryProvider Geometry
+        {
+            get { return this.RenderManager.GraphicsDevice.Geometry; }
+        }
         #endregion
 
         #region Methods

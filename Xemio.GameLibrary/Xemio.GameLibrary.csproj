@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,7 +57,7 @@
     <Compile Include="Common\Singleton.cs" />
     <Compile Include="Common\ThreadInvoker.cs" />
     <Compile Include="Components\ComponentManager.cs" />
-    <Compile Include="Components\DebugComponent.cs" />
+    <Compile Include="Components\DebugManager.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\IComponentProvider.cs" />
     <Compile Include="Components\IConstructable.cs" />
@@ -70,6 +71,8 @@
     <Compile Include="Events\ActionCollection.cs" />
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\IGameHandler.cs" />
+    <Compile Include="Input\KeyListener.cs" />
+    <Compile Include="Input\MouseListener.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="Math\Rectangle.cs" />
     <Compile Include="Math\Vector2.cs" />
@@ -93,14 +96,28 @@
     <Compile Include="Network\Synchronization\SynchronizationStorage.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\Sprites\SpriteAnimation.cs" />
+    <Compile Include="Rendering\Sprites\SpriteSheet.cs" />
     <Compile Include="Rendering\Color.cs" />
+    <Compile Include="Rendering\DisplayMode.cs" />
+    <Compile Include="Rendering\Fonts\Utility\InternalFontCache.cs" />
+    <Compile Include="Rendering\Fonts\SpriteFont.cs" />
+    <Compile Include="Rendering\Fonts\Utility\SpriteFontGenerator.cs" />
+    <Compile Include="Rendering\Fonts\SpriteFontRenderer.cs" />
+    <Compile Include="Rendering\Geometry\GeometryFactory.cs" />
+    <Compile Include="Rendering\Geometry\GeometryProvider.cs" />
+    <Compile Include="Rendering\Geometry\IBrush.cs" />
+    <Compile Include="Rendering\Geometry\IGeometryFactory.cs" />
     <Compile Include="Rendering\Geometry\IGeometryProvider.cs" />
+    <Compile Include="Rendering\Geometry\IPen.cs" />
     <Compile Include="Rendering\GraphicsDevice.cs" />
     <Compile Include="Rendering\IGraphicsProvider.cs" />
     <Compile Include="Rendering\IRenderManager.cs" />
     <Compile Include="Rendering\ITexture.cs" />
     <Compile Include="Rendering\ITextureFactory.cs" />
     <Compile Include="Rendering\GraphicsProvider.cs" />
+    <Compile Include="Game\Scene.cs" />
+    <Compile Include="Game\SceneManager.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

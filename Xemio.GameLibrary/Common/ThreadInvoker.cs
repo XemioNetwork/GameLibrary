@@ -42,6 +42,11 @@ namespace Xemio.GameLibrary.Common
         /// <param name="action">The action.</param>
         public static void Invoke(Action action)
         {
+            // Searching for a better method to invoke an action
+            // inside the main application thread. There is no
+            // other solution doing that, even though the implementation
+            // is not really good it has to stay like that.
+
             if (_invokerControl.IsHandleCreated && !_invokerControl.IsDisposed)
             {
                 _invokerControl.Invoke(action);

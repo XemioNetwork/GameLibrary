@@ -16,6 +16,7 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         public ComponentManager()
         {
+            this._cache = new Queue<IComponent>();
             this._valueMappings = new Dictionary<Type, IValueProvider>();
             this._componentMappings = new Dictionary<Type, IComponent>();
 
@@ -26,6 +27,9 @@ namespace Xemio.GameLibrary.Components
         #endregion
 
         #region Fields
+        private bool _constructionMode;
+        private Queue<IComponent> _cache;
+
         private Dictionary<Type, IValueProvider> _valueMappings;
         private Dictionary<Type, IComponent> _componentMappings;
 
@@ -55,13 +59,22 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         public void Construct()
         {
-            foreach (IComponent component in this.Components)
+            this._constructionMode = true;
             {
-                IConstructable constructable = component as IConstructable;
-                if (constructable != null)
+                foreach (IComponent component in this.Components)
                 {
-                    constructable.Construct();
+                    IConstructable constructable = component as IConstructable;
+                    if (constructable != null)
+                    {
+                        constructable.Construct();
+                    }
                 }
+            }
+            this._constructionMode = false;
+
+            while (this._cache.Count > 0)
+            {
+                this.Add(this._cache.Dequeue());
             }
         }
         /// <summary>
@@ -103,6 +116,12 @@ namespace Xemio.GameLibrary.Components
         /// <param name="component">The component.</param>
         public void Add(IComponent component)
         {
+            if (this._constructionMode)
+            {
+                this.AddCached(component);
+                return;
+            }
+
             if (component is IValueProvider)
             {
                 IValueProvider valueProvider = component as IValueProvider;
@@ -111,6 +130,14 @@ namespace Xemio.GameLibrary.Components
 
             this._componentMappings.Add(component.GetType(), component);
             this.Components.Add(component);
+        }
+        /// <summary>
+        /// Adds the specified component to the component cache.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        private void AddCached(IComponent component)
+        {
+            this._cache.Enqueue(component);
         }
         /// <summary>
         /// Removes the specified component.

@@ -198,6 +198,11 @@ namespace Xemio.GameLibrary.Math
         #endregion
 
         #region Operators
+        /// <summary>
+        /// Implements the operator +.
+        /// </summary>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="vector">The vector.</param>
         public static Rectangle operator +(Rectangle rectangle, Vector2 vector)
         {
             rectangle.X += vector.X;
@@ -205,6 +210,11 @@ namespace Xemio.GameLibrary.Math
 
             return rectangle;
         }
+        /// <summary>
+        /// Implements the operator -.
+        /// </summary>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="vector">The vector.</param>
         public static Rectangle operator -(Rectangle rectangle, Vector2 vector)
         {
             rectangle.X -= vector.X;
@@ -212,6 +222,11 @@ namespace Xemio.GameLibrary.Math
 
             return rectangle;
         }
+        /// <summary>
+        /// Implements the operator *.
+        /// </summary>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="vector">The vector.</param>
         public static Rectangle operator *(Rectangle rectangle, Vector2 vector)
         {
             rectangle.X *= vector.X;
@@ -221,6 +236,11 @@ namespace Xemio.GameLibrary.Math
 
             return rectangle;
         }
+        /// <summary>
+        /// Implements the operator *.
+        /// </summary>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="scale">The scale.</param>
         public static Rectangle operator *(Rectangle rectangle, float scale)
         {
             rectangle.X *= scale;
@@ -230,6 +250,11 @@ namespace Xemio.GameLibrary.Math
 
             return rectangle;
         }
+        /// <summary>
+        /// Implements the operator /.
+        /// </summary>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="vector">The vector.</param>
         public static Rectangle operator /(Rectangle rectangle, Vector2 vector)
         {
             rectangle.X /= vector.X;
@@ -239,6 +264,11 @@ namespace Xemio.GameLibrary.Math
 
             return rectangle;
         }
+        /// <summary>
+        /// Implements the operator /.
+        /// </summary>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="scale">The scale.</param>
         public static Rectangle operator /(Rectangle rectangle, float scale)
         {
             rectangle.X /= scale;

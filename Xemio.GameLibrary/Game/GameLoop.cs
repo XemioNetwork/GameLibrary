@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Game
 {
@@ -26,6 +27,9 @@ namespace Xemio.GameLibrary.Game
         #region Fields
         private Task _loopTask;
         private List<IGameHandler> _handlers;
+
+        private double _renderTime;
+        private double _tickTime;
         #endregion
 
         #region Properties
@@ -69,15 +73,19 @@ namespace Xemio.GameLibrary.Game
         /// <param name="elapsed">The elapsed.</param>
         public virtual void OnTick(float elapsed)
         {
+            Stopwatch tickWatch = Stopwatch.StartNew();
+
             if (this.Tick != null)
             {
-                ThreadInvoker.Invoke(() => this.Tick(elapsed));
+                this.Tick(elapsed);
             }
-
             foreach (IGameHandler handler in this._handlers)
             {
                 handler.Tick((float)elapsed);
             }
+
+            tickWatch.Stop();
+            this._tickTime = tickWatch.Elapsed.TotalMilliseconds;
         }
         /// <summary>
         /// Called when the game should be rendered.
@@ -85,15 +93,19 @@ namespace Xemio.GameLibrary.Game
         /// <param name="elapsed">The elapsed.</param>
         public virtual void OnRender(float elapsed)
         {
+            Stopwatch renderWatch = Stopwatch.StartNew();
+
             if (this.Render != null)
             {
-                ThreadInvoker.Invoke(() => this.Render(elapsed));
+                this.Render(elapsed);
             }
-
             foreach (IGameHandler handler in this._handlers)
             {
-                handler.Render((float)elapsed);
+                handler.Render();
             }
+
+            renderWatch.Stop();
+            this._renderTime = renderWatch.Elapsed.TotalMilliseconds;
         }
         #endregion
 
@@ -152,10 +164,9 @@ namespace Xemio.GameLibrary.Game
             double lastRender = gameTime.Elapsed.TotalMilliseconds;
 
             int frames = 0;
-
+            
             while (this.Active)
             {
-                double frameStart = gameTime.Elapsed.TotalMilliseconds;
                 if (requestRender)
                 {
                     frames++;
@@ -163,7 +174,7 @@ namespace Xemio.GameLibrary.Game
                     elapsedRenderTime = gameTime.Elapsed.TotalMilliseconds - lastRender;
                     lastRender = gameTime.Elapsed.TotalMilliseconds;
 
-                    this.OnRender((float)elapsedRenderTime);
+                    ThreadInvoker.Invoke(() => this.OnRender((float)elapsedRenderTime));
 
                     requestRender = false;
                 }
@@ -174,16 +185,15 @@ namespace Xemio.GameLibrary.Game
                 unprocessedTicks += elapsed / this.TargetTickTime;
                 lastTick = gameTime.Elapsed.TotalMilliseconds;
 
+                int tickCount = (int)unprocessedTicks;
                 if (unprocessedTicks >= 1)
                 {
-                    int tickCount = (int)unprocessedTicks;
                     float tickElapsed = (float)(elapsedTickTime / (float)tickCount);
-
                     unprocessedTicks -= tickCount;
 
                     for (int i = 0; i < tickCount; i++)
                     {
-                        this.OnTick(tickElapsed);
+                        ThreadInvoker.Invoke(() => this.OnTick(tickElapsed));
                     }
 
                     elapsedTickTime = 0;
@@ -196,13 +206,12 @@ namespace Xemio.GameLibrary.Game
 
                 if (gameTime.Elapsed.TotalMilliseconds - lastFrameCount >= 1000.0)
                 {
+                    this.FrameTime = this._tickTime + this._renderTime;
                     this.FramesPerSecond = frames;
 
                     lastFrameCount = gameTime.Elapsed.TotalMilliseconds;
                     frames = 0;
                 }
-
-                this.FrameTime = gameTime.Elapsed.TotalMilliseconds - frameStart;
             }
         }
         #endregion
