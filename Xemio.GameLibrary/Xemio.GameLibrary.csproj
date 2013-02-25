@@ -97,6 +97,7 @@
     <Compile Include="Network\Synchronization\SynchronizationStorage.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\Fonts\TextureFactoryExtensions.cs" />
     <Compile Include="Rendering\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\Sprites\SpriteAnimation.cs" />
     <Compile Include="Rendering\Sprites\SpriteSheet.cs" />

@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets the entities.
         /// </summary>
-        internal List<Entity> Entities { get; private set; }
+        protected List<Entity> Entities { get; private set; }
         /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Entities.Entity"/> at the specified index.
         /// </summary>
@@ -107,6 +107,13 @@ namespace Xemio.GameLibrary.Entities
             entity.Environment = null;
             this.Entities.Remove(entity);
         }
+        /// <summary>
+        /// Sorts the entities.
+        /// </summary>
+        protected virtual IEnumerable<Entity> SortedEntityCollection()
+        {
+            return this.Entities;
+        }
         #endregion
 
         #region IGameHandler Member
@@ -133,8 +140,10 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public virtual void Render()
         {
+            IEnumerable<Entity> entities = this.SortedEntityCollection();
+
             this.BeginEnumeration();
-            foreach (Entity entity in this.Entities)
+            foreach (Entity entity in entities)
             {
                 if (entity.Renderer != null)
                 {
@@ -152,7 +161,7 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public IEnumerator<Entity> GetEnumerator()
         {
-            return this.Entities.GetEnumerator();
+            return this.SortedEntityCollection().GetEnumerator();
         }
         #endregion
 

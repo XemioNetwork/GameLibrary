@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Entities
 {
@@ -19,6 +20,10 @@ namespace Xemio.GameLibrary.Entities
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the position.
+        /// </summary>
+        public Vector2 Position { get; set; }
         /// <summary>
         /// Gets a value indicating whether this instance is destroyed.
         /// </summary>

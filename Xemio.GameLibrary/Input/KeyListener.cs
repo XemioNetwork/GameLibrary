@@ -83,10 +83,12 @@ namespace Xemio.GameLibrary.Input
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
+            IEnumerator<KeyValuePair<Keys, bool>> enumerator = this._keyStates.GetEnumerator();
+
             this._lastStates.Clear();
-            foreach (KeyValuePair<Keys, bool> pair in this._keyStates)
+            while (enumerator.MoveNext())
             {
-                this._lastStates.Add(pair.Key, pair.Value);
+                this._lastStates.Add(enumerator.Current.Key, enumerator.Current.Value);
             }
         }
         /// <summary>

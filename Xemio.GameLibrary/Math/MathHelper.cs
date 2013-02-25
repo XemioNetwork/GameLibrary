@@ -87,7 +87,7 @@ namespace Xemio.GameLibrary.Math
         /// <param name="y">The y.</param>
         public static float ToAngle(float x, float y)
         {
-            return (float)Math.Atan2(y, x);
+            return (float)Math.Atan2(y, x) + MathHelper.Pi;
         }
         /// <summary>
         /// Calculates an angle out of given coordinates.

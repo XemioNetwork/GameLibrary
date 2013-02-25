@@ -113,6 +113,7 @@ namespace Xemio.GameLibrary.Game
 
                 this.GraphicsDevice.RenderManager.Tint(Color.White);
                 this.GraphicsDevice.RenderManager.Offset(Vector2.Zero);
+
                 scene.Render();
             }
 
