@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             this.ScreenOffset = Vector2.Zero;
 
             this.GraphicsDevice = graphicsDevice;
-            this.GraphicsDevice.ResolutionChanged += new EventHandler(GraphicsDevice_ResolutionChanged);
+            this.GraphicsDevice.ResolutionChanged += GraphicsDeviceResolutionChanged;
 
             this.InitializeBuffer(new DisplayMode(1, 1));
         }
@@ -117,13 +117,13 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             float g = color.G / 255.0f;
             float b = color.B / 255.0f;
 
-            ColorMatrix matrix = new ColorMatrix(new float[][]
+            ColorMatrix matrix = new ColorMatrix(new []
             {
-                new float[] { r, 0, 0, 0, 0 },
-                new float[] { 0, g, 0, 0, 0 },
-                new float[] { 0, 0, b, 0, 0 },
-                new float[] { 0, 0, 0, a, 0 },
-                new float[] { 0, 0, 0, 0, 1 }
+                new[] { r, 0, 0, 0, 0 },
+                new[] { 0, g, 0, 0, 0 },
+                new[] { 0, 0, b, 0, 0 },
+                new[] { 0, 0, 0, a, 0 },
+                new[] { 0, 0, 0, 0, 1f }
             });
 
             this._attributes = new ImageAttributes();
@@ -173,9 +173,6 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             Control surface = Control.FromHandle(this.GraphicsDevice.Handle);
 
             if (surface == null) return;
-
-            int screenWidth = surface.Width;
-            int screenHeight = surface.Height;
 
             if (gdiTexture == null)
             {
@@ -257,7 +254,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void GraphicsDevice_ResolutionChanged(object sender, EventArgs e)
+        private void GraphicsDeviceResolutionChanged(object sender, EventArgs e)
         {
             this.InitializeBuffer(this.GraphicsDevice.DisplayMode);
         }

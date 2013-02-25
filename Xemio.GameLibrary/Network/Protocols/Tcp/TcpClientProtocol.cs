@@ -10,15 +10,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
     public class TcpClientProtocol : IClientProtocol
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TcpClientProtocol"/> class.
-        /// </summary>
-        public TcpClientProtocol()
-        {
-        }
-        #endregion
-
         #region Fields
         private TcpClient _tcpClient;
         #endregion

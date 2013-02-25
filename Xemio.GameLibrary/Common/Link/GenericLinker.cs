@@ -12,19 +12,20 @@ namespace Xemio.GameLibrary.Common.Link
     /// A class that is used to link objects to a specific value. You can resolve instances
     /// using the specified identifier defined in the ILinkable interface.
     /// </summary>
-    /// <typeparam name="T">Linked type.</typeparam>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
     public class GenericLinker<TKey, TValue> : IEnumerable<TValue> where TValue : ILinkable<TKey>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericLinker&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="GenericLinker{TKey, TValue}"/> class.
         /// </summary>
         public GenericLinker()
         {
             this._linkedItems = new Dictionary<TKey, TValue>();
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericLinker&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="GenericLinker{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         public GenericLinker(Assembly assembly) : this()
@@ -32,7 +33,7 @@ namespace Xemio.GameLibrary.Common.Link
             this.Load(assembly);
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericLinker&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="GenericLinker{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
         public GenericLinker(List<Assembly> assemblies) : this()
@@ -40,7 +41,7 @@ namespace Xemio.GameLibrary.Common.Link
             this.Load(assemblies);
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericLinker&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="GenericLinker{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="assemblyName">Name of the assembly.</param>
         public GenericLinker(string assemblyName) : this()
@@ -48,10 +49,10 @@ namespace Xemio.GameLibrary.Common.Link
             this.Load(assemblyName);
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericLinker&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="GenericLinker{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
-        public GenericLinker(List<string> assemblies) : this()
+        public GenericLinker(IEnumerable<string> assemblies) : this()
         {
             this.Load(assemblies);
         }
@@ -145,11 +146,18 @@ namespace Xemio.GameLibrary.Common.Link
         /// <summary>
         /// Loads all objects, that implement the ILinkable interface out of an assembly given by a specified type name.
         /// </summary>
-        /// <typeparam name="TType">The specified type.</typeparam>
+        /// <param name="typeName">Name of the type.</param>
         public void LoadFromAssemblyOf(string typeName)
         {
-            this.Load(Type.GetType(typeName).Assembly);
+            Type type = Type.GetType(typeName);
+            if (type == null)
+            {
+                throw new InvalidOperationException(string.Format("Can't resolve the type '{0}'.", typeName));
+            }
+
+            this.Load(type.Assembly);
         }
+
         /// <summary>
         /// Loads all objects, that implement the ILinkable interface out of an assembly given by a specified type.
         /// </summary>

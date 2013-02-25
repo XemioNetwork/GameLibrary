@@ -22,9 +22,9 @@ namespace Xemio.GameLibrary.Input
         {
             Control surface = Control.FromHandle(handle);
 
-            surface.MouseMove += new MouseEventHandler(surface_MouseMove);
-            surface.MouseDown += new MouseEventHandler(surface_MouseDown);
-            surface.MouseUp += new MouseEventHandler(surface_MouseUp);
+            surface.MouseMove += SurfaceMouseMove;
+            surface.MouseDown += SurfaceMouseDown;
+            surface.MouseUp += SurfaceMouseUp;
 
             this._buttonStates = new Dictionary<MouseButtons, bool>();
         }
@@ -80,7 +80,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void surface_MouseMove(object sender, MouseEventArgs e)
+        private void SurfaceMouseMove(object sender, MouseEventArgs e)
         {
             GraphicsDevice graphicsDevice = XGL.GetComponent<GraphicsDevice>();
             Vector2 divider = new Vector2(1, 1);
@@ -97,7 +97,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void surface_MouseDown(object sender, MouseEventArgs e)
+        private void SurfaceMouseDown(object sender, MouseEventArgs e)
         {
             this.SetButtonState(e.Button, true);
         }
@@ -106,7 +106,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void surface_MouseUp(object sender, MouseEventArgs e)
+        private void SurfaceMouseUp(object sender, MouseEventArgs e)
         {
             this.SetButtonState(e.Button, false);
         }

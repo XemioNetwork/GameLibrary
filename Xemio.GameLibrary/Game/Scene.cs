@@ -11,15 +11,6 @@ namespace Xemio.GameLibrary.Game
 {
     public abstract class Scene
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Scene"/> class.
-        /// </summary>
-        public Scene()
-        {
-        }
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets a value indicating whether this <see cref="Scene"/> is loaded.

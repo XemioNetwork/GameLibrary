@@ -19,7 +19,7 @@ namespace Xemio.GameLibrary.Network
         /// Initializes a new instance of the <see cref="Server"/> class.
         /// </summary>
         /// <param name="protocol">The protocol.</param>
-        public Server(IServerProtocol protocol)
+        protected Server(IServerProtocol protocol)
         {
             this.Active = true;
 

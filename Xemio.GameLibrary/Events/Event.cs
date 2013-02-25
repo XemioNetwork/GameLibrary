@@ -8,15 +8,6 @@ namespace Xemio.GameLibrary.Events
 {
     public abstract class Event
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Event"/> class.
-        /// </summary>
-        public Event()
-        {
-        }
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets a value indicating whether this <see cref="Event"/> is synced.

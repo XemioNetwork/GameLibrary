@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Initializes a new instance of the <see cref="Client"/> class.
         /// </summary>
-        public Client(IClientProtocol protocol)
+        protected Client(IClientProtocol protocol)
         {
             this.Protocol = protocol;
             this.Protocol.Client = this;

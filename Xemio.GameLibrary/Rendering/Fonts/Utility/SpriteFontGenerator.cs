@@ -19,9 +19,9 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// <summary>
         /// Creates a sprite font for the specified font family.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <param name="fontFamily">The font family.</param>
         /// <param name="size">The size.</param>
-        /// <param name="color">The color.</param>
         public static SpriteFont Create(ITextureFactory factory, string fontFamily, int size)
         {
             return SpriteFontGenerator.Create(factory, fontFamily, size, Color.White);
@@ -29,6 +29,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// <summary>
         /// Returns a sprite font for the specified font.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <param name="font">The font.</param>
         public static SpriteFont Create(ITextureFactory factory, Font font)
         {
@@ -37,6 +38,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// <summary>
         /// Creates a sprite font for the specified font family.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <param name="fontFamily">The font family.</param>
         /// <param name="size">The size.</param>
         /// <param name="color">The color.</param>
@@ -47,6 +49,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// <summary>
         /// Returns a sprite font for the specified font.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <param name="font">The font.</param>
         /// <param name="color">The color.</param>
         public static SpriteFont Create(ITextureFactory factory, Font font, Color color)
@@ -85,6 +88,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// <summary>
         /// Creates a new spritefont.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <param name="data">The data.</param>
         public static SpriteFont Create(ITextureFactory factory, Bitmap[] data)
         {
@@ -113,6 +117,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// Saves the specified font.
         /// </summary>
         /// <param name="font">The font.</param>
+        /// <param name="fileName">Name of the file.</param>
         public static void Save(SpriteFont font, string fileName)
         {
             using (FileStream stream = new FileStream(fileName, FileMode.Create))
@@ -124,6 +129,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// Saves the specified font.
         /// </summary>
         /// <param name="font">The font.</param>
+        /// <param name="stream">The stream.</param>
         public static void Save(SpriteFont font, Stream stream)
         {
             using (BinaryWriter writer = new BinaryWriter(stream))

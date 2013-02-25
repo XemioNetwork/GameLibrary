@@ -16,7 +16,6 @@ namespace Xemio.GameLibrary.Rendering
         /// Sets up the rendering pipeline and creates related components.
         /// </summary>
         /// <param name="providerAssembly">The provider assembly.</param>
-        /// <param name="windowHandle">The window handle.</param>
         public static void Setup(Assembly providerAssembly)
         {
             PluginLoader<IGraphicsProvider> loader = new PluginLoader<IGraphicsProvider>();

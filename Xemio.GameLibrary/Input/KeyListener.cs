@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Input
 {
-    public class KeyListener : IComponent, IGameHandler, IConstructable
+    public class KeyListener : IGameHandler, IConstructable
     {
         #region Constructors
         /// <summary>
@@ -20,8 +20,8 @@ namespace Xemio.GameLibrary.Input
         {
             Control surface = Control.FromHandle(handle);
 
-            surface.KeyDown += new KeyEventHandler(surface_KeyDown);
-            surface.KeyUp += new KeyEventHandler(surface_KeyUp);
+            surface.KeyDown += SurfaceKeyDown;
+            surface.KeyUp += SurfaceKeyUp;
 
             this._keyStates = new Dictionary<Keys, bool>();
             this._lastStates = new Dictionary<Keys, bool>();
@@ -114,7 +114,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
-        private void surface_KeyDown(object sender, KeyEventArgs e)
+        private void SurfaceKeyDown(object sender, KeyEventArgs e)
         {
             this.SetKeyState(e.KeyCode, true);
         }
@@ -123,7 +123,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
-        private void surface_KeyUp(object sender, KeyEventArgs e)
+        private void SurfaceKeyUp(object sender, KeyEventArgs e)
         {
             this.SetKeyState(e.KeyCode, false);
         }

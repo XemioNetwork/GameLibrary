@@ -32,13 +32,13 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
                     foreach (char character in line)
                     {
-                        int index = (int)character;
+                        int index = character;
 
                         ITexture texture = font.Textures[index];
                         if (texture == null)
                         {
                             throw new InvalidOperationException(
-                                "Cannot render character " + character + " (" + index.ToString() + ").");
+                                "Cannot render character " + character + " (" + index + ").");
                         }
 
                         renderManager.Render(
@@ -69,6 +69,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="font">The font.</param>
         /// <param name="value">The value.</param>
         /// <param name="position">The position.</param>
+        /// <param name="color">The color.</param>
         public static void Render(SpriteFont font, string value, Vector2 position, Color color)
         {
             IRenderManager renderManager = XGL.GetComponent<IRenderManager>();
