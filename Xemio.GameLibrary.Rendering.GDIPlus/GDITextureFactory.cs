@@ -64,7 +64,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <returns></returns>
         public ITexture CreateTexture(string name, ResourceManager resourceManager)
         {
-            return this.CreateTexture((Bitmap)resourceManager.GetObject(name));
+            return this.CreateTexture(resourceManager.GetObject(name) as Bitmap);
         }
         /// <summary>
         /// Creates a texture.
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <returns></returns>
         public ITexture CreateTexture(Stream stream)
         {
-            return this.CreateTexture((Bitmap)Bitmap.FromStream(stream));
+            return this.CreateTexture(Image.FromStream(stream) as Bitmap);
         }
         /// <summary>
         /// Creates a texture.

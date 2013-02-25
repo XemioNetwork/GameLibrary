@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.Rendering
                 b = b < 0 ? 0 : (b > 255 ? 255 : b);
             }
 
-            this._packedValue = (int)(((r | g << 8) | b << 16) | -16777216);
+            this._packedValue = ((r | g << 8) | b << 16) | -16777216;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Color"/> struct.
@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Rendering
                 a = a < 0 ? 0 : (a > 255 ? 255 : a);
             }
 
-            this._packedValue = (int)(((r | g << 8) | b << 16) | a << 24);
+            this._packedValue = ((r | g << 8) | b << 16) | a << 24;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Color"/> struct.
@@ -53,8 +53,8 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="g">The green channel.</param>
         /// <param name="b">The blue channel.</param>
         public Color(float r, float g, float b)
+            : this(PackValues(r, g, b, 1.0f))
         {
-            this._packedValue = PackValues(r, g, b, 1.0f);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Color"/> struct.
@@ -64,8 +64,8 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="b">The blue channel.</param>
         /// <param name="a">The alpha channel.</param>
         public Color(float r, float g, float b, float a)
+            : this(PackValues(r, g, b, a))
         {
-            this._packedValue = PackValues(r, g, b, a);
         }
         /// <summary>
         /// Prevents a default instance of the <see cref="Color"/> struct from being created.
@@ -104,7 +104,7 @@ namespace Xemio.GameLibrary.Rendering
         public byte G
         {
             get { return (byte)(this._packedValue >> 8); }
-            set { this._packedValue = (int)(this._packedValue & 0xffff00ff) | ((int)(value << 8)); }
+            set { this._packedValue = (int)(this._packedValue & 0xffff00ff) | (value << 8); }
         }
         /// <summary>
         /// Gets or sets the blue channel.
@@ -112,7 +112,7 @@ namespace Xemio.GameLibrary.Rendering
         public byte B
         {
             get { return (byte)(this._packedValue >> 0x10); }
-            set { this._packedValue = (int)(this._packedValue & 0xff00ffff) | ((int)(value << 16)); }
+            set { this._packedValue = (int)(this._packedValue & 0xff00ffff) | (value << 16); }
         }
         /// <summary>
         /// Gets or sets the alpha channel.
@@ -120,7 +120,7 @@ namespace Xemio.GameLibrary.Rendering
         public byte A
         {
             get { return (byte)(this._packedValue >> 0x18); }
-            set { this._packedValue = (this._packedValue & 0xffffff) | ((int)(value << 24)); }
+            set { this._packedValue = (this._packedValue & 0xffffff) | (value << 24); }
         }
         #endregion
 
@@ -730,14 +730,14 @@ namespace Xemio.GameLibrary.Rendering
             byte by = (byte)(value2._packedValue >> 16);
             byte ay = (byte)(value2._packedValue >> 24);
 
-            int factor = (int)PackUNormal(65536f, amount);
+            int factor = PackUNormal(65536f, amount);
 
             int r = rx + (((ry - rx) * factor) >> 16);
             int g = gx + (((gy - gx) * factor) >> 16);
             int b = bx + (((by - bx) * factor) >> 16);
             int a = ax + (((ay - ax) * factor) >> 16);
 
-            color._packedValue = (int)(((r | (g << 8)) | (b << 16)) | (a << 24));
+            color._packedValue = ((r | (g << 8)) | (b << 16)) | (a << 24);
 
             return color;
         }

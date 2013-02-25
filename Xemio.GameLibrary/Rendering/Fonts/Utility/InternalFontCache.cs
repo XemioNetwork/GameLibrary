@@ -38,10 +38,8 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
             {
                 writer.Write(this.Data.Length);
 
-                for (int i = 0; i < this.Data.Length; i++)
+                foreach (Bitmap bitmap in this.Data)
                 {
-                    Bitmap bitmap = this.Data[i];
-                    
                     writer.Write(bitmap == null);
                     if (bitmap != null)
                     {
@@ -78,7 +76,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
                             memory.Write(binaryData, 0, binaryData.Length);
                             memory.Seek(0, SeekOrigin.Begin);
 
-                            this.Data[i] = Bitmap.FromStream(memory) as Bitmap;
+                            this.Data[i] = Image.FromStream(memory) as Bitmap;
                         }
                     }
                 }

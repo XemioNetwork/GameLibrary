@@ -63,8 +63,8 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Creates a sprite font from a specified file.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
         public static SpriteFont Load(ITextureFactory factory, string fileName)
         {
             using (FileStream stream = File.OpenRead(fileName))
@@ -75,6 +75,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Creates a sprite font from the specified stream.
         /// </summary>
+        /// <param name="factory">The factory.</param>
         /// <param name="stream">The stream.</param>
         public static SpriteFont Load(ITextureFactory factory, Stream stream)
         {
@@ -97,11 +98,17 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Creates a sprite font from a specified file.
         /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
+        /// <param name="factory">The factory.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="resourceManager">The resource manager.</param>
         public static SpriteFont Load(ITextureFactory factory, string name, ResourceManager resourceManager)
         {
-            byte[] resourceData = (byte[])resourceManager.GetObject(name);
+            byte[] resourceData = resourceManager.GetObject(name) as byte[];
+            if (resourceData == null)
+            {
+                throw new InvalidOperationException(string.Format("No resource with the name '{0}' found.", name));
+            }
+
             using (MemoryStream stream = new MemoryStream(resourceData))
             {
                 return SpriteFont.Load(factory, stream);
@@ -133,7 +140,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
                 foreach (char character in value)
                 {
-                    x += this.Textures[(int)character].Width;
+                    x += this.Textures[character].Width;
                     x += this.Kerning;
 
                     if (character == ' ')
@@ -141,9 +148,9 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                         x += this.Spacing;
                     }
 
-                    if (y < this.Textures[(int)character].Height)
+                    if (y < this.Textures[character].Height)
                     {
-                        y = this.Textures[(int)character].Height;
+                        y = this.Textures[character].Height;
                     }
                 }
 
@@ -156,6 +163,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// Renders the specified value.
         /// </summary>
         /// <param name="value">The value.</param>
+        /// <param name="position">The position.</param>
         public void Render(string value, Vector2 position)
         {
             SpriteFontRenderer.Render(this, value, position);
@@ -164,6 +172,8 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// Renders the specified value.
         /// </summary>
         /// <param name="value">The value.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="color">The color.</param>
         public void Render(string value, Vector2 position, Color color)
         {
             SpriteFontRenderer.Render(this, value, position, color);

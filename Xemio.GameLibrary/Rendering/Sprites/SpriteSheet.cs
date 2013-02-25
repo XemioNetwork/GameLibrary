@@ -14,11 +14,12 @@ namespace Xemio.GameLibrary.Rendering.Sprites
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
+        /// Initializes a new instance of the <see cref="SpriteSheet" /> class.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <param name="frameWidth">Width of the frame.</param>
         /// <param name="frameHeight">Height of the frame.</param>
+        /// <param name="startIndex">The start index.</param>
         /// <param name="frameCount">The frame count.</param>
         public SpriteSheet(string fileName, int frameWidth, int frameHeight, int startIndex, int frameCount)
             : this(File.OpenRead(fileName), frameWidth, frameHeight, startIndex, frameCount)

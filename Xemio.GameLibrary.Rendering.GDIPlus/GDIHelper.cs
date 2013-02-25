@@ -65,6 +65,7 @@ using Xemio.GameLibrary.Math;
         /// Converts the specified vertices.
         /// </summary>
         /// <param name="vertices">The vertices.</param>
+        /// <param name="offset">The offset.</param>
         public static Drawing.Point[] Convert(Vector2[] vertices, Vector2 offset)
         {
             return GDIHelper.Convert(vertices.Select(v => v + offset).ToArray());

@@ -79,6 +79,7 @@ namespace Xemio.GameLibrary.Common.Extensions
                     }
                     else
                     {
+                        //TODO: Refactor or update...
                         writer.Write(value == null);
 
                         if (value != null)

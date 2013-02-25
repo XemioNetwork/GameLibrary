@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Xemio.GameLibrary.Network.Protocols.Local
 {
-    public class LocalProtocol : IClientProtocol, IServerProtocol, IConnection
+    public class LocalProtocol : IServerProtocol, IConnection
     {
         #region Constructors
         /// <summary>
@@ -29,6 +29,10 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         #endregion
 
         #region IClientProtocol Member
+        /// <summary>
+        /// Sets the client.
+        /// </summary>
+        public Client Client { get; set; }
         /// <summary>
         /// Connects to the specified ip.
         /// </summary>
@@ -66,6 +70,10 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         #endregion
 
         #region IServerProtocol Member
+        /// <summary>
+        /// Sets the server.
+        /// </summary>
+        public Server Server { get; set; }
         /// <summary>
         /// Sends the specified package to the specified receiver.
         /// </summary>
@@ -108,20 +116,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>
         public bool Connected { get; private set; }
-        #endregion
-
-        #region IClientProtocol Member
-        /// <summary>
-        /// Sets the client.
-        /// </summary>
-        public Client Client { get; set; }
-        #endregion
-
-        #region IServerProtocol Member
-        /// <summary>
-        /// Sets the server.
-        /// </summary>
-        public Server Server { get; set; }
         #endregion
     }
 }

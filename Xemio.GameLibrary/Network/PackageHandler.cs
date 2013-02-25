@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Events;
 
 namespace Xemio.GameLibrary.Network
 {
-    public class PackageHandler : IComponent, IConstructable
+    public class PackageHandler : IConstructable
     {
         #region Constructors
         /// <summary>
@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Network
         #endregion
 
         #region Fields
-        private Dictionary<Type, ActionCollection<Package>> _subscribers;
+        private readonly Dictionary<Type, ActionCollection<Package>> _subscribers;
         #endregion
 
         #region Methods
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Network
         public void Construct()
         {
             XGL.GetComponent<EventManager>()
-                .Subscribe<ReceivedPackageEvent>(e => this.HandleEvent(e));
+                .Subscribe<ReceivedPackageEvent>(this.HandleEvent);
         }
         #endregion
     }

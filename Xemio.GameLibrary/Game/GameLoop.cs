@@ -81,7 +81,7 @@ namespace Xemio.GameLibrary.Game
             }
             foreach (IGameHandler handler in this._handlers)
             {
-                handler.Tick((float)elapsed);
+                handler.Tick(elapsed);
             }
 
             tickWatch.Stop();
@@ -188,7 +188,7 @@ namespace Xemio.GameLibrary.Game
                 int tickCount = (int)unprocessedTicks;
                 if (unprocessedTicks >= 1)
                 {
-                    float tickElapsed = (float)(elapsedTickTime / (float)tickCount);
+                    float tickElapsed = (float)(elapsedTickTime / tickCount);
                     unprocessedTicks -= tickCount;
 
                     for (int i = 0; i < tickCount; i++)

@@ -12,8 +12,9 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TcpConnection"/> class.
+        /// Initializes a new instance of the <see cref="TcpConnection" /> class.
         /// </summary>
+        /// <param name="packageManager">The package manager.</param>
         /// <param name="tcpClient">The TCP client.</param>
         public TcpConnection(PackageManager packageManager, TcpClient tcpClient)
         {

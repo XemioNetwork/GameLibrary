@@ -13,11 +13,9 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GDITexture"/> class.
+        /// Initializes a new instance of the <see cref="GDITexture" /> class.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="pixels">The pixels.</param>
+        /// <param name="bitmap">The bitmap.</param>
         public GDITexture(Bitmap bitmap)
         {
             this.Bitmap = bitmap;

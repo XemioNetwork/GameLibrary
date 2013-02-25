@@ -213,9 +213,7 @@ namespace Xemio.GameLibrary.Math
         /// <param name="amount">The amount.</param>
         public static float SmoothStep(float value1, float value2, float amount)
         {
-            float result = amount;
-
-            result = MathHelper.Clamp(amount, 0.0f, 1.0f);
+            float result = MathHelper.Clamp(amount, 0.0f, 1.0f);
             result = MathHelper.Hermite(value1, 0.0f, value2, 0.0f, result);
 
             return result;

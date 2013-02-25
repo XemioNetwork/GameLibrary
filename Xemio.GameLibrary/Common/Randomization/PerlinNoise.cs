@@ -149,7 +149,7 @@ namespace Xemio.GameLibrary.Common.Randomization
             {
                 for (int j = 0; j < height; j++)
                 {
-                    noise[i, j] = (float)(this._random.NextFloat() % 1) * multiplier;
+                    noise[i, j] = this._random.NextFloat() % 1 * multiplier;
                 }
             }
 

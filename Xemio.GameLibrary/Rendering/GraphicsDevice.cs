@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Xemio.GameLibrary.Rendering
 {
-    public class GraphicsDevice : IComponent, IConstructable
+    public class GraphicsDevice : IConstructable
     {
         #region Constructors
         /// <summary>

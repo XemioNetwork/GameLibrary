@@ -24,7 +24,6 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// Creates a pen.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns></returns>
         public virtual IPen CreatePen(Color color)
         {
             return null;
@@ -43,7 +42,6 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// Creates a solid brush.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns></returns>
         public virtual IBrush CreateSolid(Color color)
         {
             return null;
@@ -56,7 +54,6 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
         /// <param name="angle">The angle.</param>
-        /// <returns></returns>
         public virtual IBrush CreateGradient(Color top, Color bottom, int width, int height, float angle)
         {
             return null;
@@ -65,7 +62,6 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// Creates a texture brush.
         /// </summary>
         /// <param name="texture">The texture.</param>
-        /// <returns></returns>
         public virtual IBrush CreateTexture(ITexture texture)
         {
             return null;

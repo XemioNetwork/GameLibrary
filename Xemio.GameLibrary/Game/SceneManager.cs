@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Game
 {
-    public class SceneManager : IComponent, IGameHandler, IConstructable
+    public class SceneManager : IGameHandler, IConstructable
     {
         #region Constructors
         /// <summary>

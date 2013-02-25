@@ -10,7 +10,7 @@ namespace Xemio.GameLibrary.Components
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericValueProvider&lt;T, TValue&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ValueProvider{T}"/> class.
         /// </summary>
         /// <param name="value">The value.</param>
         public ValueProvider(T value)
