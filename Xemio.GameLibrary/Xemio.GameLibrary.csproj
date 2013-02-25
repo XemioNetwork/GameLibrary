@@ -65,6 +65,7 @@
     <Compile Include="Components\ValueProvider.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponent.cs" />
+    <Compile Include="Entities\EntityEnvironment.cs" />
     <Compile Include="Entities\EntityRenderer.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventManager.cs" />
