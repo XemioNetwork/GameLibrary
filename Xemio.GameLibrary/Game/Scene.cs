@@ -68,6 +68,17 @@ namespace Xemio.GameLibrary.Game
 
         #region Methods
         /// <summary>
+        /// Loads the content for the specified scene.
+        /// </summary>
+        internal void InternalLoadContent()
+        {
+            this.LoadContent();
+            this.Loaded = true;
+        }
+        #endregion
+
+        #region Virtual Methods
+        /// <summary>
         /// Initializes the scene.
         /// </summary>
         public virtual void Initialize()
@@ -78,7 +89,6 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public virtual void LoadContent()
         {
-            this.Loaded = true;
         }
         /// <summary>
         /// Handles a game tick.

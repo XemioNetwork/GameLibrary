@@ -95,7 +95,7 @@ namespace Xemio.GameLibrary.Game
                 Scene scene = this._scenes[i];
                 if (!scene.Loaded)
                 {
-                    scene.LoadContent();
+                    scene.InternalLoadContent();
                 }
 
                 scene.Tick(elapsed);
