@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         public SpriteSheet(Stream stream, int frameWidth, int frameHeight, int startIndex, int frameCount)
         {
             Image image = Image.FromStream(stream);
-            ITextureFactory factory = ComponentManager.Get<ITextureFactory>();
+            ITextureFactory factory = XGL.GetComponent<ITextureFactory>();
 
             int columns = image.Width / frameWidth;
             int rows = image.Height / frameHeight;

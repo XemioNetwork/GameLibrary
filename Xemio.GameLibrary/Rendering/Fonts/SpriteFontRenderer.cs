@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="position">The position.</param>
         public static void Render(SpriteFont font, string value, Vector2 position)
         {
-            IRenderManager renderManager = ComponentManager.Get<IRenderManager>();
+            IRenderManager renderManager = XGL.GetComponent<IRenderManager>();
             if (renderManager != null)
             {
                 string[] lines = value.Split('\n');
@@ -71,7 +71,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="position">The position.</param>
         public static void Render(SpriteFont font, string value, Vector2 position, Color color)
         {
-            IRenderManager renderManager = ComponentManager.Get<IRenderManager>();
+            IRenderManager renderManager = XGL.GetComponent<IRenderManager>();
             renderManager.Tint(color);
 
             SpriteFontRenderer.Render(font, value, position);

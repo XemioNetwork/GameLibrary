@@ -66,7 +66,7 @@ namespace Xemio.GameLibrary.Network
                 Package package = this.Protocol.Receive();
                 if (package != null)
                 {
-                    EventManager eventManager = ComponentManager.Get<EventManager>();
+                    EventManager eventManager = XGL.GetComponent<EventManager>();
                     eventManager.Send(new ReceivedPackageEvent(package));
                 }
             }
@@ -79,7 +79,7 @@ namespace Xemio.GameLibrary.Network
         {
             this.Protocol.Send(package);
 
-            EventManager eventManager = ComponentManager.Get<EventManager>();
+            EventManager eventManager = XGL.GetComponent<EventManager>();
             eventManager.Send(new SentPackageEvent(package));
         }
         #endregion

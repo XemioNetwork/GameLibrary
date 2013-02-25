@@ -103,7 +103,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = ComponentManager.Get<GameLoop>();
+            GameLoop loop = XGL.GetComponent<GameLoop>();
             loop.Subscribe(this);
         }
         #endregion

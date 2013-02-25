@@ -72,7 +72,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void Construct()
         {
-            ComponentManager.Get<EventManager>()
+            XGL.GetComponent<EventManager>()
                 .Subscribe<ReceivedPackageEvent>(e => this.HandleEvent(e));
         }
         #endregion

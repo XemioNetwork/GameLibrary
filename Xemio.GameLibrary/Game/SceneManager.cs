@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public GraphicsDevice GraphicsDevice
         {
-            get { return ComponentManager.Get<GraphicsDevice>(); }
+            get { return XGL.GetComponent<GraphicsDevice>(); }
         }
         #endregion
 
@@ -45,6 +45,25 @@ namespace Xemio.GameLibrary.Game
         {
             scene.Initialize();
             this._scenes.Add(scene);
+        }
+        /// <summary>
+        /// Adds the specified scenes.
+        /// </summary>
+        /// <param name="scenes">The scenes.</param>
+        public void Add(IEnumerable<Scene> scenes)
+        {
+            foreach (Scene scene in scenes)
+            {
+                this.Add(scene);
+            }
+        }
+        /// <summary>
+        /// Adds the specified scenes.
+        /// </summary>
+        /// <param name="scenes">The scenes.</param>
+        public void Add(params Scene[] scenes)
+        {
+            this.Add((IEnumerable<Scene>)scenes);
         }
         /// <summary>
         /// Removes the specified scene.
@@ -107,7 +126,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = ComponentManager.Get<GameLoop>();
+            GameLoop loop = XGL.GetComponent<GameLoop>();
             loop.Subscribe(this);
         }
         #endregion

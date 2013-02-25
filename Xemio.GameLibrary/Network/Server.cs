@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Network
             this.PackageManager = new PackageManager(this.PackageAssembly);
             this.Connections = new List<IConnection>();
 
-            this._eventManager = ComponentManager.Get<EventManager>();
+            this._eventManager = XGL.GetComponent<EventManager>();
             this.StartServerLoop();
         }
         #endregion
@@ -99,7 +99,7 @@ namespace Xemio.GameLibrary.Network
             {
                 IConnection connection = this.Protocol.AcceptConnection();
 
-                EventManager eventManager = ComponentManager.Get<EventManager>();
+                EventManager eventManager = XGL.GetComponent<EventManager>();
                 eventManager.Send(new ClientJoinedEvent(connection));
 
                 this.Connections.Add(connection);

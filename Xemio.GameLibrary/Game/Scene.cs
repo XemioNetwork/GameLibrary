@@ -30,28 +30,28 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public GraphicsDevice GraphicsDevice
         {
-            get { return ComponentManager.Get<GraphicsDevice>(); }
+            get { return XGL.GetComponent<GraphicsDevice>(); }
         }
         /// <summary>
         /// Gets the key listener.
         /// </summary>
         public KeyListener Keyboard
         {
-            get { return ComponentManager.Get<KeyListener>(); }
+            get { return XGL.GetComponent<KeyListener>(); }
         }
         /// <summary>
         /// Gets the mouse listener.
         /// </summary>
         public MouseListener Mouse
         {
-            get { return ComponentManager.Get<MouseListener>(); }
+            get { return XGL.GetComponent<MouseListener>(); }
         }
         /// <summary>
         /// Gets the scene manager.
         /// </summary>
         public SceneManager SceneManager
         {
-            get { return ComponentManager.Get<SceneManager>(); }
+            get { return XGL.GetComponent<SceneManager>(); }
         }
         #endregion
 

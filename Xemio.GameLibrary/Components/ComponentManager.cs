@@ -47,7 +47,7 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Gets the singleton instance.
         /// </summary>
-        public static ComponentManager Instance
+        internal static ComponentManager Instance
         {
             get { return Singleton<ComponentManager>.Value; }
         }
@@ -96,16 +96,6 @@ namespace Xemio.GameLibrary.Components
             {
                 this.Add(component);
             }
-        }
-        #endregion
-
-        #region Static Methods
-        /// <summary>
-        /// Gets a component by a specified type.
-        /// </summary>
-        public static T Get<T>() where T : IComponent
-        {
-            return ComponentManager.Instance.GetComponent<T>();
         }
         #endregion
 

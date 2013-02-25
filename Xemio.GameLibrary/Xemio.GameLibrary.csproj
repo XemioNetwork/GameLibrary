@@ -96,6 +96,7 @@
     <Compile Include="Network\Synchronization\SynchronizationStorage.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\Sprites\SpriteAnimation.cs" />
     <Compile Include="Rendering\Sprites\SpriteSheet.cs" />
     <Compile Include="Rendering\Color.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Rendering\GraphicsProvider.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneManager.cs" />
+    <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

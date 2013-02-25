@@ -82,7 +82,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void surface_MouseMove(object sender, MouseEventArgs e)
         {
-            GraphicsDevice graphicsDevice = ComponentManager.Get<GraphicsDevice>();
+            GraphicsDevice graphicsDevice = XGL.GetComponent<GraphicsDevice>();
             Vector2 divider = new Vector2(1, 1);
 
             if (graphicsDevice != null)
