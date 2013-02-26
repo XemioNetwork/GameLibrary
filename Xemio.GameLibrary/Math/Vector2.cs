@@ -174,6 +174,18 @@ namespace Xemio.GameLibrary.Math
             return result;
         }
         /// <summary>
+        /// Rotates the specified vector.
+        /// </summary>
+        /// <param name="vector">The vector.</param>
+        /// <param name="angle">The angle.</param>
+        public static Vector2 Rotate(Vector2 vector, float angle)
+        {
+            float rx = vector.X * MathHelper.Cos(angle) - vector.Y * MathHelper.Sin(angle);
+            float ry = vector.X * MathHelper.Sin(angle) + vector.Y * MathHelper.Cos(angle);
+
+            return new Vector2(rx, ry);
+        }
+        /// <summary>
         /// Rounds the specified vector.
         /// </summary>
         /// <param name="vector">The vector.</param>
