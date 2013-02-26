@@ -36,6 +36,13 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public int Height { get; private set; }
         /// <summary>
+        /// Gets the bounds.
+        /// </summary>
+        public Rectangle Bounds
+        {
+            get { return new Rectangle(0, 0, this.Width, this.Height); }
+        }
+        /// <summary>
         /// Gets the center of the screen.
         /// </summary>
         public Vector2 Center

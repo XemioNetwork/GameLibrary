@@ -98,6 +98,14 @@ namespace Xemio.GameLibrary.Math
             return MathHelper.ToAngle(vector.X, vector.Y);
         }
         /// <summary>
+        /// Converts an angle to a direction vector.
+        /// </summary>
+        /// <param name="angle">The angle.</param>
+        public static Vector2 ToVector(float angle)
+        {
+            return new Vector2(MathHelper.Cos(angle), MathHelper.Sin(angle));
+        }
+        /// <summary>
         /// Returns the Cartesian coordinate for one axis of a point that is defined by a given triangle and two normalized barycentric (areal) coordinates.
         /// </summary>
         /// <param name="value1">The value1.</param>
