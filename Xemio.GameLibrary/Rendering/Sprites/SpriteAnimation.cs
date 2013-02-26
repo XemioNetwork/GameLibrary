@@ -36,11 +36,6 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         }
         #endregion
 
-        #region Fields
-        private float _elapsed;
-        private int _frameIndex;
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets the name.
@@ -50,13 +45,6 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// Gets the sheet.
         /// </summary>
         public SpriteSheet Sheet { get; private set; }
-        /// <summary>
-        /// Gets the current frame.
-        /// </summary>
-        public ITexture CurrentFrame
-        {
-            get { return this.Sheet.Textures[this._frameIndex]; }
-        }
         /// <summary>
         /// Gets the frame time.
         /// </summary>
@@ -69,37 +57,11 @@ namespace Xemio.GameLibrary.Rendering.Sprites
 
         #region Methods
         /// <summary>
-        /// Resets this animation.
+        /// Creates a new animation instance.
         /// </summary>
-        public void Reset()
+        public SpriteAnimationInstance CreateInstance()
         {
-            this._elapsed = 0;
-            this._frameIndex = 0;
-        }
-        /// <summary>
-        /// Handles a game tick.
-        /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        public void Tick(float elapsed)
-        {
-            this._elapsed += elapsed;
-            while (this._elapsed >= this.FrameTime && this.FrameTime > 0)
-            {
-                this._elapsed -= this.FrameTime;
-                this._frameIndex++;
-
-                if (this._frameIndex >= this.Sheet.Textures.Length)
-                {
-                    if (this.IsLooped)
-                    {
-                        this._frameIndex = 0;
-                    }
-                    else
-                    {
-                        this._frameIndex = this.Sheet.Textures.Length - 1;
-                    }
-                }
-            }
+            return new SpriteAnimationInstance(this);
         }
         #endregion
     }

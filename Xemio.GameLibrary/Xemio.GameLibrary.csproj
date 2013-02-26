@@ -100,6 +100,7 @@
     <Compile Include="Rendering\Fonts\TextureFactoryExtensions.cs" />
     <Compile Include="Rendering\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\Sprites\SpriteAnimation.cs" />
+    <Compile Include="Rendering\Sprites\SpriteAnimationInstance.cs" />
     <Compile Include="Rendering\Sprites\SpriteSheet.cs" />
     <Compile Include="Rendering\Color.cs" />
     <Compile Include="Rendering\DisplayMode.cs" />
