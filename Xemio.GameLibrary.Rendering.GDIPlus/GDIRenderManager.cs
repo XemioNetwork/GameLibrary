@@ -195,8 +195,8 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             {
                 this.BufferGraphics.DrawImage(
                     gdiTexture.Bitmap,
-                    (int)destination.X,
-                    (int)destination.Y,
+                    (int)destination.X + (int)this.ScreenOffset.X,
+                    (int)destination.Y + (int)this.ScreenOffset.Y,
                     (int)destination.Width,
                     (int)destination.Height);
             }
