@@ -122,6 +122,14 @@ namespace Xemio.GameLibrary.Math
 
         #region Vector Methods
         /// <summary>
+        /// Truncates the specified vector and removes all decimal places.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        public static Vector2 Truncate(Vector2 a)
+        {
+            return new Vector2((int)a.X, (int)a.Y);
+        }
+        /// <summary>
         /// Normalizes the specified vector.
         /// </summary>
         /// <param name="a">The vector.</param>
