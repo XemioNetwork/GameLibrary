@@ -179,15 +179,13 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 throw new InvalidOperationException("The rendered texture has to be an instance of the GDITexture class.");
             }
 
-            destination += this.ScreenOffset;
-
             if (this._color != Xemio.GameLibrary.Rendering.Color.White)
             {
                 this.BufferGraphics.DrawImage(
                     gdiTexture.Bitmap,
                     new Drawing.Rectangle(
-                        (int)destination.X,
-                        (int)destination.Y,
+                        (int)destination.X + (int)this.ScreenOffset.X,
+                        (int)destination.Y + (int)this.ScreenOffset.Y,
                         (int)destination.Width,
                         (int)destination.Height),
                     0, 0, destination.Width, destination.Height, GraphicsUnit.Pixel,
