@@ -19,15 +19,34 @@ namespace Xemio.GameLibrary.Entities
         }
         #endregion
 
+        #region Fields
+        private Vector2 _position;
+        private bool _resetDirty;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
-        public Vector2 Position { get; set; }
+        public Vector2 Position
+        {
+            get { return this._position; }
+            set
+            {
+                this._position = value;
+
+                this._resetDirty = false;
+                this.IsDirty = true;
+            }
+        }
         /// <summary>
         /// Gets a value indicating whether this instance is destroyed.
         /// </summary>
         public bool IsDestroyed { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this instance is dirty.
+        /// </summary>
+        public bool IsDirty { get; set; }
         /// <summary>
         /// Gets the components.
         /// </summary>
@@ -63,6 +82,13 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
         {
+            if (this._resetDirty)
+            {
+                this.IsDirty = false;
+            }
+
+            this._resetDirty = true;
+
             foreach (EntityComponent component in this.Components)
             {
                 component.Tick(elapsed);
