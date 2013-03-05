@@ -8,7 +8,7 @@ using System.Drawing.Imaging;
 
 namespace Xemio.GameLibrary.Rendering.Fonts.Utility
 {
-    public class InternalFontCache
+    internal class InternalFontCache
     {
         #region Constructors
         /// <summary>
