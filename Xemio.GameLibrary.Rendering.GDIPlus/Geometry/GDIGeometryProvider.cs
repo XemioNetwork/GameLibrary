@@ -284,7 +284,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
             this._renderManager.BufferGraphics.FillPie(
                 gdiBrush.GetNativeBrush(),
                 GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
-                startAngle, 
+                startAngle,
                 sweetAngle);
         }
         /// <summary>

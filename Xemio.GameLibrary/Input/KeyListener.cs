@@ -6,6 +6,8 @@ using System.IO;
 using Xemio.GameLibrary.Components;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Events.Logging;
 
 namespace Xemio.GameLibrary.Input
 {
@@ -20,8 +22,8 @@ namespace Xemio.GameLibrary.Input
         {
             Control surface = Control.FromHandle(handle);
 
-            surface.KeyDown += SurfaceKeyDown;
-            surface.KeyUp += SurfaceKeyUp;
+            surface.KeyDown += this.SurfaceKeyDown;
+            surface.KeyUp += this.SurfaceKeyUp;
 
             this._keyStates = new Dictionary<Keys, bool>();
             this._lastStates = new Dictionary<Keys, bool>();
@@ -47,6 +49,17 @@ namespace Xemio.GameLibrary.Input
             }
 
             this._keyStates[key] = state;
+        }
+        /// <summary>
+        /// Updates the states.
+        /// </summary>
+        private void UpdateStates()
+        {
+            this._lastStates.Clear();
+            foreach (KeyValuePair<Keys, bool> pair in this._keyStates)
+            {
+                this._lastStates.Add(pair.Key, pair.Value);
+            }
         }
         /// <summary>
         /// Determines whether the specified key is held.
@@ -83,12 +96,16 @@ namespace Xemio.GameLibrary.Input
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
-            IEnumerator<KeyValuePair<Keys, bool>> enumerator = this._keyStates.GetEnumerator();
-
-            this._lastStates.Clear();
-            while (enumerator.MoveNext())
+            try
             {
-                this._lastStates.Add(enumerator.Current.Key, enumerator.Current.Value);
+                this.UpdateStates();
+            }
+            catch (InvalidOperationException ex)
+            {
+                EventManager eventManager = XGL.GetComponent<EventManager>();
+
+                eventManager.Send(new ExceptionEvent(ex));
+                eventManager.Send(new LoggingEvent(LoggingLevel.Exception, ex.Message));
             }
         }
         /// <summary>

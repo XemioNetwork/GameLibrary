@@ -70,10 +70,16 @@
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ActionCollection.cs" />
+    <Compile Include="Events\Logging\ExceptionEvent.cs" />
+    <Compile Include="Events\Logging\LoggingEvent.cs" />
+    <Compile Include="Events\Logging\LoggingLevel.cs" />
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Input\KeyListener.cs" />
     <Compile Include="Input\MouseListener.cs" />
+    <Compile Include="Math\BoundingBox.cs" />
+    <Compile Include="Math\BoundingSphere.cs" />
+    <Compile Include="Math\IIntersectable.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="Math\Rectangle.cs" />
     <Compile Include="Math\Vector2.cs" />
