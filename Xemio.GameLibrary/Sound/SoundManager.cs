@@ -90,24 +90,6 @@ namespace Xemio.GameLibrary.Sound
         {
             return this.Factory.CreateSound(fileName);
         }
-        /// <summary>
-        /// Creates a sound.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
-        public ISound CreateSound(Stream stream)
-        {
-            return this.Factory.CreateSound(stream);
-        }
-        /// <summary>
-        /// Creates a sound.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
-        public ISound CreateSound(byte[] data)
-        {
-            return this.Factory.CreateSound(data);
-        }
         #endregion
     }
 }

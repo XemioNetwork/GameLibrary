@@ -12,7 +12,7 @@ namespace Xemio.Testing.Sound
         static void Main(string[] args)
         {
             SoundManager soundManager = new SoundManager();
-            ISound sound = soundManager.CreateSound(@"Sounds\bell.wav");
+            ISound sound = soundManager.CreateSound(@"Resources\bell.wav");
 
             soundManager.Locate(sound, new Vector2(-10, -10));
             sound.Play();

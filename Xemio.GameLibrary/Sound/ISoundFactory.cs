@@ -13,15 +13,5 @@ namespace Xemio.GameLibrary.Sound
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         ISound CreateSound(string fileName);
-        /// <summary>
-        /// Creates a sound.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        ISound CreateSound(Stream stream);
-        /// <summary>
-        /// Creates a sound.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        ISound CreateSound(byte[] data);
     }
 }
