@@ -11,11 +11,25 @@ namespace Xemio.GameLibrary.Game
 {
     public abstract class Scene
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Scene"/> class.
+        /// </summary>
+        public Scene()
+        {
+            this.Scenes = new List<Scene>();
+        }
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets a value indicating whether this <see cref="Scene"/> is loaded.
         /// </summary>
         public bool Loaded { get; private set; }
+        /// <summary>
+        /// Gets the scenes.
+        /// </summary>
+        public List<Scene> Scenes { get; private set; }
         /// <summary>
         /// Gets the graphics device.
         /// </summary>
@@ -65,6 +79,21 @@ namespace Xemio.GameLibrary.Game
         {
             this.LoadContent();
             this.Loaded = true;
+        }
+        /// <summary>
+        /// Gets a scene.
+        /// </summary>
+        public T GetScene<T>() where T : Scene
+        {
+            return (T)this.GetScene(scene => scene is T);
+        }
+        /// <summary>
+        /// Gets a scene.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        public Scene GetScene(Func<Scene, bool> predicate)
+        {
+            return this.Scenes.FirstOrDefault(predicate);
         }
         #endregion
 

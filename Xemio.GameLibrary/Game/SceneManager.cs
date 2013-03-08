@@ -74,7 +74,14 @@ namespace Xemio.GameLibrary.Game
             this._scenes.Remove(scene);
         }
         /// <summary>
-        /// Gets the scene.
+        /// Gets a scene.
+        /// </summary>
+        public T GetScene<T>() where T : Scene
+        {
+            return (T)this.GetScene(scene => scene is T);
+        }
+        /// <summary>
+        /// Gets a scene.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         public Scene GetScene(Func<Scene, bool> predicate)
@@ -85,20 +92,49 @@ namespace Xemio.GameLibrary.Game
 
         #region IGameHandler Member
         /// <summary>
-        /// Handles game updates.
+        /// Handles a game tick.
+        /// </summary>
+        /// <param name="scene">The scene.</param>
+        /// <param name="elapsed">The elapsed.</param>
+        private void Tick(Scene scene, float elapsed)
+        {
+            if (!scene.Loaded)
+            {
+                scene.InternalLoadContent();
+            }
+
+            scene.Tick(elapsed);
+            foreach (Scene subScene in scene.Scenes)
+            {
+                this.Tick(subScene, elapsed);
+            }
+        }
+        /// <summary>
+        /// Handles a game tick.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
             for (int i = 0; i < this._scenes.Count; i++)
             {
-                Scene scene = this._scenes[i];
-                if (!scene.Loaded)
-                {
-                    scene.InternalLoadContent();
-                }
+                this.Tick(this._scenes[i], elapsed);
+            }
+        }
+        /// <summary>
+        /// Handles a game render request.
+        /// </summary>
+        /// <param name="scene">The scene.</param>
+        private void Render(Scene scene)
+        {
+            if (!scene.Loaded) return;
 
-                scene.Tick(elapsed);
+            this.GraphicsDevice.RenderManager.Tint(Color.White);
+            this.GraphicsDevice.RenderManager.Offset(Vector2.Zero);
+
+            scene.Render();
+            foreach (Scene subScene in scene.Scenes)
+            {
+                this.Render(subScene);
             }
         }
         /// <summary>
@@ -108,13 +144,7 @@ namespace Xemio.GameLibrary.Game
         {
             for (int i = 0; i < this._scenes.Count; i++)
             {
-                Scene scene = this._scenes[i];
-                if (!scene.Loaded) continue;
-
-                this.GraphicsDevice.RenderManager.Tint(Color.White);
-                this.GraphicsDevice.RenderManager.Offset(Vector2.Zero);
-
-                scene.Render();
+                this.Render(this._scenes[i]);
             }
 
             this.GraphicsDevice.Present();
