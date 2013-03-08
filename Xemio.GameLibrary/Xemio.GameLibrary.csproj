@@ -131,10 +131,12 @@
     <Compile Include="Rendering\GraphicsProvider.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneManager.cs" />
-    <Compile Include="Sound\Common\Sound.cs" />
-    <Compile Include="Sound\Common\SoundFactory.cs" />
+    <Compile Include="Sound\Internal\Sound.cs" />
+    <Compile Include="Sound\Internal\SoundFactory.cs" />
     <Compile Include="Sound\ISound.cs" />
     <Compile Include="Sound\ISoundFactory.cs" />
+    <Compile Include="Sound\LoopController.cs" />
+    <Compile Include="Sound\LoopManager.cs" />
     <Compile Include="Sound\SoundManager.cs" />
     <Compile Include="XGL.cs" />
   </ItemGroup>

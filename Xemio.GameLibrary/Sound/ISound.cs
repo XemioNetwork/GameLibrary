@@ -13,10 +13,6 @@ namespace Xemio.GameLibrary.Sound
         /// </summary>
         void Play();
         /// <summary>
-        /// Plays the sound looped.
-        /// </summary>
-        void PlayLooping();
-        /// <summary>
         /// Stops the current playing sound.
         /// </summary>
         void Stop();
@@ -29,7 +25,11 @@ namespace Xemio.GameLibrary.Sound
         /// </summary>
         float SpeedRatio { get; set; }
         /// <summary>
-        /// Gets the duration.
+        /// Gets or sets the position in seconds.
+        /// </summary>
+        float Position { get; set; }
+        /// <summary>
+        /// Gets the duration in seconds.
         /// </summary>
         float Duration { get; }
         /// <summary>

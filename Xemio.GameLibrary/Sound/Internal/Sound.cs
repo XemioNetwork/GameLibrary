@@ -5,9 +5,9 @@ using System.Text;
 using System.IO;
 using System.Windows.Media;
 
-namespace Xemio.GameLibrary.Sound.Common
+namespace Xemio.GameLibrary.Sound.Internal
 {
-    public class Sound : ISound
+    internal class Sound : ISound
     {
         #region Constructors
         /// <summary>
@@ -21,8 +21,6 @@ namespace Xemio.GameLibrary.Sound.Common
 
             this.MediaPlayer = new MediaPlayer();
             this.MediaPlayer.Open(new Uri(builder.ToString()));
-
-            this.MediaPlayer.MediaEnded += new EventHandler(MediaPlayerMediaEnded);
         }
         #endregion
 
@@ -31,10 +29,6 @@ namespace Xemio.GameLibrary.Sound.Common
         /// Gets the media player.
         /// </summary>
         public MediaPlayer MediaPlayer { get; private set; }
-        /// <summary>
-        /// Gets a value indicating whether this instance is looped.
-        /// </summary>
-        public bool IsLooped { get; private set; }
         #endregion
 
         #region ISound Member
@@ -43,23 +37,14 @@ namespace Xemio.GameLibrary.Sound.Common
         /// </summary>
         public void Play()
         {
+            this.MediaPlayer.Stop();
             this.MediaPlayer.Play();
-            this.IsLooped = false;
-        }
-        /// <summary>
-        /// Plays the sound looped.
-        /// </summary>
-        public void PlayLooping()
-        {
-            this.MediaPlayer.Play();
-            this.IsLooped = true;
         }
         /// <summary>
         /// Stops the current playing sound.
         /// </summary>
         public void Stop()
         {
-            this.IsLooped = false;
             this.MediaPlayer.Stop();
         }
         /// <summary>
@@ -79,11 +64,27 @@ namespace Xemio.GameLibrary.Sound.Common
             set { this.MediaPlayer.SpeedRatio = value; }
         }
         /// <summary>
-        /// Gets the duration.
+        /// Gets or sets the position in seconds.
+        /// </summary>
+        public float Position
+        {
+            get { return (float)this.MediaPlayer.Position.TotalSeconds; }
+            set { this.MediaPlayer.Position = TimeSpan.FromSeconds(value); }
+        }
+        /// <summary>
+        /// Gets the duration in seconds.
         /// </summary>
         public float Duration
         {
-            get { return (float)this.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds; }
+            get
+            {
+                if (this.MediaPlayer.NaturalDuration.HasTimeSpan)
+                {
+                    return (float)this.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                }
+
+                return 0;
+            }
         }
         /// <summary>
         /// Gets or sets the balance.
@@ -92,21 +93,6 @@ namespace Xemio.GameLibrary.Sound.Common
         {
             get { return (float)this.MediaPlayer.Balance; }
             set { this.MediaPlayer.Balance = value; }
-        }
-        #endregion
-
-        #region Event Handlers
-        /// <summary>
-        /// Handles the media ended event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void MediaPlayerMediaEnded(object sender, EventArgs e)
-        {
-            if (this.IsLooped)
-            {
-                this.PlayLooping();
-            }
         }
         #endregion
     }

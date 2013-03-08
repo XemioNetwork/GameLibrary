@@ -64,6 +64,7 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new KeyListener(handle));
             XGL.Components.Add(new MouseListener(handle));
             XGL.Components.Add(new SoundManager());
+            XGL.Components.Add(new LoopManager());
 
             XGL.Components.Construct();
             loop.Run();

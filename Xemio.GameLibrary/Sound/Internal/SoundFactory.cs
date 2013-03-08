@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Xemio.GameLibrary.Sound.Common
+namespace Xemio.GameLibrary.Sound.Internal
 {
-    public class SoundFactory : ISoundFactory
+    internal class SoundFactory : ISoundFactory
     {
         #region ISoundFactory Member
         /// <summary>

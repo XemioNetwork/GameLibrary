@@ -14,7 +14,9 @@ namespace Xemio.Testing.Sound
             SoundManager soundManager = new SoundManager();
             ISound sound = soundManager.CreateSound(@"Sounds\bell.wav");
 
-            soundManager.Play(sound, new Vector2(-10, -10));
+            soundManager.Locate(sound, new Vector2(-10, -10));
+            sound.Play();
+
             Console.ReadLine();
         }
     }

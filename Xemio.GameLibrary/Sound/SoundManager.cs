@@ -18,11 +18,18 @@ namespace Xemio.GameLibrary.Sound
         public SoundManager()
         {
             this.Radius = float.MaxValue;
-            this.Factory = new Common.SoundFactory();
+            this.Factory = new Internal.SoundFactory();
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the loop manager.
+        /// </summary>
+        public LoopManager LoopManager
+        {
+            get { return XGL.GetComponent<LoopManager>(); }
+        }
         /// <summary>
         /// Gets or sets the sound factory.
         /// </summary>
@@ -41,54 +48,35 @@ namespace Xemio.GameLibrary.Sound
         /// <param name="distance">The distance.</param>
         public void Locate(ISound sound, Vector2 distance)
         {
-            float length = distance.Length;
-            float balance = distance.X / length;
-            float volume = 1.0f - length / this.Radius;
+            float balance = 0.0f;
+            float volume = 1.0f;
 
-            if (distance.LengthSquared == 0)
+            if (distance.LengthSquared > 0)
             {
-                balance = 0.0f;
-                volume = 1.0f;
+                float length = distance.Length;
+
+                balance = distance.X / length;
+                volume = 1.0f - length / this.Radius;
             }
 
             sound.Balance = balance;
             sound.Volume = volume;
         }
         /// <summary>
-        /// Plays the specified sound.
+        /// Enables looped playback for the specified sound.
         /// </summary>
         /// <param name="sound">The sound.</param>
-        public void Play(ISound sound)
+        public void EnableLooping(ISound sound)
         {
-            this.Play(sound, Vector2.Zero);
+            this.LoopManager.Register(sound);
         }
         /// <summary>
-        /// Plays the specified sound.
+        /// Disables looped playback for the specified sound.
         /// </summary>
         /// <param name="sound">The sound.</param>
-        /// <param name="distance">The distance.</param>
-        public void Play(ISound sound, Vector2 distance)
+        public void DisableLooping(ISound sound)
         {
-            this.Locate(sound, distance);
-            sound.Play();
-        }
-        /// <summary>
-        /// Plays the sound looping.
-        /// </summary>
-        /// <param name="sound">The sound.</param>
-        public void PlayLooping(ISound sound)
-        {
-            this.PlayLooping(sound, Vector2.Zero);
-        }
-        /// <summary>
-        /// Plays the sound looping.
-        /// </summary>
-        /// <param name="sound">The sound.</param>
-        /// <param name="distance">The distance.</param>
-        public void PlayLooping(ISound sound, Vector2 distance)
-        {
-            this.Locate(sound, distance);
-            sound.PlayLooping();
+            this.LoopManager.Remove(sound);
         }
         #endregion
 
