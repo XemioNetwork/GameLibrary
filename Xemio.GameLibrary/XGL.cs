@@ -8,6 +8,7 @@ using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary
 {
@@ -62,6 +63,7 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new SceneManager());
             XGL.Components.Add(new KeyListener(handle));
             XGL.Components.Add(new MouseListener(handle));
+            XGL.Components.Add(new SoundManager());
 
             XGL.Components.Construct();
             loop.Run();
