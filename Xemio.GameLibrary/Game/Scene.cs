@@ -6,6 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary.Game
 {
@@ -57,6 +58,13 @@ namespace Xemio.GameLibrary.Game
         public SceneManager SceneManager
         {
             get { return XGL.GetComponent<SceneManager>(); }
+        }
+        /// <summary>
+        /// Gets the sound manager.
+        /// </summary>
+        public SoundManager SoundManager
+        {
+            get { return XGL.GetComponent<SoundManager>(); }
         }
         #endregion
 
