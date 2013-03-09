@@ -28,6 +28,20 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public bool Loaded { get; private set; }
         /// <summary>
+        /// Gets a value indicating the index during a game tick.
+        /// </summary>
+        public virtual int TickIndex
+        {
+            get { return 0; }
+        }
+        /// <summary>
+        /// Gets a value indicating the index during the rendering process.
+        /// </summary>
+        public virtual int RenderIndex
+        {
+            get { return 0; }
+        }
+        /// <summary>
         /// Gets the scenes.
         /// </summary>
         public List<Scene> Scenes { get; private set; }

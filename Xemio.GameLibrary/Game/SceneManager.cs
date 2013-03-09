@@ -88,6 +88,20 @@ namespace Xemio.GameLibrary.Game
         {
             return this._scenes.FirstOrDefault(predicate);
         }
+        /// <summary>
+        /// Orders the scenes for game tick processing.
+        /// </summary>
+        private void OrderTick()
+        {
+            this._scenes.OrderBy(scene => scene.TickIndex);
+        }
+        /// <summary>
+        /// Orders the scenes for the rendering process.
+        /// </summary>
+        private void OrderRender()
+        {
+            this._scenes.OrderBy(scene => scene.RenderIndex);
+        }
         #endregion
 
         #region IGameHandler Member
@@ -115,6 +129,7 @@ namespace Xemio.GameLibrary.Game
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
+            this.OrderTick();
             for (int i = 0; i < this._scenes.Count; i++)
             {
                 this.Tick(this._scenes[i], elapsed);
@@ -142,6 +157,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public void Render()
         {
+            this.OrderRender();
             for (int i = 0; i < this._scenes.Count; i++)
             {
                 this.Render(this._scenes[i]);

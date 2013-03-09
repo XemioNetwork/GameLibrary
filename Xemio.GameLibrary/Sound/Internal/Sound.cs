@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Windows.Media;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Sound.Internal
 {
@@ -19,8 +20,16 @@ namespace Xemio.GameLibrary.Sound.Internal
             string fullPath = Path.GetFullPath(fileName);
             UriBuilder builder = new UriBuilder(fullPath);
 
-            this.MediaPlayer = new MediaPlayer();
-            this.MediaPlayer.Open(new Uri(builder.ToString()));
+            ThreadInvoker.Invoke(() =>
+            {
+                //Safely create the media player inside the main thread to prevent
+                //invoker exceptions using the play method.
+
+                this.MediaPlayer = new MediaPlayer();
+                this.MediaPlayer.Open(new Uri(builder.ToString()));
+
+                while (this.MediaPlayer.IsBuffering);
+            });
         }
         #endregion
 
