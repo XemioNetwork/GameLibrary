@@ -91,16 +91,16 @@ namespace Xemio.GameLibrary.Game
         /// <summary>
         /// Orders the scenes for game tick processing.
         /// </summary>
-        private void OrderTick()
+        private IList<Scene> OrderedTickScenes()
         {
-            this._scenes.OrderBy(scene => scene.TickIndex);
+            return this._scenes.OrderBy(scene => scene.TickIndex).ToList();
         }
         /// <summary>
         /// Orders the scenes for the rendering process.
         /// </summary>
-        private void OrderRender()
+        private IList<Scene> OrderedRenderScenes()
         {
-            this._scenes.OrderBy(scene => scene.RenderIndex);
+            return this._scenes.OrderBy(scene => scene.RenderIndex).ToList();
         }
         #endregion
 
@@ -129,10 +129,10 @@ namespace Xemio.GameLibrary.Game
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
-            this.OrderTick();
-            for (int i = 0; i < this._scenes.Count; i++)
+            IList<Scene> scenes = this.OrderedTickScenes();
+            for (int i = 0; i < scenes.Count; i++)
             {
-                this.Tick(this._scenes[i], elapsed);
+                this.Tick(scenes[i], elapsed);
             }
         }
         /// <summary>
@@ -157,10 +157,10 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public void Render()
         {
-            this.OrderRender();
-            for (int i = 0; i < this._scenes.Count; i++)
+            IList<Scene> scenes = this.OrderedRenderScenes();
+            for (int i = 0; i < scenes.Count; i++)
             {
-                this.Render(this._scenes[i]);
+                this.Render(scenes[i]);
             }
 
             this.GraphicsDevice.Present();
