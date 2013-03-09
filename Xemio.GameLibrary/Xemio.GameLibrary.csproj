@@ -131,12 +131,16 @@
     <Compile Include="Rendering\GraphicsProvider.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneManager.cs" />
-    <Compile Include="Sound\Internal\Sound.cs" />
-    <Compile Include="Sound\Internal\SoundFactory.cs" />
+    <Compile Include="Sound\Internal\InternalSound.cs" />
+    <Compile Include="Sound\Internal\InternalSoundFactory.cs" />
+    <Compile Include="Sound\Internal\InternalSoundProvider.cs" />
+    <Compile Include="Sound\Internal\SoundDisposer.cs" />
     <Compile Include="Sound\ISound.cs" />
+    <Compile Include="Sound\ISoundProvider.cs" />
     <Compile Include="Sound\ISoundFactory.cs" />
-    <Compile Include="Sound\LoopController.cs" />
-    <Compile Include="Sound\LoopManager.cs" />
+    <Compile Include="Sound\Loops\LoopController.cs" />
+    <Compile Include="Sound\Loops\LoopManager.cs" />
+    <Compile Include="Sound\PlayMode.cs" />
     <Compile Include="Sound\SoundManager.cs" />
     <Compile Include="XGL.cs" />
   </ItemGroup>

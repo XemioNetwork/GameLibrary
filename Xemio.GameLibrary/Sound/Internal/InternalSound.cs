@@ -8,14 +8,14 @@ using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Sound.Internal
 {
-    internal class Sound : ISound
+    internal class InternalSound : ISound
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Sound"/> class.
+        /// Initializes a new instance of the <see cref="InternalSound"/> class.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        public Sound(string fileName)
+        public InternalSound(string fileName)
         {
             string fullPath = Path.GetFullPath(fileName);
             UriBuilder builder = new UriBuilder(fullPath);
@@ -43,20 +43,9 @@ namespace Xemio.GameLibrary.Sound.Internal
 
         #region ISound Member
         /// <summary>
-        /// Plays the sound.
+        /// Gets or sets the sound radius.
         /// </summary>
-        public void Play()
-        {
-            this.MediaPlayer.Stop();
-            this.MediaPlayer.Play();
-        }
-        /// <summary>
-        /// Stops the current playing sound.
-        /// </summary>
-        public void Stop()
-        {
-            this.MediaPlayer.Stop();
-        }
+        public float Radius { get; set; }
         /// <summary>
         /// Gets or sets the volume.
         /// </summary>

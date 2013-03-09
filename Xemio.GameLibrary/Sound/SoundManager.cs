@@ -17,32 +17,62 @@ namespace Xemio.GameLibrary.Sound
         /// </summary>
         public SoundManager()
         {
-            this.Radius = float.MaxValue;
-            this.Factory = new Internal.SoundFactory();
+            this.Provider = new Internal.InternalSoundProvider();
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the loop manager.
+        /// Gets or sets the provider.
         /// </summary>
-        public LoopManager LoopManager
-        {
-            get { return XGL.GetComponent<LoopManager>(); }
-        }
-        /// <summary>
-        /// Gets or sets the sound factory.
-        /// </summary>
-        public ISoundFactory Factory { get; set; }
-        /// <summary>
-        /// Gets or sets the radius for hearable sounds.
-        /// </summary>
-        public float Radius { get; set; }
+        public ISoundProvider Provider { get; set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Applies distant calculations to the specified sound.
+        /// Creates a sound.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns></returns>
+        public ISound CreateSound(string fileName)
+        {
+            return this.Provider.Factory.CreateSound(fileName);
+        }
+        /// <summary>
+        /// Plays the specified sound.
+        /// </summary>
+        /// <param name="sound">The sound.</param>
+        public IDisposable Play(ISound sound)
+        {
+            return this.Play(sound, PlayMode.ResetLocation);
+        }
+        /// <summary>
+        /// Plays the specified sound.
+        /// </summary>
+        /// <param name="sound">The sound.</param>
+        /// <param name="mode">The mode.</param>
+        public IDisposable Play(ISound sound, PlayMode mode)
+        {
+            switch (mode)
+            {
+                case PlayMode.ResetLocation: return this.Play(sound, Vector2.Zero);
+                case PlayMode.KeepLocation: return this.Provider.Play(sound);
+            }
+
+            return null;
+        }
+        /// <summary>
+        /// Plays the specified sound according to the specified position in 2d space.
+        /// </summary>
+        /// <param name="sound">The sound.</param>
+        /// <param name="distance">The distance.</param>
+        public IDisposable Play(ISound sound, Vector2 distance)
+        {
+            this.Locate(sound, distance);
+            return this.Provider.Play(sound);
+        }
+        /// <summary>
+        /// Locates the specified sound.
         /// </summary>
         /// <param name="sound">The sound.</param>
         /// <param name="distance">The distance.</param>
@@ -54,41 +84,27 @@ namespace Xemio.GameLibrary.Sound
             if (distance.LengthSquared > 0)
             {
                 float length = distance.Length;
+                float dot = Vector2.Dot(distance, new Vector2(0, -1));
 
                 balance = distance.X / length;
-                volume = 1.0f - length / this.Radius;
+                volume = 1.0f - length / sound.Radius;
+
+                if (dot < 0)
+                {
+                    float angle = MathHelper.ToAngle(distance) - MathHelper.PiOver2;
+                    float degrees = MathHelper.ToDegrees(angle);
+
+                    if (degrees >= 180)
+                    {
+                        degrees -= (degrees - 180);
+                    }
+
+                    volume *= 1.0f - (degrees - 90) / 360.0f;
+                }
             }
 
             sound.Balance = balance;
             sound.Volume = volume;
-        }
-        /// <summary>
-        /// Enables looped playback for the specified sound.
-        /// </summary>
-        /// <param name="sound">The sound.</param>
-        public void EnableLooping(ISound sound)
-        {
-            this.LoopManager.Register(sound);
-        }
-        /// <summary>
-        /// Disables looped playback for the specified sound.
-        /// </summary>
-        /// <param name="sound">The sound.</param>
-        public void DisableLooping(ISound sound)
-        {
-            this.LoopManager.Remove(sound);
-        }
-        #endregion
-
-        #region ISoundFactory Member
-        /// <summary>
-        /// Creates a sound.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
-        public ISound CreateSound(string fileName)
-        {
-            return this.Factory.CreateSound(fileName);
         }
         #endregion
     }

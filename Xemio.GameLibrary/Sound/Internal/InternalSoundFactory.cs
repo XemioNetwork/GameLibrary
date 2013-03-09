@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Sound.Internal
 {
-    internal class SoundFactory : ISoundFactory
+    internal class InternalSoundFactory : ISoundFactory
     {
         #region ISoundFactory Member
         /// <summary>
@@ -16,7 +16,10 @@ namespace Xemio.GameLibrary.Sound.Internal
         /// <returns></returns>
         public ISound CreateSound(string fileName)
         {
-            return new Sound(fileName);
+            ISound sound = new InternalSound(fileName);
+            sound.Radius = float.MaxValue;
+
+            return sound;
         }
         #endregion
     }

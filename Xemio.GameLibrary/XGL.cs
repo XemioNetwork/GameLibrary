@@ -9,6 +9,7 @@ using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Sound;
+using Xemio.GameLibrary.Sound.Loops;
 
 namespace Xemio.GameLibrary
 {

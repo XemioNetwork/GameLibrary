@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Xemio.GameLibrary.Sound
+namespace Xemio.GameLibrary.Sound.Loops
 {
     public class LoopController
     {
@@ -37,7 +37,8 @@ namespace Xemio.GameLibrary.Sound
             {
                 if (this.Sound.Position >= this.Sound.Duration)
                 {
-                    this.Sound.Play();
+                    SoundManager soundManager = XGL.GetComponent<SoundManager>();
+                    soundManager.Play(this.Sound, PlayMode.KeepLocation);
                 }
             }
         }

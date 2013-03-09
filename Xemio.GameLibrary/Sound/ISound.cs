@@ -9,13 +9,9 @@ namespace Xemio.GameLibrary.Sound
     public interface ISound
     {
         /// <summary>
-        /// Plays the sound.
+        /// Gets or sets the sound radius.
         /// </summary>
-        void Play();
-        /// <summary>
-        /// Stops the current playing sound.
-        /// </summary>
-        void Stop();
+        float Radius { get; set; }
         /// <summary>
         /// Gets or sets the volume.
         /// </summary>
@@ -29,12 +25,12 @@ namespace Xemio.GameLibrary.Sound
         /// </summary>
         float Position { get; set; }
         /// <summary>
-        /// Gets the duration in seconds.
-        /// </summary>
-        float Duration { get; }
-        /// <summary>
         /// Gets or sets the balance.
         /// </summary>
         float Balance { get; set; }
+        /// <summary>
+        /// Gets the duration in seconds.
+        /// </summary>
+        float Duration { get; }
     }
 }

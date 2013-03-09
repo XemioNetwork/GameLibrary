@@ -6,7 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
 
-namespace Xemio.GameLibrary.Sound
+namespace Xemio.GameLibrary.Sound.Loops
 {
     public class LoopManager : IComponent, IGameHandler, IConstructable
     {
