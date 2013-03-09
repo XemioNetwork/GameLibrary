@@ -26,6 +26,7 @@ namespace Xemio.GameLibrary.Sound.Internal
                 //invoker exceptions using the play method.
 
                 this.MediaPlayer = new MediaPlayer();
+                this.MediaPlayer.Volume = 1.0f;
                 this.MediaPlayer.Open(new Uri(builder.ToString()));
 
                 while (this.MediaPlayer.IsBuffering);
