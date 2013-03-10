@@ -107,6 +107,13 @@ namespace Xemio.GameLibrary.Game
             this.Loaded = true;
         }
         /// <summary>
+        /// Removes this scene.
+        /// </summary>
+        public void Remove()
+        {
+            this.Parent.Remove(this);
+        }
+        /// <summary>
         /// Gets a scene.
         /// </summary>
         public T GetScene<T>() where T : Scene
