@@ -75,6 +75,7 @@
     <Compile Include="Events\Logging\ExceptionEvent.cs" />
     <Compile Include="Events\Logging\LoggingEvent.cs" />
     <Compile Include="Events\Logging\LoggingLevel.cs" />
+    <Compile Include="Game\CachedSceneProvider.cs" />
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Game\ISceneProvider.cs" />

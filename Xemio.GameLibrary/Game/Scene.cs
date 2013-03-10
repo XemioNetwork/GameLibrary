@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
-using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary.Game
 {
-    public abstract class Scene : ISceneProvider
+    public abstract class Scene : CachedSceneProvider, IEnumerable<Scene>
     {
         #region Constructors
         /// <summary>
@@ -18,8 +19,12 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public Scene()
         {
-            this.Scenes = new List<Scene>();
+            this._scenes = new List<Scene>();
         }
+        #endregion
+
+        #region Fields
+        private List<Scene> _scenes;
         #endregion
 
         #region Properties
@@ -31,24 +36,6 @@ namespace Xemio.GameLibrary.Game
         /// Gets the parent.
         /// </summary>
         public ISceneProvider Parent { get; internal set; }
-        /// <summary>
-        /// Gets a value indicating the index during a game tick.
-        /// </summary>
-        public virtual int TickIndex
-        {
-            get { return 0; }
-        }
-        /// <summary>
-        /// Gets a value indicating the index during the rendering process.
-        /// </summary>
-        public virtual int RenderIndex
-        {
-            get { return 0; }
-        }
-        /// <summary>
-        /// Gets the scenes.
-        /// </summary>
-        public List<Scene> Scenes { get; private set; }
         /// <summary>
         /// Gets the graphics device.
         /// </summary>
@@ -84,6 +71,20 @@ namespace Xemio.GameLibrary.Game
         {
             get { return XGL.GetComponent<SoundManager>(); }
         }
+        /// <summary>
+        /// Gets a value indicating the index during a game tick.
+        /// </summary>
+        public virtual int TickIndex
+        {
+            get { return 0; }
+        }
+        /// <summary>
+        /// Gets a value indicating the index during the rendering process.
+        /// </summary>
+        public virtual int RenderIndex
+        {
+            get { return 0; }
+        }
         #endregion
 
         #region Scene Methods
@@ -96,7 +97,7 @@ namespace Xemio.GameLibrary.Game
             this.SceneManager.Add(this);
         }
         #endregion
-
+        
         #region Methods
         /// <summary>
         /// Loads the content for the specified scene.
@@ -126,7 +127,7 @@ namespace Xemio.GameLibrary.Game
         /// <param name="predicate">The predicate.</param>
         public Scene GetScene(Func<Scene, bool> predicate)
         {
-            return this.Scenes.FirstOrDefault(predicate);
+            return this._scenes.FirstOrDefault(predicate);
         }
         #endregion
 
@@ -158,26 +159,42 @@ namespace Xemio.GameLibrary.Game
         }
         #endregion
 
-        #region ISceneProvider Member
+        #region CachedSceneProvider Methods
         /// <summary>
-        /// Adds the specified scene.
+        /// Called when a scene gets added.
         /// </summary>
         /// <param name="scene">The scene.</param>
-        public void Add(Scene scene)
+        protected override void OnAddScene(Scene scene)
         {
-            scene.Parent = this;
-            scene.Initialize();
-
-            this.Scenes.Add(scene);
+            this._scenes.Add(scene);
         }
         /// <summary>
-        /// Removes the specified scene.
+        /// Called when a scene gets removed.
         /// </summary>
         /// <param name="scene">The scene.</param>
-        public void Remove(Scene scene)
+        protected override void OnRemoveScene(Scene scene)
         {
-            scene.Parent = null;
-            this.Scenes.Remove(scene);
+            this._scenes.Remove(scene);
+        }
+        #endregion
+
+        #region IEnumerable<Scene> Member
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        public IEnumerator<Scene> GetEnumerator()
+        {
+            return this._scenes.GetEnumerator();
+        }
+        #endregion
+
+        #region IEnumerable Member
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
         #endregion
     }

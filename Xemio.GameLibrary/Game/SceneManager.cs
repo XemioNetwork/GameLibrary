@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Game
 {
-    public class SceneManager : IGameHandler, IConstructable, ISceneProvider
+    public class SceneManager : CachedSceneProvider, IGameHandler, IConstructable
     {
         #region Constructors
         /// <summary>
@@ -45,7 +45,7 @@ namespace Xemio.GameLibrary.Game
         {
             foreach (Scene scene in scenes)
             {
-                this.Add(scene);
+                base.Add(scene);
             }
         }
         /// <summary>
@@ -87,25 +87,21 @@ namespace Xemio.GameLibrary.Game
         }
         #endregion
 
-        #region ISceneProvider Member
+        #region CachedSceneProvider Member
         /// <summary>
-        /// Adds the specified scene.
+        /// Called when a scene gets added.
         /// </summary>
         /// <param name="scene">The scene.</param>
-        public void Add(Scene scene)
+        protected override void OnAddScene(Scene scene)
         {
-            scene.Parent = this;
-            scene.Initialize();
-
             this._scenes.Add(scene);
         }
         /// <summary>
-        /// Removes the specified scene.
+        /// Called when a scene gets removed.
         /// </summary>
         /// <param name="scene">The scene.</param>
-        public void Remove(Scene scene)
+        protected override void OnRemoveScene(Scene scene)
         {
-            scene.Parent = null;
             this._scenes.Remove(scene);
         }
         #endregion
@@ -124,10 +120,13 @@ namespace Xemio.GameLibrary.Game
             }
 
             scene.Tick(elapsed);
-            foreach (Scene subScene in scene.Scenes)
+
+            scene.BeginEnumeration();
+            foreach (Scene subScene in scene)
             {
                 this.Tick(subScene, elapsed);
             }
+            scene.EndEnumeration();
         }
         /// <summary>
         /// Handles a game tick.
@@ -135,11 +134,15 @@ namespace Xemio.GameLibrary.Game
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
+            this.BeginEnumeration();
+
             IList<Scene> scenes = this.OrderedTickScenes();
             for (int i = 0; i < scenes.Count; i++)
             {
                 this.Tick(scenes[i], elapsed);
             }
+
+            this.EndEnumeration();
         }
         /// <summary>
         /// Handles a game render request.
@@ -153,22 +156,28 @@ namespace Xemio.GameLibrary.Game
             this.GraphicsDevice.RenderManager.Offset(Vector2.Zero);
 
             scene.Render();
-            foreach (Scene subScene in scene.Scenes)
+
+            scene.BeginEnumeration();
+            foreach (Scene subScene in scene)
             {
                 this.Render(subScene);
             }
+            scene.EndEnumeration();
         }
         /// <summary>
         /// Handles a game render request.
         /// </summary>
         public void Render()
         {
+            this.BeginEnumeration();
+
             IList<Scene> scenes = this.OrderedRenderScenes();
             for (int i = 0; i < scenes.Count; i++)
             {
                 this.Render(scenes[i]);
             }
 
+            this.EndEnumeration();
             this.GraphicsDevice.Present();
         }
         #endregion
