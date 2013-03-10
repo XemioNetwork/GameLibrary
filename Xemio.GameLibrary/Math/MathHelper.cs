@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Math
         /// <summary>
         /// Two times π.
         /// </summary>
-        public const float TwoPi = (float)(Math.PI * Math.PI);
+        public const float TwoPi = 2 * (float)Math.PI;
         /// <summary>
         /// 180 divided by π.
         /// </summary>
