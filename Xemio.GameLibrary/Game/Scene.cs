@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary.Game
 {
-    public abstract class Scene
+    public abstract class Scene : ISceneProvider
     {
         #region Constructors
         /// <summary>
@@ -27,6 +27,10 @@ namespace Xemio.GameLibrary.Game
         /// Gets a value indicating whether this <see cref="Scene"/> is loaded.
         /// </summary>
         public bool Loaded { get; private set; }
+        /// <summary>
+        /// Gets the parent.
+        /// </summary>
+        public ISceneProvider Parent { get; internal set; }
         /// <summary>
         /// Gets a value indicating the index during a game tick.
         /// </summary>
@@ -144,6 +148,29 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public virtual void Render()
         {
+        }
+        #endregion
+
+        #region ISceneProvider Member
+        /// <summary>
+        /// Adds the specified scene.
+        /// </summary>
+        /// <param name="scene">The scene.</param>
+        public void Add(Scene scene)
+        {
+            scene.Parent = this;
+            scene.Initialize();
+
+            this.Scenes.Add(scene);
+        }
+        /// <summary>
+        /// Removes the specified scene.
+        /// </summary>
+        /// <param name="scene">The scene.</param>
+        public void Remove(Scene scene)
+        {
+            scene.Parent = null;
+            this.Scenes.Remove(scene);
         }
         #endregion
     }

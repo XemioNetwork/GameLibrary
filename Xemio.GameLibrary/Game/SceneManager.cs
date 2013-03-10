@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Game
 {
-    public class SceneManager : IGameHandler, IConstructable
+    public class SceneManager : IGameHandler, IConstructable, ISceneProvider
     {
         #region Constructors
         /// <summary>
@@ -38,15 +38,6 @@ namespace Xemio.GameLibrary.Game
 
         #region Methods
         /// <summary>
-        /// Adds the specified scene.
-        /// </summary>
-        /// <param name="scene">The scene.</param>
-        public void Add(Scene scene)
-        {
-            scene.Initialize();
-            this._scenes.Add(scene);
-        }
-        /// <summary>
         /// Adds the specified scenes.
         /// </summary>
         /// <param name="scenes">The scenes.</param>
@@ -64,14 +55,6 @@ namespace Xemio.GameLibrary.Game
         public void Add(params Scene[] scenes)
         {
             this.Add((IEnumerable<Scene>)scenes);
-        }
-        /// <summary>
-        /// Removes the specified scene.
-        /// </summary>
-        /// <param name="scene">The scene.</param>
-        public void Remove(Scene scene)
-        {
-            this._scenes.Remove(scene);
         }
         /// <summary>
         /// Gets a scene.
@@ -101,6 +84,29 @@ namespace Xemio.GameLibrary.Game
         private IList<Scene> OrderedRenderScenes()
         {
             return this._scenes.OrderBy(scene => scene.RenderIndex).ToList();
+        }
+        #endregion
+
+        #region ISceneProvider Member
+        /// <summary>
+        /// Adds the specified scene.
+        /// </summary>
+        /// <param name="scene">The scene.</param>
+        public void Add(Scene scene)
+        {
+            scene.Parent = this;
+            scene.Initialize();
+
+            this._scenes.Add(scene);
+        }
+        /// <summary>
+        /// Removes the specified scene.
+        /// </summary>
+        /// <param name="scene">The scene.</param>
+        public void Remove(Scene scene)
+        {
+            scene.Parent = null;
+            this._scenes.Remove(scene);
         }
         #endregion
 

@@ -77,6 +77,7 @@
     <Compile Include="Events\Logging\LoggingLevel.cs" />
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\IGameHandler.cs" />
+    <Compile Include="Game\ISceneProvider.cs" />
     <Compile Include="Input\KeyListener.cs" />
     <Compile Include="Input\MouseListener.cs" />
     <Compile Include="Math\BoundingBox.cs" />
