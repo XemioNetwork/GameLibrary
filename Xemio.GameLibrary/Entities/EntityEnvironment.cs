@@ -108,6 +108,19 @@ namespace Xemio.GameLibrary.Entities
             this.Entities.Remove(entity);
         }
         /// <summary>
+        /// Clears this instance.
+        /// </summary>
+        public void Clear()
+        {
+            this.BeginEnumeration();
+            foreach (Entity entity in this.Entities)
+            {
+                this.Remove(entity);
+            }
+
+            this.EndEnumeration();
+        }
+        /// <summary>
         /// Sorts the entities.
         /// </summary>
         protected virtual IEnumerable<Entity> SortedEntityCollection()
