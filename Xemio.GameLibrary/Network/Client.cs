@@ -49,6 +49,13 @@ namespace Xemio.GameLibrary.Network
 
         #region Methods
         /// <summary>
+        /// Provides the component.
+        /// </summary>
+        public void ProvideComponent()
+        {
+            XGL.Components.Add(new ValueProvider<Client>(this));
+        }
+        /// <summary>
         /// Starts the client loop.
         /// </summary>
         private void StartLoop()

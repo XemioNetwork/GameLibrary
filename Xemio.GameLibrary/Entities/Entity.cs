@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Entities
 {
@@ -15,7 +16,12 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public Entity()
         {
+            this.ID = -1;
+
             this.Components = new List<EntityComponent>();
+            this.Containers = new List<EntityDataContainer>();
+
+            this.HandleComponentTick = true;
         }
         #endregion
 
@@ -25,6 +31,10 @@ namespace Xemio.GameLibrary.Entities
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the ID.
+        /// </summary>
+        public int ID { get; set; }
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
@@ -44,20 +54,36 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public bool IsDestroyed { get; private set; }
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is synced.
+        /// </summary>
+        public bool IsSynced { get; protected set; }
+        /// <summary>
         /// Gets a value indicating whether this instance is dirty.
         /// </summary>
         public bool IsDirty { get; set; }
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is tick enabled.
+        /// </summary>
+        public bool HandleComponentTick { get; set; }
+        /// <summary>
         /// Gets the components.
         /// </summary>
+        [ExcludeSync]
         public List<EntityComponent> Components { get; private set; }
+        /// <summary>
+        /// Gets the data containers.
+        /// </summary>
+        [ExcludeSync]
+        public List<EntityDataContainer> Containers { get; private set; }
         /// <summary>
         /// Gets the renderer.
         /// </summary>
+        [ExcludeSync]
         public EntityRenderer Renderer { get; protected set; }
         /// <summary>
         /// Gets the environment.
         /// </summary>
+        [ExcludeSync]
         public EntityEnvironment Environment { get; internal set; }
         #endregion
 
@@ -68,6 +94,21 @@ namespace Xemio.GameLibrary.Entities
         public T GetComponent<T>() where T : EntityComponent
         {
             return this.Components.FirstOrDefault(component => component is T) as T;
+        }
+        /// <summary>
+        /// Gets a container by the specified ID.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        public EntityDataContainer GetContainer(int id)
+        {
+            return this.Containers.FirstOrDefault(container => container.ID == id);
+        }
+        /// <summary>
+        /// Gets a specific container by a specified type.
+        /// </summary>
+        public T GetContainer<T>() where T : EntityDataContainer
+        {
+            return this.Containers.FirstOrDefault(container => container is T) as T;
         }
         /// <summary>
         /// Destroys this entity.
@@ -87,12 +128,15 @@ namespace Xemio.GameLibrary.Entities
                 this.IsDirty = false;
             }
 
-            this._resetDirty = true;
-
-            foreach (EntityComponent component in this.Components)
+            if (this.HandleComponentTick)
             {
-                component.Tick(elapsed);
+                foreach (EntityComponent component in this.Components)
+                {
+                    component.Tick(elapsed);
+                }
             }
+
+            this._resetDirty = true;
         }
         #endregion
     }

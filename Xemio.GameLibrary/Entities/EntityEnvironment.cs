@@ -19,6 +19,9 @@ namespace Xemio.GameLibrary.Entities
             this._addCache = new Queue<Entity>();
             this._removeCache = new Queue<Entity>();
 
+            this._idMappings = new Dictionary<int, Entity>();
+
+            this.Factory = new EntityFactory();
             this.Entities = new List<Entity>();
         }
         #endregion
@@ -27,14 +30,27 @@ namespace Xemio.GameLibrary.Entities
         private Queue<Entity> _addCache;
         private Queue<Entity> _removeCache;
 
+        private Dictionary<int, Entity> _idMappings;
+
         private bool _enumerating;
         #endregion
 
         #region Properties
         /// <summary>
+        /// Gets the entity count.
+        /// </summary>
+        public int Count
+        {
+            get { return this.Entities.Count; }
+        }
+        /// <summary>
         /// Gets the entities.
         /// </summary>
         protected List<Entity> Entities { get; private set; }
+        /// <summary>
+        /// Gets or sets the factory.
+        /// </summary>
+        public EntityFactory Factory { get; set; }
         /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Entities.Entity"/> at the specified index.
         /// </summary>
@@ -65,38 +81,77 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Begins the enumeration.
         /// </summary>
-        private void BeginEnumeration()
+        protected void BeginEnumeration()
         {
             this._enumerating = true;
         }
         /// <summary>
         /// Ends the enumeration.
         /// </summary>
-        private void EndEnumeration()
+        protected void EndEnumeration()
         {
             this._enumerating = false;
             this.ApplyCachedChanges();
         }
         /// <summary>
+        /// Gets an entity by a specified ID.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        public Entity GetEntity(int id)
+        {
+            if (this._idMappings.ContainsKey(id))
+            {
+                return this._idMappings[id];
+            }
+
+            return null;
+        }
+        /// <summary>
         /// Adds the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public void Add(Entity entity)
+        protected void AddMapped(Entity entity)
+        {
+            entity.Environment = this;
+
+            this._idMappings.Add(entity.ID, entity);
+            this.Entities.Add(entity);
+        }
+        /// <summary>
+        /// Adds the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        public virtual void Add(Entity entity)
         {
             if (this._enumerating)
             {
                 this._addCache.Enqueue(entity);
                 return;
             }
+            if (entity.ID < 0)
+            {
+                entity.ID = this.Factory.CreateID();
+            }
 
-            entity.Environment = this;
-            this.Entities.Add(entity);
+            this.AddMapped(entity);
         }
         /// <summary>
         /// Removes the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public void Remove(Entity entity)
+        protected void RemoveMapped(Entity entity)
+        {
+            entity.ID = -1;
+            entity.Environment = null;
+
+            this._idMappings.Remove(entity.ID);
+            this.Entities.Remove(entity);
+        }
+        /// <summary>
+        /// Removes the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        public virtual void Remove(Entity entity)
         {
             if (this._enumerating)
             {
@@ -104,8 +159,7 @@ namespace Xemio.GameLibrary.Entities
                 return;
             }
 
-            entity.Environment = null;
-            this.Entities.Remove(entity);
+            this.RemoveMapped(entity);
         }
         /// <summary>
         /// Clears this instance.

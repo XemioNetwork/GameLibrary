@@ -19,11 +19,32 @@ namespace Xemio.GameLibrary.Entities
         }
         #endregion
 
+        #region Fields
+        private EntityDataContainer _container;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the entity.
         /// </summary>
         public Entity Entity { get; private set; }
+        /// <summary>
+        /// Gets the data container.
+        /// </summary>
+        protected EntityDataContainer Container
+        {
+            get { return this._container; }
+            set
+            {
+                if (this._container != null)
+                {
+                    this.Entity.Containers.Remove(this._container);
+                }
+
+                this._container = value;
+                this.Entity.Containers.Add(this._container);
+            }
+        }
         #endregion
 
         #region Methods

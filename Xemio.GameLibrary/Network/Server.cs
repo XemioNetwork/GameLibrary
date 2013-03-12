@@ -63,11 +63,18 @@ namespace Xemio.GameLibrary.Network
 
         #region Methods
         /// <summary>
+        /// Provides the component.
+        /// </summary>
+        public void ProvideComponent()
+        {
+            XGL.Components.Add(new ValueProvider<Server>(this));
+        }
+        /// <summary>
         /// Called when the server received a package.
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        private void OnReceivedPackage(Package package, IConnection connection)
+        protected virtual void OnReceivedPackage(Package package, IConnection connection)
         {
             this._eventManager.Send(new ReceivedPackageEvent(package, connection));
         }
@@ -76,7 +83,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        private void OnSentPackage(Package package, IConnection connection)
+        protected virtual void OnSentPackage(Package package, IConnection connection)
         {
             this._eventManager.Send(new SentPackageEvent(package, connection));
         }
@@ -98,9 +105,7 @@ namespace Xemio.GameLibrary.Network
             while (this.Active)
             {
                 IConnection connection = this.Protocol.AcceptConnection();
-
-                EventManager eventManager = XGL.GetComponent<EventManager>();
-                eventManager.Send(new ClientJoinedEvent(connection));
+                this._eventManager.Send(new ClientJoinedEvent(connection));
 
                 this.Connections.Add(connection);
                 this.StartListening(connection);
@@ -132,6 +137,7 @@ namespace Xemio.GameLibrary.Network
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message + ex.StackTrace);
                     //TODO: logging
                     this.Connections.Remove(connection);
                     this._eventManager.Send(new ClientLeftEvent(connection));

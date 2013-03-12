@@ -4,11 +4,37 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Common.Extensions
 {
     public static class BinaryReaderExtensions
     {
+        #region Methods
+        /// <summary>
+        /// Reads a vector2.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        public static Vector2 ReadVector2(this BinaryReader reader)
+        {
+            float x = reader.ReadSingle();
+            float y = reader.ReadSingle();
+
+            return new Vector2(x, y);
+        }
+        /// <summary>
+        /// Reads a rectangle.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        public static Rectangle ReadRectangle(this BinaryReader reader)
+        {
+            float x = reader.ReadSingle();
+            float y = reader.ReadSingle();
+            float width = reader.ReadSingle();
+            float height = reader.ReadSingle();
+
+            return new Rectangle(x, y, width, height);
+        }
         /// <summary>
         /// Reads an object of the specified type.
         /// </summary>
@@ -80,6 +106,14 @@ namespace Xemio.GameLibrary.Common.Extensions
                     {
                         value = Enum.ToObject(type, reader.ReadInt32());
                     }
+                    else if (type == typeof(Vector2))
+                    {
+                        value = reader.ReadVector2();
+                    }
+                    else if (type == typeof(Rectangle))
+                    {
+                        value = reader.ReadRectangle();
+                    }
                     else
                     {
                         value = Activator.CreateInstance(type);
@@ -92,7 +126,7 @@ namespace Xemio.GameLibrary.Common.Extensions
                             {
                                 bool isNull = reader.ReadBoolean();
                                 object propertyValue = isNull ? null : reader.ReadInstance(property.PropertyType);
-                                
+
                                 property.SetValue(value, propertyValue, null);
                             }
                         }
@@ -102,5 +136,6 @@ namespace Xemio.GameLibrary.Common.Extensions
 
             return value;
         }
+        #endregion
     }
 }

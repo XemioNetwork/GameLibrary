@@ -65,10 +65,13 @@
     <Compile Include="Components\IConstructable.cs" />
     <Compile Include="Components\IValueProvider.cs" />
     <Compile Include="Components\ValueProvider.cs" />
+    <Compile Include="Entities\EntityDataContainer.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponent.cs" />
     <Compile Include="Entities\EntityEnvironment.cs" />
     <Compile Include="Entities\EntityRenderer.cs" />
+    <Compile Include="Entities\EntityFactory.cs" />
+    <Compile Include="Entities\Network\Packages\EntityPackage.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ActionCollection.cs" />
@@ -88,6 +91,12 @@
     <Compile Include="Math\Rectangle.cs" />
     <Compile Include="Math\Vector2.cs" />
     <Compile Include="Network\Client.cs" />
+    <Compile Include="Entities\Network\ClientEnvironment.cs" />
+    <Compile Include="Entities\Network\IWorldUpdate.cs" />
+    <Compile Include="Entities\Network\NetworkComponent.cs" />
+    <Compile Include="Entities\Network\Packages\ExchangePackage.cs" />
+    <Compile Include="Entities\Network\ServerEnvironment.cs" />
+    <Compile Include="Entities\Network\Packages\UpdatePackage.cs" />
     <Compile Include="Network\Events\ClientJoinedEvent.cs" />
     <Compile Include="Network\Events\ClientLeftEvent.cs" />
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />
@@ -95,6 +104,8 @@
     <Compile Include="Network\IConnection.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
     <Compile Include="Network\PackageHandler.cs" />
+    <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
+    <Compile Include="Network\Synchronization\IPropertyComparator.cs" />
     <Compile Include="Network\Synchronization\ISynchronizable.cs" />
     <Compile Include="Network\Package.cs" />
     <Compile Include="Network\PackageManager.cs" />
@@ -105,6 +116,9 @@
     <Compile Include="Network\Protocols\Tcp\TcpConnection.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpServerProtocol.cs" />
     <Compile Include="Network\Server.cs" />
+    <Compile Include="Network\Synchronization\PropertyComparator.cs" />
+    <Compile Include="Network\Synchronization\Properties.cs" />
+    <Compile Include="Network\Synchronization\StaticComparator.cs" />
     <Compile Include="Network\Synchronization\SynchronizationStorage.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,7 +161,9 @@
     <Compile Include="Sound\SoundManager.cs" />
     <Compile Include="XGL.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\Network\Requests\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

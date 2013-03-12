@@ -10,7 +10,25 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
     public class TcpClientProtocol : IClientProtocol
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpClientProtocol"/> class.
+        /// </summary>
+        public TcpClientProtocol()
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpClientProtocol"/> class.
+        /// </summary>
+        /// <param name="delay">The delay.</param>
+        public TcpClientProtocol(TcpDelay delay)
+        {
+            this._delay = delay;
+        }
+        #endregion
+
         #region Fields
+        private TcpDelay _delay;
         private TcpClient _tcpClient;
         #endregion
 
@@ -34,6 +52,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         public void Connect(string ip, int port)
         {
             this._tcpClient = new TcpClient();
+            this._tcpClient.NoDelay = (this._delay == TcpDelay.None);
             this._tcpClient.Connect(IPAddress.Parse(ip), port);
 
             this.Writer = new BinaryWriter(this._tcpClient.GetStream());

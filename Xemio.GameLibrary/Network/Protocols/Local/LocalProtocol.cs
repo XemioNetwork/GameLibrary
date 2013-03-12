@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Network.Protocols.Local
 {
@@ -26,6 +28,23 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         #region Fields
         private int _localSleepTime;
         private Queue<Package> _packageQueue;
+        #endregion
+
+        #region Singleton
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        public static LocalProtocol Instance
+        {
+            get { return Singleton<LocalProtocol>.Value; }
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the simulated latency in milliseconds.
+        /// </summary>
+        public float SimulatedLatency { get; set; }
         #endregion
 
         #region IClientProtocol Member
@@ -63,6 +82,11 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         {
             while (this._packageQueue.Count == 0)
             {
+            }
+
+            if (this.SimulatedLatency > 0)
+            {
+                Thread.Sleep((int)this.SimulatedLatency);
             }
 
             return this._packageQueue.Dequeue();

@@ -32,12 +32,27 @@ namespace Xemio.GameLibrary.Network
         /// <param name="packageEvent">The event.</param>
         protected void HandleEvent(ReceivedPackageEvent packageEvent)
         {
-            Type type = packageEvent.Package.GetType();
-            if (this._subscribers.ContainsKey(type))
+            List<Type> types = new List<Type>();
+
+            Type packageType = packageEvent.Package.GetType();
+            Type currentType = packageType;
+
+            while (currentType.BaseType != null)
             {
-                foreach (Action<Package> action in this._subscribers[type])
+                types.Add(currentType);
+                currentType = currentType.BaseType;
+            }
+
+            types.Add(currentType);
+
+            foreach (Type type in types)
+            {
+                if (this._subscribers.ContainsKey(type))
                 {
-                    action(packageEvent.Package);
+                    foreach (Action<Package> action in this._subscribers[type])
+                    {
+                        action(packageEvent.Package);
+                    }
                 }
             }
         }
@@ -72,8 +87,8 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void Construct()
         {
-            XGL.GetComponent<EventManager>()
-                .Subscribe<ReceivedPackageEvent>(this.HandleEvent);
+            EventManager eventManager = XGL.GetComponent<EventManager>();
+            eventManager.Subscribe<ReceivedPackageEvent>(this.HandleEvent);
         }
         #endregion
     }

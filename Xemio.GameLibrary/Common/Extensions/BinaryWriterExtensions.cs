@@ -4,11 +4,35 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Common.Extensions
 {
     public static class BinaryWriterExtensions
     {
+        #region Methods
+        /// <summary>
+        /// Writes the specified vector.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="vector">The vector.</param>
+        public static void Write(this BinaryWriter writer, Vector2 vector)
+        {
+            writer.Write(vector.X);
+            writer.Write(vector.Y);
+        }
+        /// <summary>
+        /// Writes the specified rectangle.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        public static void Write(this BinaryWriter writer, Rectangle rectangle)
+        {
+            writer.Write(rectangle.X);
+            writer.Write(rectangle.Y);
+            writer.Write(rectangle.Width);
+            writer.Write(rectangle.Height);
+        }
         /// <summary>
         /// Writes the specified object to the stream.
         /// </summary>
@@ -77,6 +101,14 @@ namespace Xemio.GameLibrary.Common.Extensions
                     {
                         writer.Write((int)value);
                     }
+                    else if (type == typeof(Vector2))
+                    {
+                        writer.Write((Vector2)value);
+                    }
+                    else if (type == typeof(Rectangle))
+                    {
+                        writer.Write((Rectangle)value);
+                    }
                     else
                     {
                         PropertyInfo[] properties = type.GetProperties();
@@ -98,5 +130,6 @@ namespace Xemio.GameLibrary.Common.Extensions
                     break;
             }
         }
+        #endregion
     }
 }
