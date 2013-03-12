@@ -52,10 +52,7 @@ namespace Xemio.GameLibrary.Entities.Network
         {
             base.Add(entity);
 
-            EntityPackage package = new EntityPackage();
-            package.ID = entity.ID;
-            package.TypeName = entity.GetType().AssemblyQualifiedName;
-
+            EntityPackage package = new EntityPackage(entity);
             this.Server.Send(package);
         }
         /// <summary>
@@ -71,7 +68,7 @@ namespace Xemio.GameLibrary.Entities.Network
         /// </summary>
         public virtual IWorldUpdate CreateUpdate()
         {
-            return new UpdatePackage(this);
+            return new WorldUpdatePackage(this);
         }
         /// <summary>
         /// Handles game updates.

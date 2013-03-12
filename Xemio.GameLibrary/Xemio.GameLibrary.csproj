@@ -96,7 +96,7 @@
     <Compile Include="Entities\Network\NetworkComponent.cs" />
     <Compile Include="Entities\Network\Packages\ExchangePackage.cs" />
     <Compile Include="Entities\Network\ServerEnvironment.cs" />
-    <Compile Include="Entities\Network\Packages\UpdatePackage.cs" />
+    <Compile Include="Entities\Network\Packages\WorldUpdatePackage.cs" />
     <Compile Include="Network\Events\ClientJoinedEvent.cs" />
     <Compile Include="Network\Events\ClientLeftEvent.cs" />
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />
@@ -162,7 +162,7 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\Network\Requests\" />
+    <Folder Include="Entities\Network\Actions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
