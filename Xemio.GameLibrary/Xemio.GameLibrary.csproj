@@ -93,6 +93,7 @@
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />
     <Compile Include="Network\Events\SentPackageEvent.cs" />
     <Compile Include="Network\IConnection.cs" />
+    <Compile Include="Network\NetworkHelper.cs" />
     <Compile Include="Network\PackageHandler.cs" />
     <Compile Include="Network\Synchronization\ISynchronizable.cs" />
     <Compile Include="Network\Package.cs" />

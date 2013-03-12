@@ -75,7 +75,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
                 if (dataWritten)
                 {
                     PropertyInfo property = this._indexMapping[i];
-                    object value = reader.ReadProperties(property.PropertyType);
+                    object value = reader.ReadInstance(property.PropertyType);
 
                     property.SetValue(this.Instance, value, null);
                 }
@@ -100,7 +100,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
 
                 if (dataWritten)
                 {
-                    writer.WriteProperties(currentValue);
+                    writer.WriteInstance(currentValue);
                 }
             }
         }

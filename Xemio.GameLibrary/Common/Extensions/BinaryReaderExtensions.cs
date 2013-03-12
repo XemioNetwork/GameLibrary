@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Common.Extensions
         /// <param name="reader">The reader.</param>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public static object ReadProperties(this BinaryReader reader, Type type)
+        public static object ReadInstance(this BinaryReader reader, Type type)
         {
             object value = null;
 
@@ -71,7 +71,7 @@ namespace Xemio.GameLibrary.Common.Extensions
 
                         for (int i = 0; i < length; i++)
                         {
-                            array[i] = reader.ReadProperties(type.GetElementType());
+                            array[i] = reader.ReadInstance(type.GetElementType());
                         }
 
                         value = array;
@@ -82,19 +82,18 @@ namespace Xemio.GameLibrary.Common.Extensions
                     }
                     else
                     {
-                        if (!reader.ReadBoolean())
-                        {
-                            value = Activator.CreateInstance(type);
+                        value = Activator.CreateInstance(type);
 
-                            PropertyInfo[] properties = type.GetProperties();
-                            foreach (PropertyInfo property in properties)
+                        PropertyInfo[] properties = type.GetProperties();
+                        foreach (PropertyInfo property in properties)
+                        {
+                            if (!property.GetCustomAttributes(true)
+                                .Any(attribute => attribute is ExcludeSyncAttribute))
                             {
-                                if (!property.GetCustomAttributes(true)
-                                    .Any(attribute => attribute is ExcludeAttribute))
-                                {
-                                    object propertyValue = reader.ReadProperties(property.PropertyType);
-                                    property.SetValue(value, propertyValue, null);
-                                }
+                                bool isNull = reader.ReadBoolean();
+                                object propertyValue = isNull ? null : reader.ReadInstance(property.PropertyType);
+                                
+                                property.SetValue(value, propertyValue, null);
                             }
                         }
                     }

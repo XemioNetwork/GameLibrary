@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Network
         public void Serialize(Package package, BinaryWriter writer)
         {
             writer.Write(package.Identifier);
-            writer.WriteProperties(package);
+            writer.WriteInstance(package);
         }
         /// <summary>
         /// Deserializes the specified reader.
@@ -50,7 +50,7 @@ namespace Xemio.GameLibrary.Network
             int identifier = reader.ReadInt32();
             Package package = this.Linker.Resolve(identifier);
 
-            return (Package)reader.ReadProperties(package.GetType());
+            return (Package)reader.ReadInstance(package.GetType());
         }
         #endregion
     }

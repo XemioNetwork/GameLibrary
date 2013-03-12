@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Common
 {
-    public class ExcludeAttribute : Attribute
+    public class ExcludeSyncAttribute : Attribute
     {
     }
 }

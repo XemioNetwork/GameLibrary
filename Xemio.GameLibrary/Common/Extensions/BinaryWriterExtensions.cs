@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Common.Extensions
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        public static void WriteProperties(this BinaryWriter writer, object value)
+        public static void WriteInstance(this BinaryWriter writer, object value)
         {
             Type type = value.GetType();
 
@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Common.Extensions
                         writer.Write(array.Length);
                         for (int i = 0; i < array.Length; i++)
                         {
-                            writer.WriteProperties(array.GetValue(i));
+                            writer.WriteInstance(array.GetValue(i));
                         }
                     }
                     else if (type.IsEnum)
@@ -79,18 +79,18 @@ namespace Xemio.GameLibrary.Common.Extensions
                     }
                     else
                     {
-                        //TODO: Refactor or update...
-                        writer.Write(value == null);
-
-                        if (value != null)
+                        PropertyInfo[] properties = type.GetProperties();
+                        foreach (PropertyInfo property in properties)
                         {
-                            PropertyInfo[] properties = type.GetProperties();
-                            foreach (PropertyInfo property in properties)
+                            if (!property.GetCustomAttributes(true)
+                                .Any(attribute => attribute is ExcludeSyncAttribute))
                             {
-                                if (!property.GetCustomAttributes(true)
-                                    .Any(attribute => attribute is ExcludeAttribute))
+                                object propertyValue = property.GetValue(value, null);
+
+                                writer.Write(propertyValue == null);
+                                if (propertyValue != null)
                                 {
-                                    writer.WriteProperties(property.GetValue(value, null));
+                                    writer.WriteInstance(propertyValue);
                                 }
                             }
                         }

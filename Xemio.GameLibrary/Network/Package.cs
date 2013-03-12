@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the identifier.
         /// </summary>
-        [Exclude]
+        [ExcludeSync]
         public int Identifier
         {
             get { return this.GetType().Name.GetHashCode(); }
