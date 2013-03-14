@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.Entities.Network.Updates
+namespace Xemio.GameLibrary.Entities.Network.Packages
 {
     internal class WorldUpdatePackage : Package, IWorldUpdate
     {

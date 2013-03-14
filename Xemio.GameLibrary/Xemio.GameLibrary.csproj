@@ -71,7 +71,7 @@
     <Compile Include="Entities\EntityEnvironment.cs" />
     <Compile Include="Entities\EntityRenderer.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
-    <Compile Include="Entities\Network\Updates\EntityPackage.cs" />
+    <Compile Include="Entities\Network\Packages\EntityPackage.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ActionCollection.cs" />
@@ -94,9 +94,9 @@
     <Compile Include="Entities\Network\ClientEnvironment.cs" />
     <Compile Include="Entities\Network\IWorldUpdate.cs" />
     <Compile Include="Entities\Network\NetworkComponent.cs" />
-    <Compile Include="Entities\Network\Updates\WorldExchangePackage.cs" />
+    <Compile Include="Entities\Network\Packages\WorldExchangePackage.cs" />
     <Compile Include="Entities\Network\ServerEnvironment.cs" />
-    <Compile Include="Entities\Network\Updates\WorldUpdatePackage.cs" />
+    <Compile Include="Entities\Network\Packages\WorldUpdatePackage.cs" />
     <Compile Include="Network\Events\ClientJoinedEvent.cs" />
     <Compile Include="Network\Events\ClientLeftEvent.cs" />
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />

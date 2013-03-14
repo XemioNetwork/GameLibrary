@@ -6,7 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Entities.Network.Updates
+namespace Xemio.GameLibrary.Entities.Network.Packages
 {
     public class EntityPackage : Package, IWorldUpdate
     {
