@@ -82,7 +82,7 @@ publish
 packages
 
 # Include Network Packages namespaces
-!Network/Packages/
+!Network/Packages/*
 
 # Windows Azure Build Output
 csx
