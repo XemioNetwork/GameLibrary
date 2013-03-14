@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Entities.Network.Packages
+namespace Xemio.GameLibrary.Entities.Network.Updates
 {
     public class WorldExchangePackage : Package
     {
