@@ -109,7 +109,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
                 object currentValue = pair.Key.GetValue(this.Instance, null);
                 object lastValue = pair.Value;
 
-                bool dataWritten = !this.Comparator.IsEqual(currentValue, lastValue);
+                bool dataWritten = !this.Comparator.HasChanged(currentValue, lastValue);
                 writer.Write(dataWritten);
 
                 if (dataWritten)

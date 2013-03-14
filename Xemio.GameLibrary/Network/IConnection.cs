@@ -16,6 +16,10 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         IPAddress IP { get; }
         /// <summary>
+        /// Gets or sets the latency.
+        /// </summary>
+        float Latency { get; set; }
+        /// <summary>
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>
         bool Connected { get; }

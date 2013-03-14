@@ -6,6 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Entities.Network.Packages;
 using Xemio.GameLibrary.Network;
+using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Entities.Network
 {
@@ -18,7 +19,9 @@ namespace Xemio.GameLibrary.Entities.Network
         public ServerEnvironment()
         {
             this.FrameDelay = 5;
-            if (this.Server == null)
+
+            Server server = XGL.GetComponent<Server>();
+            if (server == null)
             {
                 throw new InvalidOperationException("You can not create a server environment on the client side.");
             }
@@ -31,19 +34,19 @@ namespace Xemio.GameLibrary.Entities.Network
 
         #region Properties
         /// <summary>
-        /// Gets the server.
-        /// </summary>
-        public Server Server
-        {
-            get { return XGL.GetComponent<Server>(); }
-        }
-        /// <summary>
         /// Gets or sets the delay between world updates in frames.
         /// </summary>
         public int FrameDelay { get; set; }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Creates a server snapshot.
+        /// </summary>
+        public virtual IWorldUpdate CreateUpdate()
+        {
+            return new WorldUpdatePackage(this);
+        }
         /// <summary>
         /// Adds the specified entity.
         /// </summary>
@@ -53,22 +56,9 @@ namespace Xemio.GameLibrary.Entities.Network
             base.Add(entity);
 
             EntityPackage package = new EntityPackage(entity);
-            this.Server.Send(package);
-        }
-        /// <summary>
-        /// Removes the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        public override void Remove(Entity entity)
-        {
-            base.Remove(entity);
-        }
-        /// <summary>
-        /// Creates a server snapshot.
-        /// </summary>
-        public virtual IWorldUpdate CreateUpdate()
-        {
-            return new WorldUpdatePackage(this);
+            Server server = XGL.GetComponent<Server>();
+
+            server.Send(package);
         }
         /// <summary>
         /// Handles game updates.
@@ -108,10 +98,16 @@ namespace Xemio.GameLibrary.Entities.Network
             {
                 this._frames = 0;
 
+                Server server = XGL.GetComponent<Server>();
                 IWorldUpdate update = this.CreateUpdate();
-                Package package = update.CreatePackage();
+                Package package = update as Package;
 
-                this.Server.Send(package);
+                if (package == null)
+                {
+                    throw new InvalidOperationException("The world update has to be transformable into a package instance.");
+                }
+
+                server.Send(package);
             }
         }
         #endregion

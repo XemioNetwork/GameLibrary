@@ -15,9 +15,5 @@ namespace Xemio.GameLibrary.Entities.Network
         /// </summary>
         /// <param name="environment">The environment.</param>
         void Apply(EntityEnvironment environment);
-        /// <summary>
-        /// Creates the package.
-        /// </summary>
-        Package CreatePackage();
     }
 }

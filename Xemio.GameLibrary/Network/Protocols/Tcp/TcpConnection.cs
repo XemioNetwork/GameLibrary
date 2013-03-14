@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
@@ -42,6 +43,10 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             get { return ((IPEndPoint)this._tcpClient.Client.LocalEndPoint).Address; }
         }
+        /// <summary>
+        /// Gets or sets the latency.
+        /// </summary>
+        public float Latency { get; set; }
         /// <summary>
         /// Gets the writer.
         /// </summary>

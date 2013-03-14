@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// </summary>
         /// <param name="a">The <see cref="System.Object"/> to compare with.</param>
         /// <param name="b">The <see cref="System.Object"/> to compare with.</param>
-        public bool IsEqual(object a, object b)
+        public bool HasChanged(object a, object b)
         {
             return object.Equals(a, b);
         }

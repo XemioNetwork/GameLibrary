@@ -94,7 +94,7 @@
     <Compile Include="Entities\Network\ClientEnvironment.cs" />
     <Compile Include="Entities\Network\IWorldUpdate.cs" />
     <Compile Include="Entities\Network\NetworkComponent.cs" />
-    <Compile Include="Entities\Network\Packages\ExchangePackage.cs" />
+    <Compile Include="Entities\Network\Packages\WorldExchangePackage.cs" />
     <Compile Include="Entities\Network\ServerEnvironment.cs" />
     <Compile Include="Entities\Network\Packages\WorldUpdatePackage.cs" />
     <Compile Include="Network\Events\ClientJoinedEvent.cs" />
@@ -102,13 +102,17 @@
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />
     <Compile Include="Network\Events\SentPackageEvent.cs" />
     <Compile Include="Network\IConnection.cs" />
-    <Compile Include="Network\NetworkHelper.cs" />
-    <Compile Include="Network\PackageHandler.cs" />
+    <Compile Include="Network\Subscribers\IClientSubscriber.cs" />
+    <Compile Include="Network\Subscribers\IServerSubscriber.cs" />
+    <Compile Include="Network\Packages\PackageHandler.cs" />
+    <Compile Include="Network\Subscribers\ClientSubscriber.cs" />
+    <Compile Include="Network\Protocols\Local\QueuePackage.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
+    <Compile Include="Network\Subscribers\ServerSubscriber.cs" />
     <Compile Include="Network\Synchronization\IPropertyComparator.cs" />
     <Compile Include="Network\Synchronization\ISynchronizable.cs" />
-    <Compile Include="Network\Package.cs" />
-    <Compile Include="Network\PackageManager.cs" />
+    <Compile Include="Network\Packages\Package.cs" />
+    <Compile Include="Network\Packages\PackageManager.cs" />
     <Compile Include="Network\Protocols\IClientProtocol.cs" />
     <Compile Include="Network\Protocols\IServerProtocol.cs" />
     <Compile Include="Network\Protocols\Local\LocalProtocol.cs" />
@@ -120,6 +124,11 @@
     <Compile Include="Network\Synchronization\Properties.cs" />
     <Compile Include="Network\Synchronization\StaticComparator.cs" />
     <Compile Include="Network\Synchronization\SynchronizationStorage.cs" />
+    <Compile Include="Network\Timing\LatencyClientSubscriber.cs" />
+    <Compile Include="Network\Timing\LatencyPackage.cs" />
+    <Compile Include="Network\Timing\TimeSyncClientSubscriber.cs" />
+    <Compile Include="Network\Timing\TimeSyncPackage.cs" />
+    <Compile Include="Network\Timing\TimeSyncServerSubscriber.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Fonts\TextureFactoryExtensions.cs" />
@@ -163,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Network\Actions\" />
+    <Folder Include="Entities\Network\Perceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

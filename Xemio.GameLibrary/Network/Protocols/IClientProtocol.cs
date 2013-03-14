@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Network;
+using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols
 {

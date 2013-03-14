@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading;
 using System.Diagnostics;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Local
 {
@@ -19,7 +20,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         public LocalProtocol()
         {
             this._localSleepTime = 1000;
-            this._packageQueue = new Queue<Package>();
+            this._packageQueue = new Queue<QueuePackage>();
 
             this.IP = IPAddress.Parse("127.0.0.1");
         }
@@ -27,7 +28,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
 
         #region Fields
         private int _localSleepTime;
-        private Queue<Package> _packageQueue;
+        private Queue<QueuePackage> _packageQueue;
         #endregion
 
         #region Singleton
@@ -44,7 +45,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <summary>
         /// Gets or sets the simulated latency in milliseconds.
         /// </summary>
-        public float SimulatedLatency { get; set; }
+        public float Latency { get; set; }
         #endregion
 
         #region IClientProtocol Member
@@ -72,7 +73,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this._packageQueue.Enqueue(package);
+            this._packageQueue.Enqueue(new QueuePackage(package, this.Latency));
         }
         /// <summary>
         /// Receives a package.
@@ -84,12 +85,19 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
             {
             }
 
-            if (this.SimulatedLatency > 0)
+            QueuePackage queuePackage = this._packageQueue.Dequeue();
+            float sleepTime = queuePackage.Time;
+
+            for (int i = 0; i < sleepTime; i++)
             {
-                Thread.Sleep((int)this.SimulatedLatency);
+                Thread.Sleep(1);
+                foreach (QueuePackage package in this._packageQueue)
+                {
+                    package.Time--;
+                }
             }
 
-            return this._packageQueue.Dequeue();
+            return queuePackage.Package;
         }
         #endregion
 

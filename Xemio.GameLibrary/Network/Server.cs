@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Xemio.GameLibrary.Network.Protocols;
 using System.Reflection;
+using System.Threading.Tasks;
 using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;
-using System.Threading.Tasks;
+using Xemio.GameLibrary.Network.Packages;
+using Xemio.GameLibrary.Network.Timing;
+using Xemio.GameLibrary.Network.Subscribers;
+using Xemio.GameLibrary.Network.Protocols;
+using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
 {
-    public abstract class Server : IComponent
+    public abstract class Server : IComponent, IGameHandler
     {
         #region Constructors
         /// <summary>
@@ -21,6 +25,9 @@ namespace Xemio.GameLibrary.Network
         /// <param name="protocol">The protocol.</param>
         protected Server(IServerProtocol protocol)
         {
+            GameLoop loop = XGL.GetComponent<GameLoop>();
+            loop.Subscribe(this);
+            
             this.Active = true;
 
             this.Protocol = protocol;
@@ -30,12 +37,16 @@ namespace Xemio.GameLibrary.Network
             this.Connections = new List<IConnection>();
 
             this._eventManager = XGL.GetComponent<EventManager>();
+            this._subscribers = new List<IServerSubscriber>();
+
+            this.Subscribe(new TimeSyncServerSubscriber());
             this.StartServerLoop();
         }
         #endregion
 
         #region Fields
         private EventManager _eventManager;
+        private List<IServerSubscriber> _subscribers;
         #endregion
 
         #region Properties
@@ -63,6 +74,30 @@ namespace Xemio.GameLibrary.Network
 
         #region Methods
         /// <summary>
+        /// Gets the subscribers.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        private IEnumerable<IServerSubscriber> GetSubscribers(Package package)
+        {
+            return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));
+        }
+        /// <summary>
+        /// Subscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        public void Subscribe(IServerSubscriber subscriber)
+        {
+            this._subscribers.Add(subscriber);
+        }
+        /// <summary>
+        /// Unsubscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        public void Unsubscribe(IServerSubscriber subscriber)
+        {
+            this._subscribers.Remove(subscriber);
+        }
+        /// <summary>
         /// Provides the component.
         /// </summary>
         public void ProvideComponent()
@@ -76,7 +111,26 @@ namespace Xemio.GameLibrary.Network
         /// <param name="connection">The connection.</param>
         protected virtual void OnReceivedPackage(Package package, IConnection connection)
         {
+            IEnumerable<IServerSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IServerSubscriber subscriber in subscribers)
+            {
+                subscriber.OnReceive(this, package, connection);    
+            }
+
             this._eventManager.Send(new ReceivedPackageEvent(package, connection));
+        }
+        /// <summary>
+        /// Called when server is sending a package.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        /// <param name="connection">The connection.</param>
+        protected virtual void OnBeginSendPackage(Package package, IConnection connection)
+        {
+            IEnumerable<IServerSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IServerSubscriber subscriber in subscribers)
+            {
+                subscriber.OnBeginSend(this, package, connection);
+            }
         }
         /// <summary>
         /// Called when server sent a package.
@@ -85,6 +139,12 @@ namespace Xemio.GameLibrary.Network
         /// <param name="connection">The connection.</param>
         protected virtual void OnSentPackage(Package package, IConnection connection)
         {
+            IEnumerable<IServerSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IServerSubscriber subscriber in subscribers)
+            {
+                subscriber.OnSent(this, package, connection);
+            }
+
             this._eventManager.Send(new SentPackageEvent(package, connection));
         }
         /// <summary>
@@ -117,9 +177,7 @@ namespace Xemio.GameLibrary.Network
         /// <param name="connection">The connection.</param>
         private void StartListening(IConnection connection)
         {
-            Action action = () => this.Listen(connection);
-            Task listenTask = new Task(action);
-
+            Task listenTask = new Task(() => this.Listen(connection));
             listenTask.Start();
         }
         /// <summary>
@@ -163,8 +221,30 @@ namespace Xemio.GameLibrary.Network
         /// <param name="receiver">The receiver.</param>
         public void Send(Package package, IConnection receiver)
         {
-            this.OnSentPackage(package, receiver);
+            this.OnBeginSendPackage(package, receiver);
+
             this.Protocol.Send(package, receiver);
+            this.OnSentPackage(package, receiver);
+        }
+        #endregion
+
+        #region IGameHandler Member
+        /// <summary>
+        /// Handles game updates.
+        /// </summary>
+        /// <param name="elapsed">The elapsed.</param>
+        public void Tick(float elapsed)
+        {
+            foreach (IServerSubscriber subscriber in this._subscribers)
+            {
+                subscriber.Tick(elapsed);
+            }
+        }
+        /// <summary>
+        /// Handles render calls.
+        /// </summary>
+        public void Render()
+        {
         }
         #endregion
     }

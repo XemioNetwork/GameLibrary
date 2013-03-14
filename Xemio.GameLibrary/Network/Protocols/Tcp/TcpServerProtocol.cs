@@ -8,6 +8,7 @@ using System.Net;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Network.Events;
+using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {

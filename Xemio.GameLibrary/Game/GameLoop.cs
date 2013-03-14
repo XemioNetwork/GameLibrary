@@ -79,9 +79,9 @@ namespace Xemio.GameLibrary.Game
             {
                 this.Tick(elapsed);
             }
-            foreach (IGameHandler handler in this._handlers)
+            for (int i = 0; i < this._handlers.Count; i++)
             {
-                handler.Tick(elapsed);
+                this._handlers[i].Tick(elapsed);
             }
 
             tickWatch.Stop();
@@ -99,9 +99,9 @@ namespace Xemio.GameLibrary.Game
             {
                 this.Render(elapsed);
             }
-            foreach (IGameHandler handler in this._handlers)
+            for (int i = 0; i < this._handlers.Count; i++)
             {
-                handler.Render();
+                this._handlers[i].Render();
             }
 
             renderWatch.Stop();

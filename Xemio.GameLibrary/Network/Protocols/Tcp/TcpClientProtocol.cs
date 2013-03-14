@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net.Sockets;
 using System.Net;
+using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
