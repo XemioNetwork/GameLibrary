@@ -81,6 +81,9 @@ publish
 # NuGet Packages Directory
 packages
 
+# Include Network Packages namespaces
+!Network/Packages/
+
 # Windows Azure Build Output
 csx
 *.build.csdef
