@@ -58,6 +58,10 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public bool IsSynced { get; protected set; }
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is creation synced.
+        /// </summary>
+        public bool IsCreationSynced { get; protected set; }
+        /// <summary>
         /// Gets a value indicating whether this instance is dirty.
         /// </summary>
         public bool IsDirty { get; set; }

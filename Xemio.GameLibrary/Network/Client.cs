@@ -17,17 +17,14 @@ using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
 {
-    public abstract class Client : IComponent, IGameHandler
+    public class Client : IComponent, IGameHandler
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Client"/> class.
         /// </summary>
-        protected Client(IClientProtocol protocol)
+        public Client(IClientProtocol protocol)
         {
-            GameLoop loop = XGL.GetComponent<GameLoop>();
-            loop.Subscribe(this);
-
             this._subscribers = new List<IPerceptionSubscriber>();
 
             this.Protocol = protocol;
@@ -36,10 +33,14 @@ namespace Xemio.GameLibrary.Network
             this.Subscribe(new LatencyPerception());
             this.Subscribe(new TimeSyncPerception());
 
+            this.Active = true;
             this.PackageManager = new PackageManager(this.PackageAssembly);
 
             this.StartLoop();
             this.ProvideComponent();
+
+            GameLoop loop = XGL.GetComponent<GameLoop>();
+            loop.Subscribe(this);
         }
         #endregion
 
@@ -67,7 +68,10 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the package assembly.
         /// </summary>
-        public abstract Assembly PackageAssembly { get; }
+        public virtual Assembly PackageAssembly
+        {
+            get { return this.GetType().Assembly; }
+        }
         #endregion
 
         #region Methods
@@ -131,7 +135,7 @@ namespace Xemio.GameLibrary.Network
         /// Receives the specified package.
         /// </summary>
         /// <param name="package">The package.</param>
-        private void Receive(Package package)
+        public void Receive(Package package)
         {
             IEnumerable<IPerceptionSubscriber> subscribers = this.GetSubscribers(package);
             foreach (IPerceptionSubscriber subscriber in subscribers)

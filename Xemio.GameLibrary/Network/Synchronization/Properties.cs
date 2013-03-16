@@ -17,11 +17,18 @@ namespace Xemio.GameLibrary.Network.Synchronization
             get { return new PropertyComparator(); }
         }
         /// <summary>
-        /// Gets comparator for all properties.
+        /// Gets the comparator for all properties.
         /// </summary>
         public static IPropertyComparator All
         {
             get { return new StaticComparator(); }
+        }
+        /// <summary>
+        /// Gets the comparator for none of the properties.
+        /// </summary>
+        public static IPropertyComparator None
+        {
+            get { return new StaticComparator { Value = false }; }
         }
         #endregion
     }

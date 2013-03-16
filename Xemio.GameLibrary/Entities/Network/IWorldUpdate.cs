@@ -11,9 +11,9 @@ namespace Xemio.GameLibrary.Entities.Network
     public interface IWorldUpdate
     {
         /// <summary>
-        /// Applies the specified snapshot.
+        /// Creates a new world update for the specified environment.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        void Apply(EntityEnvironment environment);
+        void Create(EntityEnvironment environment);
     }
 }

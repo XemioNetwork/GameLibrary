@@ -8,20 +8,20 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Entities.Network.Packages
 {
-    public class EntityPackage : Package, IWorldUpdate
+    public class EntityCreationPackage : Package
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityPackage"/> class.
+        /// Initializes a new instance of the <see cref="EntityCreationPackage"/> class.
         /// </summary>
-        public EntityPackage()
+        public EntityCreationPackage()
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityPackage"/> class.
+        /// Initializes a new instance of the <see cref="EntityCreationPackage"/> class.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public EntityPackage(Entity entity)
+        public EntityCreationPackage(Entity entity)
         {
             Type type = entity.GetType();
 
@@ -39,22 +39,6 @@ namespace Xemio.GameLibrary.Entities.Network.Packages
         /// Gets or sets the name of the type.
         /// </summary>
         public string TypeName { get; set; }
-        #endregion
-
-        #region IWorldUpdate Member
-        /// <summary>
-        /// Applies the specified snapshot.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public void Apply(EntityEnvironment environment)
-        {
-            Type type = Type.GetType(this.TypeName);
-
-            EntityFactory factory = environment.Factory;
-            Entity entity = factory.CreateLocalEntity(type, this.ID);
-
-            environment.Add(entity);
-        }
         #endregion
     }
 }

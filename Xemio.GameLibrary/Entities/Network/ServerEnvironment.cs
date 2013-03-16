@@ -7,6 +7,8 @@ using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Entities.Network.Packages;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Packages;
+using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Network.Events;
 
 namespace Xemio.GameLibrary.Entities.Network
 {
@@ -25,6 +27,9 @@ namespace Xemio.GameLibrary.Entities.Network
             {
                 throw new InvalidOperationException("You can not create a server environment on the client side.");
             }
+
+            XGL.GetComponent<EventManager>()
+               .Subscribe<ClientJoinedEvent>(this.OnClientJoined);
         }
         #endregion
 
@@ -41,11 +46,17 @@ namespace Xemio.GameLibrary.Entities.Network
 
         #region Methods
         /// <summary>
-        /// Creates a server snapshot.
+        /// Called when a client joined the server.
         /// </summary>
-        public virtual IWorldUpdate CreateUpdate()
+        /// <param name="e">The e.</param>
+        protected virtual void OnClientJoined(ClientJoinedEvent e)
         {
-            return new WorldUpdatePackage(this);
+            Server server = XGL.GetComponent<Server>();
+
+            WorldExchangePackage exchange = new WorldExchangePackage();
+            exchange.Create(this);
+
+            server.Send(exchange, e.Connection);
         }
         /// <summary>
         /// Adds the specified entity.
@@ -55,10 +66,20 @@ namespace Xemio.GameLibrary.Entities.Network
         {
             base.Add(entity);
 
-            EntityPackage package = new EntityPackage(entity);
-            Server server = XGL.GetComponent<Server>();
+            if (entity.IsCreationSynced)
+            {
+                EntityCreationPackage package = new EntityCreationPackage(entity);
+                Server server = XGL.GetComponent<Server>();
 
-            server.Send(package);
+                server.Send(package);
+            }
+        }
+        /// <summary>
+        /// Creates a server snapshot.
+        /// </summary>
+        public virtual IWorldUpdate CreateUpdate()
+        {
+            return new WorldUpdatePackage(this);
         }
         /// <summary>
         /// Handles game updates.

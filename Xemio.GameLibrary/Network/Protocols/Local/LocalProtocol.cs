@@ -29,15 +29,25 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         #region Fields
         private int _localSleepTime;
         private Queue<QueuePackage> _packageQueue;
+
+        private static LocalProtocol _clientProtocol = new LocalProtocol();
+        private static LocalProtocol _serverProtocol = new LocalProtocol();
         #endregion
 
-        #region Singleton
+        #region Static Member
         /// <summary>
-        /// Gets the instance.
+        /// Gets the client instance.
         /// </summary>
-        public static LocalProtocol Instance
+        public static LocalProtocol GetClient()
         {
-            get { return Singleton<LocalProtocol>.Value; }
+            return _clientProtocol;
+        }
+        /// <summary>
+        /// Sets the server instance.
+        /// </summary>
+        public static LocalProtocol GetServer()
+        {
+            return _serverProtocol;
         }
         #endregion
 
@@ -46,6 +56,17 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// Gets or sets the simulated latency in milliseconds.
         /// </summary>
         public float Latency { get; set; }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Receives the specified package.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        protected void Receive(Package package)
+        {
+            this._packageQueue.Enqueue(new QueuePackage(package, this.Latency));
+        }
         #endregion
 
         #region IClientProtocol Member
@@ -73,7 +94,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this._packageQueue.Enqueue(new QueuePackage(package, this.Latency));
+            if (this == LocalProtocol.GetServer())
+            {
+                LocalProtocol.GetClient().Receive(package);
+            }
+            else
+            {
+                LocalProtocol.GetServer().Receive(package);
+            }
         }
         /// <summary>
         /// Receives a package.
@@ -91,13 +119,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
             for (int i = 0; i < sleepTime; i++)
             {
                 Thread.Sleep(1);
+
                 foreach (QueuePackage package in this._packageQueue)
                 {
                     package.Time--;
                 }
             }
 
-            return queuePackage.Package;
+            return queuePackage.Package; 
         }
         #endregion
 

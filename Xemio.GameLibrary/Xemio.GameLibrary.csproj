@@ -69,7 +69,11 @@
     <Compile Include="Entities\EntityEnvironment.cs" />
     <Compile Include="Entities\EntityRenderer.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
-    <Compile Include="Entities\Network\Packages\EntityPackage.cs" />
+    <Compile Include="Entities\Network\Packages\EntityCreationPackage.cs" />
+    <Compile Include="Entities\Network\Perceptions\EntityCreationPerception.cs" />
+    <Compile Include="Entities\Network\Perceptions\WorldExchangePerception.cs" />
+    <Compile Include="Entities\Network\Perceptions\WorldUpdatePerception.cs" />
+    <Compile Include="Entities\Network\SyncHelper.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ActionCollection.cs" />
@@ -100,6 +104,7 @@
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />
     <Compile Include="Network\Events\SentPackageEvent.cs" />
     <Compile Include="Network\IConnection.cs" />
+    <Compile Include="Network\Packages\BinaryPackage.cs" />
     <Compile Include="Network\Subscribers\IPerceptionSubscriber.cs" />
     <Compile Include="Network\Subscribers\IActionSubscriber.cs" />
     <Compile Include="Network\Packages\PackageHandler.cs" />

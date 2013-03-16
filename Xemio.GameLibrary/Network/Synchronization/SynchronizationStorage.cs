@@ -18,23 +18,13 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// Initializes a new instance of the <see cref="SynchronizationStorage"/> class.
         /// </summary>
         /// <param name="instance">The instance.</param>
-        public SynchronizationStorage(ISynchronizable instance) : this(instance, Properties.Changes)
-        {
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SynchronizationStorage"/> class.
-        /// </summary>
-        /// <param name="instance">The instance.</param>
-        /// <param name="comparator">The comparator.</param>
-        public SynchronizationStorage(ISynchronizable instance, IPropertyComparator comparator)
+        public SynchronizationStorage(ISynchronizable instance)
         {
             this._properties = new Dictionary<PropertyInfo, object>();
             this._indexMapping = new List<PropertyInfo>();
 
             this.Instance = instance;
             this.Instance.Synchronize(this);
-
-            this.Comparator = comparator;
         }
         #endregion
 
@@ -48,10 +38,6 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// Gets the instance.
         /// </summary>
         public ISynchronizable Instance { get; private set; }
-        /// <summary>
-        /// Gets or sets the comparator.
-        /// </summary>
-        public IPropertyComparator Comparator { get; set; }
         #endregion
 
         #region Methods
@@ -78,7 +64,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// Loads the property changes out of the specified stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        public void LoadChanges(Stream stream)
+        public void Load(Stream stream)
         {
             BinaryReader reader = new BinaryReader(stream);            
             int count = reader.ReadByte();
@@ -99,7 +85,8 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// Saves all property changes to the specified stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        public void SaveChanges(Stream stream)
+        /// <param name="comparator">The comparator.</param>
+        public void Save(Stream stream, IPropertyComparator comparator)
         {
             BinaryWriter writer = new BinaryWriter(stream);
             writer.Write((byte)this._properties.Count);
@@ -109,7 +96,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
                 object currentValue = pair.Key.GetValue(this.Instance, null);
                 object lastValue = pair.Value;
 
-                bool dataWritten = !this.Comparator.HasChanged(currentValue, lastValue);
+                bool dataWritten = comparator.HasChanged(currentValue, lastValue);
                 writer.Write(dataWritten);
 
                 if (dataWritten)

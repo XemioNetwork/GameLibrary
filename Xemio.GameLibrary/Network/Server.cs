@@ -16,18 +16,15 @@ using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
 {
-    public abstract class Server : IComponent, IGameHandler
+    public class Server : IComponent, IGameHandler
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Server"/> class.
         /// </summary>
         /// <param name="protocol">The protocol.</param>
-        protected Server(IServerProtocol protocol)
-        {
-            GameLoop loop = XGL.GetComponent<GameLoop>();
-            loop.Subscribe(this);
-            
+        public Server(IServerProtocol protocol)
+        {            
             this.Active = true;
 
             this.Protocol = protocol;
@@ -43,6 +40,9 @@ namespace Xemio.GameLibrary.Network
 
             this.StartServerLoop();
             this.ProvideComponent();
+
+            GameLoop loop = XGL.GetComponent<GameLoop>();
+            loop.Subscribe(this);
         }
         #endregion
 
@@ -65,24 +65,19 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public PackageManager PackageManager { get; private set; }
         /// <summary>
-        /// Gets the package assembly.
-        /// </summary>
-        public abstract Assembly PackageAssembly { get; }
-        /// <summary>
         /// Gets the connections.
         /// </summary>
         public List<IConnection> Connections { get; private set; }
+        /// <summary>
+        /// Gets the package assembly.
+        /// </summary>
+        public virtual Assembly PackageAssembly
+        {
+            get { return this.GetType().Assembly; }
+        }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Gets the subscribers.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        private IEnumerable<IActionSubscriber> GetSubscribers(Package package)
-        {
-            return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));
-        }
         /// <summary>
         /// Subscribes the specified subscriber.
         /// </summary>
@@ -98,6 +93,14 @@ namespace Xemio.GameLibrary.Network
         public void Unsubscribe(IActionSubscriber subscriber)
         {
             this._subscribers.Remove(subscriber);
+        }
+        /// <summary>
+        /// Gets the subscribers.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        private IEnumerable<IActionSubscriber> GetSubscribers(Package package)
+        {
+            return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));
         }
         /// <summary>
         /// Provides the component.
@@ -193,7 +196,10 @@ namespace Xemio.GameLibrary.Network
                 try
                 {
                     Package package = connection.Receive();
-                    this.OnReceivedPackage(package, connection);
+                    if (package != null)
+                    {
+                        this.OnReceivedPackage(package, connection);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -211,9 +217,9 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            foreach (IConnection connection in this.Connections)
+            for (int i = 0; i < this.Connections.Count; i++)
             {
-                this.Send(package, connection);
+                this.Send(package, this.Connections[i]);
             }
         }
         /// <summary>

@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// <param name="b">The <see cref="System.Object"/> to compare with.</param>
         public bool HasChanged(object a, object b)
         {
-            return object.Equals(a, b);
+            return !object.Equals(a, b);
         }
         #endregion
     }
