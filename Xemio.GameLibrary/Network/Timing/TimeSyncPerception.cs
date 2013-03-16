@@ -7,17 +7,17 @@ using Xemio.GameLibrary.Network.Subscribers;
 
 namespace Xemio.GameLibrary.Network.Timing
 {
-    public class LatencyClientSubscriber : ClientSubscriber<LatencyPackage>
+    public class TimeSyncPerception : PerceptionSubscriber<TimeSyncPackage>
     {
         #region Methods
         /// <summary>
-        /// Called when the client receives a latency package.
+        /// Called when the client receives a package.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public override void OnReceive(Client client, LatencyPackage package)
+        public override void OnReceive(Client client, TimeSyncPackage package)
         {
-            client.Latency = package.Latency;
+            client.Send(package);
         }
         #endregion
     }

@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Subscribers
 {
-    public abstract class ClientSubscriber<T> : IClientSubscriber where T : Package
+    public abstract class PerceptionSubscriber<T> : IPerceptionSubscriber where T : Package
     {
         #region Methods
         /// <summary>
@@ -56,7 +56,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientSubscriber.OnReceive(Client client, Package package)
+        void IPerceptionSubscriber.OnReceive(Client client, Package package)
         {
             this.OnReceive(client, package as T);
         }
@@ -65,7 +65,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientSubscriber.OnBeginSend(Client client, Package package)
+        void IPerceptionSubscriber.OnBeginSend(Client client, Package package)
         {
             this.OnBeginSend(client, package as T);
         }
@@ -74,7 +74,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientSubscriber.OnSent(Client client, Package package)
+        void IPerceptionSubscriber.OnSent(Client client, Package package)
         {
             this.OnSent(client, package as T);
         }

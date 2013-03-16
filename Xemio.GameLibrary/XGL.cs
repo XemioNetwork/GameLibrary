@@ -43,6 +43,14 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new ValueProvider<IGraphicsInitializer>(initializer));
         }
         /// <summary>
+        /// Initializes the sound system.
+        /// </summary>
+        /// <param name="initializer">The initializer.</param>
+        public static void Initialize(ISoundInitializer initializer)
+        {
+            XGL.Components.Add(new ValueProvider<ISoundInitializer>(initializer));
+        }
+        /// <summary>
         /// Sets up core components and intializes the rendering pipeline for the specified handle.
         /// </summary>
         /// <param name="handle">The handle.</param>
@@ -55,9 +63,9 @@ namespace Xemio.GameLibrary
             loop.TargetTickTime = 1000 / (double)targetFps;
 
             GraphicsDevice graphicsDevice = new GraphicsDevice(handle);
-            IGraphicsInitializer initializer = XGL.GetComponent<IGraphicsInitializer>();
+            IGraphicsInitializer graphicsInitializer = XGL.GetComponent<IGraphicsInitializer>();
 
-            graphicsDevice.Graphics = initializer.CreateProvider(graphicsDevice);
+            graphicsDevice.Graphics = graphicsInitializer.CreateProvider(graphicsDevice);
             graphicsDevice.SetDisplayMode(width, height);
             
             XGL.Components.Add(loop);
@@ -66,11 +74,21 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new SceneManager());
             XGL.Components.Add(new KeyListener(handle));
             XGL.Components.Add(new MouseListener(handle));
-            XGL.Components.Add(new SoundManager());
-            XGL.Components.Add(new LoopManager());
-            XGL.Components.Add(new PackageHandler());
 
+            SoundManager soundManager = new SoundManager();
+            ISoundInitializer soundInitializer = XGL.GetComponent<ISoundInitializer>();
+
+            if (soundInitializer != null)
+            {
+                soundManager.Provider = soundInitializer.CreateProvider();
+
+                XGL.Components.Add(soundManager);
+                XGL.Components.Add(new LoopManager());
+            }
+
+            XGL.Components.Add(new PackageHandler());
             XGL.Components.Construct();
+
             loop.Run();
         }
         #endregion

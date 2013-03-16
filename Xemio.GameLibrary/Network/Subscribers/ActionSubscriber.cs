@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Subscribers
 {
-    public abstract class ServerSubscriber<T> : IServerSubscriber where T : Package
+    public abstract class ActionSubscriber<T> : IActionSubscriber where T : Package
     {
         #region Methods
         /// <summary>
@@ -60,7 +60,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        void IServerSubscriber.OnReceive(Server server, Package package, IConnection sender)
+        void IActionSubscriber.OnReceive(Server server, Package package, IConnection sender)
         {
             this.OnReceive(server, package as T, sender);
         }
@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IServerSubscriber.OnBeginSend(Server server, Package package, IConnection receiver)
+        void IActionSubscriber.OnBeginSend(Server server, Package package, IConnection receiver)
         {
             this.OnBeginSend(server, package as T, receiver);
         }
@@ -80,7 +80,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IServerSubscriber.OnSent(Server server, Package package, IConnection receiver)
+        void IActionSubscriber.OnSent(Server server, Package package, IConnection receiver)
         {
             this.OnSent(server, package as T, receiver);
         }

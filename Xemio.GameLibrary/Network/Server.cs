@@ -37,16 +37,18 @@ namespace Xemio.GameLibrary.Network
             this.Connections = new List<IConnection>();
 
             this._eventManager = XGL.GetComponent<EventManager>();
-            this._subscribers = new List<IServerSubscriber>();
+            this._subscribers = new List<IActionSubscriber>();
 
-            this.Subscribe(new TimeSyncServerSubscriber());
+            this.Subscribe(new TimeSyncAction());
+
             this.StartServerLoop();
+            this.ProvideComponent();
         }
         #endregion
 
         #region Fields
         private EventManager _eventManager;
-        private List<IServerSubscriber> _subscribers;
+        private List<IActionSubscriber> _subscribers;
         #endregion
 
         #region Properties
@@ -77,7 +79,7 @@ namespace Xemio.GameLibrary.Network
         /// Gets the subscribers.
         /// </summary>
         /// <param name="package">The package.</param>
-        private IEnumerable<IServerSubscriber> GetSubscribers(Package package)
+        private IEnumerable<IActionSubscriber> GetSubscribers(Package package)
         {
             return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));
         }
@@ -85,7 +87,7 @@ namespace Xemio.GameLibrary.Network
         /// Subscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Subscribe(IServerSubscriber subscriber)
+        public void Subscribe(IActionSubscriber subscriber)
         {
             this._subscribers.Add(subscriber);
         }
@@ -93,7 +95,7 @@ namespace Xemio.GameLibrary.Network
         /// Unsubscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Unsubscribe(IServerSubscriber subscriber)
+        public void Unsubscribe(IActionSubscriber subscriber)
         {
             this._subscribers.Remove(subscriber);
         }
@@ -111,8 +113,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="connection">The connection.</param>
         protected virtual void OnReceivedPackage(Package package, IConnection connection)
         {
-            IEnumerable<IServerSubscriber> subscribers = this.GetSubscribers(package);
-            foreach (IServerSubscriber subscriber in subscribers)
+            IEnumerable<IActionSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IActionSubscriber subscriber in subscribers)
             {
                 subscriber.OnReceive(this, package, connection);    
             }
@@ -126,8 +128,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="connection">The connection.</param>
         protected virtual void OnBeginSendPackage(Package package, IConnection connection)
         {
-            IEnumerable<IServerSubscriber> subscribers = this.GetSubscribers(package);
-            foreach (IServerSubscriber subscriber in subscribers)
+            IEnumerable<IActionSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IActionSubscriber subscriber in subscribers)
             {
                 subscriber.OnBeginSend(this, package, connection);
             }
@@ -139,8 +141,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="connection">The connection.</param>
         protected virtual void OnSentPackage(Package package, IConnection connection)
         {
-            IEnumerable<IServerSubscriber> subscribers = this.GetSubscribers(package);
-            foreach (IServerSubscriber subscriber in subscribers)
+            IEnumerable<IActionSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IActionSubscriber subscriber in subscribers)
             {
                 subscriber.OnSent(this, package, connection);
             }
@@ -235,7 +237,7 @@ namespace Xemio.GameLibrary.Network
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
-            foreach (IServerSubscriber subscriber in this._subscribers)
+            foreach (IActionSubscriber subscriber in this._subscribers)
             {
                 subscriber.Tick(elapsed);
             }

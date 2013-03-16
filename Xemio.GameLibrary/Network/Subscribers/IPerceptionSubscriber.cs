@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Subscribers
 {
-    public interface IClientSubscriber
+    public interface IPerceptionSubscriber
     {
         /// <summary>
         /// Gets the type.

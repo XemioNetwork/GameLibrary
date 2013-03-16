@@ -8,13 +8,13 @@ using Xemio.GameLibrary.Network.Subscribers;
 
 namespace Xemio.GameLibrary.Network.Timing
 {
-    public class TimeSyncServerSubscriber : ServerSubscriber<TimeSyncPackage>
+    public class TimeSyncAction : ActionSubscriber<TimeSyncPackage>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSyncServerSubscriber"/> class.
+        /// Initializes a new instance of the <see cref="TimeSyncAction"/> class.
         /// </summary>
-        public TimeSyncServerSubscriber()
+        public TimeSyncAction()
         {
             this._firstSync = true;
             this._elapsed = 0;

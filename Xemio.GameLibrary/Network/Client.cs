@@ -28,21 +28,23 @@ namespace Xemio.GameLibrary.Network
             GameLoop loop = XGL.GetComponent<GameLoop>();
             loop.Subscribe(this);
 
-            this._subscribers = new List<IClientSubscriber>();
+            this._subscribers = new List<IPerceptionSubscriber>();
 
             this.Protocol = protocol;
             this.Protocol.Client = this;
 
-            this.Subscribe(new LatencyClientSubscriber());
-            this.Subscribe(new TimeSyncClientSubscriber());
+            this.Subscribe(new LatencyPerception());
+            this.Subscribe(new TimeSyncPerception());
 
             this.PackageManager = new PackageManager(this.PackageAssembly);
+
             this.StartLoop();
+            this.ProvideComponent();
         }
         #endregion
 
         #region Fields
-        private List<IClientSubscriber> _subscribers;
+        private List<IPerceptionSubscriber> _subscribers;
         #endregion
 
         #region Properties
@@ -73,7 +75,7 @@ namespace Xemio.GameLibrary.Network
         /// Gets the subscribers.
         /// </summary>
         /// <param name="package">The package.</param>
-        private IEnumerable<IClientSubscriber> GetSubscribers(Package package)
+        private IEnumerable<IPerceptionSubscriber> GetSubscribers(Package package)
         {
             return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));            
         }
@@ -81,7 +83,7 @@ namespace Xemio.GameLibrary.Network
         /// Subscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Subscribe(IClientSubscriber subscriber)
+        public void Subscribe(IPerceptionSubscriber subscriber)
         {
             this._subscribers.Add(subscriber);
         }
@@ -89,7 +91,7 @@ namespace Xemio.GameLibrary.Network
         /// Unsubscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Unsubscribe(IClientSubscriber subscriber)
+        public void Unsubscribe(IPerceptionSubscriber subscriber)
         {
             this._subscribers.Remove(subscriber);
         }
@@ -131,8 +133,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         private void Receive(Package package)
         {
-            IEnumerable<IClientSubscriber> subscribers = this.GetSubscribers(package);
-            foreach (IClientSubscriber subscriber in subscribers)
+            IEnumerable<IPerceptionSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IPerceptionSubscriber subscriber in subscribers)
             {
                 subscriber.OnReceive(this, package);
             }
@@ -143,8 +145,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            IEnumerable<IClientSubscriber> subscribers = this.GetSubscribers(package);
-            foreach (IClientSubscriber subscriber in subscribers)
+            IEnumerable<IPerceptionSubscriber> subscribers = this.GetSubscribers(package);
+            foreach (IPerceptionSubscriber subscriber in subscribers)
             {
                 subscriber.OnBeginSend(this, package);
             }
@@ -154,7 +156,7 @@ namespace Xemio.GameLibrary.Network
             EventManager eventManager = XGL.GetComponent<EventManager>();
             eventManager.Send(new SentPackageEvent(package));
 
-            foreach (IClientSubscriber subscriber in subscribers)
+            foreach (IPerceptionSubscriber subscriber in subscribers)
             {
                 subscriber.OnSent(this, package);
             }
@@ -168,7 +170,7 @@ namespace Xemio.GameLibrary.Network
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
-            foreach (IClientSubscriber subscriber in this._subscribers)
+            foreach (IPerceptionSubscriber subscriber in this._subscribers)
             {
                 subscriber.Tick(elapsed);
             }

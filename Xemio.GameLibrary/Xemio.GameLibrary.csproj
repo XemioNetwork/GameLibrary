@@ -31,7 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -41,7 +40,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
@@ -102,13 +100,13 @@
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />
     <Compile Include="Network\Events\SentPackageEvent.cs" />
     <Compile Include="Network\IConnection.cs" />
-    <Compile Include="Network\Subscribers\IClientSubscriber.cs" />
-    <Compile Include="Network\Subscribers\IServerSubscriber.cs" />
+    <Compile Include="Network\Subscribers\IPerceptionSubscriber.cs" />
+    <Compile Include="Network\Subscribers\IActionSubscriber.cs" />
     <Compile Include="Network\Packages\PackageHandler.cs" />
-    <Compile Include="Network\Subscribers\ClientSubscriber.cs" />
+    <Compile Include="Network\Subscribers\PerceptionSubscriber.cs" />
     <Compile Include="Network\Protocols\Local\QueuePackage.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
-    <Compile Include="Network\Subscribers\ServerSubscriber.cs" />
+    <Compile Include="Network\Subscribers\ActionSubscriber.cs" />
     <Compile Include="Network\Synchronization\IPropertyComparator.cs" />
     <Compile Include="Network\Synchronization\ISynchronizable.cs" />
     <Compile Include="Network\Packages\Package.cs" />
@@ -124,11 +122,11 @@
     <Compile Include="Network\Synchronization\Properties.cs" />
     <Compile Include="Network\Synchronization\StaticComparator.cs" />
     <Compile Include="Network\Synchronization\SynchronizationStorage.cs" />
-    <Compile Include="Network\Timing\LatencyClientSubscriber.cs" />
+    <Compile Include="Network\Timing\LatencyPerception.cs" />
     <Compile Include="Network\Timing\LatencyPackage.cs" />
-    <Compile Include="Network\Timing\TimeSyncClientSubscriber.cs" />
+    <Compile Include="Network\Timing\TimeSyncPerception.cs" />
     <Compile Include="Network\Timing\TimeSyncPackage.cs" />
-    <Compile Include="Network\Timing\TimeSyncServerSubscriber.cs" />
+    <Compile Include="Network\Timing\TimeSyncAction.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Fonts\TextureFactoryExtensions.cs" />
@@ -157,11 +155,8 @@
     <Compile Include="Rendering\GraphicsProvider.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneManager.cs" />
-    <Compile Include="Sound\Internal\InternalSound.cs" />
-    <Compile Include="Sound\Internal\InternalSoundFactory.cs" />
-    <Compile Include="Sound\Internal\InternalSoundProvider.cs" />
-    <Compile Include="Sound\Internal\SoundDisposer.cs" />
     <Compile Include="Sound\ISound.cs" />
+    <Compile Include="Sound\ISoundInitializer.cs" />
     <Compile Include="Sound\ISoundProvider.cs" />
     <Compile Include="Sound\ISoundFactory.cs" />
     <Compile Include="Sound\Loops\LoopController.cs" />
@@ -171,8 +166,7 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\Network\Actions\" />
-    <Folder Include="Entities\Network\Perceptions\" />
+    <Folder Include="Entities\States\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
