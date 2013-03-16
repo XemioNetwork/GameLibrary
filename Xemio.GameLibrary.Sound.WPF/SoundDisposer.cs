@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Xemio.GameLibrary.Sound.Internal
+namespace Xemio.GameLibrary.Sound.WPF
 {
     internal class SoundDisposer : IDisposable
     {
@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Sound.Internal
         /// Initializes a new instance of the <see cref="SoundDisposer"/> class.
         /// </summary>
         /// <param name="sound">The sound.</param>
-        public SoundDisposer(InternalSound sound)
+        public SoundDisposer(WPFSound sound)
         {
             this.Sound = sound;
         }
@@ -23,7 +23,7 @@ namespace Xemio.GameLibrary.Sound.Internal
         /// <summary>
         /// Gets the sound.
         /// </summary>
-        public InternalSound Sound { get; private set; }
+        public WPFSound Sound { get; private set; }
         #endregion
 
         #region IDisposable Member

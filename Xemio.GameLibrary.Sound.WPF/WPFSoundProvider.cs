@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Xemio.GameLibrary.Sound.Internal
+namespace Xemio.GameLibrary.Sound.WPF
 {
-    internal class InternalSoundProvider : ISoundProvider
+    internal class WPFSoundProvider : ISoundProvider
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="InternalSoundProvider"/> class.
+        /// Initializes a new instance of the <see cref="WPFSoundProvider"/> class.
         /// </summary>
-        public InternalSoundProvider()
+        public WPFSoundProvider()
         {
-            this.Factory = new InternalSoundFactory();
+            this.Factory = new WPFSoundFactory();
         }
         #endregion
 
@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Sound.Internal
         /// <param name="sound">The sound.</param>
         public IDisposable Play(ISound sound)
         {
-            InternalSound internalSound = sound as InternalSound;
+            WPFSound internalSound = sound as WPFSound;
             if (internalSound == null)
             {
                 throw new InvalidOperationException("You have to use the according sound factory to create a sound.");

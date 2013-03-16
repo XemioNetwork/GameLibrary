@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Xemio.GameLibrary.Sound.Internal
+namespace Xemio.GameLibrary.Sound.WPF
 {
-    internal class InternalSoundFactory : ISoundFactory
+    internal class WPFSoundFactory : ISoundFactory
     {
         #region ISoundFactory Member
         /// <summary>
@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.Sound.Internal
         /// <returns></returns>
         public ISound CreateSound(string fileName)
         {
-            ISound sound = new InternalSound(fileName);
+            ISound sound = new WPFSound(fileName);
             sound.Radius = float.MaxValue;
 
             return sound;

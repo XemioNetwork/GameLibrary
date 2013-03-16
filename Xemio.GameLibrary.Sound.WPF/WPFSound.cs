@@ -6,16 +6,16 @@ using System.IO;
 using System.Windows.Media;
 using Xemio.GameLibrary.Common;
 
-namespace Xemio.GameLibrary.Sound.Internal
+namespace Xemio.GameLibrary.Sound.WPF
 {
-    internal class InternalSound : ISound
+    internal class WPFSound : ISound
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="InternalSound"/> class.
+        /// Initializes a new instance of the <see cref="WPFSound"/> class.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        public InternalSound(string fileName)
+        public WPFSound(string fileName)
         {
             string fullPath = Path.GetFullPath(fileName);
             UriBuilder builder = new UriBuilder(fullPath);

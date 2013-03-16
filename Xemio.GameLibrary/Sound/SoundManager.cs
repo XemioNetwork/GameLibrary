@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Windows.Media;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Components;
 
@@ -17,15 +16,30 @@ namespace Xemio.GameLibrary.Sound
         /// </summary>
         public SoundManager()
         {
-            this.Provider = new Internal.InternalSoundProvider();
         }
+        #endregion
+
+        #region Fields
+        private ISoundProvider _provider;
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets or sets the provider.
         /// </summary>
-        public ISoundProvider Provider { get; set; }
+        public ISoundProvider Provider
+        {
+            get
+            {
+                if (this._provider == null)
+                {
+                    throw new InvalidOperationException("No sound provider defined. Use the XGL.Initialize method to initialize the sound system.");
+                }
+
+                return this._provider;
+            }
+            set { this._provider = value; }
+        }
         #endregion
 
         #region Methods
