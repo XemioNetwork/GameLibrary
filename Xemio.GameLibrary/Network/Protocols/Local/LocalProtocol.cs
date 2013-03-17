@@ -65,7 +65,10 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <param name="package">The package.</param>
         protected void Receive(Package package)
         {
-            this._packageQueue.Enqueue(new QueuePackage(package, this.Latency));
+            lock (this._packageQueue)
+            {
+                this._packageQueue.Enqueue(new QueuePackage(package, this.Latency));
+            }
         }
         #endregion
 
@@ -116,13 +119,15 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
             QueuePackage queuePackage = this._packageQueue.Dequeue();
             float sleepTime = queuePackage.Time;
 
-            for (int i = 0; i < sleepTime; i++)
+            lock (this._packageQueue)
             {
-                Thread.Sleep(1);
-
                 foreach (QueuePackage package in this._packageQueue)
                 {
-                    package.Time--;
+                    for (int i = 0; i < sleepTime; i++)
+                    {
+                        Thread.Sleep(1);
+                        package.Time--;
+                    }
                 }
             }
 

@@ -140,6 +140,46 @@ namespace Xemio.GameLibrary.Rendering.Xna
         /// Renders the specified texture.
         /// </summary>
         /// <param name="texture">The texture.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="color">The color.</param>
+        public void Render(ITexture texture, Vector2 position, Color color)
+        {
+            this.Tint(color);
+            this.Render(texture, position);
+
+            this.Tint(Color.White);
+        }
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="color">The color.</param>
+        public void Render(ITexture texture, Rectangle destination, Color color)
+        {
+            this.Tint(color);
+            this.Render(texture, destination);
+
+            this.Tint(Color.White);
+        }
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="origin">The origin.</param>
+        /// <param name="color">The color.</param>
+        public void Render(ITexture texture, Rectangle destination, Rectangle origin, Color color)
+        {
+            this.Tint(color);
+            this.Render(texture, destination, origin);
+
+            this.Tint(Color.White);
+        }
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
         /// <param name="destination">The destination.</param>
         /// <param name="origin">The origin.</param>
         public void Render(ITexture texture, Rectangle destination, Rectangle origin)

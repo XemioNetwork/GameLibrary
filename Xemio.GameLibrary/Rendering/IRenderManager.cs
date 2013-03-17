@@ -44,6 +44,13 @@ namespace Xemio.GameLibrary.Rendering
         /// Renders the specified texture.
         /// </summary>
         /// <param name="texture">The texture.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="color">The color.</param>
+        void Render(ITexture texture, Vector2 position, Color color);
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
         /// <param name="destination">The destination.</param>
         void Render(ITexture texture, Rectangle destination);
         /// <summary>
@@ -51,8 +58,22 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="texture">The texture.</param>
         /// <param name="destination">The destination.</param>
+        void Render(ITexture texture, Rectangle destination, Color color);
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
         /// <param name="origin">The origin.</param>
         void Render(ITexture texture, Rectangle destination, Rectangle origin);
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="origin">The origin.</param>
+        /// <param name="color">The color.</param>
+        void Render(ITexture texture, Rectangle destination, Rectangle origin, Color color);
         /// <summary>
         /// Presents this instance.
         /// </summary>

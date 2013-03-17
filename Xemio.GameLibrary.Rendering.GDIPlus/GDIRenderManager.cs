@@ -108,9 +108,19 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// Sets the opacity.
         /// </summary>
         /// <param name="color">The color.</param>
-        public void Tint(Xemio.GameLibrary.Rendering.Color color)
+        public void Tint(Rendering.Color color)
         {
             this._color = color;
+
+            if (color == Rendering.Color.White)
+            {
+                if (this._attributes != null)
+                {
+                    this._attributes.ClearColorMatrix();
+                }
+
+                return;
+            }
 
             float a = color.A / 255.0f;
             float r = color.R / 255.0f;
@@ -133,7 +143,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// Clears the screen.
         /// </summary>
         /// <param name="color">The color.</param>
-        public void Clear(Xemio.GameLibrary.Rendering.Color color)
+        public void Clear(Rendering.Color color)
         {
             Color drawingColor = Color.FromArgb(
                 color.A,
@@ -160,6 +170,46 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         public void Render(ITexture texture, Rectangle destination)
         {
             this.Render(texture, destination, Rectangle.Empty);
+        }
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="color">The color.</param>
+        public void Render(ITexture texture, Vector2 position, Rendering.Color color)
+        {
+            this.Tint(color);
+            this.Render(texture, position);
+
+            this.Tint(Rendering.Color.White);
+        }
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="color"></param>
+        public void Render(ITexture texture, Rectangle destination, Rendering.Color color)
+        {
+            this.Tint(color);
+            this.Render(texture, destination);
+
+            this.Tint(Rendering.Color.White);
+        }
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="origin">The origin.</param>
+        /// <param name="color">The color.</param>
+        public void Render(ITexture texture, Rectangle destination, Rectangle origin, Rendering.Color color)
+        {
+            this.Tint(color);
+            this.Render(texture, destination, origin);
+
+            this.Tint(Rendering.Color.White);
         }
         /// <summary>
         /// Renders the specified texture.

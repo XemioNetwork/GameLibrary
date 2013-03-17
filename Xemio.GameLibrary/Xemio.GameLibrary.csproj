@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Cryptography\MD5Helper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
     <Compile Include="Common\ExcludeAttribute.cs" />
