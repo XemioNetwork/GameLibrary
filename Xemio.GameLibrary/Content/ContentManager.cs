@@ -28,6 +28,7 @@ namespace Xemio.GameLibrary.Content
 
             this.Register(new TextureReader());
             this.Register(new FontReader());
+            this.Register(new SoundReader());
         }
         #endregion
 
