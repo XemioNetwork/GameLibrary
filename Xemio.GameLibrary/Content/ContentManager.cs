@@ -52,7 +52,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        private IContentReader GetReader(Type type)
+        protected IContentReader GetReader(Type type)
         {
             Type[] baseTypes = TypeHelper.GetBaseTypes(type);
             foreach (Type baseType in baseTypes)
@@ -75,7 +75,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        private IContentWriter GetWriter(Type type)
+        protected IContentWriter GetWriter(Type type)
         {
             Type[] baseTypes = TypeHelper.GetBaseTypes(type);
             foreach (Type baseType in baseTypes)
@@ -97,7 +97,7 @@ namespace Xemio.GameLibrary.Content
         /// Registers the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public void Register(IContentReader reader)
+        public virtual void Register(IContentReader reader)
         {
             this._readerMappings.Add(reader.Type, reader);
         }
@@ -105,7 +105,7 @@ namespace Xemio.GameLibrary.Content
         /// Registers the specified writer.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public void Register(IContentWriter writer)
+        public virtual void Register(IContentWriter writer)
         {
             this._writerMappings.Add(writer.Type, writer);
         }
@@ -114,7 +114,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="fileName">Name of the file.</param>
-        public T Load<T>(string fileName)
+        public virtual T Load<T>(string fileName)
         {
             if (!this._contentMappings.ContainsKey(fileName))
             {
@@ -129,7 +129,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="fileName">Name of the file.</param>
-        public void Save(object value, string fileName)
+        public virtual void Save(object value, string fileName)
         {
             IContentWriter writer = this.GetWriter(value.GetType());
             writer.Write(fileName, value);
