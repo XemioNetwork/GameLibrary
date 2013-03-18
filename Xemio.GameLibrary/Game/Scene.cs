@@ -8,6 +8,7 @@ using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Sound;
+using Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.Game
 {
@@ -42,6 +43,27 @@ namespace Xemio.GameLibrary.Game
         public GraphicsDevice GraphicsDevice
         {
             get { return XGL.GetComponent<GraphicsDevice>(); }
+        }
+        /// <summary>
+        /// Gets the texture factory.
+        /// </summary>
+        public ITextureFactory TextureFactory
+        {
+            get { return this.GraphicsDevice.TextureFactory; }
+        }
+        /// <summary>
+        /// Gets the render manager.
+        /// </summary>
+        public IRenderManager RenderManager
+        {
+            get { return this.GraphicsDevice.RenderManager; }
+        }
+        /// <summary>
+        /// Gets the geometry.
+        /// </summary>
+        public IGeometryProvider Geometry
+        {
+            get { return this.GraphicsDevice.Geometry; }
         }
         /// <summary>
         /// Gets the key listener.
