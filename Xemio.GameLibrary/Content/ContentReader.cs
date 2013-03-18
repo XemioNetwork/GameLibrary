@@ -8,6 +8,16 @@ namespace Xemio.GameLibrary.Content
 {
     public abstract class ContentReader<T> : IContentReader
     {
+        #region Properties
+        /// <summary>
+        /// Gets the content.
+        /// </summary>
+        public ContentManager Content
+        {
+            get { return XGL.GetComponent<ContentManager>(); }
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Reads an instance.
@@ -40,7 +50,7 @@ namespace Xemio.GameLibrary.Content
         /// <returns></returns>
         public virtual object Read(string fileName)
         {
-            using (FileStream stream = new FileStream(fileName, FileMode.Open))
+            using (Stream stream = this.Content.FileSystem.Open(fileName))
             {
                 BinaryReader reader = new BinaryReader(stream);
                 return this.Read(reader);

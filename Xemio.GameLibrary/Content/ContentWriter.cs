@@ -8,6 +8,16 @@ namespace Xemio.GameLibrary.Content
 {
     public abstract class ContentWriter<T> : IContentWriter
     {
+        #region Properties
+        /// <summary>
+        /// Gets the content.
+        /// </summary>
+        public ContentManager Content
+        {
+            get { return XGL.GetComponent<ContentManager>(); }
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Writes the specified value.
@@ -41,7 +51,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="value">The value.</param>
         public virtual void Write(string fileName, object value)
         {
-            using (FileStream stream = new FileStream(fileName, FileMode.Create))
+            using (Stream stream = this.Content.FileSystem.Open(fileName))
             {
                 BinaryWriter writer = new BinaryWriter(stream);
                 this.Write(writer, (T)value);
