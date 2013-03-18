@@ -12,6 +12,7 @@ using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Sound.Loops;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Packages;
+using Xemio.GameLibrary.Content;
 
 namespace Xemio.GameLibrary
 {
@@ -74,6 +75,7 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new SceneManager());
             XGL.Components.Add(new KeyListener(handle));
             XGL.Components.Add(new MouseListener(handle));
+            XGL.Components.Add(new ContentManager());
 
             SoundManager soundManager = new SoundManager();
             ISoundInitializer soundInitializer = XGL.GetComponent<ISoundInitializer>();

@@ -57,6 +57,7 @@
     <Compile Include="Common\Randomization\SeedableRandom.cs" />
     <Compile Include="Common\Singleton.cs" />
     <Compile Include="Common\ThreadInvoker.cs" />
+    <Compile Include="Common\TypeHelper.cs" />
     <Compile Include="Components\ComponentManager.cs" />
     <Compile Include="Components\DebugManager.cs" />
     <Compile Include="Components\IComponent.cs" />
@@ -64,6 +65,16 @@
     <Compile Include="Components\IConstructable.cs" />
     <Compile Include="Components\IValueProvider.cs" />
     <Compile Include="Components\ValueProvider.cs" />
+    <Compile Include="Content\ContentManager.cs" />
+    <Compile Include="Content\ContentReader.cs" />
+    <Compile Include="Content\ContentWriter.cs" />
+    <Compile Include="Content\FileSystem\HDDFileSystem.cs" />
+    <Compile Include="Content\FileSystem\IFileSystem.cs" />
+    <Compile Include="Content\IContentReader.cs" />
+    <Compile Include="Content\IContentWriter.cs" />
+    <Compile Include="Content\IO\FontReader.cs" />
+    <Compile Include="Content\IO\SoundReader.cs" />
+    <Compile Include="Content\IO\TextureReader.cs" />
     <Compile Include="Entities\EntityDataContainer.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponent.cs" />
