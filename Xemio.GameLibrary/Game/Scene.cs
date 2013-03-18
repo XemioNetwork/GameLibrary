@@ -9,6 +9,7 @@ using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Rendering.Geometry;
+using Xemio.GameLibrary.Content;
 
 namespace Xemio.GameLibrary.Game
 {
@@ -37,6 +38,13 @@ namespace Xemio.GameLibrary.Game
         /// Gets the parent.
         /// </summary>
         public ISceneProvider Parent { get; internal set; }
+        /// <summary>
+        /// Gets the content manager.
+        /// </summary>
+        public ContentManager Content
+        {
+            get { return XGL.GetComponent<ContentManager>(); }
+        }
         /// <summary>
         /// Gets the graphics device.
         /// </summary>
