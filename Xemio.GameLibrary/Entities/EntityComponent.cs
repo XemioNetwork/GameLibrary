@@ -49,6 +49,20 @@ namespace Xemio.GameLibrary.Entities
 
         #region Methods
         /// <summary>
+        /// Gets the entity.
+        /// </summary>
+        protected T GetEntity<T>() where T : Entity
+        {
+            return this.Entity as T;
+        }
+        /// <summary>
+        /// Gets the container.
+        /// </summary>
+        protected T GetContainer<T>() where T : EntityDataContainer
+        {
+            return this.Container as T;
+        }
+        /// <summary>
         /// Handles a game tick.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>

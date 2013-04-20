@@ -20,14 +20,14 @@ namespace Xemio.GameLibrary.Entities
 
             this.Components = new List<EntityComponent>();
             this.Containers = new List<EntityDataContainer>();
-
-            this.HandleComponentTick = true;
         }
         #endregion
 
         #region Fields
         private Vector2 _position;
+
         private bool _resetDirty;
+        private bool _handleComponentTick = true;
         #endregion
 
         #region Properties
@@ -43,6 +43,7 @@ namespace Xemio.GameLibrary.Entities
             get { return this._position; }
             set
             {
+                this.OnPositionChanged(value - this._position);
                 this._position = value;
 
                 this._resetDirty = false;
@@ -66,10 +67,6 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public bool IsDirty { get; set; }
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is tick enabled.
-        /// </summary>
-        public bool HandleComponentTick { get; set; }
-        /// <summary>
         /// Gets the components.
         /// </summary>
         [ExcludeSync]
@@ -92,6 +89,20 @@ namespace Xemio.GameLibrary.Entities
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Enables the component tick.
+        /// </summary>
+        public void EnableComponents()
+        {
+            this._handleComponentTick = true;
+        }
+        /// <summary>
+        /// Disables the component tick.
+        /// </summary>
+        public void DisableComponents()
+        {
+            this._handleComponentTick = false;
+        }
         /// <summary>
         /// Gets a specific component by a specified type.
         /// </summary>
@@ -122,6 +133,13 @@ namespace Xemio.GameLibrary.Entities
             this.IsDestroyed = true;
         }
         /// <summary>
+        /// Called when the position changed.
+        /// </summary>
+        /// <param name="delta">The delta.</param>
+        public virtual void OnPositionChanged(Vector2 delta)
+        {
+        }
+        /// <summary>
         /// Handles a game tick.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
@@ -132,7 +150,7 @@ namespace Xemio.GameLibrary.Entities
                 this.IsDirty = false;
             }
 
-            if (this.HandleComponentTick)
+            if (this._handleComponentTick)
             {
                 foreach (EntityComponent component in this.Components)
                 {

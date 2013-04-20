@@ -84,6 +84,15 @@ namespace Xemio.GameLibrary.Math
         {
             this.Bounds = new Rectangle(this.Min, this.Max);
         }
+        /// <summary>
+        /// Translates the specified bounding box.
+        /// </summary>
+        /// <param name="translation">The translation.</param>
+        public void Translate(Vector2 translation)
+        {
+            this.Min += translation;
+            this.Max += translation;
+        }
         #endregion
 
         #region IIntersectable<BoundingBox> Member

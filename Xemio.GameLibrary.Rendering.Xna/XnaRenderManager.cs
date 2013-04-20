@@ -98,7 +98,7 @@ namespace Xemio.GameLibrary.Rendering.Xna
         /// Offsets the screen.
         /// </summary>
         /// <param name="offset">The offset.</param>
-        public void Offset(Vector2 offset)
+        public void Translate(Vector2 offset)
         {
             this._offset = new Xna.Vector2(offset.X, offset.Y);
         }

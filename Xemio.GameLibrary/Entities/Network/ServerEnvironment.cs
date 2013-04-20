@@ -90,9 +90,7 @@ namespace Xemio.GameLibrary.Entities.Network
             this.BeginEnumeration();
             foreach (Entity entity in this.Entities)
             {
-                bool enabledState = entity.HandleComponentTick;
-
-                entity.HandleComponentTick = false;
+                entity.DisableComponents();
                 entity.Tick(elapsed);
 
                 foreach (EntityComponent component in entity.Components)
@@ -109,7 +107,7 @@ namespace Xemio.GameLibrary.Entities.Network
                     this.Remove(entity);
                 }
 
-                entity.HandleComponentTick = enabledState;
+                entity.EnableComponents();
             }
 
             this.EndEnumeration();

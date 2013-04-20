@@ -93,7 +93,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// Offsets the screen.
         /// </summary>
         /// <param name="offset">The offset.</param>
-        public void Offset(Vector2 offset)
+        public void Translate(Vector2 offset)
         {
             this.ScreenOffset = offset;
         }

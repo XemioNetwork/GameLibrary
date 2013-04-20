@@ -22,8 +22,8 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Offsets the screen.
         /// </summary>
-        /// <param name="offset">The offset.</param>
-        void Offset(Vector2 offset);
+        /// <param name="translation">The translation.</param>
+        void Translate(Vector2 translation);
         /// <summary>
         /// Sets the rotation to the specified angle in radians.
         /// </summary>
