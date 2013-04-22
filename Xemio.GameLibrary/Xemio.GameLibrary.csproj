@@ -68,7 +68,7 @@
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\ContentReader.cs" />
     <Compile Include="Content\ContentWriter.cs" />
-    <Compile Include="Content\FileSystem\HDDFileSystem.cs" />
+    <Compile Include="Content\FileSystem\HardDrive.cs" />
     <Compile Include="Content\FileSystem\IFileSystem.cs" />
     <Compile Include="Content\IContentReader.cs" />
     <Compile Include="Content\IContentWriter.cs" />
@@ -146,7 +146,6 @@
     <Compile Include="Network\Timing\TimeSyncAction.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendering\Fonts\TextureFactoryExtensions.cs" />
     <Compile Include="Rendering\Fonts\Utility\SpriteFontSerializer.cs" />
     <Compile Include="Rendering\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\Sprites\SpriteAnimation.cs" />

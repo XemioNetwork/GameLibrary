@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Rendering.Fonts;
+using Xemio.GameLibrary.Rendering.Fonts.Utility;
 using Xemio.GameLibrary.Rendering;
 
 namespace Xemio.GameLibrary.Content.IO
@@ -20,7 +21,18 @@ namespace Xemio.GameLibrary.Content.IO
             ITextureFactory factory = XGL.GetComponent<ITextureFactory>();
             if (factory != null)
             {
-                return SpriteFont.Load(factory, reader.BaseStream);
+                int kerning = reader.ReadInt32();
+                int spacing = reader.ReadInt32();
+
+                InternalFontCache fontCache = new InternalFontCache();
+                fontCache.Deserialize(reader.BaseStream);
+
+                SpriteFont spriteFont = SpriteFontGenerator.Create(factory, fontCache.Data);
+                spriteFont.Kerning = kerning;
+                spriteFont.Spacing = spacing;
+                spriteFont.FontCache = fontCache;
+
+                return spriteFont;
             }
 
             return null;

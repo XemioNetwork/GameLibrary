@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Content.FileSystem
 {
-    public class HDDFileSystem : IFileSystem
+    public class HardDrive : IFileSystem
     {
         #region IFileSystem Member
         /// <summary>

@@ -59,63 +59,6 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         internal InternalFontCache FontCache { get; set; }
         #endregion
 
-        #region Static Methods
-        /// <summary>
-        /// Creates a sprite font from a specified file.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="fileName">Name of the file.</param>
-        public static SpriteFont Load(ITextureFactory factory, string fileName)
-        {
-            using (FileStream stream = File.OpenRead(fileName))
-            {
-                return SpriteFont.Load(factory, stream);
-            }
-        }
-        /// <summary>
-        /// Creates a sprite font from the specified stream.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="stream">The stream.</param>
-        public static SpriteFont Load(ITextureFactory factory, Stream stream)
-        {
-            using (BinaryReader reader = new BinaryReader(stream))
-            {
-                int kerning = reader.ReadInt32();
-                int spacing = reader.ReadInt32();
-
-                InternalFontCache fontUnit = new InternalFontCache();
-                fontUnit.Deserialize(stream);
-
-                SpriteFont spriteFont = SpriteFontGenerator.Create(factory, fontUnit.Data);
-                spriteFont.Kerning = kerning;
-                spriteFont.Spacing = spacing;
-                spriteFont.FontCache = fontUnit;
-
-                return spriteFont;
-            }
-        }
-        /// <summary>
-        /// Creates a sprite font from a specified file.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="resourceManager">The resource manager.</param>
-        public static SpriteFont Load(ITextureFactory factory, string name, ResourceManager resourceManager)
-        {
-            byte[] resourceData = resourceManager.GetObject(name) as byte[];
-            if (resourceData == null)
-            {
-                throw new InvalidOperationException(string.Format("No resource with the name '{0}' found.", name));
-            }
-
-            using (MemoryStream stream = new MemoryStream(resourceData))
-            {
-                return SpriteFont.Load(factory, stream);
-            }
-        }
-        #endregion
-
         #region Methods
         /// <summary>
         /// Measures the specified string.
