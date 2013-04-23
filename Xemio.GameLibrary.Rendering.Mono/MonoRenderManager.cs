@@ -51,7 +51,7 @@ namespace Xemio.GameLibrary.Rendering.Mono
         /// <summary>
         /// Gets the buffer graphics.
         /// </summary>
-        public Graphics BufferGraphics { get; private set; }
+        public Graphics Graphics { get; private set; }
         /// <summary>
         /// Gets the offset.
         /// </summary>
@@ -71,17 +71,15 @@ namespace Xemio.GameLibrary.Rendering.Mono
                 int width = mode.Width;
                 int height = mode.Height;
 
-                PixelFormat pixelFormat = PixelFormat.Format32bppPArgb;
+                this._buffer = new Bitmap(width, height);
 
-                this._buffer = new Bitmap(width, height, pixelFormat);
+                this.Graphics = Graphics.FromImage(this._buffer);
+                this.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
+                this.Graphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
+                this.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
+                this.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
-                this.BufferGraphics = Graphics.FromImage(this._buffer);
-                this.BufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-                this.BufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
-                this.BufferGraphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
-                this.BufferGraphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
-
-                this.BufferGraphics.Clear(Drawing.Color.Black);
+                this.Graphics.Clear(Drawing.Color.Black);
             }
         }
         #endregion
@@ -153,7 +151,7 @@ namespace Xemio.GameLibrary.Rendering.Mono
                 color.G, 
                 color.B);
 
-            this.BufferGraphics.Clear(drawingColor);
+            this.Graphics.Clear(drawingColor);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -231,7 +229,7 @@ namespace Xemio.GameLibrary.Rendering.Mono
 
             if (this._color != Xemio.GameLibrary.Rendering.Color.White)
             {
-                this.BufferGraphics.DrawImage(
+                this.Graphics.DrawImage(
                     monoTexture.Bitmap,
                     new Drawing.Rectangle(
                         (int)destination.X + (int)this.ScreenOffset.X,
@@ -243,7 +241,7 @@ namespace Xemio.GameLibrary.Rendering.Mono
             }
             else
             {
-                this.BufferGraphics.DrawImage(
+                this.Graphics.DrawImage(
                     monoTexture.Bitmap,
                     (int)destination.X + (int)this.ScreenOffset.X,
                     (int)destination.Y + (int)this.ScreenOffset.Y,
@@ -251,7 +249,7 @@ namespace Xemio.GameLibrary.Rendering.Mono
                     (int)destination.Height);
             }
 
-            this.BufferGraphics.ResetTransform();
+            this.Graphics.ResetTransform();
         }
         /// <summary>
         /// Presents this instance.
@@ -297,10 +295,11 @@ namespace Xemio.GameLibrary.Rendering.Mono
 
             e.Graphics.CompositingMode = Drawing2D.CompositingMode.SourceCopy;
             e.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
+            e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None;
+            e.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
             e.Graphics.DrawImage(
-                this._buffer,
-                new Drawing.Rectangle(0, 0, screenWidth, screenHeight));
+                this._buffer, 0, 0, screenWidth, screenHeight);
 
             this.ScreenOffset = Vector2.Zero;
         }

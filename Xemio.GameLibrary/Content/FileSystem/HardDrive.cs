@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        public Stream Open(string fileName)
+        public virtual Stream Open(string fileName)
         {
             return new FileStream(fileName, FileMode.Open);
         }
@@ -23,7 +23,7 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        public Stream Create(string fileName)
+        public virtual Stream Create(string fileName)
         {
             return new FileStream(fileName, FileMode.Create);
         }
@@ -31,7 +31,7 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// Deletes the specified file.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        public void Delete(string fileName)
+        public virtual void Delete(string fileName)
         {
             File.Delete(fileName);
         }
@@ -39,7 +39,7 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// Creates the specified directory.
         /// </summary>
         /// <param name="path">The path.</param>
-        public void CreateDirectory(string path)
+        public virtual void CreateDirectory(string path)
         {
             Directory.CreateDirectory(path);
         }
@@ -47,7 +47,7 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// Deletes the specified directory.
         /// </summary>
         /// <param name="path">The path.</param>
-        public void DeleteDirectory(string path)
+        public virtual void DeleteDirectory(string path)
         {
             Directory.Delete(path, true);
         }
@@ -56,7 +56,7 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        public bool Exists(string fileName)
+        public virtual bool Exists(string fileName)
         {
             return File.Exists(fileName);
         }

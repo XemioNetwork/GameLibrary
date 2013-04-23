@@ -45,7 +45,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoPen MonoPen = pen as MonoPen;
 
-            this._renderManager.BufferGraphics.DrawRectangle(
+            this._renderManager.Graphics.DrawRectangle(
                 MonoPen.GetNativePen(), MonoHelper.Convert(rectangle + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -71,7 +71,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
             start += Vector2.Truncate(this._renderManager.ScreenOffset);
             end += Vector2.Truncate(this._renderManager.ScreenOffset);
 
-            this._renderManager.BufferGraphics.DrawLine(
+            this._renderManager.Graphics.DrawLine(
                 MonoPen.GetNativePen(), start.X, start.Y, end.X, end.Y);
         }
         /// <summary>
@@ -92,7 +92,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoPen MonoPen = pen as MonoPen;
 
-            this._renderManager.BufferGraphics.DrawPolygon(
+            this._renderManager.Graphics.DrawPolygon(
                 MonoPen.GetNativePen(), MonoHelper.Convert(points, Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -113,7 +113,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoPen MonoPen = pen as MonoPen;
 
-            this._renderManager.BufferGraphics.DrawEllipse(
+            this._renderManager.Graphics.DrawEllipse(
                 MonoPen.GetNativePen(), MonoHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -158,7 +158,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoPen MonoPen = pen as MonoPen;
 
-            this._renderManager.BufferGraphics.DrawArc(
+            this._renderManager.Graphics.DrawArc(
                 MonoPen.GetNativePen(),
                 MonoHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle, 
@@ -186,7 +186,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoPen MonoPen = pen as MonoPen;
 
-            this._renderManager.BufferGraphics.DrawPie(
+            this._renderManager.Graphics.DrawPie(
                 MonoPen.GetNativePen(),
                 MonoHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle, 
@@ -210,7 +210,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoPen MonoPen = pen as MonoPen;
 
-            this._renderManager.BufferGraphics.DrawCurve(
+            this._renderManager.Graphics.DrawCurve(
                 MonoPen.GetNativePen(), MonoHelper.Convert(points, Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -222,7 +222,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoBrush MonoBrush = brush as MonoBrush;
 
-            this._renderManager.BufferGraphics.FillRectangle(
+            this._renderManager.Graphics.FillRectangle(
                 MonoBrush.GetNativeBrush(), MonoHelper.Convert(rectangle + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -234,7 +234,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoBrush MonoBrush = brush as MonoBrush;
 
-            this._renderManager.BufferGraphics.FillPolygon(
+            this._renderManager.Graphics.FillPolygon(
                 MonoBrush.GetNativeBrush(), MonoHelper.Convert(points, Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -246,7 +246,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoBrush MonoBrush = brush as MonoBrush;
 
-            this._renderManager.BufferGraphics.FillEllipse(
+            this._renderManager.Graphics.FillEllipse(
                 MonoBrush.GetNativeBrush(), MonoHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -281,7 +281,7 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         {
             MonoBrush MonoBrush = brush as MonoBrush;
 
-            this._renderManager.BufferGraphics.FillPie(
+            this._renderManager.Graphics.FillPie(
                 MonoBrush.GetNativeBrush(),
                 MonoHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle,
