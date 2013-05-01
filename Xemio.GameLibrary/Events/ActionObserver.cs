@@ -24,12 +24,23 @@ namespace Xemio.GameLibrary.Events
         #endregion
 
         #region IObserver<IEvent> Member
+        /// <summary>
+        /// Called when the observer doesn't send events anymore.
+        /// </summary>
         public void OnCompleted()
         {
         }
+        /// <summary>
+        /// Called when an exception occurs inside the observer.
+        /// </summary>
+        /// <param name="error">The error.</param>
         public void OnError(Exception error)
         {
         }
+        /// <summary>
+        /// Called when an event instance arrives.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public void OnNext(IEvent value)
         {
             this._action(value as T);

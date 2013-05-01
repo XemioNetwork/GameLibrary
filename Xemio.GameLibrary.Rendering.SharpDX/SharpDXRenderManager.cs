@@ -31,7 +31,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             this.ScreenOffset = Math.Vector2.Zero;
             
             this.InitializeDirect2D(1, 1);
-            this.GraphicsDevice.ResolutionChanged += GraphicsDevice_ResolutionChanged;
+            this.GraphicsDevice.ResolutionChanged += GraphicsDeviceResolutionChanged;
         }
         #endregion
 
@@ -48,18 +48,18 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// </summary>
         public IGraphicsProvider GraphicsProvider { get; private set; }
         /// <summary>
-        /// Render offset.
+        /// Gets the screen offset.
         /// </summary>
         public Math.Vector2 ScreenOffset { get; private set; }
         #endregion
 
         #region Fields
         /// <summary>
-        /// Backbuffer texture
+        /// Backbuffer texture.
         /// </summary>
         private Texture2D _backBuffer;
         /// <summary>
-        /// Tint color (NOT IMPLEMENTED YET)
+        /// The tint color.
         /// </summary>
         private Color4 _tintColor;
         #endregion
@@ -121,6 +121,20 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
 
             this.BeginDraw();
         }
+        /// <summary>
+        /// Begins the drawing process.
+        /// </summary>
+        private void BeginDraw()
+        {
+            SharpDXHelper.RenderTarget.BeginDraw();
+        }
+        /// <summary>
+        /// Ends the drawing process.
+        /// </summary>
+        private void EndDraw()
+        {
+            SharpDXHelper.RenderTarget.EndDraw();
+        }
         #endregion
 
         #region Implementation of IRenderManager
@@ -129,6 +143,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// </summary>
         /// <param name="texture">The texture.</param>
         /// <param name="destination">The destination.</param>
+        /// <param name="color">The color.</param>
         public void Render(ITexture texture, Rectangle destination, Color color)
         {
             this.Tint(color);
@@ -137,11 +152,11 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             this.Tint(Color.White);
         }
         /// <summary>
-        /// Renders a bitmap
+        /// Renders a the specified texture.
         /// </summary>
-        /// <param name="texture"></param>
-        /// <param name="destination"></param>
-        /// <param name="origin"></param>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="origin">The original destination.</param>
         public void Render(ITexture texture, Math.Rectangle destination, Math.Rectangle origin)
         {
             SharpDXTexture dxTexture = texture as SharpDXTexture;
@@ -150,7 +165,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
                 throw new ArgumentException("Texture has to be SharpDXTexture.");
             }
 
-            var interpolation = BitmapInterpolationMode.NearestNeighbor;
+            const BitmapInterpolationMode interpolation = BitmapInterpolationMode.NearestNeighbor;
 
             SharpDXHelper.RenderTarget.DrawBitmap(
                 dxTexture.Bitmap,
@@ -187,7 +202,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             this.Tint(Color.White);
         }
         /// <summary>
-        /// Set tint color (NOT IMPLEMENTED)
+        /// Tints the screen.
         /// </summary>
         /// <param name="color"></param>
         public void Tint(Color color)
@@ -195,25 +210,25 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             this._tintColor = SharpDXHelper.CreateColor(color);
         }
         /// <summary>
-        /// Renders a bitmap
+        /// Renders the specified texture.
         /// </summary>
-        /// <param name="texture"></param>
-        /// <param name="destination"></param>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
         public void Render(ITexture texture, Math.Rectangle destination)
         {
             this.Render(texture, destination, new Math.Rectangle(0, 0, texture.Width, texture.Height));
         }
         /// <summary>
-        /// Renders a bitmap
+        /// Renders the specified texture.
         /// </summary>
-        /// <param name="texture"></param>
-        /// <param name="position"></param>
+        /// <param name="texture">The texture.</param>
+        /// <param name="position">The position.</param>
         public void Render(ITexture texture, Math.Vector2 position)
         {
             this.Render(texture, new Math.Rectangle(position.X, position.Y, texture.Width, texture.Height));
         }
         /// <summary>
-        /// Presents the swapchain
+        /// Presents the backbuffer to the screen.
         /// </summary>
         public void Present()
         {
@@ -222,23 +237,9 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             this.BeginDraw();
         }
         /// <summary>
-        /// BeginDraw
-        /// </summary>
-        public void BeginDraw()
-        {
-            SharpDXHelper.RenderTarget.BeginDraw();
-        }
-        /// <summary>
-        /// Enddraw
-        /// </summary>
-        public void EndDraw()
-        {
-            SharpDXHelper.RenderTarget.EndDraw();
-        }
-        /// <summary>
         /// Clears the render target.
         /// </summary>
-        /// <param name="color"></param>
+        /// <param name="color">The color.</param>
         public void Clear(Color color)
         {
             SharpDXHelper.RenderTarget.Clear(new DXColor(color.R, color.G, color.B, color.A));
@@ -252,7 +253,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             this.ScreenOffset = translation;
         }
         /// <summary>
-        /// Set rotation (NOT IMPLEMENTED)
+        /// Set rotation (NOT IMPLEMENTED).
         /// </summary>
         /// <param name="rotation"></param>
         public void Rotate(float rotation)
@@ -264,7 +265,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <summary>
         /// Handles a resize event.
         /// </summary>
-        private void GraphicsDevice_ResolutionChanged(object sender, EventArgs e)
+        private void GraphicsDeviceResolutionChanged(object sender, EventArgs e)
         {
             this.InitializeDirect2D(this.GraphicsDevice.DisplayMode.Width, this.GraphicsDevice.DisplayMode.Height);
         }

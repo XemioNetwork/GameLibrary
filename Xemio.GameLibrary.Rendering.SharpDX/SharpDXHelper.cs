@@ -3,9 +3,8 @@
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DXGI;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using Xemio.GameLibrary.Rendering.Geometry;
+using Xemio.GameLibrary.Rendering.SharpDX.Geometry;
 
 using GDIBitmap = System.Drawing.Bitmap;
 using GDIImage = System.Drawing.Image;
@@ -13,9 +12,6 @@ using GDIRectangle = System.Drawing.Rectangle;
 
 using Factory = SharpDX.Direct2D1.Factory;
 using DXColor = SharpDX.Color;
-using Xemio.GameLibrary.Rendering.Geometry;
-using Xemio.GameLibrary.Common;
-using Xemio.GameLibrary.Rendering.SharpDX.Geometry;
 
 namespace Xemio.GameLibrary.Rendering.SharpDX
 {
@@ -23,15 +19,15 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
     {
         #region Properties
         /// <summary>
-        /// SharpDX Render Target
+        /// Gets the SharpDX render target.
         /// </summary>
         public static RenderTarget RenderTarget { get; set; }
         /// <summary>
-        /// SharpDX Direct2D Factory
+        /// Gets the SharpDX Direct2D factory.
         /// </summary>
         public static Factory Factory2D { get; internal set; }
         /// <summary>
-        /// SharpDX SwapChain
+        /// Gets the SharpDX swap chain.
         /// </summary>
         public static SwapChain SwapChain { get; internal set; }
         #endregion

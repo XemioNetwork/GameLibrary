@@ -25,12 +25,14 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             : this(File.OpenRead(fileName), frameWidth, frameHeight, startIndex, frameCount)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="frameWidth">Width of the frame.</param>
         /// <param name="frameHeight">Height of the frame.</param>
+        /// <param name="startIndex"> </param>
         /// <param name="frameCount">The frame count.</param>
         public SpriteSheet(Stream stream, int frameWidth, int frameHeight, int startIndex, int frameCount)
         {

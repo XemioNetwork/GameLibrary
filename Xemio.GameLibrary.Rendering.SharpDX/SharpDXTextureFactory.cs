@@ -16,10 +16,9 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
     {
         #region Methods
         /// <summary>
-        /// Loads a bitmap from a stream
+        /// Loads a bitmap from a stream.
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
+        /// <param name="stream">The stream.</param>
         private D2DBitmap LoadFromStream(Stream stream)
         {
             // Loads from file using System.Drawing.Image
@@ -47,6 +46,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
                             byte g = Marshal.ReadByte(bitmapData.Scan0, offset++);
                             byte r = Marshal.ReadByte(bitmapData.Scan0, offset++);
                             byte a = Marshal.ReadByte(bitmapData.Scan0, offset++);
+
                             int rgba = r | (g << 8) | (b << 16) | (a << 24);
                             tempStream.Write(rgba);
                         }
@@ -64,20 +64,18 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
 
         #region Implementation of ITextureFactory
         /// <summary>
-        /// Create new texture
+        /// Creates a new texture.
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="data">The binary texture data.</param>
         public ITexture CreateTexture(byte[] data)
         {
             return this.CreateTexture(new MemoryStream(data));
         }
         /// <summary>
-        /// Create new texture
+        /// Creates a new texture.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="resourceManager"></param>
-        /// <returns></returns>
+        /// <param name="name">The resource filename.</param>
+        /// <param name="resourceManager">The resource manager.</param>
         public ITexture CreateTexture(string name, System.Resources.ResourceManager resourceManager)
         {
             Bitmap bitmap = (Bitmap)resourceManager.GetObject(name);
@@ -88,15 +86,14 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             return this.CreateTexture(stream);
         }
         /// <summary>
-        /// Create new text
+        /// Creates a new texture.
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <param name="fileName">The file name.</param>
         public ITexture CreateTexture(string fileName)
         {
             if (!File.Exists(fileName))
             {
-                throw new FileNotFoundException("Could not find '" + fileName + "'");
+                throw new FileNotFoundException("The file '" + fileName + "' does not exist.");
             }
 
             using (FileStream stream = File.OpenRead(fileName))
@@ -105,10 +102,9 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             }
         }
         /// <summary>
-        /// Create new texture
+        /// Creates a new texture.
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
+        /// <param name="stream">The stream.</param>
         public ITexture CreateTexture(System.IO.Stream stream)
         {
             return new SharpDXTexture(this.LoadFromStream(stream));

@@ -6,14 +6,14 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Rendering.Sprites
 {
-    public class SpriteAnimationInstance
+    public class AnimationInstance
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SpriteAnimationInstance"/> class.
+        /// Initializes a new instance of the <see cref="AnimationInstance"/> class.
         /// </summary>
         /// <param name="animation">The animation.</param>
-        public SpriteAnimationInstance(SpriteAnimation animation)
+        public AnimationInstance(Animation animation)
         {
             this.Animation = animation;
         }
@@ -28,7 +28,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <summary>
         /// Gets the animation.
         /// </summary>
-        public SpriteAnimation Animation { get; private set; }
+        public Animation Animation { get; private set; }
         /// <summary>
         /// Gets the current frame.
         /// </summary>

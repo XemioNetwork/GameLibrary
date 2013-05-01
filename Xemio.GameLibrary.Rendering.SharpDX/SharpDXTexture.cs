@@ -11,15 +11,8 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <param name="bitmap">The bitmap.</param>
         public SharpDXTexture(Bitmap bitmap)
         {
-            this._bitmap = bitmap;
+            this.Bitmap = bitmap;
         }
-        #endregion
-
-        #region Fields
-        /// <summary>
-        /// Bitmap
-        /// </summary>
-        private Bitmap _bitmap;
         #endregion
 
         #region Properties
@@ -28,22 +21,19 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// </summary>
         public int Height
         {
-            get { return (int)this._bitmap.Size.Height; }
+            get { return (int)this.Bitmap.Size.Height; }
         }
         /// <summary>
         /// Gets the width.
         /// </summary>
         public int Width
         {
-            get { return (int)this._bitmap.Size.Width; }
+            get { return (int)this.Bitmap.Size.Width; }
         }
         /// <summary>
-        /// Gets the bitmap
+        /// Gets the internal SharpDX bitmap.
         /// </summary>
-        public Bitmap Bitmap
-        {
-            get { return this._bitmap; }
-        }
+        public Bitmap Bitmap { get; private set; }
         #endregion
     }
 }

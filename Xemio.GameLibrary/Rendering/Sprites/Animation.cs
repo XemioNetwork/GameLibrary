@@ -6,27 +6,27 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Rendering.Sprites
 {
-    public class SpriteAnimation
+    public class Animation
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SpriteAnimation"/> class.
+        /// Initializes a new instance of the <see cref="Animation"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sheet">The sheet.</param>
         /// <param name="frameTime">The frame time.</param>
-        public SpriteAnimation(string name, SpriteSheet sheet, float frameTime)
+        public Animation(string name, SpriteSheet sheet, float frameTime)
             : this(name, sheet, frameTime, true)
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="SpriteAnimation"/> class.
+        /// Initializes a new instance of the <see cref="Animation"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sheet">The sheet.</param>
         /// <param name="frameTime">The frame time.</param>
         /// <param name="isLooped">if set to <c>true</c> the animation gets looped.</param>
-        public SpriteAnimation(string name, SpriteSheet sheet, float frameTime, bool isLooped)
+        public Animation(string name, SpriteSheet sheet, float frameTime, bool isLooped)
         {
             this.Name = name;
             this.Sheet = sheet;
@@ -59,9 +59,9 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <summary>
         /// Creates a new animation instance.
         /// </summary>
-        public SpriteAnimationInstance CreateInstance()
+        public AnimationInstance CreateInstance()
         {
-            return new SpriteAnimationInstance(this);
+            return new AnimationInstance(this);
         }
         #endregion
     }
