@@ -135,7 +135,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
         private void SurfaceKeyDown(object sender, KeyEventArgs e)
         {
-            this.SetKeyState(e.KeyCode, true);
+            this.SetKeyState((Keys)e.KeyCode, true);
         }
         /// <summary>
         /// Handles the KeyUp event of the surface.
@@ -144,7 +144,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
         private void SurfaceKeyUp(object sender, KeyEventArgs e)
         {
-            this.SetKeyState(e.KeyCode, false);
+            this.SetKeyState((Keys)e.KeyCode, false);
         }
         #endregion
     }

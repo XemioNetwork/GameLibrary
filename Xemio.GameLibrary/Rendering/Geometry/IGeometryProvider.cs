@@ -22,6 +22,20 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="rectangle">The rectangle.</param>
         void DrawRectangle(IPen pen, Rectangle rectangle);
         /// <summary>
+        /// Draws the rounded rectangle.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="radius">The radius.</param>
+        void DrawRoundedRectangle(Color color, Rectangle rectangle, float radius);
+        /// <summary>
+        /// Draws the rounded rectangle.
+        /// </summary>
+        /// <param name="pen">The pen.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="radius">The radius.</param>
+        void DrawRoundedRectangle(IPen pen, Rectangle rectangle, float radius);
+        /// <summary>
         /// Draws a line.
         /// </summary>
         /// <param name="color">The color.</param>
@@ -95,16 +109,16 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="color">The color.</param>
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
-        /// <param name="sweetAngle">The sweet angle.</param>
-        void DrawPie(Color color, Rectangle region, float startAngle, float sweetAngle);
+        /// <param name="sweepAngle">The sweet angle.</param>
+        void DrawPie(Color color, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Draws a pie.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
-        /// <param name="sweetAngle">The sweet angle.</param>
-        void DrawPie(IPen pen, Rectangle region, float startAngle, float sweetAngle);
+        /// <param name="sweepAngle">The sweet angle.</param>
+        void DrawPie(IPen pen, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Draws a curve.
         /// </summary>
@@ -123,6 +137,13 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="brush">The brush.</param>
         /// <param name="rectangle">The rectangle.</param>
         void FillRectangle(IBrush brush, Rectangle rectangle);
+        /// <summary>
+        /// Fills a rounded rectangle.
+        /// </summary>
+        /// <param name="brush">The brush.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="radius">The radius.</param>
+        void FillRoundedRectangle(IBrush brush, Rectangle rectangle, float radius);
         /// <summary>
         /// Fills a polygon.
         /// </summary>
@@ -156,8 +177,8 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="brush">The brush.</param>
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
-        /// <param name="sweetAngle">The sweet angle.</param>
-        void FillPie(IBrush brush, Rectangle region, float startAngle, float sweetAngle);
+        /// <param name="sweepAngle">The sweet angle.</param>
+        void FillPie(IBrush brush, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Gets the geometry factory.
         /// </summary>

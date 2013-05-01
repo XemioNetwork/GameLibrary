@@ -49,6 +49,26 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
                 gdiPen.GetNativePen(), GDIHelper.Convert(rectangle + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
+        /// Draws the rounded rectangle.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="radius">The radius.</param>
+        public void DrawRoundedRectangle(Color color, Rectangle rectangle, float radius)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Draws the rounded rectangle.
+        /// </summary>
+        /// <param name="pen">The pen.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="radius">The radius.</param>
+        public void DrawRoundedRectangle(IPen pen, Rectangle rectangle, float radius)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
         /// Draws a line.
         /// </summary>
         /// <param name="color">The color.</param>
@@ -170,10 +190,10 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// <param name="color">The color.</param>
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
-        /// <param name="sweetAngle">The sweet angle.</param>
-        public void DrawPie(Color color, Rectangle region, float startAngle, float sweetAngle)
+        /// <param name="sweepAngle">The sweet angle.</param>
+        public void DrawPie(Color color, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.DrawPie(this.Factory.CreatePen(color), region, startAngle, sweetAngle);
+            this.DrawPie(this.Factory.CreatePen(color), region, startAngle, sweepAngle);
         }
         /// <summary>
         /// Draws a pie.
@@ -181,8 +201,8 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// <param name="pen">The pen.</param>
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
-        /// <param name="sweetAngle">The sweet angle.</param>
-        public void DrawPie(IPen pen, Rectangle region, float startAngle, float sweetAngle)
+        /// <param name="sweepAngle">The sweet angle.</param>
+        public void DrawPie(IPen pen, Rectangle region, float startAngle, float sweepAngle)
         {
             GDIPen gdiPen = pen as GDIPen;
 
@@ -190,7 +210,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
                 gdiPen.GetNativePen(),
                 GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle, 
-                sweetAngle);
+                sweepAngle);
         }
         /// <summary>
         /// Draws a curve.
@@ -224,6 +244,15 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
 
             this._renderManager.BufferGraphics.FillRectangle(
                 gdiBrush.GetNativeBrush(), GDIHelper.Convert(rectangle + Vector2.Truncate(this._renderManager.ScreenOffset)));
+        }
+        /// <summary>
+        /// Fills a rounded rectangle.
+        /// </summary>
+        /// <param name="brush">The brush.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        public void FillRoundedRectangle(IBrush brush, Rectangle rectangle, float radius)
+        {
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Fills a polygon.
@@ -276,8 +305,8 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// <param name="brush">The brush.</param>
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
-        /// <param name="sweetAngle">The sweet angle.</param>
-        public void FillPie(IBrush brush, Rectangle region, float startAngle, float sweetAngle)
+        /// <param name="sweepAngle">The sweet angle.</param>
+        public void FillPie(IBrush brush, Rectangle region, float startAngle, float sweepAngle)
         {
             GDIBrush gdiBrush = brush as GDIBrush;
 
@@ -285,7 +314,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
                 gdiBrush.GetNativeBrush(),
                 GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle,
-                sweetAngle);
+                sweepAngle);
         }
         /// <summary>
         /// Gets the geometry factory.

@@ -65,7 +65,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// </summary>
         /// <param name="pen">The pen</param>
         /// <returns></returns>
-        public static Brush GetBrush(IPen pen)
+        public static Brush CreateBrushFromPen(IPen pen)
         {
             SharpDXPen sdxPen = pen as SharpDXPen;
             if (sdxPen == null)

@@ -99,7 +99,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseDown(object sender, MouseEventArgs e)
         {
-            this.SetButtonState(e.Button, true);
+            this.SetButtonState((MouseButtons)e.Button, true);
         }
         /// <summary>
         /// Handles the MouseUp event of the surface control.
@@ -108,7 +108,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseUp(object sender, MouseEventArgs e)
         {
-            this.SetButtonState(e.Button, false);
+            this.SetButtonState((MouseButtons)e.Button, false);
         }
         #endregion
     }

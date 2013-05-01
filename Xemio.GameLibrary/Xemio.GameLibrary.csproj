@@ -100,6 +100,8 @@
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Game\ISceneProvider.cs" />
     <Compile Include="Input\KeyListener.cs" />
+    <Compile Include="Input\Keys.cs" />
+    <Compile Include="Input\MouseButtons.cs" />
     <Compile Include="Input\MouseListener.cs" />
     <Compile Include="Math\BoundingBox.cs" />
     <Compile Include="Math\BoundingSphere.cs" />
@@ -183,11 +185,24 @@
     <Compile Include="Sound\Loops\LoopManager.cs" />
     <Compile Include="Sound\PlayMode.cs" />
     <Compile Include="Sound\SoundManager.cs" />
+    <Compile Include="UI\DataBindings\Property.cs" />
+    <Compile Include="UI\DataBindings\PropertyBinder.cs" />
+    <Compile Include="UI\DataBindings\PropertyBinding.cs" />
+    <Compile Include="UI\Widgets\WidgetDataBinder.cs" />
+    <Compile Include="UI\Events\KeyEventArgs.cs" />
+    <Compile Include="UI\Events\MouseEventArgs.cs" />
+    <Compile Include="UI\Events\PaintEventArgs.cs" />
+    <Compile Include="UI\Widgets\WidgetGraphics.cs" />
+    <Compile Include="UI\Widgets\IWidgetContainer.cs" />
+    <Compile Include="UI\Widgets\Widget.cs" />
+    <Compile Include="UI\Widgets\WidgetContainer.cs" />
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Formats\" />
     <Folder Include="Entities\States\" />
+    <Folder Include="UI\Templates\" />
+    <Folder Include="UI\Themes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
