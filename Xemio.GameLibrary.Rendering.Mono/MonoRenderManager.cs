@@ -64,23 +64,18 @@ namespace Xemio.GameLibrary.Rendering.Mono
         /// </summary>
         private void InitializeBuffer(DisplayMode mode)
         {
-            Control target = Control.FromHandle(this.GraphicsDevice.Handle);
+            int width = mode.Width;
+            int height = mode.Height;
 
-            if (target != null)
-            {
-                int width = mode.Width;
-                int height = mode.Height;
+            this._buffer = new Bitmap(width, height);
 
-                this._buffer = new Bitmap(width, height);
+            this.Graphics = Graphics.FromImage(this._buffer);
+            this.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
+            this.Graphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
+            this.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
+            this.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
-                this.Graphics = Graphics.FromImage(this._buffer);
-                this.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-                this.Graphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
-                this.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
-                this.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
-
-                this.Graphics.Clear(Drawing.Color.Black);
-            }
+            this.Graphics.Clear(Drawing.Color.Black);
         }
         #endregion
 

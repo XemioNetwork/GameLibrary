@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.IO;
 
-namespace Xemio.GameLibrary.Rendering.Xna
+namespace Xemio.GameLibrary.Rendering.SharpDX
 {
-    public class XnaGraphicsInitializer : IGraphicsInitializer
+    public class SharpDXGraphicsInitializer : IGraphicsInitializer
     {
         #region Fields
         private IGraphicsProvider _provider;
         #endregion
-        
-        #region IGraphicsInitializer Member
+
+        #region Methods
         /// <summary>
         /// Determines whether this instance is available.
         /// </summary>
@@ -38,14 +34,10 @@ namespace Xemio.GameLibrary.Rendering.Xna
         /// Creates the graphics provider.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
+        /// <returns></returns>
         public IGraphicsProvider CreateProvider(GraphicsDevice graphicsDevice)
         {
-            if (this._provider != null)
-            {
-                return this._provider;
-            }
-
-            return new XnaGraphicsProvider(graphicsDevice);
+            return new SharpDXGraphicsProvider(graphicsDevice);
         }
         #endregion
     }

@@ -122,7 +122,7 @@ namespace Xemio.GameLibrary.Network
                 subscriber.OnReceive(this, package, connection);    
             }
 
-            this._eventManager.Send(new ReceivedPackageEvent(package, connection));
+            this._eventManager.Publish(new ReceivedPackageEvent(package, connection));
         }
         /// <summary>
         /// Called when server is sending a package.
@@ -150,7 +150,7 @@ namespace Xemio.GameLibrary.Network
                 subscriber.OnSent(this, package, connection);
             }
 
-            this._eventManager.Send(new SentPackageEvent(package, connection));
+            this._eventManager.Publish(new SentPackageEvent(package, connection));
         }
         /// <summary>
         /// Starts the server loop.
@@ -170,7 +170,7 @@ namespace Xemio.GameLibrary.Network
             while (this.Active)
             {
                 IConnection connection = this.Protocol.AcceptConnection();
-                this._eventManager.Send(new ClientJoinedEvent(connection));
+                this._eventManager.Publish(new ClientJoinedEvent(connection));
 
                 this.Connections.Add(connection);
                 this.StartListening(connection);
@@ -206,7 +206,7 @@ namespace Xemio.GameLibrary.Network
                     Console.WriteLine(ex.Message + ex.StackTrace);
                     //TODO: logging
                     this.Connections.Remove(connection);
-                    this._eventManager.Send(new ClientLeftEvent(connection));
+                    this._eventManager.Publish(new ClientLeftEvent(connection));
                     break;
                 }
             }

@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibary.Script", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.Mono", "Xemio.GameLibrary.Rendering.Mono\Xemio.GameLibrary.Rendering.Mono.csproj", "{A3D565C5-163C-4B79-B36A-F96D8CE7D681}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.EventSystem", "Xemio.Testing.EventSystem\Xemio.Testing.EventSystem.csproj", "{B1EB1380-0429-4378-9669-3781CF996560}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,16 @@ Global
 		{A3D565C5-163C-4B79-B36A-F96D8CE7D681}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A3D565C5-163C-4B79-B36A-F96D8CE7D681}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A3D565C5-163C-4B79-B36A-F96D8CE7D681}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1EB1380-0429-4378-9669-3781CF996560}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Debug|x86.ActiveCfg = Debug|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Debug|x86.Build.0 = Debug|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Release|Any CPU.ActiveCfg = Release|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Release|x86.ActiveCfg = Release|x86
+		{B1EB1380-0429-4378-9669-3781CF996560}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +152,7 @@ Global
 		{A3D565C5-163C-4B79-B36A-F96D8CE7D681} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{F1DA53F3-76C8-4178-B772-B1F048F7F9E2} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
+		{B1EB1380-0429-4378-9669-3781CF996560} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04} = {71A94458-C203-48EA-8B5E-1034A897BF68}
 	EndGlobalSection
 EndGlobal

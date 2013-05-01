@@ -26,7 +26,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Gets or sets the handle.
         /// </summary>
-        public IntPtr Handle { get; private set; }
+        public IntPtr Handle { get; set; }
         /// <summary>
         /// Gets or sets the provider.
         /// </summary>

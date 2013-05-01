@@ -52,31 +52,26 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new ValueProvider<ISoundInitializer>(initializer));
         }
         /// <summary>
-        /// Sets up core components and intializes the rendering pipeline for the specified handle.
+        /// Creates the graphics components.
         /// </summary>
-        /// <param name="handle">The handle.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        public static void Run(IntPtr handle, int width, int height, int targetFps)
+        public static void CreateGraphics(IntPtr handle, int width, int height)
         {
-            GameLoop loop = new GameLoop();
-            loop.TargetFrameTime = 1000 / (double)targetFps;
-            loop.TargetTickTime = 1000 / (double)targetFps;
-
             GraphicsDevice graphicsDevice = new GraphicsDevice(handle);
+            XGL.Components.Add(graphicsDevice);
+
             IGraphicsInitializer graphicsInitializer = XGL.GetComponent<IGraphicsInitializer>();
 
-            graphicsDevice.Graphics = graphicsInitializer.CreateProvider(graphicsDevice);
-            graphicsDevice.SetDisplayMode(width, height);
-            
-            XGL.Components.Add(loop);
-            XGL.Components.Add(graphicsDevice);
-            XGL.Components.Add(new EventManager());
-            XGL.Components.Add(new SceneManager());
-            XGL.Components.Add(new KeyListener(handle));
-            XGL.Components.Add(new MouseListener(handle));
-            XGL.Components.Add(new ContentManager());
-
+            if (graphicsInitializer.IsAvailable())
+            {
+                graphicsDevice.Graphics = graphicsInitializer.CreateProvider(graphicsDevice);
+                graphicsDevice.SetDisplayMode(width, height);
+            }
+        }
+        /// <summary>
+        /// Creates the sound components.
+        /// </summary>
+        public static void CreateSound()
+        {
             SoundManager soundManager = new SoundManager();
             ISoundInitializer soundInitializer = XGL.GetComponent<ISoundInitializer>();
 
@@ -87,6 +82,30 @@ namespace Xemio.GameLibrary
                 XGL.Components.Add(soundManager);
                 XGL.Components.Add(new LoopManager());
             }
+        }
+        /// <summary>
+        /// Sets up core components and intializes the rendering pipeline for the specified handle.
+        /// </summary>
+        /// <param name="handle">The handle.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <param name="targetFps">The target FPS.</param>
+        public static void Run(IntPtr handle, int width, int height, int targetFps)
+        {
+            GameLoop loop = new GameLoop();
+            loop.TargetFrameTime = 1000 / (double)targetFps;
+            loop.TargetTickTime = 1000 / (double)targetFps;
+
+            XGL.CreateGraphics(handle, width, height);
+            
+            XGL.Components.Add(loop);
+            XGL.Components.Add(new EventManager());
+            XGL.Components.Add(new SceneManager());
+            XGL.Components.Add(new KeyListener(handle));
+            XGL.Components.Add(new MouseListener(handle));
+            XGL.Components.Add(new ContentManager());
+
+            XGL.CreateSound();
 
             XGL.Components.Add(new PackageHandler());
             XGL.Components.Construct();

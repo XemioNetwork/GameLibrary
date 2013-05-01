@@ -47,6 +47,13 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
 
         #region Properties
         /// <summary>
+        /// Gets the buffer.
+        /// </summary>
+        public Bitmap Buffer
+        {
+            get { return this._buffer; }
+        }
+        /// <summary>
         /// Gets the buffer graphics.
         /// </summary>
         public Graphics BufferGraphics { get; private set; }
@@ -62,25 +69,20 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         private void InitializeBuffer(DisplayMode mode)
         {
-            Control target = Control.FromHandle(this.GraphicsDevice.Handle);
+            int width = mode.Width;
+            int height = mode.Height;
 
-            if (target != null)
-            {
-                int width = mode.Width;
-                int height = mode.Height;
+            PixelFormat pixelFormat = PixelFormat.Format32bppPArgb;
 
-                PixelFormat pixelFormat = PixelFormat.Format32bppPArgb;
+            this._buffer = new Bitmap(width, height, pixelFormat);
 
-                this._buffer = new Bitmap(width, height, pixelFormat);
+            this.BufferGraphics = Graphics.FromImage(this._buffer);
+            this.BufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
+            this.BufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
+            this.BufferGraphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
+            this.BufferGraphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
-                this.BufferGraphics = Graphics.FromImage(this._buffer);
-                this.BufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-                this.BufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
-                this.BufferGraphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
-                this.BufferGraphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
-
-                this.BufferGraphics.Clear(Drawing.Color.Black);
-            }
+            this.BufferGraphics.Clear(Drawing.Color.Black);
         }
         #endregion
 

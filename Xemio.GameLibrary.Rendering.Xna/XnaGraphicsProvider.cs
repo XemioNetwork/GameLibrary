@@ -20,6 +20,8 @@ namespace Xemio.GameLibrary.Rendering.Xna
 
             this.TextureFactory = new XnaTextureFactory();
             this.RenderManager = new XnaRenderManager(this, graphicsDevice);
+
+            XnaHelper.CreateDevice();
         }
         #endregion
 

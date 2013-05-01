@@ -127,7 +127,7 @@ namespace Xemio.GameLibrary.Network
                     ThreadInvoker.Invoke(() => this.Receive(package));
 
                     EventManager eventManager = XGL.GetComponent<EventManager>();
-                    eventManager.Send(new ReceivedPackageEvent(package));
+                    eventManager.Publish(new ReceivedPackageEvent(package));
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace Xemio.GameLibrary.Network
             this.Protocol.Send(package);
 
             EventManager eventManager = XGL.GetComponent<EventManager>();
-            eventManager.Send(new SentPackageEvent(package));
+            eventManager.Publish(new SentPackageEvent(package));
 
             foreach (IPerceptionSubscriber subscriber in subscribers)
             {

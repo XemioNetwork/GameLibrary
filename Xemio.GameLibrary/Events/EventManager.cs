@@ -15,66 +15,46 @@ namespace Xemio.GameLibrary.Events
         /// </summary>
         public EventManager()
         {
-            this._actions = new ActionCollection<Event>();
-            this._subscribers = new Dictionary<Type, ActionCollection<Event>>();
+            this._subject = new EventSubject();
         }
         #endregion
 
         #region Fields
-        private ActionCollection<Event> _actions;
-        private Dictionary<Type, ActionCollection<Event>> _subscribers;
+        private EventSubject _subject;
         #endregion
 
         #region Methods
         /// <summary>
-        /// Sends the specified event through the event manager.
+        /// Publishes the specified event.
         /// </summary>
-        /// <param name="eventInstance">The event instance.</param>
-        public void Send(Event eventInstance)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="e">The event.</param>
+        public void Publish<T>(T e) where T : IEvent
         {
-            Type eventType = eventInstance.GetType();
-            if (!this._subscribers.ContainsKey(eventType))
-            {
-                this._subscribers.Add(eventType, new ActionCollection<Event>());
-            }
-
-            IEnumerable<Action<Event>> collection = this._subscribers[eventType]
-                .Concat(this._actions);
-
-            foreach (Action<Event> action in collection)
-            {
-                action(eventInstance);
-            }
+            this._subject.Publish(e);
         }
         /// <summary>
-        /// Subscribes the specified action to all event types.
+        /// Subscribes the specified observer.
         /// </summary>
-        /// <param name="action">The action.</param>
-        public void Subscribe(Action<Event> action)
+        /// <param name="observer">The observer.</param>
+        public void Subscribe(IObserver<IEvent> observer)
         {
-            this._actions.Add(action);
+            this._subject.Subscribe(observer);
         }
         /// <summary>
-        /// Registers the subscriber to the specified event.
+        /// Subscribes the specified action.
         /// </summary>
-        /// <param name="type">The type.</param>
         /// <param name="action">The action.</param>
-        public void Subscribe(Type type, Action<Event> action)
+        public void Subscribe<T>(Action<T> action) where T : class, IEvent
         {
-            if (!this._subscribers.ContainsKey(type))
-            {
-                this._subscribers.Add(type, new ActionCollection<Event>());
-            }
-
-            this._subscribers[type].Add(action);
+            this._subject.Subscribe(new ActionObserver<T>(action));
         }
         /// <summary>
-        /// Registers the subscriber to the specified event.
+        /// Observes this instance.
         /// </summary>
-        /// <param name="action">The action.</param>
-        public void Subscribe<T>(Action<T> action) where T : Event
+        public IObservable<IEvent> Observe()
         {
-            this.Subscribe(typeof(T), e => action(e as T));
+            return this._subject;
         }
         #endregion
     }

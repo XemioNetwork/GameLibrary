@@ -66,7 +66,7 @@ namespace Xemio.GameLibrary.Content
             string message = string.Format("No registered reader for '{0}'.", type);
 
             EventManager eventManager = XGL.GetComponent<EventManager>();
-            eventManager.Send(new LoggingEvent(LoggingLevel.Error, message));
+            eventManager.Publish(new LoggingEvent(LoggingLevel.Error, message));
 
             throw new InvalidOperationException(message);
         }
@@ -89,7 +89,7 @@ namespace Xemio.GameLibrary.Content
             string message = string.Format("No registered writer for '{0}'.", type);
 
             EventManager eventManager = XGL.GetComponent<EventManager>();
-            eventManager.Send(new LoggingEvent(LoggingLevel.Error, message));
+            eventManager.Publish(new LoggingEvent(LoggingLevel.Error, message));
 
             throw new InvalidOperationException(message);
         }

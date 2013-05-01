@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Events.Logging
 {
-    public class LoggingEvent : Event
+    public class LoggingEvent : IEvent
     {
         #region Constructors
         /// <summary>
@@ -30,6 +30,16 @@ namespace Xemio.GameLibrary.Events.Logging
         /// Gets the message.
         /// </summary>
         public string Message { get; private set; }
+        #endregion
+
+        #region IEvent Member
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IEvent"/> is synced.
+        /// </summary>
+        public bool Synced
+        {
+            get { return false; }
+        }
         #endregion
     }
 }

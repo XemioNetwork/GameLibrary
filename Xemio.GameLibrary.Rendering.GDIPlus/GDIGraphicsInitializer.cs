@@ -10,6 +10,13 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
     {
         #region IGraphicsInitializer Member
         /// <summary>
+        /// Determines whether this instance is available.
+        /// </summary>
+        public bool IsAvailable()
+        {
+            return true;
+        }
+        /// <summary>
         /// Creates the graphics provider.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>

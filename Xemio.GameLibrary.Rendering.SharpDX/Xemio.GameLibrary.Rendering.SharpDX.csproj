@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xemio.GameLibrary.Rendering.SharpDX</RootNamespace>
-    <AssemblyName>Xemio.GameLibrary.Rendering.SharpDX</AssemblyName>
+    <AssemblyName>XGL.Rendering.SharpDX</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,8 +31,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SharpDX, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Desktop\Downloads\XGL.SharpDX\XGL.SharpDX\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Desktop\Downloads\XGL.SharpDX\XGL.SharpDX\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Desktop\Downloads\XGL.SharpDX\XGL.SharpDX\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D10">
+      <HintPath>..\..\..\..\Desktop\Downloads\XGL.SharpDX\XGL.SharpDX\SharpDX.Direct3D10.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Desktop\Downloads\XGL.SharpDX\XGL.SharpDX\SharpDX.DXGI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,7 +61,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geometry\SharpDXBrush.cs" />
+    <Compile Include="Geometry\SharpDXGeometryFactory.cs" />
+    <Compile Include="Geometry\SharpDXGeometryProvider.cs" />
+    <Compile Include="Geometry\SharpDXPen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharpDXGraphicsInitializer.cs" />
+    <Compile Include="SharpDXGraphicsProvider.cs" />
+    <Compile Include="SharpDXHelper.cs" />
+    <Compile Include="SharpDXRenderManager.cs" />
+    <Compile Include="SharpDXTexture.cs" />
+    <Compile Include="SharpDXTextureFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xemio.GameLibrary\Xemio.GameLibrary.csproj">

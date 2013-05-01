@@ -10,6 +10,10 @@ namespace Xemio.GameLibrary.Rendering
     public interface IGraphicsInitializer : IComponent
     {
         /// <summary>
+        /// Determines whether this instance is available.
+        /// </summary>
+        bool IsAvailable();
+        /// <summary>
         /// Creates the graphics provider.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>

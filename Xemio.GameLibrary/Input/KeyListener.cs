@@ -104,8 +104,8 @@ namespace Xemio.GameLibrary.Input
             {
                 EventManager eventManager = XGL.GetComponent<EventManager>();
 
-                eventManager.Send(new ExceptionEvent(ex));
-                eventManager.Send(new LoggingEvent(LoggingLevel.Exception, ex.Message));
+                eventManager.Publish(new ExceptionEvent(ex));
+                eventManager.Publish(new LoggingEvent(LoggingLevel.Exception, ex.Message));
             }
         }
         /// <summary>

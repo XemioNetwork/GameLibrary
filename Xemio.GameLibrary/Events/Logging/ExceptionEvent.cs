@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Events.Logging
 {
-    public class ExceptionEvent : Event
+    public class ExceptionEvent : IEvent
     {
         #region Constructors
         /// <summary>
@@ -24,6 +24,16 @@ namespace Xemio.GameLibrary.Events.Logging
         /// Gets the exception.
         /// </summary>
         public Exception Exception { get; private set; }
+        #endregion
+
+        #region IEvent Member
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IEvent"/> is synced.
+        /// </summary>
+        public bool Synced
+        {
+            get { return false; }
+        }
         #endregion
     }
 }

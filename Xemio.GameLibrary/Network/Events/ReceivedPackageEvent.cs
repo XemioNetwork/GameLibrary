@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Events
 {
-    public class ReceivedPackageEvent : Event
+    public class ReceivedPackageEvent : IEvent
     {
         #region Constructors
         /// <summary>
@@ -47,6 +47,16 @@ namespace Xemio.GameLibrary.Network.Events
         public T As<T>() where T : Package
         {
             return this.Package as T;
+        }
+        #endregion
+
+        #region IEvent Member
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IEvent"/> is synced.
+        /// </summary>
+        public bool Synced
+        {
+            get { return false; }
         }
         #endregion
     }
