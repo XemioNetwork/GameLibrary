@@ -37,6 +37,11 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <returns></returns>
         public IGraphicsProvider CreateProvider(GraphicsDevice graphicsDevice)
         {
+            if (this._provider != null)
+            {
+                return this._provider;
+            }
+
             return new SharpDXGraphicsProvider(graphicsDevice);
         }
         #endregion
