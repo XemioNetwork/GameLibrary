@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using Xemio.GameLibrary.UI.DataBindings;
+using Xemio.GameLibrary.UI.Widgets;
 
-namespace Xemio.GameLibrary.UI.Widgets
+namespace Xemio.GameLibrary.UI.DataBindings
 {
-    public class WidgetDataBinder
+    public class DataBinder
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="WidgetDataBinder"/> class.
+        /// Initializes a new instance of the <see cref="DataBinder"/> class.
         /// </summary>
         /// <param name="widget">The widget.</param>
-        public WidgetDataBinder(Widget widget)
+        public DataBinder(Widget widget)
         {
             this._propertyBinder = new PropertyBinder();
             this.Widget = widget;
@@ -38,13 +37,13 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="property">The property.</param>
         private Property GetProperty<T>(Expression<Func<T>> property)
         {
-            var getExpression = property.Body as MemberExpression;
-            var expression = getExpression.Expression as MemberExpression;
+            MemberExpression expression = property.Body as MemberExpression;
+            PropertyInfo info = expression.Member as PropertyInfo;
 
-            var classExpression = expression.Expression as ConstantExpression;
-            object instance = classExpression.Value;
+            Delegate compiledExpression = Expression.Lambda(expression.Expression).Compile();
+            object instance = compiledExpression.DynamicInvoke();
             
-            return new Property(instance, getExpression.Member as PropertyInfo);
+            return new Property(instance, info);
         }
         /// <summary>
         /// Binds the specified property to the destination property.
@@ -55,7 +54,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         public void Bind<T>(Widget widget, Expression<Func<T>> property, Expression<Func<T>> destination)
         {
             Property p = this.GetProperty<T>(property);
-            Property d = this.GetProperty<T>(property);
+            Property d = this.GetProperty<T>(destination);
 
             if (p.Instance != widget)
             {

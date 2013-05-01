@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.UI.DataBindings;
 using Xemio.GameLibrary.UI.Events;
-using Keys = Xemio.GameLibrary.Input.Keys;
-using MouseButtons = Xemio.GameLibrary.Input.MouseButtons;
 
 namespace Xemio.GameLibrary.UI.Widgets
 {
@@ -18,16 +17,24 @@ namespace Xemio.GameLibrary.UI.Widgets
         public Widget()
         {
             this._widgets = new List<Widget>();
-            this._dataBinder = new WidgetDataBinder(this);
+            this._dataBinder = new DataBinder(this);
         }
         #endregion
 
         #region Fields
         private readonly IList<Widget> _widgets;
-        private readonly WidgetDataBinder _dataBinder;
+        private readonly DataBinder _dataBinder;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
+        /// Gets or sets the state.
+        /// </summary>
+        public WidgetState State { get; private set; }
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
@@ -35,13 +42,37 @@ namespace Xemio.GameLibrary.UI.Widgets
         #endregion
 
         #region Events
+        /// <summary>
+        /// Occurs when the widget gets painted.
+        /// </summary>
         public event EventHandler<PaintEventArgs> Paint;
+        /// <summary>
+        /// Occurs when a mouse button gets pressed.
+        /// </summary>
         public event EventHandler<MouseEventArgs> MouseDown;
+        /// <summary>
+        /// Occurs when a mouse button gets released.
+        /// </summary>
         public event EventHandler<MouseEventArgs> MouseUp;
+        /// <summary>
+        /// Occurs when the mouse moved.
+        /// </summary>
         public event EventHandler<MouseEventArgs> MouseMove;
+        /// <summary>
+        /// Occurs when a key got pressed.
+        /// </summary>
         public event EventHandler<KeyEventArgs> KeyDown;
+        /// <summary>
+        /// Occurs when a key got released.
+        /// </summary>
         public event EventHandler<KeyEventArgs> KeyUp;
+        /// <summary>
+        /// Occurs when the widget got focused.
+        /// </summary>
         public event EventHandler GotFocus;
+        /// <summary>
+        /// Occurs when the widget lost focus.
+        /// </summary>
         public event EventHandler LostFocus;
         #endregion
 
@@ -56,6 +87,13 @@ namespace Xemio.GameLibrary.UI.Widgets
             this._dataBinder.Bind(this, property, destination);
         }
         /// <summary>
+        /// Updates the bindings.
+        /// </summary>
+        public void UpdateBindings()
+        {
+            this._dataBinder.UpdateBindings();
+        }
+        /// <summary>
         /// Loads the content.
         /// </summary>
         public virtual void LoadContent()
@@ -67,6 +105,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
         {
+            this.UpdateBindings();
         }
         #endregion
 
@@ -76,6 +115,10 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// </summary>
         protected virtual void OnPaint(PaintEventArgs e)
         {
+            if (this.Paint != null)
+            {
+                this.Paint(this, e);
+            }
         }
         /// <summary>
         /// Raises the <see cref="E:MouseDown"/> event.
@@ -83,6 +126,10 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
         protected virtual void OnMouseDown(MouseEventArgs e)
         {
+            if (this.MouseDown != null)
+            {
+                this.MouseDown(this, e);
+            }
         }
         /// <summary>
         /// Raises the <see cref="E:MouseUp"/> event.
@@ -90,6 +137,10 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
         protected virtual void OnMouseUp(MouseEventArgs e)
         {
+            if (this.MouseUp != null)
+            {
+                this.MouseUp(this, e);
+            }
         }
         /// <summary>
         /// Raises the <see cref="E:MouseMove"/> event.
@@ -97,6 +148,10 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
         protected virtual void OnMouseMove(MouseEventArgs e)
         {
+            if (this.MouseMove != null)
+            {
+                this.MouseMove(this, e);
+            }
         }
         /// <summary>
         /// Raises the <see cref="E:KeyDown"/> event.
@@ -104,6 +159,10 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.KeyEventArgs"/> instance containing the event data.</param>
         protected virtual void OnKeyDown(KeyEventArgs e)
         {
+            if (this.KeyDown != null)
+            {
+                this.KeyDown(this, e);
+            }
         }
         /// <summary>
         /// Raises the <see cref="E:KeyUp"/> event.
@@ -111,18 +170,30 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.KeyEventArgs"/> instance containing the event data.</param>
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
+            if (this.KeyUp != null)
+            {
+                this.KeyUp(this, e);
+            }
         }
         /// <summary>
         /// Called when the widget gets focused.
         /// </summary>
         protected virtual void OnGotFocus()
         {
+            if (this.GotFocus != null)
+            {
+                this.GotFocus(this, EventArgs.Empty);
+            }
         }
         /// <summary>
         /// Called when the widget loses focus.
         /// </summary>
         protected virtual void OnLostFocus()
         {
+            if (this.LostFocus != null)
+            {
+                this.LostFocus(this, EventArgs.Empty);
+            }
         }
         #endregion
 

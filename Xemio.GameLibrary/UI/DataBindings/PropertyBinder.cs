@@ -41,13 +41,10 @@ namespace Xemio.GameLibrary.UI.DataBindings
             foreach (PropertyBinding binding in this._bindings)
             {
                 if (binding.Source.HasChanged())
-                {
-                    binding.Source.SetValue(binding.Destination);
-                }
-                if (binding.Destination.HasChanged())
-                {
                     binding.Destination.SetValue(binding.Source);
-                }
+
+                if (binding.Destination.HasChanged())
+                    binding.Source.SetValue(binding.Destination);
             }
         }
         #endregion
