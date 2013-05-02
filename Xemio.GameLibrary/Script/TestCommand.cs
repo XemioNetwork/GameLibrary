@@ -14,14 +14,16 @@ namespace Xemio.GameLibary.Script
         /// <summary>
         /// Initializes a new instance of the <see cref="TestCommand"/> class.
         /// </summary>
-        /// <param name="a">A.</param>
-        public TestCommand(int a)
+        /// <param name="value">A.</param>
+        public TestCommand(int value)
         {
-            _a = a;
+            this._value = value;
         }
         #endregion
 
-        private int _a;
+        #region Fields
+        private int _value;
+        #endregion
 
         #region Implementation of ILinkable<string>
         /// <summary>
@@ -46,7 +48,7 @@ namespace Xemio.GameLibary.Script
         /// </summary>
         public void Execute()
         {
-            Console.WriteLine(_a);
+            Console.WriteLine(this._value);
         }
         #endregion
     }

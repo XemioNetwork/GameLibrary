@@ -18,11 +18,10 @@ namespace Xemio.Testing.Script
             compiler.Assemblies.Add("XGL.dll");
             compiler.OutputAssembly = "test.dll";
 
-            object[] instances = compiler.Compile(@"
+            IScript[] scripts = compiler.Compile(@"
                                using System;
                                using System.Collections;
                                using Xemio.GameLibary.Script;
-                               using Xemio.GameLibary.Script.Commands;
 
                                public class Test : IScript
                                {
@@ -40,7 +39,7 @@ namespace Xemio.Testing.Script
                     Console.WriteLine(a.ErrorText);
             }
 
-            foreach (IScript script in instances)
+            foreach (IScript script in scripts)
                 foreach (ICommand command in script.Execute())
                     command.Execute();
 

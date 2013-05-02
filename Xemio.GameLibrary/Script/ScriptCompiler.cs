@@ -64,15 +64,21 @@ namespace Xemio.GameLibary.Script
         /// Loads the instances.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
-        private object[] LoadInstances(Assembly assembly)
+        private IScript[] LoadInstances(Assembly assembly)
         {
-            List<object> instances = new List<object>();
+            List<IScript> instances = new List<IScript>();
 
             foreach (Type type in assembly.GetTypes())
             {
                 if (!type.IsGenericType && !type.IsAbstract && this.HasDefaultConstructor(type))
                 {
-                    instances.Add(Activator.CreateInstance(type));
+                    object instance = Activator.CreateInstance(type);
+                    IScript script = instance as IScript;
+
+                    if (script != null)
+                    {
+                        instances.Add(script);
+                    }
                 }
             }
 
@@ -96,7 +102,7 @@ namespace Xemio.GameLibary.Script
         /// Compiles the specified sources.
         /// </summary>
         /// <param name="sources">The sources.</param>
-        public object[] Compile(params string[] sources)
+        public IScript[] Compile(params string[] sources)
         {
             CSharpCodeProvider codeProvider = new CSharpCodeProvider();
 
@@ -118,7 +124,7 @@ namespace Xemio.GameLibary.Script
                     this.Errors.Add(error);
                 }
 
-                return new object[] { };
+                return new IScript[] { };
             }
 
             return this.LoadInstances(result.CompiledAssembly);
