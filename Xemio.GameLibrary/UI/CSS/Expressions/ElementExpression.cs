@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using Xemio.GameLibrary.UI.CSS.Namespaces;
 using Xemio.GameLibrary.UI.Widgets;
 
-namespace Xemio.GameLibrary.UI.CSS.Namespaces
+namespace Xemio.GameLibrary.UI.CSS.Expressions
 {
-    public class IdExpression : INamespaceExpression
+    public class ElementExpression : IExpression
     {
         #region Implementation of ILinkable<string>
         /// <summary>
@@ -15,7 +11,7 @@ namespace Xemio.GameLibrary.UI.CSS.Namespaces
         /// </summary>
         public string Identifier
         {
-            get { return "IdExpression"; }
+            get { return "ElementExpression"; }
         }
         #endregion
 
@@ -34,6 +30,7 @@ namespace Xemio.GameLibrary.UI.CSS.Namespaces
         /// <param name="widget">The widget.</param>
         public bool Matches(Widget widget)
         {
+            //TODO: Implement elements
             return widget.Id == this.Name;
         }
         /// <summary>
@@ -42,7 +39,7 @@ namespace Xemio.GameLibrary.UI.CSS.Namespaces
         /// <param name="expression">The expression.</param>
         public bool IsExpression(string expression)
         {
-            return expression.StartsWith("#") && expression.Length >= 2;
+            return !expression.StartsWith(".") && !expression.StartsWith("#");
         }
         /// <summary>
         /// Parses the specified expression.
@@ -50,7 +47,17 @@ namespace Xemio.GameLibrary.UI.CSS.Namespaces
         /// <param name="expression">The expression.</param>
         public void Parse(string expression)
         {
-            this.Name = expression.Substring(1);
+            this.Name = expression;
+        }
+        #endregion
+
+        #region Object Member
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        public override string ToString()
+        {
+            return this.Name;
         }
         #endregion
     }

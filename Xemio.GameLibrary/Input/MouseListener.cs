@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game;
 using System.Windows.Forms;
+using Xemio.GameLibrary.Input.Events;
+using Xemio.GameLibrary.Input.Events.Mouse;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 
@@ -22,25 +25,32 @@ namespace Xemio.GameLibrary.Input
         {
             Control surface = Control.FromHandle(handle);
 
-            surface.MouseMove += SurfaceMouseMove;
-            surface.MouseDown += SurfaceMouseDown;
-            surface.MouseUp += SurfaceMouseUp;
+            surface.MouseMove += this.SurfaceMouseMove;
+            surface.MouseDown += this.SurfaceMouseDown;
+            surface.MouseUp += this.SurfaceMouseUp;
 
             this._buttonStates = new Dictionary<MouseButtons, bool>();
         }
         #endregion
 
         #region Fields
-        private Dictionary<MouseButtons, bool> _buttonStates;
+        private readonly Dictionary<MouseButtons, bool> _buttonStates;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the event manager.
+        /// </summary>
+        protected EventManager EventManager
+        {
+            get { return XGL.GetComponent<EventManager>(); }
+        }
         /// <summary>
         /// Gets the position.
         /// </summary>
         public Vector2 Position { get; private set; }
         #endregion
-
+        
         #region Methods
         /// <summary>
         /// Determines whether the specified button is pressed.
@@ -91,6 +101,7 @@ namespace Xemio.GameLibrary.Input
             }
 
             this.Position = new Vector2(e.X, e.Y) / divider;
+            this.EventManager.Publish(new MouseMoveEvent(this.Position, (MouseButtons)e.Button));
         }
         /// <summary>
         /// Handles the MouseDown event of the surface control.
@@ -100,6 +111,7 @@ namespace Xemio.GameLibrary.Input
         private void SurfaceMouseDown(object sender, MouseEventArgs e)
         {
             this.SetButtonState((MouseButtons)e.Button, true);
+            this.EventManager.Publish(new MouseDownEvent(this.Position, (MouseButtons)e.Button));
         }
         /// <summary>
         /// Handles the MouseUp event of the surface control.
@@ -109,6 +121,7 @@ namespace Xemio.GameLibrary.Input
         private void SurfaceMouseUp(object sender, MouseEventArgs e)
         {
             this.SetButtonState((MouseButtons)e.Button, false);
+            this.EventManager.Publish(new MouseUpEvent(this.Position, (MouseButtons)e.Button));
         }
         #endregion
     }

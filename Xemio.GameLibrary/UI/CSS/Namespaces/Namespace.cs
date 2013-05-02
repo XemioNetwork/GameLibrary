@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.UI.CSS.Expressions;
 using Xemio.GameLibrary.UI.CSS.Parsers;
 using Xemio.GameLibrary.UI.Widgets;
 
@@ -21,22 +22,37 @@ namespace Xemio.GameLibrary.UI.CSS.Namespaces
             this.Name = name;
 
             this._parser = new NamespaceParser();
-
-            this._expressions = new List<INamespaceExpression>();
-            this._expressions.AddRange(this._parser.Parse(name));
+            this._expressions = new List<IExpression>(this._parser.Parse(name));
         }
         #endregion
 
         #region Fields
         private readonly NamespaceParser _parser;
-        private readonly List<INamespaceExpression> _expressions; 
+        private readonly List<IExpression> _expressions; 
         #endregion
-        
+
+        #region Object Member
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        public override string ToString()
+        {
+            return this.Name;
+        }
+        #endregion
+
         #region Implementation of INamespace
         /// <summary>
         /// Gets the name.
         /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// Gets the depth.
+        /// </summary>
+        public int Depth
+        {
+            get { return this._expressions.Count; }
+        }
         /// <summary>
         /// Determines whether the namespace contains the specified widget.
         /// </summary>
@@ -55,7 +71,7 @@ namespace Xemio.GameLibrary.UI.CSS.Namespaces
             widgetTree.Reverse();
             for (int i = 0; i < widgetTree.Count && i < this._expressions.Count; i++)
             {
-                INamespaceExpression expression = this._expressions[i];
+                IExpression expression = this._expressions[i];
 
                 bool matchesExpression = !expression.Matches(widgetTree[i]);
                 bool matchesState = expression.State != widgetTree[i].State;

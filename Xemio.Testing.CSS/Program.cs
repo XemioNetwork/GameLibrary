@@ -10,7 +10,16 @@ namespace Xemio.Testing.CSS
     {
         static void Main(string[] args)
         {
-            Namespace n = new Namespace(".test #id #a element");
+            Namespace namespace1 = new Namespace(".test:Hover #id #a element");
+            Namespace namespace2 = new Namespace(".a .b .c");
+
+            Console.WriteLine(namespace1.Name);
+            Console.WriteLine("Depth={0}", namespace1.Depth);
+            Console.WriteLine();
+
+            Console.WriteLine(namespace2.Name);
+            Console.WriteLine("Depth={0}", namespace2.Depth);
+
             Console.ReadLine();
         }
     }

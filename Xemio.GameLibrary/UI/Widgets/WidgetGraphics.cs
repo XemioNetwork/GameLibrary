@@ -5,7 +5,7 @@ using Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.UI.Widgets
 {
-    public class WidgetGraphics : IRenderManager, IGeometryProvider, IGeometryFactory
+    internal class WidgetGraphics : IGraphics
     {
         #region Constructors
         /// <summary>
@@ -86,7 +86,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="position">The position.</param>
         public void Render(ITexture texture, Vector2 position)
         {
-            this.RenderManager.Render(texture, position + this.Widget.Position);
+            this.RenderManager.Render(texture, position + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -96,7 +96,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="color">The color.</param>
         public void Render(ITexture texture, Vector2 position, Color color)
         {
-            this.RenderManager.Render(texture, position + this.Widget.Position, color);
+            this.RenderManager.Render(texture, position + this.Widget.AbsolutePosition, color);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -105,16 +105,17 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="destination">The destination.</param>
         public void Render(ITexture texture, Rectangle destination)
         {
-            this.RenderManager.Render(texture, destination + this.Widget.Position);
+            this.RenderManager.Render(texture, destination + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Renders the specified texture.
         /// </summary>
         /// <param name="texture">The texture.</param>
         /// <param name="destination">The destination.</param>
+        /// <param name="color">The color.</param>
         public void Render(ITexture texture, Rectangle destination, Color color)
         {
-            this.RenderManager.Render(texture, destination + this.Widget.Position, color);
+            this.RenderManager.Render(texture, destination + this.Widget.AbsolutePosition, color);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -124,7 +125,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="origin">The origin.</param>
         public void Render(ITexture texture, Rectangle destination, Rectangle origin)
         {
-            this.RenderManager.Render(texture, destination + this.Widget.Position, origin);
+            this.RenderManager.Render(texture, destination + this.Widget.AbsolutePosition, origin);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -135,7 +136,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="color">The color.</param>
         public void Render(ITexture texture, Rectangle destination, Rectangle origin, Color color)
         {
-            this.RenderManager.Render(texture, destination + this.Widget.Position, origin, color);
+            this.RenderManager.Render(texture, destination + this.Widget.AbsolutePosition, origin, color);
         }
         /// <summary>
         /// Presents this instance.
@@ -154,7 +155,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="rectangle">The rectangle.</param>
         public void DrawRectangle(Color color, Rectangle rectangle)
         {
-            this.Geometry.DrawRectangle(color, rectangle + this.Widget.Position);
+            this.Geometry.DrawRectangle(color, rectangle + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Draws a rectangle.
@@ -163,7 +164,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="rectangle">The rectangle.</param>
         public void DrawRectangle(IPen pen, Rectangle rectangle)
         {
-            this.Geometry.DrawRectangle(pen, rectangle + this.Widget.Position);
+            this.Geometry.DrawRectangle(pen, rectangle + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Draws the rounded rectangle.
@@ -193,7 +194,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="end">The end.</param>
         public void DrawLine(Color color, Vector2 start, Vector2 end)
         {
-            this.Geometry.DrawLine(color, start + this.Widget.Position, end + this.Widget.Position);
+            this.Geometry.DrawLine(color, start + this.Widget.AbsolutePosition, end + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Draws a line.
@@ -203,7 +204,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="end">The end.</param>
         public void DrawLine(IPen pen, Vector2 start, Vector2 end)
         {
-            this.Geometry.DrawLine(pen, start + this.Widget.Position, end + this.Widget.Position);
+            this.Geometry.DrawLine(pen, start + this.Widget.AbsolutePosition, end + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Draws a polygon.
@@ -212,7 +213,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="points">The points.</param>
         public void DrawPolygon(Color color, Vector2[] points)
         {
-            this.Geometry.DrawPolygon(color, points.Select(p => p + this.Widget.Position).ToArray());
+            this.Geometry.DrawPolygon(color, points.Select(p => p + this.Widget.AbsolutePosition).ToArray());
         }
         /// <summary>
         /// Draws a polygon.
@@ -221,7 +222,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="points">The points.</param>
         public void DrawPolygon(IPen pen, Vector2[] points)
         {
-            this.Geometry.DrawPolygon(pen, points.Select(p => p + this.Widget.Position).ToArray());
+            this.Geometry.DrawPolygon(pen, points.Select(p => p + this.Widget.AbsolutePosition).ToArray());
         }
         /// <summary>
         /// Draws an ellipse.
@@ -230,7 +231,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="region">The region.</param>
         public void DrawEllipse(Color color, Rectangle region)
         {
-            this.Geometry.DrawEllipse(color, region + this.Widget.Position);
+            this.Geometry.DrawEllipse(color, region + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Draws an ellipse.
@@ -239,7 +240,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="region">The region.</param>
         public void DrawEllipse(IPen pen, Rectangle region)
         {
-            this.Geometry.DrawEllipse(pen, region + this.Widget.Position);
+            this.Geometry.DrawEllipse(pen, region + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Draws a circle.
@@ -249,7 +250,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="radius">The radius.</param>
         public void DrawCircle(Color color, Vector2 position, float radius)
         {
-            this.Geometry.DrawCircle(color, position + this.Widget.Position, radius);
+            this.Geometry.DrawCircle(color, position + this.Widget.AbsolutePosition, radius);
         }
         /// <summary>
         /// Draws a circle.
@@ -259,7 +260,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="radius">The radius.</param>
         public void DrawCircle(IPen pen, Vector2 position, float radius)
         {
-            this.Geometry.DrawCircle(pen, position + this.Widget.Position, radius);
+            this.Geometry.DrawCircle(pen, position + this.Widget.AbsolutePosition, radius);
         }
         /// <summary>
         /// Draws an arc.
@@ -270,7 +271,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="sweepAngle">The sweep angle.</param>
         public void DrawArc(Color color, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Geometry.DrawArc(color, region + this.Widget.Position, startAngle, sweepAngle);
+            this.Geometry.DrawArc(color, region + this.Widget.AbsolutePosition, startAngle, sweepAngle);
         }
         /// <summary>
         /// Draws an arc.
@@ -281,7 +282,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="sweepAngle">The sweep angle.</param>
         public void DrawArc(IPen pen, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Geometry.DrawArc(pen, region + this.Widget.Position, startAngle, sweepAngle);
+            this.Geometry.DrawArc(pen, region + this.Widget.AbsolutePosition, startAngle, sweepAngle);
         }
         /// <summary>
         /// Draws a pie.
@@ -292,7 +293,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="sweepAngle">The sweet angle.</param>
         public void DrawPie(Color color, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Geometry.DrawPie(color, region + this.Widget.Position, startAngle, sweepAngle);
+            this.Geometry.DrawPie(color, region + this.Widget.AbsolutePosition, startAngle, sweepAngle);
         }
         /// <summary>
         /// Draws a pie.
@@ -303,7 +304,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="sweepAngle">The sweet angle.</param>
         public void DrawPie(IPen pen, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Geometry.DrawPie(pen, region + this.Widget.Position, startAngle, sweepAngle);
+            this.Geometry.DrawPie(pen, region + this.Widget.AbsolutePosition, startAngle, sweepAngle);
         }
         /// <summary>
         /// Draws a curve.
@@ -312,7 +313,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="points">The points.</param>
         public void DrawCurve(Color color, Vector2[] points)
         {
-            this.Geometry.DrawCurve(color, points.Select(p => p + this.Widget.Position).ToArray());
+            this.Geometry.DrawCurve(color, points.Select(p => p + this.Widget.AbsolutePosition).ToArray());
         }
         /// <summary>
         /// Draws a curve.
@@ -321,7 +322,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="points">The points.</param>
         public void DrawCurve(IPen pen, Vector2[] points)
         {
-            this.Geometry.DrawCurve(pen, points.Select(p => p + this.Widget.Position).ToArray());
+            this.Geometry.DrawCurve(pen, points.Select(p => p + this.Widget.AbsolutePosition).ToArray());
         }
         /// <summary>
         /// Fills a rectangle.
@@ -330,7 +331,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="rectangle">The rectangle.</param>
         public void FillRectangle(IBrush brush, Rectangle rectangle)
         {
-            this.Geometry.FillRectangle(brush, rectangle + this.Widget.Position);
+            this.Geometry.FillRectangle(brush, rectangle + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Fills a rounded rectangle.
@@ -349,7 +350,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="points">The points.</param>
         public void FillPolygon(IBrush brush, Vector2[] points)
         {
-            this.Geometry.FillPolygon(brush, points.Select(p => p + this.Widget.Position).ToArray());
+            this.Geometry.FillPolygon(brush, points.Select(p => p + this.Widget.AbsolutePosition).ToArray());
         }
         /// <summary>
         /// Fills an ellipse.
@@ -358,7 +359,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="region">The region.</param>
         public void FillEllipse(IBrush brush, Rectangle region)
         {
-            this.Geometry.FillEllipse(brush, region + this.Widget.Position);
+            this.Geometry.FillEllipse(brush, region + this.Widget.AbsolutePosition);
         }
         /// <summary>
         /// Fills a circle.
@@ -368,7 +369,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="radius">The radius.</param>
         public void FillCircle(IBrush brush, Vector2 position, float radius)
         {
-            this.Geometry.FillCircle(brush, position + this.Widget.Position, radius);
+            this.Geometry.FillCircle(brush, position + this.Widget.AbsolutePosition, radius);
         }
         /// <summary>
         /// Fills an arc.
@@ -379,7 +380,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="sweepAngle">The sweep angle.</param>
         public void FillArc(IBrush brush, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Geometry.FillArc(brush, region + this.Widget.Position, startAngle, sweepAngle);
+            this.Geometry.FillArc(brush, region + this.Widget.AbsolutePosition, startAngle, sweepAngle);
         }
         /// <summary>
         /// Fills a pie.
@@ -390,7 +391,7 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="sweepAngle">The sweet angle.</param>
         public void FillPie(IBrush brush, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Geometry.FillPie(brush, region + this.Widget.Position, startAngle, sweepAngle);
+            this.Geometry.FillPie(brush, region + this.Widget.AbsolutePosition, startAngle, sweepAngle);
         }
         /// <summary>
         /// Gets the geometry factory.

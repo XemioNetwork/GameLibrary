@@ -58,7 +58,9 @@ namespace Xemio.GameLibrary.UI.DataBindings
 
             if (p.Instance != widget)
             {
-                throw new ArgumentException("The first property has to be a member of the defined widget", "property");
+                throw new ArgumentException(
+                    "The first property has to be a member of the defined widget",
+                    "property");
             }
 
             this._propertyBinder.Register(p, d);

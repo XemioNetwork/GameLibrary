@@ -59,22 +59,12 @@ namespace Xemio.GameLibrary.UI.Widgets
             widget.Parent = null;
             this._widgets.Remove(widget);
         }
-        #endregion
-
-        #region Implementation of IEnumerable
         /// <summary>
-        /// Gets the enumerator.
+        /// Gets the widgets.
         /// </summary>
-        public IEnumerator<Widget> GetEnumerator()
+        public IEnumerable<Widget> Widgets
         {
-            return this._widgets.GetEnumerator();
-        }
-        /// <summary>
-        /// Gets the enumerator.
-        /// </summary>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
+            get { return this._widgets; }
         }
         #endregion
 

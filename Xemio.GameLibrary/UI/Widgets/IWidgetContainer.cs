@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.UI.Widgets
 {
-    public interface IWidgetContainer : IEnumerable<Widget>
+    public interface IWidgetContainer
     {
         /// <summary>
         /// Gets or sets the position.
@@ -27,5 +27,9 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// </summary>
         /// <param name="widget">The widget.</param>
         void Remove(Widget widget);
+        /// <summary>
+        /// Gets the widgets.
+        /// </summary>
+        IEnumerable<Widget> Widgets { get; } 
     }
 }

@@ -1,48 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.UI.CSS.Expressions;
 using Xemio.GameLibrary.UI.CSS.Namespaces;
 using Xemio.GameLibrary.UI.Widgets;
 
 namespace Xemio.GameLibrary.UI.CSS.Parsers
 {
-    public class NamespaceParser : IParser<IEnumerable<INamespaceExpression>>
+    public class NamespaceParser : IParser<string, IEnumerable<IExpression>>
     {
+        #region Methods
+        /// <summary>
+        /// Validates the type instance.
+        /// </summary>
+        /// <param name="typeInstance">The type instance.</param>
+        /// <param name="expression">The expression.</param>
+        private void ValidateTypeInstance(IExpression typeInstance, string expression)
+        {
+            if (typeInstance == null)
+            {
+                const string format = "Invalid namespace member '{0}'.";
+                string message = string.Format(format, expression);
+
+                throw new InvalidOperationException(message);
+            }
+        }
+        #endregion
+
         #region Implementation of IParser
         /// <summary>
         /// Parses the specified namespace.
         /// </summary>
         /// <param name="input">The input.</param>
-        public IEnumerable<INamespaceExpression> Parse(string input)
+        public IEnumerable<IExpression> Parse(string input)
         {
-            GenericLinker<string, INamespaceExpression> linker = new AutomaticLinker<string, INamespaceExpression>();
+            var linker = new AutomaticLinker<string, IExpression>();
             linker.CreationType = CreationType.Instantiate;
             
             string[] expressions = input.Split(' ');
             foreach (string expression in expressions)
             {
+                //Seperate state from expression
                 string[] parts = expression.Split(':');
 
+                //Get expression and state
                 string expressionName = parts.FirstOrDefault();
                 string state = parts.Length > 1 ? parts[1] : "None";
-                
-                INamespaceExpression typeInstance = linker.FirstOrDefault(
+
+                IExpression typeInstance = linker.FirstOrDefault(
                     ex => ex.IsExpression(expression));
 
-                if (typeInstance == null)
+                if (!string.IsNullOrEmpty(expressionName))
                 {
-                    string format = "Invalid namespace member '{0}'.";
-                    string message = string.Format(format, expression);
+                    this.ValidateTypeInstance(typeInstance, expression);
 
-                    throw new InvalidOperationException(message);
+                    object stateEnum = Enum.Parse(typeof(WidgetState), state);
+                    IExpression instance = linker.Resolve(typeInstance.Identifier);
+
+                    instance.State = (WidgetState)stateEnum;
+                    instance.Parse(expressionName);
+
+                    yield return instance;
                 }
-
-                INamespaceExpression instance = linker.Resolve(typeInstance.Identifier);
-                instance.State = (WidgetState)Enum.Parse(typeof(WidgetState), state);
-                instance.Parse(expressionName);
-
-                yield return instance;
             }
         } 
         #endregion

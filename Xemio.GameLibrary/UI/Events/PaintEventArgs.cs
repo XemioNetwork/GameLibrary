@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.UI.Events
         /// <param name="widget">The widget.</param>
         public PaintEventArgs(Widget widget)
         {
-            this.Graphics = new WidgetGraphics(widget);
+            this.Graphics = widget.CreateGraphics();
         }
         #endregion
 
@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.UI.Events
         /// <summary>
         /// Gets the graphics.
         /// </summary>
-        public WidgetGraphics Graphics { get; private set; }
+        public IGraphics Graphics { get; private set; }
         #endregion
     }
 }

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Xemio.GameLibrary.Common.Link;
+﻿using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.UI.Widgets;
 
-namespace Xemio.GameLibrary.UI.CSS.Namespaces
+namespace Xemio.GameLibrary.UI.CSS.Expressions
 {
-    public interface INamespaceExpression : ILinkable<string>
+    public interface IExpression : ILinkable<string>
     {
         /// <summary>
         /// Gets the name.

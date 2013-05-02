@@ -99,6 +99,14 @@
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Game\ISceneProvider.cs" />
+    <Compile Include="Input\Events\IInputEvent.cs" />
+    <Compile Include="Input\Events\Keyboard\KeyDownEvent.cs" />
+    <Compile Include="Input\Events\Keyboard\KeyEvent.cs" />
+    <Compile Include="Input\Events\Keyboard\KeyUpEvent.cs" />
+    <Compile Include="Input\Events\Mouse\MouseDownEvent.cs" />
+    <Compile Include="Input\Events\Mouse\MouseEvent.cs" />
+    <Compile Include="Input\Events\Mouse\MouseMoveEvent.cs" />
+    <Compile Include="Input\Events\Mouse\MouseUpEvent.cs" />
     <Compile Include="Input\KeyListener.cs" />
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\MouseButtons.cs" />
@@ -185,30 +193,14 @@
     <Compile Include="Sound\Loops\LoopManager.cs" />
     <Compile Include="Sound\PlayMode.cs" />
     <Compile Include="Sound\SoundManager.cs" />
-    <Compile Include="UI\CSS\Namespaces\ClassExpression.cs" />
-    <Compile Include="UI\CSS\Namespaces\ElementExpression.cs" />
-    <Compile Include="UI\CSS\Namespaces\IdExpression.cs" />
+    <Compile Include="UI\CSS\Expressions\ClassExpression.cs" />
+    <Compile Include="UI\CSS\Expressions\ElementExpression.cs" />
+    <Compile Include="UI\CSS\Expressions\IdExpression.cs" />
     <Compile Include="UI\CSS\Namespaces\INamespace.cs" />
-    <Compile Include="UI\CSS\Namespaces\INamespaceExpression.cs" />
+    <Compile Include="UI\CSS\Expressions\IExpression.cs" />
     <Compile Include="UI\CSS\Namespaces\Namespace.cs" />
-    <Compile Include="UI\CSS\Parsers\IParser.cs" />
+    <Compile Include="Common\IParser.cs" />
     <Compile Include="UI\CSS\Parsers\NamespaceParser.cs" />
-    <Compile Include="UI\CSS\Parsers\PropertyParser.cs" />
-    <Compile Include="UI\CSS\Parsers\SectionParser.cs" />
-    <Compile Include="UI\CSS\Parsers\StyleParser.cs" />
-    <Compile Include="UI\CSS\Parsers\WhiteSpaceParser.cs" />
-    <Compile Include="UI\CSS\Properties\ColorProperty.cs" />
-    <Compile Include="UI\CSS\Properties\IStyleProperty.cs" />
-    <Compile Include="UI\CSS\Rendering\BorderStyle.cs" />
-    <Compile Include="UI\CSS\Rendering\BoxShadow.cs" />
-    <Compile Include="UI\CSS\Rendering\Padding.cs" />
-    <Compile Include="UI\CSS\Rendering\Text\DefaultTransform.cs" />
-    <Compile Include="UI\CSS\Rendering\Text\ITextTransformation.cs" />
-    <Compile Include="UI\CSS\Rendering\Text\LowercaseTransform.cs" />
-    <Compile Include="UI\CSS\Rendering\Text\UppercaseTransform.cs" />
-    <Compile Include="UI\CSS\Rendering\WidgetRenderer.cs" />
-    <Compile Include="UI\CSS\Rendering\WidgetRenderState.cs" />
-    <Compile Include="UI\CSS\Rendering\TextShadow.cs" />
     <Compile Include="UI\CSS\Style.cs" />
     <Compile Include="UI\CSS\StyleInterpreter.cs" />
     <Compile Include="UI\CSS\StyleManager.cs" />
@@ -220,6 +212,7 @@
     <Compile Include="UI\Events\KeyEventArgs.cs" />
     <Compile Include="UI\Events\MouseEventArgs.cs" />
     <Compile Include="UI\Events\PaintEventArgs.cs" />
+    <Compile Include="UI\IGraphics.cs" />
     <Compile Include="UI\Shapes\IShape.cs" />
     <Compile Include="UI\Shapes\RectangleShape.cs" />
     <Compile Include="UI\Widgets\WidgetGraphics.cs" />
@@ -232,7 +225,10 @@
   <ItemGroup>
     <Folder Include="Content\Formats\" />
     <Folder Include="Entities\States\" />
+    <Folder Include="Input\Bindings\" />
+    <Folder Include="UI\CSS\Properties\" />
     <Folder Include="UI\Templates\" />
+    <Folder Include="UI\Widgets\View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

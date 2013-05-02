@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.UI.CSS.Namespaces;
-using Xemio.GameLibrary.UI.CSS.Properties;
 
 namespace Xemio.GameLibrary.UI.CSS
 {
@@ -18,7 +17,6 @@ namespace Xemio.GameLibrary.UI.CSS
         public StyleSection(string name)
         {
             this.Namespace = new Namespace(name);
-            this.Properties = new List<IStyleProperty>();
         }
         #endregion
 
@@ -27,10 +25,6 @@ namespace Xemio.GameLibrary.UI.CSS
         /// Gets or sets the namespace.
         /// </summary>
         public INamespace Namespace { get; private set; }
-        /// <summary>
-        /// Gets the properties.
-        /// </summary>
-        public List<IStyleProperty> Properties { get; private set; } 
         #endregion
     }
 }

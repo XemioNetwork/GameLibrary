@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Events.Logging;
+using Xemio.GameLibrary.Input.Events;
+using Xemio.GameLibrary.Input.Events.Keyboard;
 
 namespace Xemio.GameLibrary.Input
 {
@@ -31,8 +33,18 @@ namespace Xemio.GameLibrary.Input
         #endregion
 
         #region Fields
-        private Dictionary<Keys, bool> _keyStates;
-        private Dictionary<Keys, bool> _lastStates;
+        private readonly Dictionary<Keys, bool> _keyStates;
+        private readonly Dictionary<Keys, bool> _lastStates;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the event manager.
+        /// </summary>
+        protected EventManager EventManager
+        {
+            get { return XGL.GetComponent<EventManager>(); }
+        }
         #endregion
 
         #region Methods
@@ -87,6 +99,33 @@ namespace Xemio.GameLibrary.Input
                 this._keyStates.ContainsKey(key) &&
                 this._keyStates[key];
         }
+        /// <summary>
+        /// Determines whether the specified key got released.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        public bool IsKeyReleased(Keys key)
+        {
+            return this._lastStates.ContainsKey(key) && this._lastStates[key] &&
+                (!this._keyStates.ContainsKey(key) || !this._keyStates[key]);
+        }
+        /// <summary>
+        /// Gets the pressed keys.
+        /// </summary>
+        public IEnumerable<Keys> GetPressedKeys()
+        {
+            return this._keyStates
+                .Where(pair => pair.Value && !this._lastStates.ContainsKey(pair.Key) || !this._lastStates[pair.Key])
+                .Select(pair => pair.Key);
+        }
+        /// <summary>
+        /// Gets the pressed keys.
+        /// </summary>
+        public IEnumerable<Keys> GetReleasedKeys()
+        {
+            return this._lastStates
+                .Where(pair => pair.Value && !this._keyStates.ContainsKey(pair.Key) || !this._keyStates[pair.Key])
+                .Select(pair => pair.Key);
+        }
         #endregion
 
         #region IGameHandler Member
@@ -102,10 +141,8 @@ namespace Xemio.GameLibrary.Input
             }
             catch (InvalidOperationException ex)
             {
-                EventManager eventManager = XGL.GetComponent<EventManager>();
-
-                eventManager.Publish(new ExceptionEvent(ex));
-                eventManager.Publish(new LoggingEvent(LoggingLevel.Exception, ex.Message));
+                this.EventManager.Publish(new ExceptionEvent(ex));
+                this.EventManager.Publish(new LoggingEvent(LoggingLevel.Exception, ex.Message));
             }
         }
         /// <summary>
@@ -136,6 +173,7 @@ namespace Xemio.GameLibrary.Input
         private void SurfaceKeyDown(object sender, KeyEventArgs e)
         {
             this.SetKeyState((Keys)e.KeyCode, true);
+            this.EventManager.Publish(new KeyDownEvent((Keys)e.KeyCode));
         }
         /// <summary>
         /// Handles the KeyUp event of the surface.
@@ -145,6 +183,7 @@ namespace Xemio.GameLibrary.Input
         private void SurfaceKeyUp(object sender, KeyEventArgs e)
         {
             this.SetKeyState((Keys)e.KeyCode, false);
+            this.EventManager.Publish(new KeyUpEvent((Keys)e.KeyCode));
         }
         #endregion
     }

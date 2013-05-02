@@ -1,7 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Input.Events;
+using Xemio.GameLibrary.Input.Events.Keyboard;
+using Xemio.GameLibrary.Input.Events.Mouse;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.UI.DataBindings;
 using Xemio.GameLibrary.UI.Events;
@@ -18,6 +24,11 @@ namespace Xemio.GameLibrary.UI.Widgets
         {
             this._widgets = new List<Widget>();
             this._dataBinder = new DataBinder(this);
+
+            this.State = WidgetState.Normal;
+
+            EventManager eventManager = XGL.GetComponent<EventManager>();
+            eventManager.Subscribe<IInputEvent>(this.HandleInput);
         }
         #endregion
 
@@ -32,6 +43,10 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// </summary>
         public string Id { get; set; }
         /// <summary>
+        /// Gets or sets the bounds.
+        /// </summary>
+        public Rectangle Bounds { get; set; }
+        /// <summary>
         /// Gets or sets the state.
         /// </summary>
         public WidgetState State { get; private set; }
@@ -39,6 +54,30 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// Gets or sets the parent.
         /// </summary>
         public IWidgetContainer Parent { get; internal set; }
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="Widget"/> is focused.
+        /// </summary>
+        public bool Focused { get; internal set; }
+        /// <summary>
+        /// Gets or sets the top widget.
+        /// </summary>
+        public Widget Top { get; set; }
+        /// <summary>
+        /// Gets or sets the right widget.
+        /// </summary>
+        public Widget Right { get; set; }
+        /// <summary>
+        /// Gets or sets the bottom widget.
+        /// </summary>
+        public Widget Bottom { get; set; }
+        /// <summary>
+        /// Gets or sets the left widget.
+        /// </summary>
+        public Widget Left { get; set; }
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        public string Text { get; set; }
         #endregion
 
         #region Events
@@ -92,6 +131,46 @@ namespace Xemio.GameLibrary.UI.Widgets
         public void UpdateBindings()
         {
             this._dataBinder.UpdateBindings();
+        }
+        /// <summary>
+        /// Handles the user input.
+        /// </summary>
+        /// <param name="e">The event.</param>
+        protected virtual void HandleInput(IInputEvent e)
+        {
+            if (this.Focused)
+            {
+                KeyEvent keyEvent = e as KeyEvent;
+                MouseEvent mouseEvent = e as MouseEvent;
+                
+                bool inBounds = false;
+                if (mouseEvent != null)
+                {
+                    inBounds = this.Bounds.Contains(mouseEvent.Position);
+                }
+
+                if (e is KeyDownEvent)
+                    this.OnKeyDown(new KeyEventArgs(keyEvent.Key));
+
+                if (e is KeyUpEvent)
+                    this.OnKeyUp(new KeyEventArgs(keyEvent.Key));
+
+                if (e is MouseDownEvent && inBounds)
+                    this.OnMouseDown(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+
+                if (e is MouseUpEvent)
+                    this.OnMouseUp(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+
+                if (e is MouseMoveEvent && inBounds)
+                    this.OnMouseMove(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+            }
+        }
+        /// <summary>
+        /// Creates a new graphics object.
+        /// </summary>
+        public virtual IGraphics CreateGraphics()
+        {
+            return new WidgetGraphics(this);
         }
         /// <summary>
         /// Loads the content.
@@ -235,22 +314,12 @@ namespace Xemio.GameLibrary.UI.Widgets
             widget.Parent = null;
             this._widgets.Remove(widget);
         }
-        #endregion
-
-        #region Implementation of IEnumerable
         /// <summary>
-        /// Gets the enumerator.
+        /// Gets the widgets.
         /// </summary>
-        public IEnumerator<Widget> GetEnumerator()
+        public IEnumerable<Widget> Widgets
         {
-            return this._widgets.GetEnumerator();
-        }
-        /// <summary>
-        /// Gets the enumerator.
-        /// </summary>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
+            get { return this._widgets; }
         }
         #endregion
     }
