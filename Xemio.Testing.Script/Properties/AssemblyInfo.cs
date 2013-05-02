@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("Xemio.GameLibary.Script")]
+[assembly: AssemblyTitle("Xemio.Testing.Script")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Xemio.GameLibary.Script")]
+[assembly: AssemblyProduct("Xemio.Testing.Script")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("d3eb315c-2ccb-4617-995b-e9c3807dd4e0")]
+[assembly: Guid("54b31803-4657-4ff2-befa-c4e7276b925a")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

@@ -50,6 +50,7 @@
     <Compile Include="Common\Link\CreationType.cs" />
     <Compile Include="Common\Link\GenericLinker.cs" />
     <Compile Include="Common\Link\ILinkable.cs" />
+    <Compile Include="Common\ObjectStorage.cs" />
     <Compile Include="Common\Randomization\IRandom.cs" />
     <Compile Include="Common\Randomization\ISeedable.cs" />
     <Compile Include="Common\Randomization\PerlinNoise.cs" />
@@ -185,6 +186,11 @@
     <Compile Include="Rendering\GraphicsProvider.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneManager.cs" />
+    <Compile Include="Script\ICommand.cs" />
+    <Compile Include="Script\IScript.cs" />
+    <Compile Include="Script\ScriptCompiler.cs" />
+    <Compile Include="Script\TestCommand.cs" />
+    <Compile Include="Script\YieldEvaluator.cs" />
     <Compile Include="Sound\ISound.cs" />
     <Compile Include="Sound\ISoundInitializer.cs" />
     <Compile Include="Sound\ISoundProvider.cs" />
@@ -215,6 +221,7 @@
     <Compile Include="UI\IGraphics.cs" />
     <Compile Include="UI\Shapes\IShape.cs" />
     <Compile Include="UI\Shapes\RectangleShape.cs" />
+    <Compile Include="UI\Widgets\Rendering\IWidgetRenderer.cs" />
     <Compile Include="UI\Widgets\WidgetGraphics.cs" />
     <Compile Include="UI\Widgets\IWidgetContainer.cs" />
     <Compile Include="UI\Widgets\Widget.cs" />
@@ -228,7 +235,6 @@
     <Folder Include="Input\Bindings\" />
     <Folder Include="UI\CSS\Properties\" />
     <Folder Include="UI\Templates\" />
-    <Folder Include="UI\Widgets\View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

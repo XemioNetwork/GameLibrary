@@ -78,6 +78,22 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// Gets or sets the text.
         /// </summary>
         public string Text { get; set; }
+        /// <summary>
+        /// Gets the root container.
+        /// </summary>
+        public IWidgetContainer Root
+        {
+            get
+            {
+                IWidgetContainer root = this;
+                while (root is Widget)
+                {
+                    root = (root as Widget).Parent;
+                }
+
+                return root;
+            }
+        }
         #endregion
 
         #region Events
@@ -166,17 +182,18 @@ namespace Xemio.GameLibrary.UI.Widgets
             }
         }
         /// <summary>
+        /// Focuses this widget.
+        /// </summary>
+        public void Focus()
+        {
+            
+        }
+        /// <summary>
         /// Creates a new graphics object.
         /// </summary>
         public virtual IGraphics CreateGraphics()
         {
             return new WidgetGraphics(this);
-        }
-        /// <summary>
-        /// Loads the content.
-        /// </summary>
-        public virtual void LoadContent()
-        {
         }
         /// <summary>
         /// Handles a game tick.
@@ -185,6 +202,12 @@ namespace Xemio.GameLibrary.UI.Widgets
         public virtual void Tick(float elapsed)
         {
             this.UpdateBindings();
+        }
+        /// <summary>
+        /// Loads the content.
+        /// </summary>
+        public virtual void LoadContent()
+        {
         }
         #endregion
 
