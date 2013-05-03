@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -79,9 +78,9 @@ namespace Xemio.GameLibrary.Script
         /// <summary>
         /// Creates compiler parameters.
         /// </summary>
-        private CompilerParameters CreateParameters()
+        private CodeDom.CompilerParameters CreateParameters()
         {
-            CompilerParameters parameters = new CompilerParameters();
+            CodeDom.CompilerParameters parameters = new CodeDom.CompilerParameters();
             parameters.OutputAssembly = this.OutputAssembly;
             parameters.GenerateInMemory = false;
 
