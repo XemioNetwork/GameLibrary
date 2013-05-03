@@ -1,11 +1,10 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Xemio.GameLibary.Script;
+using Xemio.GameLibrary.Script;
 
 namespace Xemio.Testing.Script
 {
@@ -18,10 +17,10 @@ namespace Xemio.Testing.Script
             compiler.Assemblies.Add("XGL.dll");
             compiler.OutputAssembly = "test.dll";
 
-            IScript[] scripts = compiler.Compile(@"
+            CompilerResult result = compiler.Compile(@"
                                using System;
                                using System.Collections;
-                               using Xemio.GameLibary.Script;
+                               using Xemio.GameLibrary.Script;
 
                                public class Test : IScript
                                {
@@ -33,13 +32,13 @@ namespace Xemio.Testing.Script
                                     }
                                }");
 
-            if (!compiler.Succeed)
+            if (!result.Succeed)
             {
-                foreach(CompilerError a in compiler.Errors)
-                    Console.WriteLine(a.ErrorText);
+                foreach(CompilerError a in result.Errors)
+                    Console.WriteLine(a.Message);
             }
 
-            foreach (IScript script in scripts)
+            foreach (IScript script in result.Scripts)
                 foreach (ICommand command in script.Execute())
                     command.Execute();
 

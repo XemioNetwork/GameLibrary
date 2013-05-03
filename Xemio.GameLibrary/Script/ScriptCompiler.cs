@@ -5,9 +5,12 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.CSharp;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Script;
 
-namespace Xemio.GameLibary.Script
+namespace Xemio.GameLibrary.Script
 {
+    using CodeDom = System.CodeDom.Compiler;
+
     public class ScriptCompiler
     {
         #region Constructors
@@ -18,7 +21,6 @@ namespace Xemio.GameLibary.Script
         public ScriptCompiler(IEnumerable<ICommand> commands)
         {
             this.Assemblies = new List<string>();
-            this.Errors = new List<CompilerError>();
 
             this.Commands = new GenericLinker<string, ICommand>();
             this.Commands.Add(commands);
@@ -38,14 +40,6 @@ namespace Xemio.GameLibary.Script
         /// </summary>
         public List<string> Assemblies { get; private set; }
         /// <summary>
-        /// Gets a value indicating whether this <see cref="ScriptCompiler"/> is succeed.
-        /// </summary>
-        public bool Succeed { get; private set; }
-        /// <summary>
-        /// Gets the errors.
-        /// </summary>
-        public List<CompilerError> Errors { get; private set; } 
-        /// <summary>
         /// Gets the commands.
         /// </summary>
         public GenericLinker<string, ICommand> Commands { get; private set; } 
@@ -64,7 +58,7 @@ namespace Xemio.GameLibary.Script
         /// Loads the instances.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
-        private IScript[] LoadInstances(Assembly assembly)
+        private IEnumerable<IScript> LoadInstances(Assembly assembly)
         {
             List<IScript> instances = new List<IScript>();
 
@@ -72,12 +66,10 @@ namespace Xemio.GameLibary.Script
             {
                 if (!type.IsGenericType && !type.IsAbstract && this.HasDefaultConstructor(type))
                 {
-                    object instance = Activator.CreateInstance(type);
-                    IScript script = instance as IScript;
-
-                    if (script != null)
+                    if (typeof(IScript).IsAssignableFrom(type))
                     {
-                        instances.Add(script);
+                        object instance = Activator.CreateInstance(type);
+                        instances.Add(instance as IScript);
                     }
                 }
             }
@@ -102,32 +94,33 @@ namespace Xemio.GameLibary.Script
         /// Compiles the specified sources.
         /// </summary>
         /// <param name="sources">The sources.</param>
-        public IScript[] Compile(params string[] sources)
+        public CompilerResult Compile(params string[] sources)
         {
             CSharpCodeProvider codeProvider = new CSharpCodeProvider();
-
-            YieldEvaluator evaluator = new YieldEvaluator(this.Commands);
+            CommandEvaluator evaluator = new CommandEvaluator(this.Commands);
 
             string[] evaluatedSources = sources
                 .Select(evaluator.Evaluate)
                 .ToArray();
-            
-            CompilerResults result = codeProvider.CompileAssemblyFromSource(
+
+            CodeDom.CompilerResults result = codeProvider.CompileAssemblyFromSource(
                 this.CreateParameters(), evaluatedSources);
 
-            this.Succeed = result.Errors.Count == 0;
-            if (!this.Succeed)
+            bool succeed = result.Errors.Count == 0;
+            List<CompilerError> errors = new List<CompilerError>();
+
+            if (!succeed)
             {
-                this.Errors.Clear();
-                foreach (CompilerError error in result.Errors)
+                foreach (CodeDom.CompilerError error in result.Errors)
                 {
-                    this.Errors.Add(error);
+                    errors.Add(new CompilerError(error.Line, error.ErrorText));
                 }
 
-                return new IScript[] { };
+                return new CompilerResult(errors);
             }
 
-            return this.LoadInstances(result.CompiledAssembly);
+            IEnumerable<IScript> scripts = this.LoadInstances(result.CompiledAssembly);
+            return new CompilerResult(scripts);
         }
         #endregion
     }

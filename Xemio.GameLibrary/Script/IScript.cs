@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Xemio.GameLibary.Script
+namespace Xemio.GameLibrary.Script
 {
     public interface IScript
     {

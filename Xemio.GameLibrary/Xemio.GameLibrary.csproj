@@ -186,11 +186,15 @@
     <Compile Include="Rendering\GraphicsProvider.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneManager.cs" />
+    <Compile Include="Script\CompilerError.cs" />
+    <Compile Include="Script\CompilerResult.cs" />
     <Compile Include="Script\ICommand.cs" />
     <Compile Include="Script\IScript.cs" />
+    <Compile Include="Script\ScriptCollection.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
+    <Compile Include="Script\ScriptInterpreter.cs" />
     <Compile Include="Script\TestCommand.cs" />
-    <Compile Include="Script\YieldEvaluator.cs" />
+    <Compile Include="Script\CommandEvaluator.cs" />
     <Compile Include="Sound\ISound.cs" />
     <Compile Include="Sound\ISoundInitializer.cs" />
     <Compile Include="Sound\ISoundProvider.cs" />

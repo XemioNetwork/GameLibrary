@@ -1,6 +1,6 @@
 ﻿using Xemio.GameLibrary.Common.Link;
 
-namespace Xemio.GameLibary.Script
+namespace Xemio.GameLibrary.Script
 {
     public interface ICommand : ILinkable<string>
     {

@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Xemio.GameLibary.Script
+namespace Xemio.GameLibrary.Script
 {
-    public class YieldEvaluator
+    public class CommandEvaluator
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="YieldEvaluator"/> class.
+        /// Initializes a new instance of the <see cref="CommandEvaluator"/> class.
         /// </summary>
-        public YieldEvaluator()
+        public CommandEvaluator()
         {
-
+            this.Commands = new List<ICommand>();
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="YieldEvaluator"/> class.
+        /// Initializes a new instance of the <see cref="CommandEvaluator"/> class.
         /// </summary>
         /// <param name="commands">The commands.</param>
-        public YieldEvaluator(IEnumerable<ICommand> commands)
+        public CommandEvaluator(IEnumerable<ICommand> commands)
         {
             this.Commands = commands.ToList();
         }

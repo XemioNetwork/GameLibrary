@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xemio.GameLibary.Script
+namespace Xemio.GameLibrary.Script
 {
     public class TestCommand : ICommand
     {
