@@ -188,6 +188,12 @@
     <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
+    <Compile Include="Script\Events\ExecutedCommandEvent.cs" />
+    <Compile Include="Script\Events\ExecutedScriptEvent.cs" />
+    <Compile Include="Script\Events\ExecutingCommandEvent.cs" />
+    <Compile Include="Script\Events\ExecutingScriptEvent.cs" />
+    <Compile Include="Script\Events\ICommandEvent.cs" />
+    <Compile Include="Script\Events\IScriptEvent.cs" />
     <Compile Include="Script\ICommand.cs" />
     <Compile Include="Script\IScript.cs" />
     <Compile Include="Script\ScriptCollection.cs" />

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Script;
+using Xemio.GameLibrary.Script.Events;
 
 namespace Xemio.GameLibrary.Script
 {
@@ -20,6 +22,7 @@ namespace Xemio.GameLibrary.Script
         #endregion
 
         #region Fields
+        private IScript _script;
         private IEnumerator _enumerator;
         #endregion
 
@@ -41,6 +44,11 @@ namespace Xemio.GameLibrary.Script
         public void Run(IScript script)
         {
             IEnumerable enumerable = script.Execute();
+
+            EventManager eventManager = XGL.GetComponent<EventManager>();
+            eventManager.Publish(new ExecutingScriptEvent(script));
+
+            this._script = script;
             this._enumerator = enumerable.GetEnumerator();
         }
         /// <summary>
@@ -52,18 +60,29 @@ namespace Xemio.GameLibrary.Script
             if (this._enumerator == null)
                 return;
 
+            EventManager eventManager = XGL.GetComponent<EventManager>();
             ICommand current = this.Command;
+
             if (current != null)
             {
                 current.Execute();
+                if (!current.Active)
+                {
+                    eventManager.Publish(new ExecutedCommandEvent(current));
+                }
             }
 
             if (current == null || !current.Active)
             {
-                if (!this._enumerator.MoveNext())
+                bool moveNext = this._enumerator.MoveNext();
+
+                if (moveNext)
                 {
-                    this._enumerator = null;
+                    eventManager.Publish(new ExecutingCommandEvent(this.Command));
+                    return;
                 }
+
+                this._enumerator = null;
             }
         }
         #endregion
