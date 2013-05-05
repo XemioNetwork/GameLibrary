@@ -9,6 +9,6 @@ namespace Xemio.GameLibrary.Common.Link
     public enum CreationType
     {
         None = 0,
-        Instantiate = 1
+        CreateNew = 1
     }
 }

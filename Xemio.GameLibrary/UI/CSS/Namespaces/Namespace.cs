@@ -73,11 +73,11 @@ namespace Xemio.GameLibrary.UI.CSS.Namespaces
             {
                 IExpression expression = this._expressions[i];
 
-                bool matchesExpression = !expression.Matches(widgetTree[i]);
-                bool matchesState = expression.State != widgetTree[i].State;
+                bool matchesExpression = expression.Matches(widgetTree[i]);
+                bool matchesState = expression.State == widgetTree[i].State;
                 bool notNoneState = expression.State != WidgetState.None;
                 
-                if (matchesExpression && matchesState && notNoneState)
+                if (!matchesExpression && !matchesState && notNoneState)
                 {
                     return false;
                 }

@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Common.Link
         /// Initializes a new instance of the <see cref="GenericLinker{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
-        public GenericLinker(List<Assembly> assemblies) : this()
+        public GenericLinker(IEnumerable<Assembly> assemblies) : this()
         {
             this.Load(assemblies);
         }
@@ -179,7 +179,7 @@ namespace Xemio.GameLibrary.Common.Link
             {
                 value = this._linkedItems[identifier];
 
-                if (this.CreationType == CreationType.Instantiate)
+                if (this.CreationType == CreationType.CreateNew)
                 {
                     return (TValue)Activator.CreateInstance(value.GetType());
                 }

@@ -49,6 +49,7 @@
     <Compile Include="Common\Link\AutomaticLinker.cs" />
     <Compile Include="Common\Link\CreationType.cs" />
     <Compile Include="Common\Link\GenericLinker.cs" />
+    <Compile Include="Common\Link\HashLinker.cs" />
     <Compile Include="Common\Link\ILinkable.cs" />
     <Compile Include="Common\ObjectStorage.cs" />
     <Compile Include="Common\Randomization\IRandom.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\ContentReader.cs" />
     <Compile Include="Content\ContentWriter.cs" />
+    <Compile Include="Content\FileSystem\FileContainer.cs" />
     <Compile Include="Content\FileSystem\HardDrive.cs" />
     <Compile Include="Content\FileSystem\IFileSystem.cs" />
     <Compile Include="Content\IContentReader.cs" />

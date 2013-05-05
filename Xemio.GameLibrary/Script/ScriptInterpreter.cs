@@ -74,9 +74,7 @@ namespace Xemio.GameLibrary.Script
 
             if (current == null || !current.Active)
             {
-                bool moveNext = this._enumerator.MoveNext();
-
-                if (moveNext)
+                if (this._enumerator.MoveNext())
                 {
                     eventManager.Publish(new ExecutingCommandEvent(this.Command));
                     return;

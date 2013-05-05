@@ -37,7 +37,7 @@ namespace Xemio.GameLibrary.UI.CSS.Parsers
         public IEnumerable<IExpression> Parse(string input)
         {
             var linker = new AutomaticLinker<string, IExpression>();
-            linker.CreationType = CreationType.Instantiate;
+            linker.CreationType = CreationType.CreateNew;
             
             string[] expressions = input.Split(' ');
             foreach (string expression in expressions)
