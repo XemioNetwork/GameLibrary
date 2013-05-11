@@ -7,18 +7,17 @@ using System.Security.Cryptography;
 
 namespace Xemio.GameLibrary.Common.Cryptography
 {
-    public static class MD5Helper
+    public static class CrytographyHelper
     {
         #region Methods
         /// <summary>
         /// Computes the md5 hash for the specified data array.
         /// </summary>
+        /// <param name="algorithm">The algorithm.</param>
         /// <param name="data">The data.</param>
-        public static string ComputeHash(byte[] data)
+        public static string ComputeHash(HashAlgorithm algorithm, byte[] data)
         {
-            MD5 md5 = MD5.Create();
-
-            byte[] hash = md5.ComputeHash(data);
+            byte[] hash = algorithm.ComputeHash(data);
             StringBuilder builder = new StringBuilder();
 
             for (int i = 0; i < hash.Length; i++)
@@ -34,10 +33,12 @@ namespace Xemio.GameLibrary.Common.Cryptography
         /// <summary>
         /// Computes the MD5 hash for the specified file.
         /// </summary>
+        /// <param name="algorithm">The algorithm.</param>
         /// <param name="fileName">Name of the file.</param>
-        public static string ComputeHash(string fileName)
+        /// <returns></returns>
+        public static string ComputeHash(HashAlgorithm algorithm, string fileName)
         {
-            return MD5Helper.ComputeHash(File.ReadAllBytes(fileName));
+            return CrytographyHelper.ComputeHash(algorithm, File.ReadAllBytes(fileName));
         }
         #endregion
     }
