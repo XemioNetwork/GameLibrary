@@ -28,12 +28,12 @@ namespace Xemio.GameLibrary.Components
 
         #region Fields
         private bool _constructionMode;
-        private Queue<IComponent> _cache;
+        private readonly Queue<IComponent> _cache;
 
-        private Dictionary<Type, IValueProvider> _valueMappings;
-        private Dictionary<Type, IComponent> _componentMappings;
+        private readonly Dictionary<Type, IValueProvider> _valueMappings;
+        private readonly Dictionary<Type, IComponent> _componentMappings;
 
-        private PluginLoader<IComponent> _pluginLoader;
+        private readonly PluginLoader<IComponent> _pluginLoader;
         #endregion
 
         #region Properties

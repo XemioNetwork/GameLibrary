@@ -188,7 +188,6 @@
     <Compile Include="Rendering\IRenderManager.cs" />
     <Compile Include="Rendering\ITexture.cs" />
     <Compile Include="Rendering\ITextureFactory.cs" />
-    <Compile Include="Rendering\GraphicsProvider.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Script\CompilerError.cs" />

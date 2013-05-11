@@ -19,14 +19,14 @@ namespace Xemio.GameLibrary.Game
         /// <summary>
         /// Initializes a new instance of the <see cref="Scene"/> class.
         /// </summary>
-        public Scene()
+        protected Scene()
         {
             this._scenes = new List<Scene>();
         }
         #endregion
 
         #region Fields
-        private List<Scene> _scenes;
+        private readonly List<Scene> _scenes;
         #endregion
 
         #region Properties

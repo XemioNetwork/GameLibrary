@@ -26,7 +26,7 @@ namespace Xemio.GameLibrary.Game
 
         #region Fields
         private Task _loopTask;
-        private List<IGameHandler> _handlers;
+        private readonly List<IGameHandler> _handlers;
 
         private double _renderTime;
         private double _tickTime;

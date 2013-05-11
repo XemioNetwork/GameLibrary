@@ -22,8 +22,8 @@ namespace Xemio.GameLibrary.Game
         #region Fields
         private bool _enumerating;
 
-        private Queue<Scene> _addCache;
-        private Queue<Scene> _removeCache;
+        private readonly Queue<Scene> _addCache;
+        private readonly Queue<Scene> _removeCache;
         #endregion
 
         #region Methods

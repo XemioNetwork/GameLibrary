@@ -27,10 +27,10 @@ namespace Xemio.GameLibrary.Entities
         #endregion
 
         #region Fields
-        private Queue<Entity> _addCache;
-        private Queue<Entity> _removeCache;
+        private readonly Queue<Entity> _addCache;
+        private readonly Queue<Entity> _removeCache;
 
-        private Dictionary<int, Entity> _idMappings;
+        private readonly Dictionary<int, Entity> _idMappings;
 
         private bool _enumerating;
         #endregion
@@ -114,7 +114,7 @@ namespace Xemio.GameLibrary.Entities
         {
             entity.Environment = this;
 
-            this._idMappings.Add(entity.ID, entity);
+            this._idMappings.Add(entity.Id, entity);
             this.Entities.Add(entity);
         }
         /// <summary>
@@ -128,9 +128,9 @@ namespace Xemio.GameLibrary.Entities
                 this._addCache.Enqueue(entity);
                 return;
             }
-            if (entity.ID < 0)
+            if (entity.Id < 0)
             {
-                entity.ID = this.Factory.CreateID();
+                entity.Id = this.Factory.CreateId();
             }
 
             this.AddMapped(entity);
@@ -141,10 +141,10 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         protected void RemoveMapped(Entity entity)
         {
-            entity.ID = -1;
+            entity.Id = -1;
             entity.Environment = null;
 
-            this._idMappings.Remove(entity.ID);
+            this._idMappings.Remove(entity.Id);
             this.Entities.Remove(entity);
         }
         /// <summary>
@@ -207,7 +207,7 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public virtual void Render()
         {
-            IEnumerable<Entity> entities = this.SortedEntityCollection();
+            var entities = this.SortedEntityCollection();
 
             this.BeginEnumeration();
             foreach (Entity entity in entities)

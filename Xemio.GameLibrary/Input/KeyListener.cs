@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="handle">The handle.</param>
         public KeyListener(IntPtr handle)
         {
-            Control surface = Control.FromHandle(handle);
+            var surface = Control.FromHandle(handle);
 
             surface.KeyDown += this.SurfaceKeyDown;
             surface.KeyUp += this.SurfaceKeyUp;

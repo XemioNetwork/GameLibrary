@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.Entities.Network.Packages
         {
             Type type = entity.GetType();
 
-            this.ID = entity.ID;
+            this.ID = entity.Id;
             this.TypeName = type.AssemblyQualifiedName;
         }
         #endregion

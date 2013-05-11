@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Entities
         /// Initializes a new instance of the <see cref="EntityComponent"/> class.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public EntityComponent(Entity entity)
+        protected EntityComponent(Entity entity)
         {
             this.Entity = entity;
         }

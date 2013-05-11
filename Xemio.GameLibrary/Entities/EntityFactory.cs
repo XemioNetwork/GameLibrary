@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Entities
         #endregion
 
         #region Fields
-        private int _currentID;
+        private int _currentId;
         #endregion
         
         #region Methods
@@ -42,7 +42,7 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="type">The type.</param>
         public virtual Entity CreateLocalEntity(Type type)
         {
-            return this.CreateLocalEntity(type, this.CreateID());
+            return this.CreateLocalEntity(type, this.CreateId());
         }
         /// <summary>
         /// Creates a new entity.
@@ -52,16 +52,16 @@ namespace Xemio.GameLibrary.Entities
         public virtual Entity CreateLocalEntity(Type type, int id)
         {
             Entity entity = (Entity)Activator.CreateInstance(type);
-            entity.ID = id;
+            entity.Id = id;
 
             return entity;
         }
         /// <summary>
-        /// Creates a new ID.
+        /// Creates a new Id.
         /// </summary>
-        public virtual int CreateID()
+        public virtual int CreateId()
         {
-            return this._currentID++;
+            return this._currentId++;
         }
         #endregion
     }

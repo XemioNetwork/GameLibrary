@@ -102,25 +102,6 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
             return result;
         }
-        /// <summary>
-        /// Renders the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="position">The position.</param>
-        public void Render(string value, Vector2 position)
-        {
-            SpriteFontRenderer.Render(this, value, position);
-        }
-        /// <summary>
-        /// Renders the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="position">The position.</param>
-        /// <param name="color">The color.</param>
-        public void Render(string value, Vector2 position, Color color)
-        {
-            SpriteFontRenderer.Render(this, value, position, color);
-        }
         #endregion
     }
 }

@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.Entities
         /// Initializes a new instance of the <see cref="EntityRenderer"/> class.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public EntityRenderer(Entity entity)
+        protected EntityRenderer(Entity entity)
         {
             this.Entity = entity;
             this.RenderManager = XGL.GetComponent<IRenderManager>();
