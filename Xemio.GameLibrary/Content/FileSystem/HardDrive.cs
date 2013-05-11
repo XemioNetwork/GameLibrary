@@ -60,6 +60,22 @@ namespace Xemio.GameLibrary.Content.FileSystem
         {
             return File.Exists(fileName);
         }
+        /// <summary>
+        /// Gets all files inside the specified directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        public string[] GetFiles(string directory)
+        {
+            return Directory.GetFiles(directory);
+        }
+        /// <summary>
+        /// Gets all directories inside the specified directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        public string[] GetDirectories(string directory)
+        {
+            return Directory.GetDirectories(directory);
+        }
         #endregion
     }
 }

@@ -40,5 +40,15 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         bool Exists(string fileName);
+        /// <summary>
+        /// Gets all files inside the specified directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        string[] GetFiles(string directory);
+        /// <summary>
+        /// Gets all directories inside the specified directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        string[] GetDirectories(string directory);
     }
 }
