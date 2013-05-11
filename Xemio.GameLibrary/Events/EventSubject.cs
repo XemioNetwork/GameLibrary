@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -50,13 +51,20 @@ namespace Xemio.GameLibrary.Events
         /// <param name="e">The e.</param>
         public void Publish<TEvent>(TEvent e)
         {
-            IEnumerable<IObserver<TEvent>> observers = this._observers
-                .Where(observer => this.IsObserver<TEvent>(observer))
-                .Select(observer => observer as IObserver<TEvent>);
-
-            foreach (IObserver<TEvent> observer in observers)
+            try
             {
-                observer.OnNext(e);
+                IEnumerable<IObserver<TEvent>> observers = this._observers
+                    .Where(observer => this.IsObserver<TEvent>(observer))
+                    .Select(observer => observer as IObserver<TEvent>);
+
+                foreach (IObserver<TEvent> observer in observers)
+                {
+                    observer.OnNext(e);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
         #endregion

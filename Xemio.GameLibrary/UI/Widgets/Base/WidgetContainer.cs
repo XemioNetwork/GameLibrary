@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.UI.Widgets.View;
+using Xemio.GameLibrary.UI.Widgets.View.Instructions;
 
-namespace Xemio.GameLibrary.UI.Widgets
+namespace Xemio.GameLibrary.UI.Widgets.Base
 {
     public class WidgetContainer : IWidgetContainer
     {
@@ -31,12 +28,51 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
+            for (int i = this._widgets.Count - 1; i >= 0; i--)
+            {
+                this._widgets[i].Tick(elapsed);
+            }
+        }
+        /// <summary>
+        /// Renders the specified widget.
+        /// </summary>
+        /// <param name="widget">The widget.</param>
+        private void Render(Widget widget)
+        {
+            WidgetView view = widget.View;
+            WidgetGraphics graphics = new WidgetGraphics(widget);
+
+            if (view == null) return;
+
+            foreach (IWidgetViewInstruction item in view.Current.Instructions)
+            {
+                Rectangle bounds = item.Shape.Bounds;
+
+                item.Shape.Bounds = new Rectangle(
+                    bounds.X * widget.Bounds.Width,
+                    bounds.Y * widget.Bounds.Height,
+                    bounds.Width * widget.Bounds.Width,
+                    bounds.Height * widget.Bounds.Height);
+
+                item.Render(graphics);
+                item.Shape.Bounds = bounds;
+            }
+
+            widget.Render();
+            foreach (Widget child in widget.Widgets)
+            {
+                this.Render(child);
+            }
         }
         /// <summary>
         /// Renders all widget instances.
         /// </summary>
         public void Render()
         {
+            for (int i = 0; i < this._widgets.Count; i++)
+            {
+                this.Render(this._widgets[i]);
+            }
         }
         #endregion
 

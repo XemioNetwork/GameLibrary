@@ -231,14 +231,25 @@
     <Compile Include="UI\Events\MouseEventArgs.cs" />
     <Compile Include="UI\Events\PaintEventArgs.cs" />
     <Compile Include="UI\IGraphics.cs" />
+    <Compile Include="UI\Shapes\EllipseShape.cs" />
     <Compile Include="UI\Shapes\IShape.cs" />
     <Compile Include="UI\Shapes\RectangleShape.cs" />
+    <Compile Include="UI\Shapes\RoundedRectangleShape.cs" />
+    <Compile Include="UI\Widgets\Button.cs" />
     <Compile Include="UI\Widgets\Rendering\IWidgetRenderer.cs" />
-    <Compile Include="UI\Widgets\WidgetGraphics.cs" />
-    <Compile Include="UI\Widgets\IWidgetContainer.cs" />
-    <Compile Include="UI\Widgets\Widget.cs" />
-    <Compile Include="UI\Widgets\WidgetContainer.cs" />
-    <Compile Include="UI\Widgets\WidgetState.cs" />
+    <Compile Include="UI\Widgets\ViewStates\Button\ButtonStateHover.cs" />
+    <Compile Include="UI\Widgets\ViewStates\Button\ButtonStateNormal.cs" />
+    <Compile Include="UI\Widgets\ViewStates\Button\ButtonView.cs" />
+    <Compile Include="UI\Widgets\View\Instructions\DrawShapeInstruction.cs" />
+    <Compile Include="UI\Widgets\View\Instructions\FillShapeInstruction.cs" />
+    <Compile Include="UI\Widgets\View\Instructions\IWidgetViewInstruction.cs" />
+    <Compile Include="UI\Widgets\View\WidgetView.cs" />
+    <Compile Include="UI\Widgets\View\WidgetViewState.cs" />
+    <Compile Include="UI\Widgets\Base\WidgetGraphics.cs" />
+    <Compile Include="UI\Widgets\Base\IWidgetContainer.cs" />
+    <Compile Include="UI\Widgets\Base\Widget.cs" />
+    <Compile Include="UI\Widgets\Base\WidgetContainer.cs" />
+    <Compile Include="UI\Widgets\Base\WidgetState.cs" />
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>

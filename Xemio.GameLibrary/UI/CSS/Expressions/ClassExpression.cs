@@ -1,6 +1,7 @@
 ﻿using System;
 using Xemio.GameLibrary.UI.CSS.Namespaces;
 using Xemio.GameLibrary.UI.Widgets;
+using Xemio.GameLibrary.UI.Widgets.Base;
 
 namespace Xemio.GameLibrary.UI.CSS.Expressions
 {

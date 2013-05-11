@@ -3,9 +3,9 @@ using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Geometry;
 
-namespace Xemio.GameLibrary.UI.Widgets
+namespace Xemio.GameLibrary.UI.Widgets.Base
 {
-    internal class WidgetGraphics : IGraphics
+    public class WidgetGraphics : IGraphics
     {
         #region Constructors
         /// <summary>

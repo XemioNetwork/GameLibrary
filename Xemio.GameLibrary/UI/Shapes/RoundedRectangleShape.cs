@@ -8,34 +8,32 @@ using Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.UI.Shapes
 {
-    public class RectangleShape : IShape
+    public class RoundedRectangleShape : IShape
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="RectangleShape"/> class.
         /// </summary>
-        public RectangleShape()
+        public RoundedRectangleShape()
         {
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="RectangleShape"/> class.
         /// </summary>
         /// <param name="bounds">The bounds.</param>
-        public RectangleShape(Rectangle bounds)
+        /// <param name="radius">The radius.</param>
+        public RoundedRectangleShape(Rectangle bounds, int radius)
         {
             this.Bounds = bounds;
+            this.Radius = radius;
         }
+        #endregion
+
+        #region Properties
         /// <summary>
-        /// Initializes a new instance of the <see cref="RectangleShape"/> class.
+        /// Gets or sets the edge radius.
         /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        public RectangleShape(float x, float y, float width, float height)
-        {
-            this.Bounds = new Rectangle(x, y, width, height);
-        }
+        public int Radius { get; set; }
         #endregion
 
         #region Implementation of IShape
@@ -50,7 +48,7 @@ namespace Xemio.GameLibrary.UI.Shapes
         /// <param name="brush">The brush.</param>
         public void Fill(IGeometryProvider geometry, IBrush brush)
         {
-            geometry.FillRectangle(brush, this.Bounds);
+            geometry.FillRoundedRectangle(brush, this.Bounds, this.Radius);
         }
         /// <summary>
         /// Draws the shape.
@@ -59,7 +57,7 @@ namespace Xemio.GameLibrary.UI.Shapes
         /// <param name="pen">The pen.</param>
         public void Draw(IGeometryProvider geometry, IPen pen)
         {
-            geometry.DrawRectangle(pen, this.Bounds);
+            geometry.DrawRoundedRectangle(pen, this.Bounds, this.Radius);
         }
         #endregion
     }

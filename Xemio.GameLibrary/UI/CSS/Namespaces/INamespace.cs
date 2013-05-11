@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.UI.Widgets;
+using Xemio.GameLibrary.UI.Widgets.Base;
 
 namespace Xemio.GameLibrary.UI.CSS.Namespaces
 {

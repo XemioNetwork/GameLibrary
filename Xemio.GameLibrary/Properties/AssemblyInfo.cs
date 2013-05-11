@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
 [assembly: AssemblyTitle("Xemio GameLibrary")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("2D indiegame engine")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("xemiogames")]
+[assembly: AssemblyCompany("Xemio Network")]
 [assembly: AssemblyProduct("Xemio GameLibrary")]
-[assembly: AssemblyCopyright("Copyright © xemio.net 2013")]
+[assembly: AssemblyCopyright("Copyright © Xemio.net 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.11.0")]
-[assembly: AssemblyFileVersion("0.1.11.0")]
+[assembly: AssemblyVersion("0.2.17.0")]
+[assembly: AssemblyFileVersion("0.2.17.0")]

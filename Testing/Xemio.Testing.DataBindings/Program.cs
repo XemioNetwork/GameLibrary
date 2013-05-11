@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.UI.DataBindings;
 using Xemio.GameLibrary.UI.Widgets;
+using Xemio.GameLibrary.UI.Widgets.Base;
 
 namespace Xemio.Testing.DataBindings
 {

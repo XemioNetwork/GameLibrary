@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using Xemio.GameLibrary.UI.Widgets;
+using Xemio.GameLibrary.UI.Widgets.Base;
 
 namespace Xemio.GameLibrary.UI.DataBindings
 {

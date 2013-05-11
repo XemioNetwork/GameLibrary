@@ -1,26 +1,24 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Input.Events.Keyboard;
 using Xemio.GameLibrary.Input.Events.Mouse;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.UI.DataBindings;
 using Xemio.GameLibrary.UI.Events;
+using Xemio.GameLibrary.UI.Widgets.View;
 
-namespace Xemio.GameLibrary.UI.Widgets
+namespace Xemio.GameLibrary.UI.Widgets.Base
 {
-    public class Widget : IWidgetContainer
+    public abstract class Widget : IWidgetContainer
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Widget"/> class.
         /// </summary>
-        public Widget()
+        protected Widget()
         {
             this._widgets = new List<Widget>();
             this._dataBinder = new DataBinder(this);
@@ -46,6 +44,23 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// Gets or sets the bounds.
         /// </summary>
         public Rectangle Bounds { get; set; }
+        /// <summary>
+        /// Gets the absolute bounds.
+        /// </summary>
+        public Rectangle AbsoluteBounds
+        {
+            get 
+            { 
+                Vector2 absolutePosition = this.AbsolutePosition;
+                Rectangle absoluteBounds = new Rectangle(
+                    absolutePosition.X, 
+                    absolutePosition.Y, 
+                    this.Bounds.Width,
+                    this.Bounds.Height);
+
+                return absoluteBounds;
+            }
+        }
         /// <summary>
         /// Gets or sets the state.
         /// </summary>
@@ -94,9 +109,17 @@ namespace Xemio.GameLibrary.UI.Widgets
                 return root;
             }
         }
+        /// <summary>
+        /// Gets or sets the view.
+        /// </summary>
+        public WidgetView View { get; protected set; }
         #endregion
 
         #region Events
+        /// <summary>
+        /// Occurs when the user clicks inside the widget.
+        /// </summary>
+        public event EventHandler<MouseEventArgs> Click;
         /// <summary>
         /// Occurs when the widget gets painted.
         /// </summary>
@@ -113,6 +136,14 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// Occurs when the mouse moved.
         /// </summary>
         public event EventHandler<MouseEventArgs> MouseMove;
+        /// <summary>
+        /// Occurs when the mouse enters the widget bounds.
+        /// </summary>
+        public event EventHandler<MouseEventArgs> MouseEnter;
+        /// <summary>
+        /// Occurs when the mouse leaves the widget bounds.
+        /// </summary>
+        public event EventHandler<MouseEventArgs> MouseLeave;
         /// <summary>
         /// Occurs when a key got pressed.
         /// </summary>
@@ -154,38 +185,42 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="e">The event.</param>
         protected virtual void HandleInput(IInputEvent e)
         {
-            if (this.Focused)
-            {
-                KeyEvent keyEvent = e as KeyEvent;
-                MouseEvent mouseEvent = e as MouseEvent;
+            KeyEvent keyEvent = e as KeyEvent;
+            MouseEvent mouseEvent = e as MouseEvent;
                 
-                bool inBounds = false;
-                if (mouseEvent != null)
-                {
-                    inBounds = this.Bounds.Contains(mouseEvent.Position);
-                }
-
-                if (e is KeyDownEvent)
-                    this.OnKeyDown(new KeyEventArgs(keyEvent.Key));
-
-                if (e is KeyUpEvent)
-                    this.OnKeyUp(new KeyEventArgs(keyEvent.Key));
-
-                if (e is MouseDownEvent && inBounds)
-                    this.OnMouseDown(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
-
-                if (e is MouseUpEvent)
-                    this.OnMouseUp(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
-
-                if (e is MouseMoveEvent && inBounds)
-                    this.OnMouseMove(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+            bool inBounds = false;
+            if (mouseEvent != null)
+            {
+                inBounds = this.AbsoluteBounds.Contains(mouseEvent.Position);
             }
-        }
-        /// <summary>
-        /// Focuses this widget.
-        /// </summary>
-        public void Focus()
-        {
+
+            if (e is KeyDownEvent && this.Focused)
+                this.OnKeyDown(new KeyEventArgs(keyEvent.Key));
+
+            if (e is KeyUpEvent && this.Focused)
+                this.OnKeyUp(new KeyEventArgs(keyEvent.Key));
+
+            if (e is MouseDownEvent && inBounds)
+                this.OnMouseDown(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+
+            if (e is MouseUpEvent && this.Focused)
+                this.OnMouseUp(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+            
+            if (e is MouseMoveEvent)
+            {
+                if (inBounds)
+                {
+                    this.OnMouseMove(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+                }
+                if (this.State != WidgetState.Hover && inBounds)
+                {
+                    this.OnMouseEnter(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+                }
+                if (this.State == WidgetState.Hover && !inBounds)
+                {
+                    this.OnMouseLeave(new MouseEventArgs(mouseEvent.Position, mouseEvent.Button));
+                }
+            }
             
         }
         /// <summary>
@@ -204,9 +239,22 @@ namespace Xemio.GameLibrary.UI.Widgets
             this.UpdateBindings();
         }
         /// <summary>
+        /// Paints this widget.
+        /// </summary>
+        internal void Render()
+        {
+            this.OnPaint(new PaintEventArgs(this));
+        }
+        /// <summary>
         /// Loads the content.
         /// </summary>
         public virtual void LoadContent()
+        {
+        }
+        /// <summary>
+        /// Focuses this widget.
+        /// </summary>
+        public void Focus()
         {
         }
         #endregion
@@ -223,11 +271,24 @@ namespace Xemio.GameLibrary.UI.Widgets
             }
         }
         /// <summary>
+        /// Raises the <see cref="E:Click"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnClick(MouseEventArgs e)
+        {
+            this.Focus();
+            if (this.Click != null)
+            {
+                this.Click(this, e);
+            }
+        }
+        /// <summary>
         /// Raises the <see cref="E:MouseDown"/> event.
         /// </summary>
         /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
         protected virtual void OnMouseDown(MouseEventArgs e)
         {
+            this.State = WidgetState.Pressed;
             if (this.MouseDown != null)
             {
                 this.MouseDown(this, e);
@@ -239,6 +300,12 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
         protected virtual void OnMouseUp(MouseEventArgs e)
         {
+            this.State = WidgetState.Hover;
+
+            if (this.Bounds.Contains(e.Position))
+            {
+                this.OnClick(e);
+            }
             if (this.MouseUp != null)
             {
                 this.MouseUp(this, e);
@@ -253,6 +320,30 @@ namespace Xemio.GameLibrary.UI.Widgets
             if (this.MouseMove != null)
             {
                 this.MouseMove(this, e);
+            }
+        }
+        /// <summary>
+        /// Raises the <see cref="E:MouseEnter"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnMouseEnter(MouseEventArgs e)
+        {
+            this.State = WidgetState.Hover;
+            if (this.MouseEnter != null)
+            {
+                this.MouseEnter(this, e);
+            }
+        }
+        /// <summary>
+        /// Raises the <see cref="E:MouseLeave"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Xemio.GameLibrary.UI.Events.MouseEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnMouseLeave(MouseEventArgs e)
+        {
+            this.State = WidgetState.Normal;
+            if (this.MouseLeave != null)
+            {
+                this.MouseLeave(this, e);
             }
         }
         /// <summary>
@@ -303,7 +394,15 @@ namespace Xemio.GameLibrary.UI.Widgets
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
-        public Vector2 Position { get; set; }
+        public Vector2 Position
+        {
+            get { return new Vector2(this.Bounds.X, this.Bounds.Y); }
+            set 
+            {
+                this.Bounds = new Rectangle(
+                    value.X, value.Y, this.Bounds.Width, this.Bounds.Height);
+            }
+        }
         /// <summary>
         /// Gets the absolute position.
         /// </summary>

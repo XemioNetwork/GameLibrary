@@ -8,33 +8,22 @@ using Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.UI.Shapes
 {
-    public class RectangleShape : IShape
+    public class EllipseShape : IShape
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="RectangleShape"/> class.
         /// </summary>
-        public RectangleShape()
+        public EllipseShape()
         {
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="RectangleShape"/> class.
         /// </summary>
         /// <param name="bounds">The bounds.</param>
-        public RectangleShape(Rectangle bounds)
+        public EllipseShape(Rectangle bounds)
         {
             this.Bounds = bounds;
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RectangleShape"/> class.
-        /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        public RectangleShape(float x, float y, float width, float height)
-        {
-            this.Bounds = new Rectangle(x, y, width, height);
         }
         #endregion
 
@@ -50,7 +39,7 @@ namespace Xemio.GameLibrary.UI.Shapes
         /// <param name="brush">The brush.</param>
         public void Fill(IGeometryProvider geometry, IBrush brush)
         {
-            geometry.FillRectangle(brush, this.Bounds);
+            geometry.FillEllipse(brush, this.Bounds);
         }
         /// <summary>
         /// Draws the shape.
@@ -59,7 +48,7 @@ namespace Xemio.GameLibrary.UI.Shapes
         /// <param name="pen">The pen.</param>
         public void Draw(IGeometryProvider geometry, IPen pen)
         {
-            geometry.DrawRectangle(pen, this.Bounds);
+            geometry.DrawEllipse(pen, this.Bounds);
         }
         #endregion
     }

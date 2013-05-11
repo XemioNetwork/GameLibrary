@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.UI.Widgets
+namespace Xemio.GameLibrary.UI.Widgets.Base
 {
     public interface IWidgetContainer
     {
