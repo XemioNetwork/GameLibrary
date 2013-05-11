@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.UI.Widgets.Base;
-using Xemio.GameLibrary.UI.Widgets.ViewStates.Button;
+using Xemio.GameLibrary.UI.Widgets.View.ViewStates.Button;
 
 namespace Xemio.GameLibrary.UI.Widgets
 {

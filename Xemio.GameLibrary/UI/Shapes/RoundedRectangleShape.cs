@@ -42,6 +42,10 @@ namespace Xemio.GameLibrary.UI.Shapes
         /// </summary>
         public Rectangle Bounds { get; set; }
         /// <summary>
+        /// Gets the position mode.
+        /// </summary>
+        public PositionMode PositionMode { get; set; }
+        /// <summary>
         /// Fills the shape.
         /// </summary>
         /// <param name="geometry">The geometry.</param>
