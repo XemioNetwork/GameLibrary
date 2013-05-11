@@ -5,35 +5,35 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary", "Xemio.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rendering", "Rendering", "{B6438755-1B31-4AC3-8F7F-4F328D79227E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.GDIPlus", "Xemio.GameLibrary.Rendering.GDIPlus\Xemio.GameLibrary.Rendering.GDIPlus.csproj", "{B2587704-FF2B-4028-A43B-336A3BB8FA43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.GDIPlus", "Rendering\Xemio.GameLibrary.Rendering.GDIPlus\Xemio.GameLibrary.Rendering.GDIPlus.csproj", "{B2587704-FF2B-4028-A43B-336A3BB8FA43}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameLibrary", "GameLibrary", "{0534896C-1686-4CE7-A78B-0E58A515D000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.Xna", "Xemio.GameLibrary.Rendering.Xna\Xemio.GameLibrary.Rendering.Xna.csproj", "{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.Xna", "Rendering\Xemio.GameLibrary.Rendering.Xna\Xemio.GameLibrary.Rendering.Xna.csproj", "{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{14F9A976-6AE6-45BE-9C5E-C94087FA06D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Sound", "Xemio.Testing.Sound\Xemio.Testing.Sound.csproj", "{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Sound", "Testing\Xemio.Testing.Sound\Xemio.Testing.Sound.csproj", "{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sound", "Sound", "{71A94458-C203-48EA-8B5E-1034A897BF68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Sound.WPF", "Xemio.GameLibrary.Sound.WPF\Xemio.GameLibrary.Sound.WPF.csproj", "{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Sound.WPF", "Sound\Xemio.GameLibrary.Sound.WPF\Xemio.GameLibrary.Sound.WPF.csproj", "{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Network", "Xemio.Testing.Network\Xemio.Testing.Network.csproj", "{F1DA53F3-76C8-4178-B772-B1F048F7F9E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Network", "Testing\Xemio.Testing.Network\Xemio.Testing.Network.csproj", "{F1DA53F3-76C8-4178-B772-B1F048F7F9E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.SharpDX", "Xemio.GameLibrary.Rendering.SharpDX\Xemio.GameLibrary.Rendering.SharpDX.csproj", "{E1B7CCD2-91B9-416E-94A1-F27B6B910371}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.SharpDX", "Rendering\Xemio.GameLibrary.Rendering.SharpDX\Xemio.GameLibrary.Rendering.SharpDX.csproj", "{E1B7CCD2-91B9-416E-94A1-F27B6B910371}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.Mono", "Xemio.GameLibrary.Rendering.Mono\Xemio.GameLibrary.Rendering.Mono.csproj", "{A3D565C5-163C-4B79-B36A-F96D8CE7D681}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.Mono", "Rendering\Xemio.GameLibrary.Rendering.Mono\Xemio.GameLibrary.Rendering.Mono.csproj", "{A3D565C5-163C-4B79-B36A-F96D8CE7D681}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.EventSystem", "Xemio.Testing.EventSystem\Xemio.Testing.EventSystem.csproj", "{B1EB1380-0429-4378-9669-3781CF996560}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.EventSystem", "Testing\Xemio.Testing.EventSystem\Xemio.Testing.EventSystem.csproj", "{B1EB1380-0429-4378-9669-3781CF996560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.DataBindings", "Xemio.Testing.DataBindings\Xemio.Testing.DataBindings.csproj", "{7A63BC9E-0E86-4681-B469-6272F7868B2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.DataBindings", "Testing\Xemio.Testing.DataBindings\Xemio.Testing.DataBindings.csproj", "{7A63BC9E-0E86-4681-B469-6272F7868B2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.CSS", "Xemio.Testing.CSS\Xemio.Testing.CSS.csproj", "{1B1E7BF1-F766-4076-8510-D91C20C88155}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.CSS", "Testing\Xemio.Testing.CSS\Xemio.Testing.CSS.csproj", "{1B1E7BF1-F766-4076-8510-D91C20C88155}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{2A171C25-F948-4A32-A52A-8079D5158648}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Script", "Xemio.Testing.Script\Xemio.Testing.Script.csproj", "{654D61AC-4895-480A-81E4-774FA33C95C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Script", "Testing\Xemio.Testing.Script\Xemio.Testing.Script.csproj", "{654D61AC-4895-480A-81E4-774FA33C95C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

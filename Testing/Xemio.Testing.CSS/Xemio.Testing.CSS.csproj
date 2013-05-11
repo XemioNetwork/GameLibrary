@@ -2,18 +2,20 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A3D565C5-163C-4B79-B36A-F96D8CE7D681}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{1B1E7BF1-F766-4076-8510-D91C20C88155}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xemio.GameLibrary.Rendering.Mono</RootNamespace>
-    <AssemblyName>XGL.Rendering.Mono</AssemblyName>
+    <RootNamespace>Xemio.Testing.CSS</RootNamespace>
+    <AssemblyName>Xemio.Testing.CSS</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,7 +24,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,8 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,20 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MonoGraphicsInitializer.cs" />
-    <Compile Include="MonoGraphicsProvider.cs" />
-    <Compile Include="MonoHelper.cs" />
-    <Compile Include="MonoRenderManager.cs" />
-    <Compile Include="MonoTexture.cs" />
-    <Compile Include="MonoTextureFactory.cs" />
-    <Compile Include="Geometry\MonoBrush.cs" />
-    <Compile Include="Geometry\MonoGeometryFactory.cs" />
-    <Compile Include="Geometry\MonoGeometryProvider.cs" />
-    <Compile Include="Geometry\MonoPen.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xemio.GameLibrary\Xemio.GameLibrary.csproj">
+    <ProjectReference Include="..\..\Xemio.GameLibrary\Xemio.GameLibrary.csproj">
       <Project>{474CA844-EA03-48DC-A790-5F18510799AC}</Project>
       <Name>Xemio.GameLibrary</Name>
     </ProjectReference>

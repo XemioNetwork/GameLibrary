@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F1DA53F3-76C8-4178-B772-B1F048F7F9E2}</ProjectGuid>
+    <ProjectGuid>{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xemio.Testing.Network</RootNamespace>
-    <AssemblyName>Xemio.Testing.Network</AssemblyName>
+    <RootNamespace>Xemio.Testing.Sound</RootNamespace>
+    <AssemblyName>Xemio.Testing.Sound</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -36,7 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,19 +45,28 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestComponent.cs" />
-    <Compile Include="TestDataContainer.cs" />
-    <Compile Include="TestEntity.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xemio.GameLibrary.Rendering.GDIPlus\Xemio.GameLibrary.Rendering.GDIPlus.csproj">
-      <Project>{B2587704-FF2B-4028-A43B-336A3BB8FA43}</Project>
-      <Name>Xemio.GameLibrary.Rendering.GDIPlus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xemio.GameLibrary\Xemio.GameLibrary.csproj">
+    <ProjectReference Include="..\..\Xemio.GameLibrary\Xemio.GameLibrary.csproj">
       <Project>{474CA844-EA03-48DC-A790-5F18510799AC}</Project>
       <Name>Xemio.GameLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bell.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
