@@ -12,17 +12,17 @@ namespace Xemio.Testing.FileSystem
     {
         static void Main(string[] args)
         {
-            VirtualFileSystem fileSystem = new VirtualFileSystem("main.fcon");
+            VirtualFileSystem fileSystem = new VirtualFileSystem();
 
-            /*fileSystem.Create("test.txt");
-            fileSystem.CreateDirectory("a");
+            fileSystem.Create("a/test.txt");
+            //fileSystem.CreateDirectory("a");
             fileSystem.Create("a/data.txt");
 
             using (Stream stream = fileSystem.Open("a/data.txt"))
             {
                 BinaryWriter writer = new BinaryWriter(stream);
                 writer.Write("Hallo Welt");
-            }*/
+            }
 
             Console.WriteLine("Files and Directories:");
             ListFiles(fileSystem, ".");

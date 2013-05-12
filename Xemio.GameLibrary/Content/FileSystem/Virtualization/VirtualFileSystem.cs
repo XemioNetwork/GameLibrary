@@ -118,6 +118,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         {
             if (this.GetDirectory(fileName) == null)
             {
+                //TODO: Create directory for the specified file (NOT WORKING ATM)
                 this.CreateDirectory(Path.GetDirectoryName(fileName));
             }
 
@@ -176,7 +177,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         {
             VirtualPath path = new VirtualPath(fileName);
             VirtualDirectory directory = this.GetDirectory(path);
-
+            
             return directory != null && directory.Files.Any(
                 file => file.Name == path.Name);
         }

@@ -28,6 +28,10 @@ namespace Xemio.GameLibrary.Game
 
         #region Properties
         /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SceneManager"/> is present.
+        /// </summary>
+        public bool PresentChanges { get; set; }
+        /// <summary>
         /// Gets the graphics device.
         /// </summary>
         public GraphicsDevice GraphicsDevice
@@ -178,7 +182,9 @@ namespace Xemio.GameLibrary.Game
             }
 
             this.EndEnumeration();
-            this.GraphicsDevice.Present();
+
+            if (this.PresentChanges)
+                this.GraphicsDevice.Present();
         }
         #endregion
 
@@ -190,6 +196,8 @@ namespace Xemio.GameLibrary.Game
         {
             GameLoop loop = XGL.GetComponent<GameLoop>();
             loop.Subscribe(this);
+
+            this.PresentChanges = true;
         }
         #endregion
     }
