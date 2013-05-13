@@ -19,11 +19,6 @@ namespace Xemio.GameLibrary.Components
         /// <param name="component">The component.</param>
         void Remove(IComponent component);
         /// <summary>
-        /// Loads the components.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        void LoadComponents(string directory);
-        /// <summary>
         /// Constructs this instance.
         /// </summary>
         void Construct();

@@ -40,7 +40,7 @@ namespace Xemio.GameLibrary.Entities.Network.Packages
         public void Create(EntityEnvironment environment)
         {
             List<Entity> syncedEntities = environment
-                .Where(e => e.IsSynced)
+                .Where<Entity>(e => e.IsSynced)
                 .ToList();
 
             SyncHelper.Write(this.Stream, syncedEntities, Properties.Changes);

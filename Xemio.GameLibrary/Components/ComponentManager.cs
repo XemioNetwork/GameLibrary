@@ -19,9 +19,7 @@ namespace Xemio.GameLibrary.Components
             this._cache = new Queue<IComponent>();
             this._valueMappings = new Dictionary<Type, IValueProvider>();
             this._componentMappings = new Dictionary<Type, IComponent>();
-
-            this._pluginLoader = new PluginLoader<IComponent>();
-
+            
             this.Components = new List<IComponent>();
         }
         #endregion
@@ -32,8 +30,6 @@ namespace Xemio.GameLibrary.Components
 
         private readonly Dictionary<Type, IValueProvider> _valueMappings;
         private readonly Dictionary<Type, IComponent> _componentMappings;
-
-        private readonly PluginLoader<IComponent> _pluginLoader;
         #endregion
 
         #region Properties
@@ -75,26 +71,6 @@ namespace Xemio.GameLibrary.Components
             while (this._cache.Count > 0)
             {
                 this.Add(this._cache.Dequeue());
-            }
-        }
-        /// <summary>
-        /// Loads all components found in the current directory.
-        /// </summary>
-        public void LoadComponents()
-        {
-            this.LoadComponents(".");
-            this.Construct();
-        }
-        /// <summary>
-        /// Loads all components found in the specified directory.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        public void LoadComponents(string directory)
-        {
-            this._pluginLoader.LoadPlugins(directory);
-            foreach (IComponent component in this._pluginLoader.Plugins)
-            {
-                this.Add(component);
             }
         }
         #endregion

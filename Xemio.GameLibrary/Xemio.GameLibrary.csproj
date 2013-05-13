@@ -46,6 +46,7 @@
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
     <Compile Include="Common\ExcludeAttribute.cs" />
+    <Compile Include="Common\ICondition.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
     <Compile Include="Common\Link\CreationType.cs" />
     <Compile Include="Common\Link\GenericLinker.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Game\ISceneProvider.cs" />
+    <Compile Include="Game\SceneWrapper.cs" />
     <Compile Include="Input\Events\IInputEvent.cs" />
     <Compile Include="Input\Events\Keyboard\KeyDownEvent.cs" />
     <Compile Include="Input\Events\Keyboard\KeyEvent.cs" />
@@ -163,7 +165,13 @@
     <Compile Include="Network\Timing\TimeSyncPerception.cs" />
     <Compile Include="Network\Timing\TimeSyncPackage.cs" />
     <Compile Include="Network\Timing\TimeSyncAction.cs" />
-    <Compile Include="Plugins\PluginLoader.cs" />
+    <Compile Include="Plugins\ContextFactory.cs" />
+    <Compile Include="Plugins\Contexts\FileAssemblyContext.cs" />
+    <Compile Include="Plugins\IAssemblyContext.cs" />
+    <Compile Include="Plugins\ILibraryInitializer.cs" />
+    <Compile Include="Plugins\LibraryLoader.cs" />
+    <Compile Include="Plugins\Contexts\MultipleAssemblyContext.cs" />
+    <Compile Include="Plugins\Contexts\SingleAssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Fonts\Utility\SpriteFontSerializer.cs" />
     <Compile Include="Rendering\IGraphicsInitializer.cs" />

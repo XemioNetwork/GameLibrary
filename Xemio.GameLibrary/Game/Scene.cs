@@ -134,8 +134,11 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         internal void InternalLoadContent()
         {
-            this.LoadContent();
-            this.Loaded = true;
+            if (!this.Loaded)
+            {
+                this.LoadContent();
+                this.Loaded = true;
+            }
         }
         /// <summary>
         /// Removes this scene.
@@ -189,6 +192,18 @@ namespace Xemio.GameLibrary.Game
         }
         #endregion
 
+        #region Static Methods
+        /// <summary>
+        /// Wraps the specified game handler.
+        /// </summary>
+        /// <param name="gameHandler">The game handler.</param>
+        /// <returns></returns>
+        public static Scene Wrap(IGameHandler gameHandler)
+        {
+            return new SceneWrapper(gameHandler);    
+        }
+        #endregion
+
         #region CachedSceneProvider Methods
         /// <summary>
         /// Called when a scene gets added.
@@ -196,6 +211,7 @@ namespace Xemio.GameLibrary.Game
         /// <param name="scene">The scene.</param>
         protected override void OnAddScene(Scene scene)
         {
+            scene.InternalLoadContent();
             this._scenes.Add(scene);
         }
         /// <summary>

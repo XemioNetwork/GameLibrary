@@ -222,7 +222,7 @@ namespace Xemio.GameLibrary.Entities
         }
         #endregion
 
-        #region IEnumerable<Entity> Member
+        #region Implementation of IEnumerable
         /// <summary>
         /// Gets the enumerator.
         /// </summary>
@@ -230,15 +230,12 @@ namespace Xemio.GameLibrary.Entities
         {
             return this.SortedEntityCollection().GetEnumerator();
         }
-        #endregion
-
-        #region IEnumerable Member
         /// <summary>
         /// Gets the enumerator.
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
         #endregion
     }
