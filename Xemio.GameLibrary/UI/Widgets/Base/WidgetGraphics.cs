@@ -72,14 +72,6 @@ namespace Xemio.GameLibrary.UI.Widgets.Base
             this.RenderManager.Rotate(rotation);
         }
         /// <summary>
-        /// Tints all drawn images using the specified color.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        public void Tint(Color color)
-        {
-            this.RenderManager.Tint(color);
-        }
-        /// <summary>
         /// Renders the specified texture.
         /// </summary>
         /// <param name="texture">The texture.</param>

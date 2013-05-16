@@ -9,6 +9,7 @@ using Bitmap = System.Drawing.Bitmap;
 using D2DBitmap = SharpDX.Direct2D1.Bitmap;
 using PixelFormat = SharpDX.Direct2D1.PixelFormat;
 using SharpDX.DXGI;
+using AlphaMode = SharpDX.Direct2D1.AlphaMode;
 
 namespace Xemio.GameLibrary.Rendering.SharpDX
 {

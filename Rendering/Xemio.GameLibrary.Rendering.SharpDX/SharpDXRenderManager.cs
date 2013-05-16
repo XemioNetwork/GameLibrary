@@ -1,11 +1,12 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
+using SharpDX.Direct2D1.Effects;
 using SharpDX.Direct3D10;
 using SharpDX.DXGI;
 
 using System;
 using System.Windows.Forms;
-
+using AlphaMode = SharpDX.Direct2D1.AlphaMode;
 using Device1 = SharpDX.Direct3D10.Device1;
 using DriverType = SharpDX.Direct3D10.DriverType;
 using Factory = SharpDX.DXGI.Factory;
@@ -14,6 +15,7 @@ using FeatureLevel = SharpDX.Direct3D10.FeatureLevel;
 using DXColor = SharpDX.Color;
 
 using Rectangle = Xemio.GameLibrary.Math.Rectangle;
+using Resource = SharpDX.Direct3D10.Resource;
 using Vector2 = Xemio.GameLibrary.Math.Vector2;
 
 namespace Xemio.GameLibrary.Rendering.SharpDX
@@ -54,6 +56,10 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         #endregion
 
         #region Fields
+        /// <summary>
+        /// The device context.
+        /// </summary>
+        private DeviceContext _deviceContext;
         /// <summary>
         /// Backbuffer texture.
         /// </summary>
@@ -102,7 +108,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
                 out swapChain);
 
             // InitializeDirect2D backbuffer and surface
-            this._backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
+            this._backBuffer = Resource.FromSwapChain<Texture2D>(swapChain, 0);
             RenderTargetView renderView = new RenderTargetView(device, this._backBuffer);
             Surface surface = this._backBuffer.QueryInterface<Surface>();
 
@@ -119,6 +125,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             SharpDXHelper.RenderTarget.AntialiasMode = AntialiasMode.Aliased;
             SharpDXHelper.SwapChain = swapChain;
 
+            this._deviceContext = new DeviceContext(surface);
             this.BeginDraw();
         }
         /// <summary>
@@ -146,10 +153,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <param name="color">The color.</param>
         public void Render(ITexture texture, Rectangle destination, Color color)
         {
-            this.Tint(color);
-
-            this.Render(texture, destination);
-            this.Tint(Color.White);
+            this.Render(texture, destination, new Rectangle(0, 0, texture.Width, texture.Height), color);
         }
         /// <summary>
         /// Renders a the specified texture.
@@ -159,20 +163,7 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <param name="origin">The original destination.</param>
         public void Render(ITexture texture, Math.Rectangle destination, Math.Rectangle origin)
         {
-            SharpDXTexture dxTexture = texture as SharpDXTexture;
-            if (dxTexture == null)
-            {
-                throw new ArgumentException("Texture has to be SharpDXTexture.");
-            }
-
-            const BitmapInterpolationMode interpolation = BitmapInterpolationMode.NearestNeighbor;
-
-            SharpDXHelper.RenderTarget.DrawBitmap(
-                dxTexture.Bitmap,
-                SharpDXHelper.ConvertRectangle(destination + this.ScreenOffset),
-                this._tintColor.Alpha,
-                interpolation,
-                SharpDXHelper.ConvertRectangle(origin));
+            this.Render(texture, destination, origin, Color.White);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -183,10 +174,34 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <param name="color">The color.</param>
         public void Render(ITexture texture, Rectangle destination, Rectangle origin, Color color)
         {
-            this.Tint(color);
+            SharpDXTexture dxTexture = texture as SharpDXTexture;
+            if (dxTexture == null)
+            {
+                throw new ArgumentException("Texture has to be SharpDXTexture.");
+            }
 
-            this.Render(texture, destination, origin);
-            this.Tint(Color.White);
+            const BitmapInterpolationMode interpolation = BitmapInterpolationMode.NearestNeighbor;
+
+            float a = color.A / 255.0f;
+            float r = color.R / 255.0f;
+            float g = color.G / 255.0f;
+            float b = color.B / 255.0f;
+
+            ColorMatrix colorMatrix = new ColorMatrix(this._deviceContext);
+
+            Matrix5x4 matrix = Matrix5x4.Identity;
+            //TODO: implement tinting, found nothing on google to solve this problem
+
+            colorMatrix.Matrix = matrix;
+            colorMatrix.AlphaMode = AlphaMode.Premultiplied;
+            colorMatrix.SetInput(0, dxTexture.Bitmap, true);
+
+            SharpDXHelper.RenderTarget.DrawBitmap(
+                (Bitmap)colorMatrix.Output,
+                SharpDXHelper.ConvertRectangle(destination + this.ScreenOffset),
+                this._tintColor.Alpha,
+                interpolation,
+                SharpDXHelper.ConvertRectangle(origin));
         }
         /// <summary>
         /// Renders the specified texture.
@@ -196,18 +211,10 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <param name="color">The color.</param>
         public void Render(ITexture texture, Vector2 position, Color color)
         {
-            this.Tint(color);
-
-            this.Render(texture, position);
-            this.Tint(Color.White);
-        }
-        /// <summary>
-        /// Tints the screen.
-        /// </summary>
-        /// <param name="color"></param>
-        public void Tint(Color color)
-        {
-            this._tintColor = SharpDXHelper.CreateColor(color);
+            this.Render(
+                texture,
+                new Rectangle(position.X, position.Y, texture.Width, texture.Height),
+                new Rectangle(0, 0, texture.Width, texture.Height), color);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -216,7 +223,9 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <param name="destination">The destination.</param>
         public void Render(ITexture texture, Math.Rectangle destination)
         {
-            this.Render(texture, destination, new Math.Rectangle(0, 0, texture.Width, texture.Height));
+            this.Render(texture,
+                destination, 
+                new Math.Rectangle(0, 0, texture.Width, texture.Height));
         }
         /// <summary>
         /// Renders the specified texture.
@@ -225,7 +234,8 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         /// <param name="position">The position.</param>
         public void Render(ITexture texture, Math.Vector2 position)
         {
-            this.Render(texture, new Math.Rectangle(position.X, position.Y, texture.Width, texture.Height));
+            this.Render(texture,
+                new Math.Rectangle(position.X, position.Y, texture.Width, texture.Height));
         }
         /// <summary>
         /// Presents the backbuffer to the screen.

@@ -70,10 +70,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="color">The color.</param>
         public static void Render(this IRenderManager renderManager, SpriteFont font, string value, Vector2 position, Color color)
         {
-            renderManager.Tint(color);
-
-            renderManager.Render(font, value, position);
-            renderManager.Tint(Color.White);
+            renderManager.Render(font, value, position, color);
         }
         #endregion
     }

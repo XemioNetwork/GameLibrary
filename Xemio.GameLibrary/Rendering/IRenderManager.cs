@@ -30,11 +30,6 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="rotation">The rotation.</param>
         void Rotate(float rotation);
         /// <summary>
-        /// Tints all drawn images using the specified color.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        void Tint(Color color);
-        /// <summary>
         /// Renders the specified texture.
         /// </summary>
         /// <param name="texture">The texture.</param>

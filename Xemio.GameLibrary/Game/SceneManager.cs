@@ -156,9 +156,7 @@ namespace Xemio.GameLibrary.Game
         {
             if (!scene.Loaded) return;
 
-            this.GraphicsDevice.RenderManager.Tint(Color.White);
             this.GraphicsDevice.RenderManager.Translate(Vector2.Zero);
-
             scene.Render();
 
             scene.BeginEnumeration();

@@ -12,6 +12,7 @@ using GDIRectangle = System.Drawing.Rectangle;
 
 using Factory = SharpDX.Direct2D1.Factory;
 using DXColor = SharpDX.Color;
+using Device = SharpDX.Direct2D1.Device;
 
 namespace Xemio.GameLibrary.Rendering.SharpDX
 {
@@ -19,9 +20,13 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
     {
         #region Properties
         /// <summary>
+        /// Gets the device.
+        /// </summary>
+        public static Device Device { get; internal set; }
+        /// <summary>
         /// Gets the SharpDX render target.
         /// </summary>
-        public static RenderTarget RenderTarget { get; set; }
+        public static RenderTarget RenderTarget { get; internal set; }
         /// <summary>
         /// Gets the SharpDX Direct2D factory.
         /// </summary>
