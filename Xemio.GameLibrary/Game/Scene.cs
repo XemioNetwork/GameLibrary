@@ -22,7 +22,9 @@ namespace Xemio.GameLibrary.Game
         protected Scene()
         {
             this._scenes = new List<Scene>();
+
             this.Visible = true;
+            this.Paused = true;
         }
         #endregion
 
@@ -39,6 +41,10 @@ namespace Xemio.GameLibrary.Game
         /// Gets or sets a value indicating whether this <see cref="Scene"/> is visible.
         /// </summary>
         public bool Visible { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Scene"/> is paused.
+        /// </summary>
+        public bool Paused { get; set; }
         /// <summary>
         /// Gets the parent.
         /// </summary>

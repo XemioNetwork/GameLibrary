@@ -118,6 +118,7 @@ namespace Xemio.GameLibrary.Game
         /// <param name="elapsed">The elapsed.</param>
         private void Tick(Scene scene, float elapsed)
         {
+            if (scene.Paused) return;
             if (!scene.Visible) return;
             if (!scene.Loaded) scene.InternalLoadContent();
 
