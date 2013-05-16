@@ -21,6 +21,18 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="position">The position.</param>
         public static void Render(this IRenderManager renderManager, SpriteFont font, string value, Vector2 position)
         {
+            renderManager.Render(font, value, position, Color.White);
+        }
+        /// <summary>
+        /// Renders the specified text.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="font">The font.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="color">The color.</param>
+        public static void Render(this IRenderManager renderManager, SpriteFont font, string value, Vector2 position, Color color)
+        {
             string[] lines = value.Split('\n');
             Vector2 currentPosition = position;
 
@@ -59,18 +71,6 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                 currentPosition.X = position.X;
                 currentPosition += new Vector2(0, maximumHeight + font.Kerning + 2);
             }
-        }
-        /// <summary>
-        /// Renders the specified text.
-        /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        /// <param name="font">The font.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="position">The position.</param>
-        /// <param name="color">The color.</param>
-        public static void Render(this IRenderManager renderManager, SpriteFont font, string value, Vector2 position, Color color)
-        {
-            renderManager.Render(font, value, position, color);
         }
         #endregion
     }
