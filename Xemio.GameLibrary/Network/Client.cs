@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Network
             this.Subscribe(new TimeSyncPerception());
 
             this.Active = true;
-            this.PackageManager = new PackageManager(this.PackageAssembly);
+            this.PackageManager = new PackageManager();
 
             this.StartLoop();
             this.ProvideComponent();
@@ -65,13 +65,6 @@ namespace Xemio.GameLibrary.Network
         /// Gets the package manager.
         /// </summary>
         public PackageManager PackageManager { get; private set; }
-        /// <summary>
-        /// Gets the package assembly.
-        /// </summary>
-        public virtual Assembly PackageAssembly
-        {
-            get { return this.GetType().Assembly; }
-        }
         #endregion
 
         #region Methods

@@ -15,9 +15,9 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <summary>
         /// Initializes a new instance of the <see cref="PackageManager"/> class.
         /// </summary>
-        public PackageManager(Assembly assembly)
+        public PackageManager()
         {
-            this.Linker = new GenericLinker<int, Package>(assembly);
+            this.Linker = new GenericLinker<int, Package>();
             this.Linker.CreationType = CreationType.None;
         }
         #endregion

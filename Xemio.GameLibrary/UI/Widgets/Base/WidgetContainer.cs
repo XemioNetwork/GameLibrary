@@ -42,20 +42,22 @@ namespace Xemio.GameLibrary.UI.Widgets.Base
             WidgetView view = widget.View;
             WidgetGraphics graphics = new WidgetGraphics(widget);
 
-            if (view == null) return;
-
-            foreach (IWidgetViewInstruction item in view.Current.Instructions)
+            if (view != null)
             {
-                Rectangle bounds = item.Shape.Bounds;
 
-                item.Shape.Bounds = new Rectangle(
-                    bounds.X * widget.Bounds.Width,
-                    bounds.Y * widget.Bounds.Height,
-                    bounds.Width * widget.Bounds.Width,
-                    bounds.Height * widget.Bounds.Height);
+                foreach (IWidgetViewInstruction item in view.Current.Instructions)
+                {
+                    Rectangle bounds = item.Shape.Bounds;
 
-                item.Render(graphics);
-                item.Shape.Bounds = bounds;
+                    item.Shape.Bounds = new Rectangle(
+                        bounds.X*widget.Bounds.Width,
+                        bounds.Y*widget.Bounds.Height,
+                        bounds.Width*widget.Bounds.Width,
+                        bounds.Height*widget.Bounds.Height);
+
+                    item.Render(graphics);
+                    item.Shape.Bounds = bounds;
+                }
             }
 
             widget.Render();

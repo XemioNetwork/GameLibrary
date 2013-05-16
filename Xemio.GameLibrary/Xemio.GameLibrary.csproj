@@ -247,6 +247,8 @@
     <Compile Include="UI\Shapes\RectangleShape.cs" />
     <Compile Include="UI\Shapes\RoundedRectangleShape.cs" />
     <Compile Include="UI\Widgets\Button.cs" />
+    <Compile Include="UI\Widgets\ThemedSpriteSheet.cs" />
+    <Compile Include="UI\Widgets\ThemedWidget.cs" />
     <Compile Include="UI\Widgets\View\ViewStates\Button\ButtonStateHover.cs" />
     <Compile Include="UI\Widgets\View\ViewStates\Button\ButtonStateNormal.cs" />
     <Compile Include="UI\Widgets\View\ViewStates\Button\ButtonView.cs" />

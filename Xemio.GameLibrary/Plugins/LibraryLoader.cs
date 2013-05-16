@@ -19,8 +19,8 @@ namespace Xemio.GameLibrary.Plugins
             var initializers = from assembly in context.Assemblies
                                from type in assembly.GetTypes()
                                where
-                                   !type.IsAbstract && !type.IsGenericType &&
-                                   typeof (ILibraryInitializer).IsAssignableFrom(type)
+                                   !type.IsAbstract && !type.IsInterface && !type.IsGenericType &&
+                                   typeof(ILibraryInitializer).IsAssignableFrom(type)
                                select Activator.CreateInstance(type) as ILibraryInitializer;
 
             foreach (var initializer in initializers)
@@ -28,7 +28,6 @@ namespace Xemio.GameLibrary.Plugins
                 initializer.Initialize();
             }
         }
-
         #endregion
     }
 }

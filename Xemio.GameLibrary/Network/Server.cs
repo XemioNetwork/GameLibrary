@@ -30,7 +30,7 @@ namespace Xemio.GameLibrary.Network
             this.Protocol = protocol;
             this.Protocol.Server = this;
 
-            this.PackageManager = new PackageManager(this.PackageAssembly);
+            this.PackageManager = new PackageManager();
             this.Connections = new List<IConnection>();
 
             this._eventManager = XGL.GetComponent<EventManager>();
@@ -47,8 +47,8 @@ namespace Xemio.GameLibrary.Network
         #endregion
 
         #region Fields
-        private EventManager _eventManager;
-        private List<IActionSubscriber> _subscribers;
+        private readonly EventManager _eventManager;
+        private readonly List<IActionSubscriber> _subscribers;
         #endregion
 
         #region Properties
@@ -68,13 +68,6 @@ namespace Xemio.GameLibrary.Network
         /// Gets the connections.
         /// </summary>
         public List<IConnection> Connections { get; private set; }
-        /// <summary>
-        /// Gets the package assembly.
-        /// </summary>
-        public virtual Assembly PackageAssembly
-        {
-            get { return this.GetType().Assembly; }
-        }
         #endregion
 
         #region Methods
