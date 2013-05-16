@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Game
             this._scenes = new List<Scene>();
 
             this.Visible = true;
-            this.Paused = true;
+            this.Paused = false;
         }
         #endregion
 
