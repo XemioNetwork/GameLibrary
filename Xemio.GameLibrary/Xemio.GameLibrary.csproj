@@ -268,6 +268,7 @@
     <Folder Include="Content\Formats\" />
     <Folder Include="Entities\States\" />
     <Folder Include="Input\Bindings\" />
+    <Folder Include="Localization\" />
     <Folder Include="UI\CSS\Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

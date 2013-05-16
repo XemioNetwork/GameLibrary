@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         public string DisplayName
         {
-            get { return "GDIPlus"; }
+            get { return "GDI Plus"; }
         }
         /// <summary>
         /// Gets the graphics device.
@@ -60,8 +60,5 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         public IGeometryProvider Geometry { get; private set; }
         #endregion
-
-
-
     }
 }
