@@ -78,11 +78,54 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
 
             this.BufferGraphics = Graphics.FromImage(this._buffer);
             this.BufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-            this.BufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
+            this.BufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighQuality;
             this.BufferGraphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
             this.BufferGraphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
             this.BufferGraphics.Clear(Drawing.Color.Black);
+        }
+        /// <summary>
+        /// Sets the opacity.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        private void Tint(Rendering.Color color)
+        {
+            this._color = color;
+
+            if (color == Rendering.Color.White)
+            {
+                this.ResetTint();
+                return;
+            }
+
+            float a = color.A / 255.0f;
+            float r = color.R / 255.0f;
+            float g = color.G / 255.0f;
+            float b = color.B / 255.0f;
+
+            ColorMatrix matrix = new ColorMatrix(new[]
+            {
+                new[] { r, 0, 0, 0, 0 },
+                new[] { 0, g, 0, 0, 0 },
+                new[] { 0, 0, b, 0, 0 },
+                new[] { 0, 0, 0, a, 0 },
+                new[] { 0, 0, 0, 0, 1f }
+            });
+
+            this._attributes = new ImageAttributes();
+            this._attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+        }
+        /// <summary>
+        /// Resets the tint.
+        /// </summary>
+        private void ResetTint()
+        {
+            if (this._attributes != null)
+            {
+                this._attributes.ClearColorMatrix();
+            }
+
+            this._color = Rendering.Color.White;
         }
         #endregion
 
@@ -105,41 +148,6 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="rotation">The rotation.</param>
         public void Rotate(float rotation)
         {
-        }
-        /// <summary>
-        /// Sets the opacity.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        public void Tint(Rendering.Color color)
-        {
-            this._color = color;
-
-            if (color == Rendering.Color.White)
-            {
-                if (this._attributes != null)
-                {
-                    this._attributes.ClearColorMatrix();
-                }
-
-                return;
-            }
-
-            float a = color.A / 255.0f;
-            float r = color.R / 255.0f;
-            float g = color.G / 255.0f;
-            float b = color.B / 255.0f;
-
-            ColorMatrix matrix = new ColorMatrix(new []
-            {
-                new[] { r, 0, 0, 0, 0 },
-                new[] { 0, g, 0, 0, 0 },
-                new[] { 0, 0, b, 0, 0 },
-                new[] { 0, 0, 0, a, 0 },
-                new[] { 0, 0, 0, 0, 1f }
-            });
-
-            this._attributes = new ImageAttributes();
-            this._attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
         }
         /// <summary>
         /// Clears the screen.
@@ -181,10 +189,10 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="color">The color.</param>
         public void Render(ITexture texture, Vector2 position, Rendering.Color color)
         {
-            this.Tint(color);
-            this.Render(texture, position);
-
-            this.Tint(Rendering.Color.White);
+            this.Render(
+                texture,
+                new Rectangle(position.X, position.Y, texture.Width, texture.Height),
+                new Rectangle(0, 0, texture.Width, texture.Height), color);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -194,10 +202,17 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// <param name="color"></param>
         public void Render(ITexture texture, Rectangle destination, Rendering.Color color)
         {
-            this.Tint(color);
-            this.Render(texture, destination);
-
-            this.Tint(Rendering.Color.White);
+            this.Render(texture, destination, new Rectangle(0, 0, texture.Width, texture.Height), color);
+        }
+        /// <summary>
+        /// Renders the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="origin">The origin.</param>
+        public void Render(ITexture texture, Rectangle destination, Rectangle origin)
+        {
+            this.Render(texture, destination, Rendering.Color.White);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -209,18 +224,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         public void Render(ITexture texture, Rectangle destination, Rectangle origin, Rendering.Color color)
         {
             this.Tint(color);
-            this.Render(texture, destination, origin);
 
-            this.Tint(Rendering.Color.White);
-        }
-        /// <summary>
-        /// Renders the specified texture.
-        /// </summary>
-        /// <param name="texture">The texture.</param>
-        /// <param name="destination">The destination.</param>
-        /// <param name="origin">The origin.</param>
-        public void Render(ITexture texture, Rectangle destination, Rectangle origin)
-        {
             GDITexture gdiTexture = texture as GDITexture;
             Control surface = Control.FromHandle(this.GraphicsDevice.Handle);
 
@@ -231,29 +235,30 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 throw new InvalidOperationException("The rendered texture has to be an instance of the GDITexture class.");
             }
 
-            if (this._color != Xemio.GameLibrary.Rendering.Color.White)
+            int x = (int)destination.X + (int)this.ScreenOffset.X;
+            int y = (int)destination.Y + (int)this.ScreenOffset.Y;
+            int w = (int)destination.Width;
+            int h = (int)destination.Height;
+
+            if (this._color != Rendering.Color.White)
             {
                 this.BufferGraphics.DrawImage(
                     gdiTexture.Bitmap,
-                    new Drawing.Rectangle(
-                        (int)destination.X + (int)this.ScreenOffset.X,
-                        (int)destination.Y + (int)this.ScreenOffset.Y,
-                        (int)destination.Width,
-                        (int)destination.Height),
-                    0, 0, destination.Width, destination.Height, GraphicsUnit.Pixel,
+                    new Drawing.Rectangle(x, y, w, h),
+                    origin.X, origin.Y, origin.Width, origin.Height, GraphicsUnit.Pixel,
                     this._attributes);
             }
             else
             {
                 this.BufferGraphics.DrawImage(
-                    gdiTexture.Bitmap,
-                    (int)destination.X + (int)this.ScreenOffset.X,
-                    (int)destination.Y + (int)this.ScreenOffset.Y,
-                    (int)destination.Width,
-                    (int)destination.Height);
+                    gdiTexture.Bitmap, 
+                    new Drawing.Rectangle(x, y, w, h),
+                    GDIHelper.Convert(origin),
+                    GraphicsUnit.Pixel);
             }
 
             this.BufferGraphics.ResetTransform();
+            this.ResetTint();
         }
         /// <summary>
         /// Presents this instance.

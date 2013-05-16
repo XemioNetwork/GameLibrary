@@ -57,7 +57,8 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                             currentPosition.X,
                             currentPosition.Y,
                             texture.Width,
-                            texture.Height));
+                            texture.Height),
+                        color);
 
                     currentPosition.X += texture.Width + font.Kerning;
                     currentPosition.X += character == ' ' ? font.Spacing : 0;
