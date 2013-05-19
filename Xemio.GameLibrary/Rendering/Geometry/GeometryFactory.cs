@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Xemio.GameLibrary.Common;
+﻿using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Rendering.Geometry
 {
@@ -51,10 +47,9 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// </summary>
         /// <param name="top">The top.</param>
         /// <param name="bottom">The bottom.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="angle">The angle.</param>
-        public virtual IBrush CreateGradient(Color top, Color bottom, int width, int height, float angle)
+        /// <param name="from">First point.</param>
+        /// <param name="to">Second point.</param>
+        public virtual IBrush CreateGradient(Color top, Color bottom, Vector2 from, Vector2 to)
         {
             return null;
         }
