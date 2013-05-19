@@ -25,10 +25,7 @@ namespace Xemio.GameLibrary.Common
                 types.Add(currentType);
             }
 
-            foreach (Type interfaceType in type.GetInterfaces())
-            {
-                types.Add(interfaceType);
-            }
+            types.AddRange(type.GetInterfaces());
 
             return types.ToArray();
         }
