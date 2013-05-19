@@ -10,7 +10,7 @@ namespace Xemio.GameLibrary.UI.CSS.Expressions
         /// <summary>
         /// Gets the identifier for the current instance.
         /// </summary>
-        public string Identifier
+        public string Id
         {
             get { return "IdExpression"; }
         }

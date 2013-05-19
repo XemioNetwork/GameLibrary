@@ -47,7 +47,7 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Gets the identifier.
         /// </summary>
-        public Type Identifier
+        public Type Id
         {
             get { return typeof(T); }
         }

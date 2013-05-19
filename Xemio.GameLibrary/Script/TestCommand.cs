@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Script
         /// <summary>
         /// Gets the identifier for the current instance.
         /// </summary>
-        public string Identifier
+        public string Id
         {
             get { return "Test"; }
         }

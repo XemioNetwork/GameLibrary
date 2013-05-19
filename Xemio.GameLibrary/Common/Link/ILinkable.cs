@@ -11,7 +11,7 @@ namespace Xemio.GameLibrary.Common.Link
         /// <summary>
         /// Gets the identifier for the current instance.
         /// </summary>
-        T Identifier { get; }
+        T Id { get; }
     }
     public interface ILinkable : ILinkable<int>
     {

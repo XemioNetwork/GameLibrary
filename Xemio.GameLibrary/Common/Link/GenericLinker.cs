@@ -90,7 +90,7 @@ namespace Xemio.GameLibrary.Common.Link
         {
             foreach (TValue value in values)
             {
-                this.Add(value.Identifier, value);
+                this.Add(value.Id, value);
             }
         }
         /// <summary>
@@ -108,7 +108,7 @@ namespace Xemio.GameLibrary.Common.Link
                     if (!type.ContainsGenericParameters && !type.IsAbstract)
                     {
                         TValue instance = (TValue)Activator.CreateInstance(type);
-                        this.Add(instance.Identifier, instance);
+                        this.Add(instance.Id, instance);
                     }
                 }
             }

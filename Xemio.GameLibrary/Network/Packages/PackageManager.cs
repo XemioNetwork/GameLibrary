@@ -37,7 +37,7 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <param name="writer">The writer.</param>
         public void Serialize(Package package, BinaryWriter writer)
         {
-            writer.Write(package.Identifier);
+            writer.Write(package.Id);
             writer.WriteInstance(package);
         }
         /// <summary>

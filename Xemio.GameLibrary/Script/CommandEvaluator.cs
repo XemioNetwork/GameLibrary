@@ -43,13 +43,13 @@ namespace Xemio.GameLibrary.Script
 
             foreach (ICommand command in this.Commands)
             {
-                int length = command.Identifier.Length;
+                int length = command.Id.Length;
                 List<int> indices = new List<int>();
 
                 for (int i = 0; i < source.Length - length; i++)
                 {
                     string current = source.Substring(i, length);
-                    if (current == command.Identifier)
+                    if (current == command.Id)
                     {
                         int openBracket = i + length;
 

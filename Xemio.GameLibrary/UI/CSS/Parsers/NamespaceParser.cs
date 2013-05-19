@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary.UI.CSS.Parsers
                     this.ValidateTypeInstance(typeInstance, expression);
 
                     object stateEnum = Enum.Parse(typeof(WidgetState), state);
-                    IExpression instance = linker.Resolve(typeInstance.Identifier);
+                    IExpression instance = linker.Resolve(typeInstance.Id);
 
                     instance.State = (WidgetState)stateEnum;
                     instance.Parse(expressionName);

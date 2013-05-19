@@ -91,7 +91,7 @@ namespace Xemio.GameLibrary.Components
             if (component is IValueProvider)
             {
                 IValueProvider valueProvider = component as IValueProvider;
-                this._valueMappings.Add(valueProvider.Identifier, valueProvider);
+                this._valueMappings.Add(valueProvider.Id, valueProvider);
             }
 
             this._componentMappings.Add(component.GetType(), component);
@@ -114,7 +114,7 @@ namespace Xemio.GameLibrary.Components
             if (component is IValueProvider)
             {
                 IValueProvider valueProvider = component as IValueProvider;
-                this._valueMappings.Remove(valueProvider.Identifier);
+                this._valueMappings.Remove(valueProvider.Id);
             }
 
             this._componentMappings.Remove(component.GetType());
