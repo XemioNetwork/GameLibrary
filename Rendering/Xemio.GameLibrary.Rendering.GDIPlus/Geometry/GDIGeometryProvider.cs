@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Drawing.Drawing2D;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Math;
 
@@ -56,7 +57,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// <param name="radius">The radius.</param>
         public void DrawRoundedRectangle(Color color, Rectangle rectangle, float radius)
         {
-            throw new NotImplementedException();
+            this.DrawRoundedRectangle(this.Factory.CreatePen(color), rectangle, radius);
         }
         /// <summary>
         /// Draws the rounded rectangle.
@@ -66,7 +67,37 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// <param name="radius">The radius.</param>
         public void DrawRoundedRectangle(IPen pen, Rectangle rectangle, float radius)
         {
-            throw new NotImplementedException();
+            GDIPen gdiPen = pen as GDIPen;
+
+            this._renderManager.BufferGraphics.DrawPath(
+                gdiPen.GetNativePen(), this.PrepareRoundedRectanglePath(rectangle, radius));
+        }
+        /// <summary>
+        /// Prepares a GraphicsPath for the rounded rectangle
+        /// </summary>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <param name="radius">The corner radius.</param>
+        /// <returns></returns>
+        private GraphicsPath PrepareRoundedRectanglePath(Rectangle rectangle, float radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+
+            if (radius <= 0.0f)
+            {
+                path.AddRectangle(new System.Drawing.RectangleF(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height));
+                path.CloseFigure();
+
+                return path;
+            }
+
+            path.AddArc(rectangle.X - 1, rectangle.Y - 1, radius * 2, radius * 2, -180, 90);
+            path.AddArc(rectangle.X + rectangle.Width - radius * 2, rectangle.Y - 1, radius * 2, radius * 2, -90, 90);
+            path.AddArc(rectangle.X + rectangle.Width - radius * 2, rectangle.Y + rectangle.Height - radius * 2, radius * 2, radius * 2, 0, 90);
+            path.AddArc(rectangle.X - 1, rectangle.Y + rectangle.Height - radius * 2, radius * 2, radius * 2, 90, 90);
+
+            path.CloseFigure();
+
+            return path;
         }
         /// <summary>
         /// Draws a line.
@@ -252,7 +283,10 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// <param name="rectangle">The rectangle.</param>
         public void FillRoundedRectangle(IBrush brush, Rectangle rectangle, float radius)
         {
-            throw new NotImplementedException();
+            GDIBrush gdiBrush = brush as GDIBrush;
+
+            this._renderManager.BufferGraphics.FillPath(
+                gdiBrush.GetNativeBrush(), this.PrepareRoundedRectanglePath(rectangle, radius));
         }
         /// <summary>
         /// Fills a polygon.
