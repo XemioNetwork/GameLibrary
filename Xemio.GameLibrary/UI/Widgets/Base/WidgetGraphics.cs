@@ -48,6 +48,13 @@ namespace Xemio.GameLibrary.UI.Widgets.Base
             get { return XGL.GetComponent<GraphicsDevice>(); }
         }
         /// <summary>
+        /// Gets the back buffer.
+        /// </summary>
+        public IRenderTarget BackBuffer
+        {
+            get { return this.RenderManager.BackBuffer; }
+        }
+        /// <summary>
         /// Clears the screen.
         /// </summary>
         /// <param name="color">The color.</param>

@@ -100,9 +100,22 @@ namespace Xemio.GameLibrary.Rendering
             }
         }
         /// <summary>
+        /// Gets the current render target.
+        /// </summary>
+        public IRenderTarget RenderTarget
+        {
+            get
+            {
+                if (this.Targets.Count > 0)
+                    return this.Targets.First();
+
+                return this.RenderManager.BackBuffer;
+            }
+        }
+        /// <summary>
         /// Gets the render target stack.
         /// </summary>
-        internal Stack<IRenderTarget> Targets { get; private set; } 
+        internal Stack<IRenderTarget> Targets { get; private set; }
         #endregion
 
         #region Events

@@ -39,24 +39,27 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         #endregion
 
         #region Fields
-        private Bitmap _buffer;
-
         private Xemio.GameLibrary.Rendering.Color _color;
         private ImageAttributes _attributes;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the buffer.
-        /// </summary>
-        public Bitmap Buffer
-        {
-            get { return this._buffer; }
-        }
-        /// <summary>
         /// Gets the buffer graphics.
         /// </summary>
-        public Graphics BufferGraphics { get; private set; }
+        public Graphics Graphics
+        {
+            get
+            {
+                var renderTarget = this.GraphicsDevice.RenderTarget as GDIRenderTarget;
+                if (renderTarget == null)
+                {
+                    throw new InvalidOperationException("No active GDI render target as back buffer.");
+                }
+
+                return renderTarget.Graphics;
+            }
+        }
         /// <summary>
         /// Gets the offset.
         /// </summary>
@@ -69,20 +72,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         private void InitializeBuffer(DisplayMode mode)
         {
-            int width = mode.Width;
-            int height = mode.Height;
-
-            PixelFormat pixelFormat = PixelFormat.Format32bppPArgb;
-
-            this._buffer = new Bitmap(width, height, pixelFormat);
-
-            this.BufferGraphics = Graphics.FromImage(this._buffer);
-            this.BufferGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-            this.BufferGraphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighQuality;
-            this.BufferGraphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
-            this.BufferGraphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
-
-            this.BufferGraphics.Clear(Drawing.Color.Black);
+            this.BackBuffer = new GDIRenderTarget(mode.Width, mode.Height);
         }
         /// <summary>
         /// Sets the opacity.
@@ -135,6 +125,10 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         /// </summary>
         public GraphicsDevice GraphicsDevice { get; private set; }
         /// <summary>
+        /// Gets the back buffer.
+        /// </summary>
+        public IRenderTarget BackBuffer { get; private set; }
+        /// <summary>
         /// Offsets the screen.
         /// </summary>
         /// <param name="offset">The offset.</param>
@@ -161,7 +155,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 color.G, 
                 color.B);
 
-            this.BufferGraphics.Clear(drawingColor);
+            this.Graphics.Clear(drawingColor);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -242,7 +236,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
 
             if (this._color != Rendering.Color.White)
             {
-                this.BufferGraphics.DrawImage(
+                this.Graphics.DrawImage(
                     gdiTexture.Bitmap,
                     new Drawing.Rectangle(x, y, w, h),
                     origin.X, origin.Y, origin.Width, origin.Height, GraphicsUnit.Pixel,
@@ -250,14 +244,14 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             }
             else
             {
-                this.BufferGraphics.DrawImage(
+                this.Graphics.DrawImage(
                     gdiTexture.Bitmap, 
                     new Drawing.Rectangle(x, y, w, h),
                     GDIHelper.Convert(origin),
                     GraphicsUnit.Pixel);
             }
 
-            this.BufferGraphics.ResetTransform();
+            this.Graphics.ResetTransform();
             this.ResetTint();
         }
         /// <summary>
@@ -299,7 +293,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
             }
 
             this.ScreenOffset = Vector2.Zero;
-            this.BufferGraphics.Clear(Drawing.Color.Black);
+            this.Graphics.Clear(Drawing.Color.Black);
         }
         #endregion
 

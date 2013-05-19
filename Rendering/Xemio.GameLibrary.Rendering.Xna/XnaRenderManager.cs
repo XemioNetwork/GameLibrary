@@ -87,6 +87,13 @@ namespace Xemio.GameLibrary.Rendering.Xna
             get { return this.GraphicsProvider.GraphicsDevice; }
         }
         /// <summary>
+        /// Gets the back buffer.
+        /// </summary>
+        public IRenderTarget BackBuffer
+        {
+            get { return null; }
+        }
+        /// <summary>
         /// Clears the screen.
         /// </summary>
         /// <param name="color">The color.</param>

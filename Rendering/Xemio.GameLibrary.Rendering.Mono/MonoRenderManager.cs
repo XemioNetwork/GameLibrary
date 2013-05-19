@@ -40,7 +40,6 @@ namespace Xemio.GameLibrary.Rendering.Mono
         #endregion
 
         #region Fields
-        private Bitmap _buffer;
         private bool _initializedPaint;
 
         private Xemio.GameLibrary.Rendering.Color _color;
@@ -51,7 +50,19 @@ namespace Xemio.GameLibrary.Rendering.Mono
         /// <summary>
         /// Gets the buffer graphics.
         /// </summary>
-        public Graphics Graphics { get; private set; }
+        public Graphics Graphics
+        {
+            get
+            {
+                var renderTarget = this.GraphicsDevice.RenderTarget as MonoRenderTarget;
+                if (renderTarget == null)
+                {
+                    throw new InvalidOperationException("No active mono render target.");
+                }
+
+                return renderTarget.Graphics;
+            }
+        }
         /// <summary>
         /// Gets the offset.
         /// </summary>
@@ -64,18 +75,7 @@ namespace Xemio.GameLibrary.Rendering.Mono
         /// </summary>
         private void InitializeBuffer(DisplayMode mode)
         {
-            int width = mode.Width;
-            int height = mode.Height;
-
-            this._buffer = new Bitmap(width, height);
-
-            this.Graphics = Graphics.FromImage(this._buffer);
-            this.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-            this.Graphics.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighSpeed;
-            this.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
-            this.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
-
-            this.Graphics.Clear(Drawing.Color.Black);
+            this.BackBuffer = new MonoRenderTarget(mode.Width, mode.Height);
         }
         #endregion
 
@@ -84,6 +84,10 @@ namespace Xemio.GameLibrary.Rendering.Mono
         /// Gets the graphics device.
         /// </summary>
         public GraphicsDevice GraphicsDevice { get; private set; }
+        /// <summary>
+        /// Gets the back buffer.
+        /// </summary>
+        public IRenderTarget BackBuffer { get; private set; }
         /// <summary>
         /// Offsets the screen.
         /// </summary>
@@ -293,8 +297,11 @@ namespace Xemio.GameLibrary.Rendering.Mono
             e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.None;
             e.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
+            var backBuffer = this.BackBuffer as MonoRenderTarget;
+            var image = backBuffer.Bitmap;
+
             e.Graphics.DrawImage(
-                this._buffer, 0, 0, screenWidth, screenHeight);
+                image, 0, 0, screenWidth, screenHeight);
 
             this.ScreenOffset = Vector2.Zero;
         }

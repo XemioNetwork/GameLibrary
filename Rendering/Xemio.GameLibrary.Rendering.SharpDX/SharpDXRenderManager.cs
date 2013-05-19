@@ -46,6 +46,13 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
             get { return this.GraphicsProvider.GraphicsDevice; }
         }
         /// <summary>
+        /// Gets the back buffer.
+        /// </summary>
+        public IRenderTarget BackBuffer
+        {
+            get { return null; }
+        }
+        /// <summary>
         /// Gets the graphics provider.
         /// </summary>
         public IGraphicsProvider GraphicsProvider { get; private set; }

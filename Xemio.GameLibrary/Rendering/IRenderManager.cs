@@ -15,6 +15,10 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         GraphicsDevice GraphicsDevice { get; }
         /// <summary>
+        /// Gets the back buffer.
+        /// </summary>
+        IRenderTarget BackBuffer { get; }
+        /// <summary>
         /// Clears the screen.
         /// </summary>
         /// <param name="color">The color.</param>

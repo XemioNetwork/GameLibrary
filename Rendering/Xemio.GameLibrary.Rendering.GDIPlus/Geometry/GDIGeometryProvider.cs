@@ -46,7 +46,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIPen gdiPen = pen as GDIPen;
 
-            this._renderManager.BufferGraphics.DrawRectangle(
+            this._renderManager.Graphics.DrawRectangle(
                 gdiPen.GetNativePen(), GDIHelper.Convert(rectangle + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -69,7 +69,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIPen gdiPen = pen as GDIPen;
 
-            this._renderManager.BufferGraphics.DrawPath(
+            this._renderManager.Graphics.DrawPath(
                 gdiPen.GetNativePen(), this.PrepareRoundedRectanglePath(rectangle, radius));
         }
         /// <summary>
@@ -122,7 +122,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
             start += Vector2.Truncate(this._renderManager.ScreenOffset);
             end += Vector2.Truncate(this._renderManager.ScreenOffset);
 
-            this._renderManager.BufferGraphics.DrawLine(
+            this._renderManager.Graphics.DrawLine(
                 gdiPen.GetNativePen(), start.X, start.Y, end.X, end.Y);
         }
         /// <summary>
@@ -143,7 +143,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIPen gdiPen = pen as GDIPen;
 
-            this._renderManager.BufferGraphics.DrawPolygon(
+            this._renderManager.Graphics.DrawPolygon(
                 gdiPen.GetNativePen(), GDIHelper.Convert(points, Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -164,7 +164,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIPen gdiPen = pen as GDIPen;
 
-            this._renderManager.BufferGraphics.DrawEllipse(
+            this._renderManager.Graphics.DrawEllipse(
                 gdiPen.GetNativePen(), GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -209,7 +209,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIPen gdiPen = pen as GDIPen;
 
-            this._renderManager.BufferGraphics.DrawArc(
+            this._renderManager.Graphics.DrawArc(
                 gdiPen.GetNativePen(),
                 GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle, 
@@ -237,7 +237,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIPen gdiPen = pen as GDIPen;
 
-            this._renderManager.BufferGraphics.DrawPie(
+            this._renderManager.Graphics.DrawPie(
                 gdiPen.GetNativePen(),
                 GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle, 
@@ -261,7 +261,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIPen gdiPen = pen as GDIPen;
 
-            this._renderManager.BufferGraphics.DrawCurve(
+            this._renderManager.Graphics.DrawCurve(
                 gdiPen.GetNativePen(), GDIHelper.Convert(points, Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -273,7 +273,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIBrush gdiBrush = brush as GDIBrush;
 
-            this._renderManager.BufferGraphics.FillRectangle(
+            this._renderManager.Graphics.FillRectangle(
                 gdiBrush.GetNativeBrush(), GDIHelper.Convert(rectangle + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -285,7 +285,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIBrush gdiBrush = brush as GDIBrush;
 
-            this._renderManager.BufferGraphics.FillPath(
+            this._renderManager.Graphics.FillPath(
                 gdiBrush.GetNativeBrush(), this.PrepareRoundedRectanglePath(rectangle, radius));
         }
         /// <summary>
@@ -297,7 +297,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIBrush gdiBrush = brush as GDIBrush;
 
-            this._renderManager.BufferGraphics.FillPolygon(
+            this._renderManager.Graphics.FillPolygon(
                 gdiBrush.GetNativeBrush(), GDIHelper.Convert(points, Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -309,7 +309,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIBrush gdiBrush = brush as GDIBrush;
 
-            this._renderManager.BufferGraphics.FillEllipse(
+            this._renderManager.Graphics.FillEllipse(
                 gdiBrush.GetNativeBrush(), GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)));
         }
         /// <summary>
@@ -344,7 +344,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         {
             GDIBrush gdiBrush = brush as GDIBrush;
 
-            this._renderManager.BufferGraphics.FillPie(
+            this._renderManager.Graphics.FillPie(
                 gdiBrush.GetNativeBrush(),
                 GDIHelper.Convert(region + Vector2.Truncate(this._renderManager.ScreenOffset)),
                 startAngle,
