@@ -67,18 +67,17 @@ namespace Xemio.GameLibrary.Rendering.Mono.Geometry
         /// </summary>
         /// <param name="top">The top.</param>
         /// <param name="bottom">The bottom.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="angle">The angle in radians.</param>
+        /// <param name="from">First point.</param>
+        /// <param name="to">Second point.</param>
         /// <returns></returns>
-        public IBrush CreateGradient(Color top, Color bottom, int width, int height, float angle)
+        public IBrush CreateGradient(Color top, Color bottom, Vector2 from, Vector2 to)
         {
             return new MonoBrush(
                 new LinearGradientBrush(
-                    new Rectangle(0, 0, width, height),
+                    new PointF(from.X, from.Y),
+                    new PointF(to.X, to.Y),
                     MonoHelper.Convert(top),
-                    MonoHelper.Convert(bottom),
-                    MathHelper.ToDegrees(angle)));
+                    MonoHelper.Convert(bottom)));
         }
         /// <summary>
         /// Creates a texture brush.
