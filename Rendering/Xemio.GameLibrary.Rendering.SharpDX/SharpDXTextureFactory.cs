@@ -110,6 +110,15 @@ namespace Xemio.GameLibrary.Rendering.SharpDX
         {
             return new SharpDXTexture(this.LoadFromStream(stream));
         }
+        /// <summary>
+        /// Creates a render target.
+        /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        public IRenderTarget CreateRenderTarget(int width, int height)
+        {
+            throw new System.NotImplementedException();
+        }
         #endregion
     }
 }

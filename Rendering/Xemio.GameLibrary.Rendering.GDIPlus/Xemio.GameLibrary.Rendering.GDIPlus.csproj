@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GDIGraphicsInitializer.cs" />
+    <Compile Include="GDIRenderTarget.cs" />
     <Compile Include="Geometry\GDIBrush.cs" />
     <Compile Include="Geometry\GDIGeometryFactory.cs" />
     <Compile Include="Geometry\GDIGeometryProvider.cs" />

@@ -64,7 +64,7 @@ namespace Xemio.GameLibrary
             if (graphicsInitializer.IsAvailable())
             {
                 graphicsDevice.Graphics = graphicsInitializer.CreateProvider(graphicsDevice);
-                graphicsDevice.SetDisplayMode(width, height);
+                graphicsDevice.DisplayMode = new DisplayMode(width, height);
             }
         }
         /// <summary>

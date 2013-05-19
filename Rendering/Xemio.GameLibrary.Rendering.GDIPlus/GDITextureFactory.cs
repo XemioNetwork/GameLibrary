@@ -84,6 +84,15 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         {
             return this.CreateTexture(new MemoryStream(data));
         }
+        /// <summary>
+        /// Creates a render target.
+        /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        public IRenderTarget CreateRenderTarget(int width, int height)
+        {
+            return new GDIRenderTarget(width, height);
+        }
         #endregion
     }
 }

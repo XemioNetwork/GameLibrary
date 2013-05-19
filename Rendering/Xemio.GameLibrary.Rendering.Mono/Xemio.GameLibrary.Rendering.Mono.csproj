@@ -46,6 +46,7 @@
     <Compile Include="MonoGraphicsProvider.cs" />
     <Compile Include="MonoHelper.cs" />
     <Compile Include="MonoRenderManager.cs" />
+    <Compile Include="MonoRenderTarget.cs" />
     <Compile Include="MonoTexture.cs" />
     <Compile Include="MonoTextureFactory.cs" />
     <Compile Include="Geometry\MonoBrush.cs" />

@@ -19,9 +19,14 @@ namespace Xemio.GameLibrary.Rendering
         public GraphicsDevice(IntPtr handle)
         {
             this.Handle = handle;
+            this.Targets = new Stack<IRenderTarget>();
         }
         #endregion
-        
+
+        #region Fields
+        private DisplayMode _displayMode;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets or sets the handle.
@@ -82,7 +87,22 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Gets the display mode.
         /// </summary>
-        public DisplayMode DisplayMode { get; private set; }
+        public DisplayMode DisplayMode
+        {
+            get { return this._displayMode; }
+            set
+            {
+                this._displayMode = value;
+                if (this.ResolutionChanged != null)
+                {
+                    this.ResolutionChanged(this, EventArgs.Empty);
+                }
+            }
+        }
+        /// <summary>
+        /// Gets the render target stack.
+        /// </summary>
+        internal Stack<IRenderTarget> Targets { get; private set; } 
         #endregion
 
         #region Events
@@ -102,24 +122,20 @@ namespace Xemio.GameLibrary.Rendering
             this.Graphics.RenderManager.Clear(color);
         }
         /// <summary>
+        /// Renders to the specified render target.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        public IDisposable RenderTo(IRenderTarget target)
+        {
+            this.Targets.Push(target);
+            return new RenderTargetDisposer(this);
+        }
+        /// <summary>
         /// Presents all drawn data.
         /// </summary>
         public void Present()
         {
             this.Graphics.RenderManager.Present();
-        }
-        /// <summary>
-        /// Sets the display mode.
-        /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        public void SetDisplayMode(int width, int height)
-        {
-            this.DisplayMode = new DisplayMode(width, height);
-            if (this.ResolutionChanged != null)
-            {
-                this.ResolutionChanged(this, EventArgs.Empty);
-            }
         }
         #endregion
 
@@ -129,10 +145,20 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public void Construct()
         {
-            ComponentManager.Instance.Add(new ValueProvider<ITextureFactory>(this.TextureFactory));
-            ComponentManager.Instance.Add(new ValueProvider<IRenderManager>(this.RenderManager));
+            ComponentManager.Instance.Add(
+                new ValueProvider<ITextureFactory>(this.TextureFactory));
 
-            ComponentManager.Instance.Add(new ValueProvider<IGraphicsProvider>(this.Graphics));
+            ComponentManager.Instance.Add(
+                new ValueProvider<IRenderManager>(this.RenderManager));
+
+            ComponentManager.Instance.Add(
+                new ValueProvider<IGeometryProvider>(this.Geometry));
+
+            ComponentManager.Instance.Add(
+                new ValueProvider<IGeometryFactory>(this.Geometry.Factory));
+
+            ComponentManager.Instance.Add(
+                new ValueProvider<IGraphicsProvider>(this.Graphics));
         }
         #endregion
     }

@@ -31,5 +31,11 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="data">The binary texture data.</param>
         ITexture CreateTexture(byte[] data);
+        /// <summary>
+        /// Creates a render target.
+        /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        IRenderTarget CreateRenderTarget(int width, int height);
     }
 }

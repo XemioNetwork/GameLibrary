@@ -42,7 +42,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
         #region Properties
         /// <summary>
-        /// Gets or sets the kerning.
+        /// Gets or sets the space between 2 characters.
         /// </summary>
         public int Kerning { get; set; }
         /// <summary>
