@@ -268,18 +268,21 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 
                 Drawing.Graphics graphics = surface.CreateGraphics();
 
-                IntPtr hDC = graphics.GetHdc();
-                IntPtr hMemDC = GDIHelper.CreateCompatibleDC(hDC);
-                IntPtr bufferDC = this._buffer.GetHbitmap();
+                var backBuffer = this.BackBuffer as GDIRenderTarget;
+                var bitmap = backBuffer.Bitmap;
 
-                GDIHelper.SelectObject(hMemDC, bufferDC);
+                IntPtr hdc = graphics.GetHdc();
+                IntPtr compatibleDC = GDIHelper.CreateCompatibleDC(hdc);
+                IntPtr bufferDC = bitmap.GetHbitmap();
+
+                GDIHelper.SelectObject(compatibleDC, bufferDC);
 
                 GDIHelper.StretchBlt
                 (
-                    hDC, 0, 0,
+                    hdc, 0, 0,
                     screenWidth,
                     screenHeight,
-                    hMemDC,
+                    compatibleDC,
                     0, 0,
                     this.GraphicsDevice.DisplayMode.Width, 
                     this.GraphicsDevice.DisplayMode.Height,
@@ -287,9 +290,9 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
                 );
 
                 GDIHelper.DeleteObject(bufferDC);
-                GDIHelper.DeleteObject(hMemDC);
+                GDIHelper.DeleteObject(compatibleDC);
 
-                graphics.ReleaseHdc(hDC);
+                graphics.ReleaseHdc(hdc);
             }
 
             this.ScreenOffset = Vector2.Zero;
