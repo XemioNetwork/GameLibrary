@@ -31,21 +31,20 @@ namespace Xemio.GameLibrary.Rendering.SharpDX.Geometry
         /// <summary>
         /// Create a new gradient brush.
         /// </summary>
-        /// <param name="top"></param>
-        /// <param name="bottom"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="angle">Not supported.</param>
+        /// <param name="top">Top color.</param>
+        /// <param name="bottom">Bottom color.</param>
+        /// <param name="from">First point.</param>
+        /// <param name="to">Second point.</param>
         /// <returns></returns>
-        public IBrush CreateGradient(Color top, Color bottom, int width, int height, float angle)
+        public IBrush CreateGradient(Color top, Color bottom, Vector2 from, Vector2 to)
         {
             /// Brush properties
             LinearGradientBrushProperties properties = new LinearGradientBrushProperties()
             {
                 StartPoint =
-                    SharpDXHelper.CreateDrawingPoint(new Vector2(0, 0)),
+                    SharpDXHelper.CreateDrawingPoint(from),
                 EndPoint =
-                    SharpDXHelper.CreateDrawingPoint(new Vector2(width, height))
+                    SharpDXHelper.CreateDrawingPoint(to)
             };
 
             // Gradient stop
@@ -70,7 +69,8 @@ namespace Xemio.GameLibrary.Rendering.SharpDX.Geometry
                     SharpDXHelper.RenderTarget,
                     properties,
                     stopCollection),
-                height, width);
+                    (int)(to.Y - from.Y),
+                    (int)(to.X - from.X));
         }
         /// <summary>
         /// Create a new solid brush

@@ -427,17 +427,17 @@ namespace Xemio.GameLibrary.UI.Widgets.Base
         {
             return this.Factory.CreateSolid(color);
         }
+
         /// <summary>
         /// Creates a gradient brush.
         /// </summary>
         /// <param name="top">The top.</param>
         /// <param name="bottom">The bottom.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="angle">The angle in radians.</param>
-        public IBrush CreateGradient(Color top, Color bottom, int width, int height, float angle)
+        /// <param name="from">First point.</param>
+        /// <param name="to">Second point.</param>
+        public IBrush CreateGradient(Color top, Color bottom, Vector2 from, Vector2 to)
         {
-            return this.Factory.CreateGradient(top, bottom, width, height, angle);
+            return this.Factory.CreateGradient(top, bottom, from, to);
         }
         /// <summary>
         /// Creates a texture brush.
