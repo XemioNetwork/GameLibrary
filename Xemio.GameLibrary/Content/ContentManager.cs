@@ -48,11 +48,18 @@ namespace Xemio.GameLibrary.Content
 
         #region Methods
         /// <summary>
+        /// Gets the reader for the specified type.
+        /// </summary>
+        public IContentReader GetReader<T>()
+        {
+            return this.GetReader(typeof (T));
+        }
+        /// <summary>
         /// Gets the content reader for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        protected IContentReader GetReader(Type type)
+        public IContentReader GetReader(Type type)
         {
             Type[] baseTypes = TypeHelper.GetBaseTypes(type);
             foreach (Type baseType in baseTypes)
@@ -71,11 +78,18 @@ namespace Xemio.GameLibrary.Content
             throw new InvalidOperationException(message);
         }
         /// <summary>
+        /// Gets the writer for the specified type.
+        /// </summary>
+        public IContentWriter GetWriter<T>()
+        {
+            return this.GetWriter(typeof (T));
+        }
+        /// <summary>
         /// Gets the content writer for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        protected IContentWriter GetWriter(Type type)
+        public IContentWriter GetWriter(Type type)
         {
             Type[] baseTypes = TypeHelper.GetBaseTypes(type);
             foreach (Type baseType in baseTypes)

@@ -40,7 +40,7 @@ namespace Xemio.GameLibrary.Entities.Network.Perceptions
             Type type = Type.GetType(package.TypeName);
 
             EntityFactory factory = this.Environment.Factory;
-            Entity entity = factory.CreateLocalEntity(type, package.ID);
+            Entity entity = factory.CreateEntity(type, package.EntityId);
 
             this.Environment.Add(entity);
         }

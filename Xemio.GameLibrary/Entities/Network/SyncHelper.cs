@@ -39,8 +39,8 @@ namespace Xemio.GameLibrary.Entities.Network
                 writer.Write(entity.Containers.Count);
                 foreach (EntityDataContainer container in entity.Containers)
                 {
-                    writer.Write(container.ID);
-                    container.Storage.Save(stream, Properties.Changes);
+                    writer.Write(container.Id);
+                    container.Storage.Save(stream, comparator);
                 }
             }
         }

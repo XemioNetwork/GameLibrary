@@ -11,7 +11,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// <summary>
         /// Gets the ID.
         /// </summary>
-        int ID { get; }
+        int Id { get; }
         /// <summary>
         /// Synchronizes to the specified storage.
         /// </summary>

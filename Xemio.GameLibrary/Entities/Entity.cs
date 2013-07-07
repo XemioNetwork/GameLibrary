@@ -116,7 +116,7 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="id">The id.</param>
         public EntityDataContainer GetContainer(int id)
         {
-            return this.Containers.FirstOrDefault(container => container.ID == id);
+            return this.Containers.FirstOrDefault(container => container.Id == id);
         }
         /// <summary>
         /// Gets a specific container by a specified type.

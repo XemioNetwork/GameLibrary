@@ -22,7 +22,6 @@ namespace Xemio.GameLibrary.Script
         #endregion
 
         #region Fields
-        private IScript _script;
         private IEnumerator _enumerator;
         #endregion
 
@@ -48,7 +47,6 @@ namespace Xemio.GameLibrary.Script
             EventManager eventManager = XGL.GetComponent<EventManager>();
             eventManager.Publish(new ExecutingScriptEvent(script));
 
-            this._script = script;
             this._enumerator = enumerable.GetEnumerator();
         }
         /// <summary>

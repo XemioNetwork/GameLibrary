@@ -3,53 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Entities
 {
     public class EntityFactory
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EntityFactory"/> class.
-        /// </summary>
-        public EntityFactory()
-        {
-        }
-        #endregion
-
         #region Fields
         private int _currentId;
         #endregion
-        
-        #region Methods
+
+        #region Singleton
         /// <summary>
-        /// Determines whether the factory can create a new entity.
+        /// Gets the singleton instance.
         /// </summary>
-        public virtual bool CanCreate<T>() where T : Entity, new()
+        public static EntityFactory Instance
         {
-            return true;
+            get { return Singleton<EntityFactory>.Value; }
         }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Creates a new entity.
         /// </summary>
-        public virtual T CreateLocalEntity<T>() where T : Entity, new()
+        public T CreateEntity<T>() where T : Entity, new()
         {
-            return (T)this.CreateLocalEntity(typeof(T));
+            return (T)this.CreateEntity(typeof(T));
         }
         /// <summary>
         /// Creates a new entity.
         /// </summary>
         /// <param name="type">The type.</param>
-        public virtual Entity CreateLocalEntity(Type type)
+        public Entity CreateEntity(Type type)
         {
-            return this.CreateLocalEntity(type, this.CreateId());
+            return this.CreateEntity(type, this.CreateId());
         }
         /// <summary>
         /// Creates a new entity.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="id">The id.</param>
-        public virtual Entity CreateLocalEntity(Type type, int id)
+        public Entity CreateEntity(Type type, int id)
         {
             Entity entity = (Entity)Activator.CreateInstance(type);
             entity.Id = id;
@@ -59,7 +54,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Creates a new Id.
         /// </summary>
-        public virtual int CreateId()
+        public int CreateId()
         {
             return this._currentId++;
         }

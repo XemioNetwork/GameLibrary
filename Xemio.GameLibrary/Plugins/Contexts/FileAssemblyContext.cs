@@ -14,6 +14,7 @@ namespace Xemio.GameLibrary.Plugins.Contexts
         /// <param name="directory">The directory.</param>
         public FileAssemblyContext(string directory)
         {
+            this.Assemblies = new List<Assembly>();
             this.LoadAssemblies(directory);
         }
         #endregion
@@ -31,7 +32,7 @@ namespace Xemio.GameLibrary.Plugins.Contexts
                 if (Path.GetExtension(fileName) == ".dll" ||
                     Path.GetExtension(fileName) == ".exe")
                 {
-                    assemblies.Add(Assembly.LoadFile(fileName));
+                    assemblies.Add(Assembly.LoadFrom(fileName));
                 }
             }
 

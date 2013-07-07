@@ -38,6 +38,10 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public bool Active { get; private set; }
         /// <summary>
+        /// Gets or sets the precision.
+        /// </summary>
+        public GameLoopPrecision Precision { get; set; }
+        /// <summary>
         /// Gets the frames per second.
         /// </summary>
         public int FramesPerSecond { get; private set; }
@@ -212,6 +216,26 @@ namespace Xemio.GameLibrary.Game
                     lastFrameCount = gameTime.Elapsed.TotalMilliseconds;
                     frames = 0;
                 }
+
+                this.ManagePrecisionLevel();
+            }
+        }
+        /// <summary>
+        /// Manages the precision level.
+        /// </summary>
+        private void ManagePrecisionLevel()
+        {
+            switch (this.Precision)
+            {
+                case GameLoopPrecision.Highest:
+                    //Use busy waiting for the game loop
+                    break;
+                case GameLoopPrecision.High:
+                    Thread.Sleep(1);
+                    break;
+                case GameLoopPrecision.Low:
+                    Thread.Sleep(5);
+                    break;
             }
         }
         #endregion

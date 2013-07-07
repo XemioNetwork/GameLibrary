@@ -8,13 +8,13 @@ using Xemio.GameLibrary.Network.Synchronization;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public class EntityDataContainer : ISynchronizable
+    public abstract class EntityDataContainer : ISynchronizable
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityDataContainer"/> class.
         /// </summary>
-        public EntityDataContainer()
+        protected EntityDataContainer()
         {
             this.Storage = new SynchronizationStorage(this);
         }
@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Entities
         [ExcludeSync]
         public static EntityDataContainer Empty
         {
-            get { return Singleton<EntityDataContainer>.Value; }
+            get { return Singleton<DefaultDataContainer>.Value; }
         }
         #endregion
 
@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Entities
         /// Gets the ID.
         /// </summary>
         [ExcludeSync]
-        public int ID
+        public int Id
         {
             get { return this.GetType().FullName.GetHashCode(); }
         }
@@ -52,9 +52,7 @@ namespace Xemio.GameLibrary.Entities
         /// Synchronizes to the specified storage.
         /// </summary>
         /// <param name="storage">The storage.</param>
-        public virtual void Synchronize(SynchronizationStorage storage)
-        {
-        }
+        public abstract void Synchronize(SynchronizationStorage storage);
         #endregion
     }
 }

@@ -25,16 +25,16 @@ namespace Xemio.GameLibrary.Entities.Network.Packages
         {
             Type type = entity.GetType();
 
-            this.ID = entity.Id;
+            this.EntityId = entity.Id;
             this.TypeName = type.AssemblyQualifiedName;
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets or sets the ID.
+        /// Gets or sets the entity ID.
         /// </summary>
-        public int ID { get; set; }
+        public int EntityId { get; set; }
         /// <summary>
         /// Gets or sets the name of the type.
         /// </summary>

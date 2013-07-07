@@ -82,6 +82,9 @@
     <Compile Include="Content\IO\FontReader.cs" />
     <Compile Include="Content\IO\SoundReader.cs" />
     <Compile Include="Content\IO\TextureReader.cs" />
+    <Compile Include="Entities\IO\EntityReader.cs" />
+    <Compile Include="Entities\IO\EntityWriter.cs" />
+    <Compile Include="Entities\DefaultDataContainer.cs" />
     <Compile Include="Entities\EntityDataContainer.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponent.cs" />
@@ -104,8 +107,11 @@
     <Compile Include="Events\Logging\LoggingLevel.cs" />
     <Compile Include="Game\CachedSceneProvider.cs" />
     <Compile Include="Game\GameLoop.cs" />
+    <Compile Include="Game\GameTime.cs" />
+    <Compile Include="Game\GameTimeMode.cs" />
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Game\ISceneProvider.cs" />
+    <Compile Include="Game\GameLoopPrecision.cs" />
     <Compile Include="Game\SceneWrapper.cs" />
     <Compile Include="Input\Events\IInputEvent.cs" />
     <Compile Include="Input\Events\Keyboard\KeyDownEvent.cs" />
