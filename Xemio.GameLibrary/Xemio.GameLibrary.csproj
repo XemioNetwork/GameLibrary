@@ -70,9 +70,11 @@
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\ContentReader.cs" />
     <Compile Include="Content\ContentWriter.cs" />
+    <Compile Include="Content\FileSystem\Containers\ContainerFileSystem.cs" />
+    <Compile Include="Content\FileSystem\Containers\ContainerPath.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualFileStream.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualFileSystem.cs" />
-    <Compile Include="Content\FileSystem\HardDrive.cs" />
+    <Compile Include="Content\FileSystem\DefaultFileSystem.cs" />
     <Compile Include="Content\FileSystem\IFileSystem.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualDirectory.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualFile.cs" />

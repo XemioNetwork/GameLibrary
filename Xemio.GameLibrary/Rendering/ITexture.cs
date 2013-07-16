@@ -16,5 +16,14 @@ namespace Xemio.GameLibrary.Rendering
         /// Gets the height.
         /// </summary>
         int Height { get; }
+        /// <summary>
+        /// Gets the texture data.
+        /// </summary>
+        byte[] GetData();
+        /// <summary>
+        /// Sets the texture data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        void SetData(byte[] data);
     }
 }

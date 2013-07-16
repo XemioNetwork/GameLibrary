@@ -18,11 +18,14 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         /// Initializes a new instance of the <see cref="VirtualFileSystem"/> class.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        public VirtualFileSystem(string fileName)
+        public VirtualFileSystem(string fileName) : this()
         {
-            using (FileStream stream = new FileStream(fileName, FileMode.Open))
+            if (File.Exists(fileName))
             {
-                this._root = VirtualDirectory.FromStream(stream);
+                using (FileStream stream = new FileStream(fileName, FileMode.Open))
+                {
+                    this._root = VirtualDirectory.FromStream(stream);
+                }
             }
         }
         /// <summary>
@@ -36,7 +39,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         #endregion
 
         #region Fields
-        private VirtualDirectory _root;
+        private readonly VirtualDirectory _root;
         #endregion
 
         #region Methods
@@ -58,13 +61,13 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
             VirtualDirectory directory = this._root;
             int count = returnParent ? path.Count - 1 : path.Count;
 
-            for (int i = 0; i < count; i++)
+            var parts = path.Take(count);
+            foreach (string part in parts)
             {
                 if (directory == null)
                     return null;
 
-                string current = path.MoveNext();
-                directory = directory.GetDirectory(current);
+                directory = directory.GetDirectory(part);
             }
 
             return directory;
@@ -124,7 +127,14 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
 
             VirtualPath path = new VirtualPath(fileName);
             VirtualDirectory directory = this.GetDirectory(path);
+
             VirtualFile file = new VirtualFile(path.Name);
+            VirtualFile existingFile = directory.GetFile(file.Name);
+
+            if (existingFile != null)
+            {
+                directory.Files.Remove(existingFile);
+            }
 
             directory.Add(file);
 
@@ -155,6 +165,13 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
             VirtualDirectory directory = this.GetDirectory(virtualPath);
 
             VirtualDirectory newDirectory = new VirtualDirectory(virtualPath.Name);
+            VirtualDirectory existingDirectory = directory.GetDirectory(newDirectory.Name);
+
+            if (existingDirectory != null)
+            {
+                directory.Directories.Remove(existingDirectory);
+            }
+
             directory.Add(newDirectory);
         }
         /// <summary>

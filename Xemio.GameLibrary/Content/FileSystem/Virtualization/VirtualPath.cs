@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
 {
-    public class VirtualPath
+    public class VirtualPath : IEnumerable<string>
     {
         #region Constructors
         /// <summary>
@@ -16,14 +17,11 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         public VirtualPath(string path)
         {
             this.FullPath = path;
-
-            this._currentIndex = 0;
-            this._elements = this.ValidatePath(path);
+            this._elements = this.GetElements(path);
         }
         #endregion
 
         #region Fields
-        private int _currentIndex;
         private readonly string[] _elements;
         #endregion
 
@@ -32,6 +30,17 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         /// Gets the full path.
         /// </summary>
         public string FullPath { get; private set; }
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public string Name
+        {
+            get { return this._elements.LastOrDefault(); }
+        }
+        public int Count
+        {
+            get { return this._elements.Length; }
+        }
         /// <summary>
         /// Gets the extension.
         /// </summary>
@@ -46,39 +55,20 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         {
             get { return !this.Name.Contains("."); }
         }
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        public string Name
-        {
-            get { return this._elements[this.Count - 1]; }
-        }
-        /// <summary>
-        /// Gets the count.
-        /// </summary>
-        public int Count
-        {
-            get { return this._elements.Length; }
-        }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Validates the path.
+        /// Gets all path elements.
         /// </summary>
         /// <param name="path">The path.</param>
-        private string[] ValidatePath(string path)
+        private string[] GetElements(string path)
         {
-            return path.Split('/')
-                .Where(element => element != ".")
+            string[] pathSeparation = path.Split('/');
+
+            return pathSeparation
+                .Where(e => e != ".")
                 .ToArray();
-        }
-        /// <summary>
-        /// Gets the next path element.
-        /// </summary>
-        public string MoveNext()
-        {
-            return this._elements[this._currentIndex++];
         }
         #endregion
 
@@ -89,6 +79,20 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         public override string ToString()
         {
             return this.FullPath;
+        }
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        public IEnumerator<string> GetEnumerator()
+        {
+            return this._elements.ToList().GetEnumerator();
+        }
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
         #endregion
     }

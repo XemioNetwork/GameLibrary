@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing;
 using System.IO;
@@ -43,6 +45,37 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus
         public int Height
         {
             get { return this.Bitmap.Height; }
+        }
+        /// <summary>
+        /// Gets the texture data.
+        /// </summary>
+        public byte[] GetData()
+        {
+            BitmapData data = this.Bitmap.LockBits(
+                new Rectangle(0, 0, this.Bitmap.Width, this.Bitmap.Height),
+                ImageLockMode.ReadOnly,
+                this.Bitmap.PixelFormat);
+
+            byte[] result = new byte[data.Width * data.Height * 4];
+            Marshal.Copy(data.Scan0, result, 0, result.Length);
+
+            this.Bitmap.UnlockBits(data);
+
+            return result;
+        }
+        /// <summary>
+        /// Sets the texture data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        public void SetData(byte[] data)
+        {
+            BitmapData bm = this.Bitmap.LockBits(
+                new Rectangle(0, 0, this.Bitmap.Width, this.Bitmap.Height),
+                ImageLockMode.WriteOnly,
+                this.Bitmap.PixelFormat);
+
+            Marshal.Copy(data, 0, bm.Scan0, data.Length);
+            this.Bitmap.UnlockBits(bm);
         }
         #endregion
     }

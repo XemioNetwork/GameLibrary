@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Script", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.FileSystem", "Testing\Xemio.Testing.FileSystem\Xemio.Testing.FileSystem.csproj", "{45CEDC4A-A304-4365-A753-5F620189E434}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.TileEngine", "Xemio.TileEngine\Xemio.TileEngine.csproj", "{E25B667B-70D2-4445-B791-478CE05888B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -184,12 +186,23 @@ Global
 		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|Mixed Platforms.Build.0 = Release|x86
 		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|x86.ActiveCfg = Release|x86
 		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|x86.Build.0 = Release|x86
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E25B667B-70D2-4445-B791-478CE05888B2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{474CA844-EA03-48DC-A790-5F18510799AC} = {0534896C-1686-4CE7-A78B-0E58A515D000}
+		{E25B667B-70D2-4445-B791-478CE05888B2} = {0534896C-1686-4CE7-A78B-0E58A515D000}
 		{B2587704-FF2B-4028-A43B-336A3BB8FA43} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}
 		{9F3AD84B-7A22-46C7-A631-79ECF26AE1FD} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}
 		{E1B7CCD2-91B9-416E-94A1-F27B6B910371} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}

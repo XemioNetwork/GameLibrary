@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         public ContentManager()
         {
-            this.FileSystem = new HardDrive();
+            this.FileSystem = new DefaultFileSystem();
 
             this._contentMappings = new Dictionary<string, object>();
             this._readerMappings = new Dictionary<Type, IContentReader>();

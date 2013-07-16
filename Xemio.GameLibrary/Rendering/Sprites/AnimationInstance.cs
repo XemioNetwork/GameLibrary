@@ -30,11 +30,18 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// </summary>
         public Animation Animation { get; private set; }
         /// <summary>
+        /// Gets the index of the sprite.
+        /// </summary>
+        public int SpriteIndex
+        {
+            get { return this.Animation.Indices[this._frameIndex]; }
+        }
+        /// <summary>
         /// Gets the current frame.
         /// </summary>
         public ITexture Frame
         {
-            get { return this.Animation.Sheet.Textures[this._frameIndex]; }
+            get { return this.Animation.Sheet.Textures[this.SpriteIndex]; }
         }
         #endregion
 

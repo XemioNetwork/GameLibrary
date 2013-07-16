@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Content.FileSystem;
+using Xemio.GameLibrary.Content.FileSystem.Containers;
 using Xemio.GameLibrary.Content.FileSystem.Virtualization;
 
 namespace Xemio.Testing.FileSystem
@@ -12,23 +13,23 @@ namespace Xemio.Testing.FileSystem
     {
         static void Main(string[] args)
         {
-            VirtualFileSystem fileSystem = new VirtualFileSystem();
+            ContainerFileSystem fileSystem = new ContainerFileSystem();
+            fileSystem.RootDirectory = "./Resources/";
 
-            fileSystem.Create("a/test.txt");
-            //fileSystem.CreateDirectory("a");
-            fileSystem.Create("a/data.txt");
+            fileSystem.Create("test.dat://a/test.txt");
+            fileSystem.Create("test.dat://a/data.txt");
 
-            using (Stream stream = fileSystem.Open("a/data.txt"))
+            using (Stream stream = fileSystem.Open("test.dat://a/data.txt"))
             {
                 BinaryWriter writer = new BinaryWriter(stream);
                 writer.Write("Hallo Welt");
             }
 
             Console.WriteLine("Files and Directories:");
-            ListFiles(fileSystem, ".");
+            ListFiles(fileSystem, "test.dat://.");
 
             Console.WriteLine();
-            using (Stream stream = fileSystem.Open("./a/data.txt"))
+            using (Stream stream = fileSystem.Open("test.dat://a/data.txt"))
             {
                 BinaryReader reader = new BinaryReader(stream);
 
@@ -36,7 +37,6 @@ namespace Xemio.Testing.FileSystem
                 Console.WriteLine(reader.ReadString());
             }
 
-            fileSystem.Save("main.fcon");
             Console.ReadLine();
         }
 

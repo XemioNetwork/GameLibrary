@@ -13,6 +13,19 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// Initializes a new instance of the <see cref="Animation"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <param name="texture">The texture.</param>
+        public Animation(string name, ITexture texture)
+        {
+            this.Name = name;
+            this.Indices = new[] {0};
+            this.Sheet = new SpriteSheet(texture, texture.Width, texture.Height);
+            this.FrameTime = 0;
+            this.IsLooped = false;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Animation"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         /// <param name="sheet">The sheet.</param>
         /// <param name="frameTime">The frame time.</param>
         public Animation(string name, SpriteSheet sheet, float frameTime)
@@ -41,6 +54,10 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// Gets the name.
         /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// Gets or sets the indices.
+        /// </summary>
+        public int[] Indices { get; set; }
         /// <summary>
         /// Gets the sheet.
         /// </summary>

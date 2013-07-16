@@ -19,10 +19,8 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <param name="fileName">Name of the file.</param>
         /// <param name="frameWidth">Width of the frame.</param>
         /// <param name="frameHeight">Height of the frame.</param>
-        /// <param name="startIndex">The start index.</param>
-        /// <param name="frameCount">The frame count.</param>
-        public SpriteSheet(string fileName, int frameWidth, int frameHeight, int startIndex, int frameCount)
-            : this(File.OpenRead(fileName), frameWidth, frameHeight, startIndex, frameCount)
+        public SpriteSheet(string fileName, int frameWidth, int frameHeight)
+            : this(File.OpenRead(fileName), frameWidth, frameHeight)
         {
         }
 
@@ -32,9 +30,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <param name="stream">The stream.</param>
         /// <param name="frameWidth">Width of the frame.</param>
         /// <param name="frameHeight">Height of the frame.</param>
-        /// <param name="startIndex"> </param>
-        /// <param name="frameCount">The frame count.</param>
-        public SpriteSheet(Stream stream, int frameWidth, int frameHeight, int startIndex, int frameCount)
+        public SpriteSheet(Stream stream, int frameWidth, int frameHeight)
         {
             Image image = Image.FromStream(stream);
             ITextureFactory factory = XGL.GetComponent<ITextureFactory>();
@@ -42,23 +38,21 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             int columns = image.Width / frameWidth;
             int rows = image.Height / frameHeight;
 
-            Bitmap[] sprites = new Bitmap[frameCount];
+            Bitmap[] sprites = new Bitmap[columns * rows];
             for (int y = 0; y < rows; y++)
             {
                 for (int x = 0; x < columns; x++)
                 {
                     int currentIndex = y * columns + x;
-                    if (currentIndex >= startIndex && currentIndex < startIndex + frameCount)
-                    {
-                        Bitmap frame = new Bitmap(frameWidth, frameHeight);
-                        using (Graphics frameGraphics = Graphics.FromImage(frame))
-                        {
-                            frameGraphics.DrawImage(image,
-                                new Rectangle(-x * frameWidth, -y * frameHeight, image.Width, image.Height));
-                        }
+                    Bitmap frame = new Bitmap(frameWidth, frameHeight);
 
-                        sprites[currentIndex - startIndex] = frame;
+                    using (Graphics frameGraphics = Graphics.FromImage(frame))
+                    {
+                        frameGraphics.DrawImage(image,
+                            new Rectangle(-x * frameWidth, -y * frameHeight, image.Width, image.Height));
                     }
+
+                    sprites[currentIndex] = frame;
                 }
             }
 
@@ -76,6 +70,42 @@ namespace Xemio.GameLibrary.Rendering.Sprites
 
             this.FrameWidth = frameWidth;
             this.FrameHeight = frameHeight;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
+        /// </summary>
+        /// <param name="texture">The texture.</param>
+        /// <param name="frameWidth">Width of the frame.</param>
+        /// <param name="frameHeight">Height of the frame.</param>
+        public SpriteSheet(ITexture texture, int frameWidth, int frameHeight)
+        {
+            var graphicsDevice = XGL.GetComponent<GraphicsDevice>();
+            var textureFactory = XGL.GetComponent<ITextureFactory>();
+
+            int columns = texture.Width / frameWidth;
+            int rows = texture.Height / frameHeight;
+
+            this.Textures = new ITexture[columns * rows];
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < columns; x++)
+                {
+                    int currentIndex = y * columns + x;
+                    IRenderTarget renderTarget = textureFactory.CreateRenderTarget(frameWidth, frameHeight);
+
+                    using (graphicsDevice.RenderTo(renderTarget))
+                    {
+                        graphicsDevice.RenderManager.Render(
+                            texture, new Math.Rectangle(
+                                -x * frameWidth,
+                                -y * frameHeight,
+                                frameWidth,
+                                frameHeight));
+                    }
+
+                    this.Textures[currentIndex] = renderTarget;
+                }
+            }
         }
         #endregion
 
