@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Events;
@@ -20,9 +21,13 @@ namespace Xemio.GameLibrary
     {
         #region Properties
         /// <summary>
+        /// Gets a value indicating whether this <see cref="XGL"/> is initialized.
+        /// </summary>
+        public static bool Initialized { get; private set; }
+        /// <summary>
         /// Gets the components.
         /// </summary>
-        public static ComponentManager Components
+        private static ComponentManager Components
         {
             get { return ComponentManager.Instance; }
         }
@@ -30,10 +35,24 @@ namespace Xemio.GameLibrary
 
         #region Methods
         /// <summary>
+        /// Adds the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        public static void Add(IComponent component)
+        {
+            XGL.Components.Add(component);
+        }
+        /// <summary>
         /// Gets a component by the specified type.
         /// </summary>
         public static T GetComponent<T>() where T : IComponent
         {
+            if (!XGL.Initialized)
+            {
+                throw new InvalidOperationException(
+                    "You have to initialize the game library before resolving a component.");
+            }
+
             return XGL.Components.GetComponent<T>();
         }
         /// <summary>
@@ -59,13 +78,20 @@ namespace Xemio.GameLibrary
             GraphicsDevice graphicsDevice = new GraphicsDevice(handle);
             XGL.Components.Add(graphicsDevice);
 
-            IGraphicsInitializer graphicsInitializer = XGL.GetComponent<IGraphicsInitializer>();
+            IGraphicsInitializer graphicsInitializer = XGL.Components.GetComponent<IGraphicsInitializer>();
+            if (graphicsInitializer == null)
+            {
+                throw new InvalidOperationException(
+                    "You have to pass in a graphics initializer before creating graphics.");
+            }
 
             if (graphicsInitializer.IsAvailable())
             {
                 graphicsDevice.Graphics = graphicsInitializer.CreateProvider(graphicsDevice);
                 graphicsDevice.DisplayMode = new DisplayMode(width, height);
             }
+
+            XGL.Initialized = true;
         }
         /// <summary>
         /// Creates the sound components.
@@ -73,7 +99,7 @@ namespace Xemio.GameLibrary
         public static void CreateSound()
         {
             SoundManager soundManager = new SoundManager();
-            ISoundInitializer soundInitializer = XGL.GetComponent<ISoundInitializer>();
+            ISoundInitializer soundInitializer = XGL.Components.GetComponent<ISoundInitializer>();
 
             if (soundInitializer != null)
             {
@@ -104,6 +130,7 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new KeyListener(handle));
             XGL.Components.Add(new MouseListener(handle));
             XGL.Components.Add(new ContentManager());
+            XGL.Components.Add(new ImplementationManager());
 
             XGL.CreateSound();
 

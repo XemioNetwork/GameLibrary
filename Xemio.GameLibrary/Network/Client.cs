@@ -97,7 +97,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void ProvideComponent()
         {
-            XGL.Components.Add(new ValueProvider<Client>(this));
+            XGL.Add(new ValueProvider<Client>(this));
         }
         /// <summary>
         /// Starts the client loop.

@@ -69,6 +69,7 @@
     <Compile Include="Components\ValueProvider.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\ContentReader.cs" />
+    <Compile Include="Content\ContentSerializer.cs" />
     <Compile Include="Content\ContentWriter.cs" />
     <Compile Include="Content\FileSystem\Containers\ContainerFileSystem.cs" />
     <Compile Include="Content\FileSystem\Containers\ContainerPath.cs" />
@@ -80,10 +81,11 @@
     <Compile Include="Content\FileSystem\Virtualization\VirtualFile.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualPath.cs" />
     <Compile Include="Content\IContentReader.cs" />
+    <Compile Include="Content\IContentSerializer.cs" />
     <Compile Include="Content\IContentWriter.cs" />
-    <Compile Include="Content\IO\FontReader.cs" />
-    <Compile Include="Content\IO\SoundReader.cs" />
-    <Compile Include="Content\IO\TextureReader.cs" />
+    <Compile Include="Content\Serialization\FontReader.cs" />
+    <Compile Include="Content\Serialization\SoundReader.cs" />
+    <Compile Include="Content\Serialization\TextureReader.cs" />
     <Compile Include="Entities\IO\EntityReader.cs" />
     <Compile Include="Entities\IO\EntityWriter.cs" />
     <Compile Include="Entities\DefaultDataContainer.cs" />
@@ -177,6 +179,8 @@
     <Compile Include="Plugins\Contexts\FileAssemblyContext.cs" />
     <Compile Include="Plugins\IAssemblyContext.cs" />
     <Compile Include="Plugins\ILibraryInitializer.cs" />
+    <Compile Include="Plugins\Implementations\ImplementationCache.cs" />
+    <Compile Include="Plugins\Implementations\ImplementationManager.cs" />
     <Compile Include="Plugins\LibraryLoader.cs" />
     <Compile Include="Plugins\Contexts\MultipleAssemblyContext.cs" />
     <Compile Include="Plugins\Contexts\SingleAssemblyContext.cs" />

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Sound;
 
-namespace Xemio.GameLibrary.Content.IO
+namespace Xemio.GameLibrary.Content.Serialization
 {
     public class SoundReader : ContentReader<ISound>
     {

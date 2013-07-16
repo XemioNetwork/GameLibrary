@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using Xemio.GameLibrary.Rendering.Fonts;
 using Xemio.GameLibrary.Rendering.Fonts.Utility;
 using Xemio.GameLibrary.Rendering;
 
-namespace Xemio.GameLibrary.Content.IO
+namespace Xemio.GameLibrary.Content.Serialization
 {
     public class FontReader : ContentReader<SpriteFont>
     {

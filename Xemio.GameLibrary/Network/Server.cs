@@ -100,7 +100,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void ProvideComponent()
         {
-            XGL.Components.Add(new ValueProvider<Server>(this));
+            XGL.Add(new ValueProvider<Server>(this));
         }
         /// <summary>
         /// Called when the server received a package.
