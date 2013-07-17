@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Common.Link;
-using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.TileEngine.Components;
 
-namespace Xemio.GameLibrary.TileEngine
+namespace Xemio.GameLibrary.TileEngine.Tiles
 {
     public abstract class Tile : ILinkable<string>
     {

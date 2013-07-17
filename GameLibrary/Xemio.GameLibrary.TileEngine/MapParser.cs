@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.TileEngine.Tiles;
 
 namespace Xemio.GameLibrary.TileEngine
 {

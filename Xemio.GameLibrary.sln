@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary", "Xemio.GameLibrary\Xemio.GameLibrary.csproj", "{474CA844-EA03-48DC-A790-5F18510799AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary", "GameLibrary\Xemio.GameLibrary\Xemio.GameLibrary.csproj", "{474CA844-EA03-48DC-A790-5F18510799AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rendering", "Rendering", "{B6438755-1B31-4AC3-8F7F-4F328D79227E}"
 EndProject
@@ -38,7 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Script", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.FileSystem", "Testing\Xemio.Testing.FileSystem\Xemio.Testing.FileSystem.csproj", "{45CEDC4A-A304-4365-A753-5F620189E434}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.TileEngine", "Xemio.GameLibrary.TileEngine\Xemio.GameLibrary.TileEngine.csproj", "{E25B667B-70D2-4445-B791-478CE05888B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.TileEngine", "GameLibrary\Xemio.GameLibrary.TileEngine\Xemio.GameLibrary.TileEngine.csproj", "{E25B667B-70D2-4445-B791-478CE05888B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.TileEngine", "Testing\Xemio.Testing.TileEngine\Xemio.Testing.TileEngine.csproj", "{C658EE39-3FCF-4DEB-B814-07FE783F8D57}"
 EndProject

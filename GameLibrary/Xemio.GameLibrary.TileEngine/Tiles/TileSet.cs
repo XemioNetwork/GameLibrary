@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Sprites;
 
-namespace Xemio.GameLibrary.TileEngine
+namespace Xemio.GameLibrary.TileEngine.Tiles
 {
     public class TileSet
     {

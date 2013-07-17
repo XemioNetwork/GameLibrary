@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Plugins.Implementations;
+using Xemio.GameLibrary.TileEngine.Tiles;
 
 namespace Xemio.GameLibrary.TileEngine
 {

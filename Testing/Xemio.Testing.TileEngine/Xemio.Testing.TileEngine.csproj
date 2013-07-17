@@ -52,11 +52,11 @@
       <Project>{B2587704-FF2B-4028-A43B-336A3BB8FA43}</Project>
       <Name>Xemio.GameLibrary.Rendering.GDIPlus</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xemio.GameLibrary.TileEngine\Xemio.GameLibrary.TileEngine.csproj">
+    <ProjectReference Include="..\..\GameLibrary\Xemio.GameLibrary.TileEngine\Xemio.GameLibrary.TileEngine.csproj">
       <Project>{E25B667B-70D2-4445-B791-478CE05888B2}</Project>
       <Name>Xemio.GameLibrary.TileEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xemio.GameLibrary\Xemio.GameLibrary.csproj">
+    <ProjectReference Include="..\..\GameLibrary\Xemio.GameLibrary\Xemio.GameLibrary.csproj">
       <Project>{474CA844-EA03-48DC-A790-5F18510799AC}</Project>
       <Name>Xemio.GameLibrary</Name>
     </ProjectReference>
