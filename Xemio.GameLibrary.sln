@@ -26,13 +26,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.CSS", "Testing\Xemio.Testing.CSS\Xemio.Testing.CSS.csproj", "{1B1E7BF1-F766-4076-8510-D91C20C88155}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{2A171C25-F948-4A32-A52A-8079D5158648}"
-	ProjectSection(SolutionItems) = preProject
-		Libraries\SharpDX.D3DCompiler.dll = Libraries\SharpDX.D3DCompiler.dll
-		Libraries\SharpDX.Direct2D1.dll = Libraries\SharpDX.Direct2D1.dll
-		Libraries\SharpDX.Direct3D10.dll = Libraries\SharpDX.Direct3D10.dll
-		Libraries\SharpDX.dll = Libraries\SharpDX.dll
-		Libraries\SharpDX.DXGI.dll = Libraries\SharpDX.DXGI.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Script", "Testing\Xemio.Testing.Script\Xemio.Testing.Script.csproj", "{654D61AC-4895-480A-81E4-774FA33C95C9}"
 EndProject
