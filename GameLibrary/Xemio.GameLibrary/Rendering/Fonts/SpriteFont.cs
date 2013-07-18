@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Drawing.Imaging;
 using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Rendering.Fonts.Utility;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Components;
 
@@ -36,7 +35,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
             this.Spacing = 15;
 
             this.Textures = new ITexture[byte.MaxValue];
-            this.FontCache = new InternalFontCache();
+            this.Bitmaps = new Bitmap[byte.MaxValue];
         }
         #endregion
 
@@ -56,7 +55,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Gets the font cache.
         /// </summary>
-        internal InternalFontCache FontCache { get; set; }
+        internal Bitmap[] Bitmaps { get; set; }
         #endregion
 
         #region Methods
