@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.Content.Serialization.BaseTypes
+namespace Xemio.GameLibrary.Content.Serialization
 {
     public class VectorSerializer : ContentSerializer<Vector2>
     {

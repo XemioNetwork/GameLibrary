@@ -83,6 +83,20 @@
     <Compile Include="Content\IContentReader.cs" />
     <Compile Include="Content\IContentSerializer.cs" />
     <Compile Include="Content\IContentWriter.cs" />
+<<<<<<< HEAD
+    <Compile Include="Content\Serialization\BaseTypes\BooleanSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\ByteSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\CharSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\DoubleSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\FloatSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\IntegerSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\LongSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\ShortSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\StringSerializer.cs" />
+    <Compile Include="Content\Serialization\BaseTypes\VectorSerializer.cs" />
+    <Compile Include="Content\Serialization\FontReader.cs" />
+    <Compile Include="Content\Serialization\TextureReader.cs" />
+=======
     <Compile Include="Content\Serialization\BooleanSerializer.cs" />
     <Compile Include="Content\Serialization\ByteSerializer.cs" />
     <Compile Include="Content\Serialization\CharSerializer.cs" />
@@ -94,6 +108,7 @@
     <Compile Include="Content\Serialization\StringSerializer.cs" />
     <Compile Include="Content\Serialization\VectorSerializer.cs" />
     <Compile Include="Rendering\TextureReader.cs" />
+>>>>>>> b54911dada2882ae0f78030f93f1a2b3659190c5
     <Compile Include="Entities\IO\EntityReader.cs" />
     <Compile Include="Entities\IO\EntityWriter.cs" />
     <Compile Include="Entities\EmptyDataContainer.cs" />
@@ -293,7 +308,6 @@
   <ItemGroup>
     <Folder Include="Entities\States\" />
     <Folder Include="Input\Bindings\" />
-    <Folder Include="Localization\" />
     <Folder Include="Math\Collision\" />
     <Folder Include="UI\CSS\Properties\" />
   </ItemGroup>

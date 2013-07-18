@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
-namespace Xemio.GameLibrary.Content.Serialization.BaseTypes
+namespace Xemio.GameLibrary.Content.Serialization
 {
     public class LongSerializer : ContentSerializer<long>
     {

@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Drawing;
 using System.Drawing.Text;
-using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Components;
 using System.Drawing.Imaging;
 
-namespace Xemio.GameLibrary.Rendering.Fonts.Utility
+namespace Xemio.GameLibrary.Rendering.Fonts
 {
-    using Drawing = System.Drawing;
-
     public static class SpriteFontGenerator
     {
         #region Methods
@@ -58,7 +50,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
             Graphics graphics = Graphics.FromImage(measureBitmap);
 
             Brush brush = new SolidBrush(
-                Drawing.Color.FromArgb(color.A, color.R, color.G, color.B));
+                System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B));
 
             Bitmap[] bitmaps = new Bitmap[byte.MaxValue];
 
@@ -89,24 +81,24 @@ namespace Xemio.GameLibrary.Rendering.Fonts.Utility
         /// Creates a new spritefont.
         /// </summary>
         /// <param name="factory">The factory.</param>
-        /// <param name="data">The data.</param>
-        public static SpriteFont Create(ITextureFactory factory, Bitmap[] data)
+        /// <param name="bitmaps">The data.</param>
+        public static SpriteFont Create(ITextureFactory factory, Bitmap[] bitmaps)
         {
             SpriteFont spriteFont = new SpriteFont();
 
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < bitmaps.Length; i++)
             {
-                if (data[i] == null) continue;
+                if (bitmaps[i] == null) continue;
 
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    if (data[i] != null)
+                    if (bitmaps[i] != null)
                     {
-                        data[i].Save(stream, ImageFormat.Png);
+                        bitmaps[i].Save(stream, ImageFormat.Png);
                         stream.Seek(0, SeekOrigin.Begin);
 
                         spriteFont.Textures[i] = factory.CreateTexture(stream.ToArray());
-                        spriteFont.FontCache.Data[i] = data[i];
+                        spriteFont.Bitmaps[i] = bitmaps[i];
                     }
                 }
             }
