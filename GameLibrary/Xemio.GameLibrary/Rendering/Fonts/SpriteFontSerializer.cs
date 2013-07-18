@@ -38,6 +38,8 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                     }
                 }
             }
+
+            return font;
         }
         /// <summary>
         /// Writes the specified value.
