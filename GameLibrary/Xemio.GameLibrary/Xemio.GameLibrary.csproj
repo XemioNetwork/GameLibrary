@@ -42,12 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Asset.cs" />
-    <Compile Include="Assets\AssetContainer.cs" />
-    <Compile Include="Assets\AssetManager.cs" />
-    <Compile Include="Assets\Exceptions\AssetNotFoundException.cs" />
-    <Compile Include="Assets\IAsset.cs" />
-    <Compile Include="Assets\Serialization\AssetContainerSerializer.cs" />
     <Compile Include="Common\Cryptography\CrytographyHelper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
@@ -104,7 +98,7 @@
     <Compile Include="Content\Serialization\TextureReader.cs" />
     <Compile Include="Entities\IO\EntityReader.cs" />
     <Compile Include="Entities\IO\EntityWriter.cs" />
-    <Compile Include="Entities\DefaultDataContainer.cs" />
+    <Compile Include="Entities\EmptyDataContainer.cs" />
     <Compile Include="Entities\EntityDataContainer.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponent.cs" />

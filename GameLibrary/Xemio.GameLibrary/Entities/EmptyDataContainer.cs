@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Network.Synchronization;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public class DefaultDataContainer : EntityDataContainer
+    public class EmptyDataContainer : EntityDataContainer
     {
         #region Overrides of EntityDataContainer
         /// <summary>
