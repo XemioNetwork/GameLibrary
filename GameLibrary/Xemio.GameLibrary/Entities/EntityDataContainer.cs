@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Entities
         [ExcludeSync]
         public static EntityDataContainer Empty
         {
-            get { return Singleton<DefaultDataContainer>.Value; }
+            get { return Singleton<EmptyDataContainer>.Value; }
         }
         #endregion
 

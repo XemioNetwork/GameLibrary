@@ -94,7 +94,6 @@
     <Compile Include="Content\Serialization\BaseTypes\StringSerializer.cs" />
     <Compile Include="Content\Serialization\BaseTypes\VectorSerializer.cs" />
     <Compile Include="Content\Serialization\FontReader.cs" />
-    <Compile Include="Content\Serialization\SoundReader.cs" />
     <Compile Include="Content\Serialization\TextureReader.cs" />
     <Compile Include="Entities\IO\EntityReader.cs" />
     <Compile Include="Entities\IO\EntityWriter.cs" />
@@ -139,6 +138,11 @@
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\MouseButtons.cs" />
     <Compile Include="Input\MouseListener.cs" />
+    <Compile Include="Localization\Language.cs" />
+    <Compile Include="Localization\LanguageMissingLoggingEvent.cs" />
+    <Compile Include="Localization\LanguageSerializer.cs" />
+    <Compile Include="Localization\LocalizationManager.cs" />
+    <Compile Include="Localization\LanguageValue.cs" />
     <Compile Include="Math\BoundingBox.cs" />
     <Compile Include="Math\BoundingSphere.cs" />
     <Compile Include="Math\IIntersectable.cs" />
@@ -291,7 +295,6 @@
   <ItemGroup>
     <Folder Include="Entities\States\" />
     <Folder Include="Input\Bindings\" />
-    <Folder Include="Localization\" />
     <Folder Include="Math\Collision\" />
     <Folder Include="UI\CSS\Properties\" />
   </ItemGroup>

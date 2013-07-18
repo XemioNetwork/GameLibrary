@@ -33,37 +33,11 @@ namespace Xemio.GameLibrary.Content
         /// <returns></returns>
         public abstract T Read(BinaryReader reader);
         /// <summary>
-        /// Reads a value out of the specified file.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
-        public T Read(string fileName)
-        {
-            using (Stream stream = this.Content.FileSystem.Open(fileName))
-            {
-                BinaryReader reader = new BinaryReader(stream);
-                return this.Read(reader);
-            }
-        }
-        /// <summary>
         /// Writes the specified value.
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
         public abstract void Write(BinaryWriter writer, T value);
-        /// <summary>
-        /// Writes the specified value.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="value">The value.</param>
-        public void Write(string fileName, T value)
-        {
-            using (Stream stream = this.Content.FileSystem.Create(fileName))
-            {
-                BinaryWriter writer = new BinaryWriter(stream);
-                this.Write(writer, value);
-            }
-        }
         #endregion
 
         #region IContentReader Member
@@ -76,15 +50,6 @@ namespace Xemio.GameLibrary.Content
         {
             return this.Read(reader);
         }
-        /// <summary>
-        /// Reads an instance.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
-        object IContentReader.Read(string fileName)
-        {
-            return this.Read(fileName);
-        }
         #endregion
 
         #region IContentWriter Member
@@ -96,15 +61,6 @@ namespace Xemio.GameLibrary.Content
         void IContentWriter.Write(BinaryWriter writer, object value)
         {
             this.Write(writer, (T)value);
-        }
-        /// <summary>
-        /// Writes the specified value.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="value">The value.</param>
-        void IContentWriter.Write(string fileName, object value)
-        {
-            this.Write(fileName, (T)value);
         }
         #endregion
     }

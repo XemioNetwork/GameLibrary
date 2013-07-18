@@ -25,7 +25,7 @@ namespace Xemio.Testing.FileSystem
                 writer.Write("Hallo Welt");
             }
 
-            Console.WriteLine("Files and Directories:");
+            Console.WriteLine("Files and RootDirectories:");
             ListFiles(fileSystem, "test.dat://.");
 
             Console.WriteLine();
