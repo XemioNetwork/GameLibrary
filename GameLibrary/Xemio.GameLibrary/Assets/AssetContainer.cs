@@ -54,14 +54,22 @@ namespace Xemio.GameLibrary.Assets
         /// Gets the asset for the specified id.
         /// </summary>
         /// <param name="id">The id.</param>
-        public object Get(string id)
+        private IAsset GetAsset(string id)
         {
             if (!this._assetMappings.ContainsKey(id))
             {
                 throw new AssetNotFoundException(id);
             }
 
-            return this._assetMappings[id].Value;
+            return this._assetMappings[id];
+        }
+        /// <summary>
+        /// Gets the asset for the specified id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        public object Get(string id)
+        {
+            return this.GetAsset(id).Value;
         }
         /// <summary>
         /// Gets the asset for the specified id.
@@ -69,7 +77,7 @@ namespace Xemio.GameLibrary.Assets
         /// <param name="id">The id.</param>
         public T Get<T>(string id)
         {
-            Asset<T> asset = this.Get(id) as Asset<T>;
+            Asset<T> asset = this.GetAsset(id) as Asset<T>;
             if (asset == null)
             {
                 return default(T);
