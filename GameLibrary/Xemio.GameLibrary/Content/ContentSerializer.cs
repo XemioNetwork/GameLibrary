@@ -6,13 +6,13 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Content
 {
-    public abstract class ContentSerializer<T> : IContentSerializer where T : class
+    public abstract class ContentSerializer<T> : IContentSerializer
     {
         #region Properties
         /// <summary>
         /// Gets the type.
         /// </summary>
-        public Type Type
+        public Type Id
         {
             get { return typeof (T); }
         }
@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         public ContentManager Content
         {
-            get { return XGL.GetComponent<ContentManager>(); }
+            get { return XGL.Components.Get<ContentManager>(); }
         }
         #endregion
 
@@ -49,19 +49,19 @@ namespace Xemio.GameLibrary.Content
         /// Writes the specified value.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        /// <param name="tileset">The value.</param>
-        public abstract void Write(BinaryWriter writer, T tileset);
+        /// <param name="value">The value.</param>
+        public abstract void Write(BinaryWriter writer, T value);
         /// <summary>
         /// Writes the specified value.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <param name="tileset">The value.</param>
-        public void Write(string fileName, T tileset)
+        /// <param name="value">The value.</param>
+        public void Write(string fileName, T value)
         {
             using (Stream stream = this.Content.FileSystem.Create(fileName))
             {
                 BinaryWriter writer = new BinaryWriter(stream);
-                this.Write(writer, tileset);
+                this.Write(writer, value);
             }
         }
         #endregion
@@ -95,7 +95,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="value">The value.</param>
         void IContentWriter.Write(BinaryWriter writer, object value)
         {
-            this.Write(writer, value as T);
+            this.Write(writer, (T)value);
         }
         /// <summary>
         /// Writes the specified value.
@@ -104,7 +104,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="value">The value.</param>
         void IContentWriter.Write(string fileName, object value)
         {
-            this.Write(fileName, value as T);
+            this.Write(fileName, (T)value);
         }
         #endregion
     }

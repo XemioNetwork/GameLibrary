@@ -54,14 +54,14 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public ContentManager Content
         {
-            get { return XGL.GetComponent<ContentManager>(); }
+            get { return XGL.Components.Get<ContentManager>(); }
         }
         /// <summary>
         /// Gets the graphics device.
         /// </summary>
         public GraphicsDevice GraphicsDevice
         {
-            get { return XGL.GetComponent<GraphicsDevice>(); }
+            get { return XGL.Components.Get<GraphicsDevice>(); }
         }
         /// <summary>
         /// Gets the texture factory.
@@ -89,28 +89,28 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public KeyListener Keyboard
         {
-            get { return XGL.GetComponent<KeyListener>(); }
+            get { return XGL.Components.Get<KeyListener>(); }
         }
         /// <summary>
         /// Gets the mouse listener.
         /// </summary>
         public MouseListener Mouse
         {
-            get { return XGL.GetComponent<MouseListener>(); }
+            get { return XGL.Components.Get<MouseListener>(); }
         }
         /// <summary>
         /// Gets the scene manager.
         /// </summary>
         public SceneManager SceneManager
         {
-            get { return XGL.GetComponent<SceneManager>(); }
+            get { return XGL.Components.Get<SceneManager>(); }
         }
         /// <summary>
         /// Gets the sound manager.
         /// </summary>
         public SoundManager SoundManager
         {
-            get { return XGL.GetComponent<SoundManager>(); }
+            get { return XGL.Components.Get<SoundManager>(); }
         }
         /// <summary>
         /// Gets a value indicating the index during a game tick.

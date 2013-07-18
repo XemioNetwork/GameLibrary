@@ -37,7 +37,7 @@ namespace Xemio.GameLibrary.Sound.Loops
             {
                 if (this.Sound.Position >= this.Sound.Duration)
                 {
-                    SoundManager soundManager = XGL.GetComponent<SoundManager>();
+                    SoundManager soundManager = XGL.Components.Get<SoundManager>();
                     soundManager.Play(this.Sound, PlayMode.KeepLocation);
                 }
             }

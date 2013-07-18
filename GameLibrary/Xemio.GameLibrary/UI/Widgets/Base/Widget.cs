@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.UI.Widgets.Base
 
             this.State = WidgetState.Normal;
 
-            EventManager eventManager = XGL.GetComponent<EventManager>();
+            EventManager eventManager = XGL.Components.Get<EventManager>();
             eventManager.Subscribe<IInputEvent>(this.HandleInput);
         }
         #endregion

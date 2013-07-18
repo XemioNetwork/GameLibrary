@@ -72,7 +72,7 @@ namespace Xemio.GameLibrary.Sound.Loops
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.GetComponent<GameLoop>();
+            GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
         }
         #endregion

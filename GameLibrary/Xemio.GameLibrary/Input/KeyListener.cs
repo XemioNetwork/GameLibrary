@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         protected EventManager EventManager
         {
-            get { return XGL.GetComponent<EventManager>(); }
+            get { return XGL.Components.Get<EventManager>(); }
         }
         #endregion
 
@@ -159,7 +159,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.GetComponent<GameLoop>();
+            GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
         }
         #endregion

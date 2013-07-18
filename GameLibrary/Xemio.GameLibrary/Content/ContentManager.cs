@@ -9,6 +9,7 @@ using Xemio.GameLibrary.Content.Serialization;
 using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Content.FileSystem;
+using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Content
 {
@@ -22,21 +23,14 @@ namespace Xemio.GameLibrary.Content
         {
             this.FileSystem = new DefaultFileSystem();
 
+            this._implementations = XGL.Components.Get<ImplementationManager>();
             this._contentMappings = new Dictionary<string, object>();
-            this._readerMappings = new Dictionary<Type, IContentReader>();
-            this._writerMappings = new Dictionary<Type, IContentWriter>();
-
-            this.Register(new TextureReader());
-            this.Register(new FontReader());
-            this.Register(new SoundReader());
         }
         #endregion
 
         #region Fields
-        private Dictionary<string, object> _contentMappings;
-
-        private Dictionary<Type, IContentReader> _readerMappings;
-        private Dictionary<Type, IContentWriter> _writerMappings;
+        private readonly ImplementationManager _implementations;
+        private readonly Dictionary<string, object> _contentMappings;
         #endregion
 
         #region Properties
@@ -61,21 +55,7 @@ namespace Xemio.GameLibrary.Content
         /// <returns></returns>
         public IContentReader GetReader(Type type)
         {
-            Type[] baseTypes = TypeHelper.GetBaseTypes(type);
-            foreach (Type baseType in baseTypes)
-            {
-                if (this._readerMappings.ContainsKey(baseType))
-                {
-                    return this._readerMappings[baseType];
-                }
-            }
-
-            string message = string.Format("No registered reader for '{0}'.", type);
-
-            EventManager eventManager = XGL.GetComponent<EventManager>();
-            eventManager.Publish(new LoggingEvent(LoggingLevel.Error, message));
-
-            throw new InvalidOperationException(message);
+            return this._implementations.Get<Type, IContentReader>(type);
         }
         /// <summary>
         /// Gets the writer for the specified type.
@@ -91,37 +71,7 @@ namespace Xemio.GameLibrary.Content
         /// <returns></returns>
         public IContentWriter GetWriter(Type type)
         {
-            Type[] baseTypes = TypeHelper.GetBaseTypes(type);
-            foreach (Type baseType in baseTypes)
-            {
-                if (this._writerMappings.ContainsKey(baseType))
-                {
-                    return this._writerMappings[baseType];
-                }
-            }
-
-            string message = string.Format("No registered writer for '{0}'.", type);
-
-            EventManager eventManager = XGL.GetComponent<EventManager>();
-            eventManager.Publish(new LoggingEvent(LoggingLevel.Error, message));
-
-            throw new InvalidOperationException(message);
-        }
-        /// <summary>
-        /// Registers the specified reader.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        public virtual void Register(IContentReader reader)
-        {
-            this._readerMappings.Add(reader.Type, reader);
-        }
-        /// <summary>
-        /// Registers the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        public virtual void Register(IContentWriter writer)
-        {
-            this._writerMappings.Add(writer.Type, writer);
+            return this._implementations.Get<Type, IContentWriter>(type);
         }
         /// <summary>
         /// Loads the specified file.

@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public GraphicsDevice GraphicsDevice
         {
-            get { return XGL.GetComponent<GraphicsDevice>(); }
+            get { return XGL.Components.Get<GraphicsDevice>(); }
         }
         #endregion
 
@@ -192,7 +192,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.GetComponent<GameLoop>();
+            GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
 
             this.PresentChanges = true;

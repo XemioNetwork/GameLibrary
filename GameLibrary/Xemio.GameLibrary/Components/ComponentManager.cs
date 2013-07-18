@@ -125,7 +125,7 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetComponent<T>() where T : IComponent
+        public T Get<T>() where T : IComponent
         {
             if (this._componentMappings.ContainsKey(typeof(T)))
             {

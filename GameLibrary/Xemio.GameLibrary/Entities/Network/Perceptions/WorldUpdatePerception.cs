@@ -39,7 +39,7 @@ namespace Xemio.GameLibrary.Entities.Network.Perceptions
         /// <param name="package">The package.</param>
         public override void OnReceive(Client client, WorldUpdatePackage package)
         {
-            GameLoop loop = XGL.GetComponent<GameLoop>();
+            GameLoop loop = XGL.Components.Get<GameLoop>();
 
             float ticks = client.Latency / (float)loop.TargetTickTime;
             int tickCount = (int)MathHelper.Round(ticks);

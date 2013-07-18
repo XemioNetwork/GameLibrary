@@ -45,7 +45,7 @@ namespace Xemio.GameLibrary.UI.Widgets.Base
         /// </summary>
         public GraphicsDevice GraphicsDevice
         {
-            get { return XGL.GetComponent<GraphicsDevice>(); }
+            get { return XGL.Components.Get<GraphicsDevice>(); }
         }
         /// <summary>
         /// Gets the back buffer.

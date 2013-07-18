@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.UI.Widgets.View.ViewStates.Button
         /// <param name="widget">The widget.</param>
         public ButtonStateHover(Widget widget) : base(WidgetState.Hover)
         {
-            GraphicsDevice graphicsDevice = XGL.GetComponent<GraphicsDevice>();
+            GraphicsDevice graphicsDevice = XGL.Components.Get<GraphicsDevice>();
             IGeometryFactory factory = graphicsDevice.Geometry.Factory;
 
             IShape backgroundShape = new RectangleShape(0, 0, 1, 1);

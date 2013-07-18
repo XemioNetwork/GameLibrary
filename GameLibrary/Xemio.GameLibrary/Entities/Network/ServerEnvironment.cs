@@ -22,13 +22,13 @@ namespace Xemio.GameLibrary.Entities.Network
         {
             this.FrameDelay = 5;
 
-            Server server = XGL.GetComponent<Server>();
+            Server server = XGL.Components.Get<Server>();
             if (server == null)
             {
                 throw new InvalidOperationException("You can not create a server environment on the client side.");
             }
 
-            XGL.GetComponent<EventManager>()
+            XGL.Components.Get<EventManager>()
                .Subscribe<ClientJoinedEvent>(this.OnClientJoined);
         }
         #endregion
@@ -51,7 +51,7 @@ namespace Xemio.GameLibrary.Entities.Network
         /// <param name="e">The e.</param>
         protected virtual void OnClientJoined(ClientJoinedEvent e)
         {
-            Server server = XGL.GetComponent<Server>();
+            Server server = XGL.Components.Get<Server>();
 
             WorldExchangePackage exchange = new WorldExchangePackage();
             exchange.Create(this);
@@ -69,7 +69,7 @@ namespace Xemio.GameLibrary.Entities.Network
             if (entity.IsCreationSynced)
             {
                 EntityCreationPackage package = new EntityCreationPackage(entity);
-                Server server = XGL.GetComponent<Server>();
+                Server server = XGL.Components.Get<Server>();
 
                 server.Send(package);
             }
@@ -117,7 +117,7 @@ namespace Xemio.GameLibrary.Entities.Network
             {
                 this._frames = 0;
 
-                Server server = XGL.GetComponent<Server>();
+                Server server = XGL.Components.Get<Server>();
                 IWorldUpdate update = this.CreateUpdate();
                 Package package = update as Package;
 

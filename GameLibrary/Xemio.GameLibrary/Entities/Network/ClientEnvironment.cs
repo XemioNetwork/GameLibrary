@@ -19,7 +19,7 @@ namespace Xemio.GameLibrary.Entities.Network
         /// </summary>
         public ClientEnvironment()
         {
-            Client client = XGL.GetComponent<Client>();
+            Client client = XGL.Components.Get<Client>();
             if (client == null)
             {
                 throw new InvalidOperationException("You can not create a client environment on the server side.");

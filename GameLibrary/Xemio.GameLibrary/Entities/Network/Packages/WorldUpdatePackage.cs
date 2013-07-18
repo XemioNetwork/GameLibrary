@@ -53,8 +53,8 @@ namespace Xemio.GameLibrary.Entities.Network.Packages
         {
             int entityCount = this.Reader.ReadInt32();
 
-            GameLoop loop = XGL.GetComponent<GameLoop>();
-            Client client = XGL.GetComponent<Client>();
+            GameLoop loop = XGL.Components.Get<GameLoop>();
+            Client client = XGL.Components.Get<Client>();
 
             float ticks = client.Latency / (float)loop.TargetTickTime;
             int tickCount = (int)MathHelper.Round(ticks);

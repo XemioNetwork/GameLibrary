@@ -25,6 +25,6 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Gets a component by a specified type.
         /// </summary>
-        T GetComponent<T>() where T : IComponent;
+        T Get<T>() where T : IComponent;
     }
 }

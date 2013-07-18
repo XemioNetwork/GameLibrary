@@ -33,7 +33,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         public SpriteSheet(Stream stream, int frameWidth, int frameHeight)
         {
             Image image = Image.FromStream(stream);
-            ITextureFactory factory = XGL.GetComponent<ITextureFactory>();
+            ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
 
             int columns = image.Width / frameWidth;
             int rows = image.Height / frameHeight;
@@ -79,8 +79,8 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <param name="frameHeight">Height of the frame.</param>
         public SpriteSheet(ITexture texture, int frameWidth, int frameHeight)
         {
-            var graphicsDevice = XGL.GetComponent<GraphicsDevice>();
-            var textureFactory = XGL.GetComponent<ITextureFactory>();
+            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
+            var textureFactory = XGL.Components.Get<ITextureFactory>();
 
             int columns = texture.Width / frameWidth;
             int rows = texture.Height / frameHeight;

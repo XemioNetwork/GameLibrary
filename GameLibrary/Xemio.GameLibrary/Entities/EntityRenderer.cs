@@ -19,7 +19,7 @@ namespace Xemio.GameLibrary.Entities
         protected EntityRenderer(Entity entity)
         {
             this.Entity = entity;
-            this.RenderManager = XGL.GetComponent<IRenderManager>();
+            this.RenderManager = XGL.Components.Get<IRenderManager>();
         }
         #endregion
 

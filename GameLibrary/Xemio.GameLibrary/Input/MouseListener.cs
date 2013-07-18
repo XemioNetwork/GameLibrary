@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         protected EventManager EventManager
         {
-            get { return XGL.GetComponent<EventManager>(); }
+            get { return XGL.Components.Get<EventManager>(); }
         }
         /// <summary>
         /// Gets the position.
@@ -92,7 +92,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseMove(object sender, MouseEventArgs e)
         {
-            GraphicsDevice graphicsDevice = XGL.GetComponent<GraphicsDevice>();
+            GraphicsDevice graphicsDevice = XGL.Components.Get<GraphicsDevice>();
             Vector2 divider = new Vector2(1, 1);
 
             if (graphicsDevice != null)

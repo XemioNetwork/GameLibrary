@@ -33,7 +33,7 @@ namespace Xemio.GameLibrary.Network
             this.PackageManager = new PackageManager();
             this.Connections = new List<IConnection>();
 
-            this._eventManager = XGL.GetComponent<EventManager>();
+            this._eventManager = XGL.Components.Get<EventManager>();
             this._subscribers = new List<IActionSubscriber>();
 
             this.Subscribe(new TimeSyncAction());
@@ -41,7 +41,7 @@ namespace Xemio.GameLibrary.Network
             this.StartServerLoop();
             this.ProvideComponent();
 
-            GameLoop loop = XGL.GetComponent<GameLoop>();
+            GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
         }
         #endregion
@@ -93,14 +93,14 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         private IEnumerable<IActionSubscriber> GetSubscribers(Package package)
         {
-            return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));
+            return this._subscribers.Where(s => s.Type.IsInstanceOfType(package));
         }
         /// <summary>
         /// Provides the component.
         /// </summary>
         public void ProvideComponent()
         {
-            XGL.Add(new ValueProvider<Server>(this));
+            XGL.Components.Add(new ValueProvider<Server>(this));
         }
         /// <summary>
         /// Called when the server received a package.

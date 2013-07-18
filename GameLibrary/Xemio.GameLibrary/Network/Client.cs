@@ -39,7 +39,7 @@ namespace Xemio.GameLibrary.Network
             this.StartLoop();
             this.ProvideComponent();
 
-            GameLoop loop = XGL.GetComponent<GameLoop>();
+            GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
         }
         #endregion
@@ -97,7 +97,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void ProvideComponent()
         {
-            XGL.Add(new ValueProvider<Client>(this));
+            XGL.Components.Add(new ValueProvider<Client>(this));
         }
         /// <summary>
         /// Starts the client loop.
@@ -119,7 +119,7 @@ namespace Xemio.GameLibrary.Network
                 {
                     ThreadInvoker.Invoke(() => this.Receive(package));
 
-                    EventManager eventManager = XGL.GetComponent<EventManager>();
+                    EventManager eventManager = XGL.Components.Get<EventManager>();
                     eventManager.Publish(new ReceivedPackageEvent(package));
                 }
             }
@@ -150,7 +150,7 @@ namespace Xemio.GameLibrary.Network
 
             this.Protocol.Send(package);
 
-            EventManager eventManager = XGL.GetComponent<EventManager>();
+            EventManager eventManager = XGL.Components.Get<EventManager>();
             eventManager.Publish(new SentPackageEvent(package));
 
             foreach (IPerceptionSubscriber subscriber in subscribers)

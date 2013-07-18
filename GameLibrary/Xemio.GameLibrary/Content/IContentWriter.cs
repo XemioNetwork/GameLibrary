@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common.Link;
 
 namespace Xemio.GameLibrary.Content
 {
-    public interface IContentWriter
+    public interface IContentWriter : ILinkable<Type>
     {
-        /// <summary>
-        /// Gets the type.
-        /// </summary>
-        Type Type { get; }
         /// <summary>
         /// Writes the specified value.
         /// </summary>

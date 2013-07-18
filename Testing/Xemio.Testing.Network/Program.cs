@@ -54,7 +54,7 @@ namespace Xemio.Testing.Network
             TestEntity entity = new TestEntity();
             this._environment.Add(entity);
 
-            XGL.GetComponent<GameLoop>().Subscribe(this);
+            XGL.Components.Get<GameLoop>().Subscribe(this);
 
             Application.Run(form);
         }

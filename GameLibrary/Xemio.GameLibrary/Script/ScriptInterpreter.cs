@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Script
         {
             IEnumerable enumerable = script.Execute();
 
-            EventManager eventManager = XGL.GetComponent<EventManager>();
+            EventManager eventManager = XGL.Components.Get<EventManager>();
             eventManager.Publish(new ExecutingScriptEvent(script));
 
             this._enumerator = enumerable.GetEnumerator();
@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary.Script
             if (this._enumerator == null)
                 return;
 
-            EventManager eventManager = XGL.GetComponent<EventManager>();
+            EventManager eventManager = XGL.Components.Get<EventManager>();
             ICommand current = this.Command;
 
             if (current != null)

@@ -27,34 +27,13 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets the components.
         /// </summary>
-        private static ComponentManager Components
+        public static ComponentManager Components
         {
             get { return ComponentManager.Instance; }
         }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Adds the specified component.
-        /// </summary>
-        /// <param name="component">The component.</param>
-        public static void Add(IComponent component)
-        {
-            XGL.Components.Add(component);
-        }
-        /// <summary>
-        /// Gets a component by the specified type.
-        /// </summary>
-        public static T GetComponent<T>() where T : IComponent
-        {
-            if (!XGL.Initialized)
-            {
-                throw new InvalidOperationException(
-                    "You have to initialize the game library before resolving a component.");
-            }
-
-            return XGL.Components.GetComponent<T>();
-        }
         /// <summary>
         /// Initializes the graphics provider.
         /// </summary>
@@ -78,7 +57,7 @@ namespace Xemio.GameLibrary
             GraphicsDevice graphicsDevice = new GraphicsDevice(handle);
             XGL.Components.Add(graphicsDevice);
 
-            IGraphicsInitializer graphicsInitializer = XGL.Components.GetComponent<IGraphicsInitializer>();
+            IGraphicsInitializer graphicsInitializer = XGL.Components.Get<IGraphicsInitializer>();
             if (graphicsInitializer == null)
             {
                 throw new InvalidOperationException(
@@ -99,7 +78,7 @@ namespace Xemio.GameLibrary
         public static void CreateSound()
         {
             SoundManager soundManager = new SoundManager();
-            ISoundInitializer soundInitializer = XGL.Components.GetComponent<ISoundInitializer>();
+            ISoundInitializer soundInitializer = XGL.Components.Get<ISoundInitializer>();
 
             if (soundInitializer != null)
             {

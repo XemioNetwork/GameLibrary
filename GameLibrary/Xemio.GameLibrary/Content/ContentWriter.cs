@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         public ContentManager Content
         {
-            get { return XGL.GetComponent<ContentManager>(); }
+            get { return XGL.Components.Get<ContentManager>(); }
         }
         #endregion
 
@@ -31,7 +31,7 @@ namespace Xemio.GameLibrary.Content
         /// <summary>
         /// Gets the type.
         /// </summary>
-        public Type Type
+        public Type Id
         {
             get { return typeof(T); }
         }

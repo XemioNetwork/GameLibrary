@@ -77,7 +77,7 @@ namespace Xemio.GameLibrary.Network.Timing
                 this._elapsed = 0;
                 this._firstSync = false;
 
-                Server server = XGL.GetComponent<Server>();
+                Server server = XGL.Components.Get<Server>();
                 TimeSyncPackage syncPackage = new TimeSyncPackage();
 
                 server.Send(syncPackage);
