@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="fileName">Name of the file.</param>
         public override object Read(string fileName)
         {
-            SoundManager soundManager = XGL.GetComponent<SoundManager>();
+            SoundManager soundManager = XGL.Components.Get<SoundManager>();
             ISoundFactory factory = soundManager.Provider.Factory;
 
             return factory.CreateSound(fileName);

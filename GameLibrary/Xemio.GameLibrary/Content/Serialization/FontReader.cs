@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="reader">The reader.</param>
         public override SpriteFont Read(BinaryReader reader)
         {
-            ITextureFactory factory = XGL.GetComponent<ITextureFactory>();
+            ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
             if (factory != null)
             {
                 int kerning = reader.ReadInt32();

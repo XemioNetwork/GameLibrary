@@ -11,7 +11,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// </summary>
         public ITextureFactory Factory
         {
-            get { return XGL.GetComponent<ITextureFactory>(); }
+            get { return XGL.Components.Get<ITextureFactory>(); }
         }
         #endregion
         
