@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;

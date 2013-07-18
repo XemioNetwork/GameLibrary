@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Events.Logging;
+using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Input.Events.Keyboard;
 

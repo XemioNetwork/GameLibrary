@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.Game
+namespace Xemio.GameLibrary.Game.Timing
 {
     public class GameLoop : IComponent
     {

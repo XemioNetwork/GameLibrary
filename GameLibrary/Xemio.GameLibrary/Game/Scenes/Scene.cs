@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Content;
 
-namespace Xemio.GameLibrary.Game
+namespace Xemio.GameLibrary.Game.Scenes
 {
     public abstract class Scene : CachedSceneProvider, IEnumerable<Scene>
     {

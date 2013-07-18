@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.Game
+namespace Xemio.GameLibrary.Game.Scenes
 {
     public class SceneManager : CachedSceneProvider, IGameHandler, IConstructable
     {

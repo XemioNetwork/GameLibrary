@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Sound.Loops
 {

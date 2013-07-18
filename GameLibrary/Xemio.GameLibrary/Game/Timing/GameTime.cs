@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using Xemio.GameLibrary.Components;
 
-namespace Xemio.GameLibrary.Game
+namespace Xemio.GameLibrary.Game.Timing
 {
     public class GameTime : IConstructable, IGameHandler
     {

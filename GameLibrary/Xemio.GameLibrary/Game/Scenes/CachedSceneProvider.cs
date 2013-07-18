@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 
-namespace Xemio.GameLibrary.Game
+namespace Xemio.GameLibrary.Game.Scenes
 {
     public class CachedSceneProvider : ISceneProvider
     {

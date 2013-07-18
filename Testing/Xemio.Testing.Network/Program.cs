@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Entities.Network;
+using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Protocols.Local;
 using Xemio.GameLibrary;

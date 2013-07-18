@@ -117,14 +117,14 @@
     <Compile Include="Events\Logging\ExceptionEvent.cs" />
     <Compile Include="Events\Logging\LoggingEvent.cs" />
     <Compile Include="Events\Logging\LoggingLevel.cs" />
-    <Compile Include="Game\CachedSceneProvider.cs" />
-    <Compile Include="Game\GameLoop.cs" />
-    <Compile Include="Game\GameTime.cs" />
-    <Compile Include="Game\GameTimeMode.cs" />
+    <Compile Include="Game\Scenes\CachedSceneProvider.cs" />
+    <Compile Include="Game\Timing\GameLoop.cs" />
+    <Compile Include="Game\Timing\GameTime.cs" />
+    <Compile Include="Game\Timing\GameTimeMode.cs" />
     <Compile Include="Game\IGameHandler.cs" />
-    <Compile Include="Game\ISceneProvider.cs" />
-    <Compile Include="Game\GameLoopPrecision.cs" />
-    <Compile Include="Game\SceneWrapper.cs" />
+    <Compile Include="Game\Scenes\ISceneProvider.cs" />
+    <Compile Include="Game\Timing\GameLoopPrecision.cs" />
+    <Compile Include="Game\Scenes\SceneWrapper.cs" />
     <Compile Include="Input\Events\IInputEvent.cs" />
     <Compile Include="Input\Events\Keyboard\KeyDownEvent.cs" />
     <Compile Include="Input\Events\Keyboard\KeyEvent.cs" />
@@ -222,8 +222,8 @@
     <Compile Include="Rendering\IRenderManager.cs" />
     <Compile Include="Rendering\ITexture.cs" />
     <Compile Include="Rendering\ITextureFactory.cs" />
-    <Compile Include="Game\Scene.cs" />
-    <Compile Include="Game\SceneManager.cs" />
+    <Compile Include="Game\Scenes\Scene.cs" />
+    <Compile Include="Game\Scenes\SceneManager.cs" />
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
     <Compile Include="Script\Events\ExecutedCommandEvent.cs" />
@@ -293,7 +293,6 @@
   <ItemGroup>
     <Folder Include="Entities\States\" />
     <Folder Include="Input\Bindings\" />
-    <Folder Include="Localization\" />
     <Folder Include="Math\Collision\" />
     <Folder Include="UI\CSS\Properties\" />
   </ItemGroup>
