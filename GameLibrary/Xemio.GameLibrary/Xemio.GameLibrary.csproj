@@ -45,7 +45,9 @@
     <Compile Include="Assets\Asset.cs" />
     <Compile Include="Assets\AssetContainer.cs" />
     <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\Exceptions\AssetNotFoundException.cs" />
     <Compile Include="Assets\IAsset.cs" />
+    <Compile Include="Assets\Serialization\AssetContainerSerializer.cs" />
     <Compile Include="Common\Cryptography\CrytographyHelper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
@@ -293,7 +295,6 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Serialization\" />
     <Folder Include="Entities\States\" />
     <Folder Include="Input\Bindings\" />
     <Folder Include="Localization\" />

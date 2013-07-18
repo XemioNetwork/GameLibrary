@@ -14,11 +14,5 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         /// <param name="reader">The reader.</param>
         object Read(BinaryReader reader);
-        /// <summary>
-        /// Reads an instance.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
-        object Read(string fileName);
     }
 }

@@ -15,11 +15,5 @@ namespace Xemio.GameLibrary.Content
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
         void Write(BinaryWriter writer, object value);
-        /// <summary>
-        /// Writes the specified value.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="value">The value.</param>
-        void Write(string fileName, object value);
     }
 }

@@ -43,19 +43,6 @@ namespace Xemio.GameLibrary.Content
         {
             return this.Read(reader);
         }
-        /// <summary>
-        /// Reads an instance.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
-        public virtual object Read(string fileName)
-        {
-            using (Stream stream = this.Content.FileSystem.Open(fileName))
-            {
-                BinaryReader reader = new BinaryReader(stream);
-                return this.Read(reader);
-            }
-        }
         #endregion
     }
 }

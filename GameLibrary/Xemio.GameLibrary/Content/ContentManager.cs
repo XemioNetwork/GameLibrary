@@ -82,8 +82,12 @@ namespace Xemio.GameLibrary.Content
         {
             if (!this._contentMappings.ContainsKey(fileName))
             {
-                IContentReader reader = this.GetReader(typeof(T));
-                this._contentMappings[fileName] = reader.Read(fileName);
+                IContentReader contentReader = this.GetReader(typeof(T));
+                using (FileStream stream = new FileStream(fileName, FileMode.Open))
+                {
+                    BinaryReader reader = new BinaryReader(stream);
+                    this._contentMappings[fileName] = contentReader.Read(reader);
+                }
             }
 
             return (T)this._contentMappings[fileName];
@@ -95,8 +99,13 @@ namespace Xemio.GameLibrary.Content
         /// <param name="fileName">Name of the file.</param>
         public virtual void Save(object value, string fileName)
         {
-            IContentWriter writer = this.GetWriter(value.GetType());
-            writer.Write(fileName, value);
+            using (FileStream stream = new FileStream(fileName, FileMode.Create))
+            {
+                IContentWriter contentWriter = this.GetWriter(value.GetType());
+                BinaryWriter writer = new BinaryWriter(stream);
+
+                contentWriter.Write(writer, value);
+            }
         }
         #endregion
     }

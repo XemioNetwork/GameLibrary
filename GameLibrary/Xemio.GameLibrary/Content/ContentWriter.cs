@@ -44,19 +44,6 @@ namespace Xemio.GameLibrary.Content
         {
             this.Write(writer, (T)value);
         }
-        /// <summary>
-        /// Writes the specified value.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="value">The value.</param>
-        public virtual void Write(string fileName, object value)
-        {
-            using (Stream stream = this.Content.FileSystem.Open(fileName))
-            {
-                BinaryWriter writer = new BinaryWriter(stream);
-                this.Write(writer, (T)value);
-            }
-        }
         #endregion
     }
 }
