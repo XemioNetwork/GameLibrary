@@ -22,14 +22,11 @@ namespace Xemio.GameLibrary.Content
         public ContentManager()
         {
             this.FileSystem = new DefaultFileSystem();
-
-            this._implementations = XGL.Components.Get<ImplementationManager>();
             this._contentMappings = new Dictionary<string, object>();
         }
         #endregion
 
         #region Fields
-        private readonly ImplementationManager _implementations;
         private readonly Dictionary<string, object> _contentMappings;
         #endregion
 
@@ -55,7 +52,8 @@ namespace Xemio.GameLibrary.Content
         /// <returns></returns>
         public IContentReader GetReader(Type type)
         {
-            return this._implementations.Get<Type, IContentReader>(type);
+            var implementations = XGL.Components.Get<ImplementationManager>();
+            return implementations.Get<Type, IContentReader>(type);
         }
         /// <summary>
         /// Gets the writer for the specified type.
@@ -71,7 +69,8 @@ namespace Xemio.GameLibrary.Content
         /// <returns></returns>
         public IContentWriter GetWriter(Type type)
         {
-            return this._implementations.Get<Type, IContentWriter>(type);
+            var implementations = XGL.Components.Get<ImplementationManager>();
+            return implementations.Get<Type, IContentWriter>(type);
         }
         /// <summary>
         /// Loads the specified file.

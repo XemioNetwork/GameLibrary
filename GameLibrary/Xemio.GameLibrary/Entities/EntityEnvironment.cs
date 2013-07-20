@@ -114,7 +114,7 @@ namespace Xemio.GameLibrary.Entities
         {
             entity.Environment = this;
 
-            this._idMappings.Add(entity.Id, entity);
+            this._idMappings.Add(entity.EntityId, entity);
             this.Entities.Add(entity);
         }
         /// <summary>
@@ -128,9 +128,9 @@ namespace Xemio.GameLibrary.Entities
                 this._addCache.Enqueue(entity);
                 return;
             }
-            if (entity.Id < 0)
+            if (entity.EntityId < 0)
             {
-                entity.Id = this.Factory.CreateId();
+                entity.EntityId = this.Factory.CreateId();
             }
 
             this.AddMapped(entity);
@@ -141,10 +141,10 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         protected void RemoveMapped(Entity entity)
         {
-            entity.Id = -1;
+            entity.EntityId = -1;
             entity.Environment = null;
 
-            this._idMappings.Remove(entity.Id);
+            this._idMappings.Remove(entity.EntityId);
             this.Entities.Remove(entity);
         }
         /// <summary>

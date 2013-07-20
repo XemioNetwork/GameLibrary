@@ -99,13 +99,16 @@ namespace Xemio.GameLibrary.Rendering.Sprites
                             texture, new Math.Rectangle(
                                 -x * frameWidth,
                                 -y * frameHeight,
-                                frameWidth,
-                                frameHeight));
+                                texture.Width,
+                                texture.Height));
                     }
 
                     this.Textures[currentIndex] = renderTarget;
                 }
             }
+
+            this.FrameWidth = frameWidth;
+            this.FrameHeight = frameHeight;
         }
         #endregion
 

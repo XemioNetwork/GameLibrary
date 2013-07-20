@@ -47,7 +47,7 @@ namespace Xemio.GameLibrary.Entities
         public Entity CreateEntity(Type type, int id)
         {
             Entity entity = (Entity)Activator.CreateInstance(type);
-            entity.Id = id;
+            entity.EntityId = id;
 
             return entity;
         }

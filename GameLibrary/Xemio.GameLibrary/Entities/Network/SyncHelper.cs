@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Entities.Network
 
             foreach (Entity entity in entities)
             {
-                writer.Write(entity.Id);
+                writer.Write(entity.EntityId);
                 writer.Write(entity.IsDirty);
                 writer.Write(entity.IsDestroyed);
 

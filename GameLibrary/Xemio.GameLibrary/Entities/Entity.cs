@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public Entity()
         {
-            this.Id = -1;
+            this.EntityId = -1;
 
             this.Components = new List<EntityComponent>();
             this.Containers = new List<EntityDataContainer>();
@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets or sets the Id.
         /// </summary>
-        public int Id { get; set; }
+        public int EntityId { get; set; }
         /// <summary>
         /// Gets or sets the position.
         /// </summary>

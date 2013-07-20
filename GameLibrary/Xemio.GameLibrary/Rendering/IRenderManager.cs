@@ -57,6 +57,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="texture">The texture.</param>
         /// <param name="destination">The destination.</param>
+        /// <param name="color">The color.</param>
         void Render(ITexture texture, Rectangle destination, Color color);
         /// <summary>
         /// Renders the specified texture.
