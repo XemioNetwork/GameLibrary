@@ -51,7 +51,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
-        public IEnumerable<TValue> Resolve<TKey, TValue>() where TValue : ILinkable<TKey>
+        public IEnumerable<TValue> All<TKey, TValue>() where TValue : ILinkable<TKey>
         {
             return this._cache.Resolve<TKey, TValue>(this._context);
         }
