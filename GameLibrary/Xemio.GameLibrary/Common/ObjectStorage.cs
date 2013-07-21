@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common.TypeParsers;
 
 namespace Xemio.GameLibrary.Common
 {
@@ -14,22 +15,16 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public ObjectStorage()
         {
+            this._typeParser = new TypeParser();
             this._values = new Dictionary<string, object>();
         }
         #endregion
 
         #region Fields
+        private readonly TypeParser _typeParser;
         private readonly Dictionary<string, object> _values;
         #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to automatically convert strings.
-        /// </summary>
-        public bool AutoConversion { get; set; }
-        #endregion
-
+        
         #region Methods
         /// <summary>
         /// Stores the specified value into an internal dictionary.
@@ -64,7 +59,7 @@ namespace Xemio.GameLibrary.Common
                 object value = this.Retrieve(key);
                 if (value is string)
                 {
-                    
+                    return (T)this._typeParser.Parse(value as string);
                 }
 
                 return (T)value;
