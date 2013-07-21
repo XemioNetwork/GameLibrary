@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Common.TypeParsers
@@ -33,9 +29,10 @@ namespace Xemio.GameLibrary.Common.TypeParsers
         {
             foreach (ITypeParser typeParser in this._implementations.All<Type, ITypeParser>())
             {
-                if (typeParser.IsType(value))
+                ParserResult result = typeParser.Parse(value);
+                if (result.Succeed)
                 {
-                    return typeParser.Parse(value);
+                    return result.Value;
                 }
             }
 

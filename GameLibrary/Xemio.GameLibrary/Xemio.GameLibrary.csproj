@@ -64,12 +64,13 @@
     <Compile Include="Common\Singleton.cs" />
     <Compile Include="Common\ThreadInvoker.cs" />
     <Compile Include="Common\TypeHelper.cs" />
-    <Compile Include="Common\TypeParsers\DoubleParser.cs" />
-    <Compile Include="Common\TypeParsers\IntegerParser.cs" />
+    <Compile Include="Common\TypeParsers\BaseTypes\DoubleParser.cs" />
+    <Compile Include="Common\TypeParsers\BaseTypes\IntegerParser.cs" />
     <Compile Include="Common\TypeParsers\ITypeParser.cs" />
+    <Compile Include="Common\TypeParsers\ParserResult.cs" />
     <Compile Include="Common\TypeParsers\TypeParser.cs" />
-    <Compile Include="Common\TypeParsers\RectangleParser.cs" />
-    <Compile Include="Common\TypeParsers\VectorParser.cs" />
+    <Compile Include="Common\TypeParsers\BaseTypes\RectangleParser.cs" />
+    <Compile Include="Common\TypeParsers\BaseTypes\VectorParser.cs" />
     <Compile Include="Components\ComponentManager.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\IComponentProvider.cs" />
