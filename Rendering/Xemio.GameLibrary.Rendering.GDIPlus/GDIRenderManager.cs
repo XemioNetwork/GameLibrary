@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Xemio.GameLibrary;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Components;

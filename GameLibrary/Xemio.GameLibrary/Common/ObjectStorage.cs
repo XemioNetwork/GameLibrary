@@ -19,7 +19,15 @@ namespace Xemio.GameLibrary.Common
         #endregion
 
         #region Fields
-        private Dictionary<string, object> _values;
+        private readonly Dictionary<string, object> _values;
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to automatically convert strings.
+        /// </summary>
+        public bool AutoConversion { get; set; }
         #endregion
 
         #region Methods
@@ -45,11 +53,21 @@ namespace Xemio.GameLibrary.Common
         {
             return this._values[key];
         }
+        /// <summary>
+        /// Retrieves the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
         public virtual T Retrieve<T>(string key)
         {
             if (this.Contains(key))
             {
-                return (T)this.Retrieve(key);
+                object value = this.Retrieve(key);
+                if (value is string)
+                {
+                    
+                }
+
+                return (T)value;
             }
 
             return default(T);

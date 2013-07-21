@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Resources;
 using System.Drawing;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using System.Drawing.Imaging;
 
@@ -85,22 +86,23 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             int columns = texture.Width / frameWidth;
             int rows = texture.Height / frameHeight;
 
-            this.Textures = new ITexture[columns * rows];
+            this.Textures = new ITexture[columns*rows];
             for (int y = 0; y < rows; y++)
             {
                 for (int x = 0; x < columns; x++)
                 {
-                    int currentIndex = y * columns + x;
-                    IRenderTarget renderTarget = textureFactory.CreateRenderTarget(frameWidth, frameHeight);
+                    int currentIndex = y*columns + x;
+                    IRenderTarget renderTarget =
+                        textureFactory.CreateRenderTarget(frameWidth, frameHeight);
 
                     using (graphicsDevice.RenderTo(renderTarget))
                     {
                         graphicsDevice.RenderManager.Render(
                             texture, new Math.Rectangle(
-                                -x * frameWidth,
-                                -y * frameHeight,
-                                texture.Width,
-                                texture.Height));
+                                        -x * frameWidth,
+                                        -y * frameHeight,
+                                        texture.Width,
+                                        texture.Height));
                     }
 
                     this.Textures[currentIndex] = renderTarget;
