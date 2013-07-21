@@ -31,6 +31,22 @@ namespace Xemio.GameLibrary.Plugins.Implementations
 
         #region Methods
         /// <summary>
+        /// Resolves an instance for the specified key.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="key">The key.</param>
+        public TValue GetNew<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
+        {
+            TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.CreateNew);
+            if (value == default(TValue))
+            {
+                return GetNew<TKey, TValue>(default(TKey));
+            }
+
+            return value;
+        }
+        /// <summary>
         /// Resolves the specified key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
@@ -38,7 +54,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="key">The key.</param>
         public TValue Get<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
         {
-            TValue value = this._cache.Resolve<TKey, TValue>(this._context, key);
+            TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.Singleton);
             if (value == default(TValue))
             {
                 return Get<TKey, TValue>(default(TKey));

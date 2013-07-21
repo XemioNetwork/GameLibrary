@@ -28,8 +28,8 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="context">The context.</param>
         /// <param name="key">The key.</param>
-        /// <returns></returns>
-        public TValue Resolve<TKey, TValue>(IAssemblyContext context, TKey key) where TValue : ILinkable<TKey>
+        /// <param name="creationType">Type of the creation.</param>
+        public TValue Resolve<TKey, TValue>(IAssemblyContext context, TKey key, CreationType creationType) where TValue : ILinkable<TKey>
         {
             if (!this.InCache<TKey, TValue>(context))
             {
@@ -39,6 +39,11 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             GenericLinker<TKey, TValue> linker = this._linkers[context]
                 .FirstOrDefault(l => l is GenericLinker<TKey, TValue>);
 
+            //Temporary set the creation type for the specified linker, to
+            //provide access to the instance creation feature of our GenericLinker class
+            linker.CreationType = creationType;
+
+            //Resolve the value.
             TValue value = linker.Resolve(key);
 
             return value;

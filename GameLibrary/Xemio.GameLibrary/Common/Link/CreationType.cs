@@ -8,7 +8,7 @@ namespace Xemio.GameLibrary.Common.Link
 {
     public enum CreationType
     {
-        None = 0,
+        Singleton = 0,
         CreateNew = 1
     }
 }

@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Network.Packages
         public PackageManager()
         {
             this.Linker = new GenericLinker<int, Package>();
-            this.Linker.CreationType = CreationType.None;
+            this.Linker.CreationType = CreationType.Singleton;
         }
         #endregion
 
