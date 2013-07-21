@@ -31,6 +31,18 @@ namespace Xemio.GameLibrary.Plugins.Implementations
 
         #region Methods
         /// <summary>
+        /// Gets the default value for the specified type.
+        /// </summary>
+        private T GetDefaultValue<T>()
+        {
+            if (typeof(T) == typeof(string))
+            {
+                return (T)("Default" as object);
+            }
+
+            return default(T);
+        }
+        /// <summary>
         /// Resolves an instance for the specified key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
@@ -41,7 +53,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.CreateNew);
             if (value == default(TValue))
             {
-                return GetNew<TKey, TValue>(default(TKey));
+                return GetNew<TKey, TValue>(this.GetDefaultValue<TKey>());
             }
 
             return value;
@@ -57,7 +69,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.Singleton);
             if (value == default(TValue))
             {
-                return Get<TKey, TValue>(default(TKey));
+                return Get<TKey, TValue>(this.GetDefaultValue<TKey>());
             }
 
             return value;
