@@ -5,10 +5,11 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Math.Collision;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public class Entity
+    public class Entity : ICollisionSource
     {
         #region Constructors
         /// <summary>
@@ -140,6 +141,13 @@ namespace Xemio.GameLibrary.Entities
         {
         }
         /// <summary>
+        /// Initializes this instance.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        public virtual void Initialize(EntityEnvironment environment)
+        {
+        }
+        /// <summary>
         /// Handles a game tick.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
@@ -158,6 +166,8 @@ namespace Xemio.GameLibrary.Entities
                 }
             }
 
+            //Make the IsDirty property accessible after the
+            //entity tick. DO NOT REMOVE, RETARD!
             this._resetDirty = true;
         }
         #endregion

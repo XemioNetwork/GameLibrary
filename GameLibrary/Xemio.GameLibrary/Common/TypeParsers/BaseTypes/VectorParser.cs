@@ -15,10 +15,10 @@ namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
         public ParserResult Parse(string input)
         {
             double temporaryValue;
-            string[] dimensions = input.Split(',');
+            string[] dimensions = input.Split(';');
 
             if (dimensions.Length == 2 &&
-                dimensions.All(d => double.TryParse(input,
+                dimensions.All(d => double.TryParse(d,
                     NumberStyles.Number,
                     CultureInfo.CreateSpecificCulture("en-US"),
                     out temporaryValue)))

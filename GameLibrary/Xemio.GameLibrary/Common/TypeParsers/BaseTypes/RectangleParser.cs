@@ -15,10 +15,10 @@ namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
         public ParserResult Parse(string input)
         {
             double temporaryValue;
-            string[] dimensions = input.Split(',');
+            string[] dimensions = input.Split(';');
 
             if (dimensions.Length == 4 &&
-                dimensions.All(d => double.TryParse(input,
+                dimensions.All(d => double.TryParse(d,
                     NumberStyles.Number,
                     CultureInfo.CreateSpecificCulture("en-US"),
                     out temporaryValue)))
@@ -28,9 +28,11 @@ namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
                     (float)double.Parse(dimensions[1]),
                     (float)double.Parse(dimensions[2]),
                     (float)double.Parse(dimensions[3]));
+
+                return new ParserResult(true, value);
             }
 
-            return new ParserResult(false, Vector2.Zero);
+            return new ParserResult(false, Rectangle.Empty);
         }
         /// <summary>
         /// Gets the identifier for the current instance.

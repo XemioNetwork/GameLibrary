@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xemio.GameLibrary.Common.Link;
 
@@ -61,8 +62,11 @@ namespace Xemio.GameLibrary.Plugins.Implementations
                 this.Cache<TKey, TValue>(context);
             }
 
-            return this._linkers[context] as IEnumerable<TValue>;
+            return this._linkers[context]
+                .OfType<GenericLinker<TKey, TValue>>()
+                .SelectMany(genericLinker => genericLinker);
         }
+
         /// <summary>
         /// Returns a value that determines wether the specified context was already cached or not.
         /// </summary>

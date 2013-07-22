@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -46,7 +47,18 @@ namespace Xemio.GameLibrary.Common
         /// <param name="key">The key.</param>
         public virtual object Retrieve(string key)
         {
-            return this._values[key];
+            if (this.Contains(key))
+            {
+                object value = this._values[key];
+                if (value is string)
+                {
+                    value = this._typeParser.Parse(value as string);
+                }
+
+                return value;
+            }
+
+            return null;
         }
         /// <summary>
         /// Retrieves the specified key.
@@ -54,18 +66,13 @@ namespace Xemio.GameLibrary.Common
         /// <param name="key">The key.</param>
         public virtual T Retrieve<T>(string key)
         {
-            if (this.Contains(key))
+            object value = this.Retrieve(key);
+            if (value is IConvertible)
             {
-                object value = this.Retrieve(key);
-                if (value is string && typeof(T) != typeof(string))
-                {
-                    return (T)this._typeParser.Parse(value as string);
-                }
-
-                return (T)value;
+                return (T)Convert.ChangeType(value, typeof(T));
             }
 
-            return default(T);
+            return (T)value;
         }
         /// <summary>
         /// Determines whether the invokation store contains the specified key.

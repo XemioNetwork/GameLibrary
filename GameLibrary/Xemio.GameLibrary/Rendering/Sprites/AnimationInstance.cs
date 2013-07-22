@@ -66,7 +66,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
                 this._elapsed -= this.Animation.FrameTime;
                 this._frameIndex++;
 
-                if (this._frameIndex >= this.Animation.Sheet.Textures.Length)
+                if (this._frameIndex >= this.Animation.Indices.Length)
                 {
                     if (this.Animation.IsLooped)
                     {
@@ -74,7 +74,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
                     }
                     else
                     {
-                        this._frameIndex = this.Animation.Sheet.Textures.Length - 1;
+                        this._frameIndex = this.Animation.Indices.Length - 1;
                     }
                 }
             }

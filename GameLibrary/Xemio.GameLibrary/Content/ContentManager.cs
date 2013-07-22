@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         public IContentReader GetReader<T>()
         {
-            return this.GetReader(typeof (T));
+            return this.GetReader(typeof(T));
         }
         /// <summary>
         /// Gets the content reader for the specified type.
@@ -53,7 +53,17 @@ namespace Xemio.GameLibrary.Content
         public IContentReader GetReader(Type type)
         {
             var implementations = XGL.Components.Get<ImplementationManager>();
-            return implementations.Get<Type, IContentReader>(type);
+            var reader = implementations.Get<Type, IContentReader>(type);
+
+            if (reader == null)
+            {
+                const string format = "No reader found for '{0}'.";
+                string message = string.Format(format, type.FullName);
+
+                throw new InvalidOperationException(message);
+            }
+
+            return reader;
         }
         /// <summary>
         /// Gets the writer for the specified type.
@@ -75,13 +85,12 @@ namespace Xemio.GameLibrary.Content
         /// <summary>
         /// Loads the specified file.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="fileName">Name of the file.</param>
-        public virtual T Load<T>(string fileName)
+        /// <param name="contentReader">The content reader.</param>
+        private object Load(string fileName, IContentReader contentReader)
         {
             if (!this._contentMappings.ContainsKey(fileName))
             {
-                IContentReader contentReader = this.GetReader(typeof(T));
                 using (FileStream stream = new FileStream(fileName, FileMode.Open))
                 {
                     BinaryReader reader = new BinaryReader(stream);
@@ -89,7 +98,26 @@ namespace Xemio.GameLibrary.Content
                 }
             }
 
-            return (T)this._contentMappings[fileName];
+            return this._contentMappings[fileName];
+        }
+        /// <summary>
+        /// Loads the specified file.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TReader">The type of the reader.</typeparam>
+        /// <param name="fileName">Name of the file.</param>
+        public virtual T Load<T, TReader>(string fileName) where TReader : IContentReader, new()
+        {
+            return (T)this.Load(fileName, new TReader());
+        }
+        /// <summary>
+        /// Loads the specified file.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="fileName">Name of the file.</param>
+        public virtual T Load<T>(string fileName)
+        {
+            return (T)this.Load(fileName, this.GetReader<T>());
         }
         /// <summary>
         /// Saves the specified value.

@@ -20,9 +20,7 @@ namespace Xemio.GameLibrary.Script
         public ScriptCompiler(IEnumerable<ICommand> commands)
         {
             this.Assemblies = new List<string>();
-
-            this.Commands = new GenericLinker<string, ICommand>();
-            this.Commands.Add(commands);
+            this.Commands = new GenericLinker<string, ICommand> {commands};
         }
         #endregion
 

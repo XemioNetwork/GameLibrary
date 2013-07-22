@@ -113,6 +113,7 @@ namespace Xemio.GameLibrary.Entities
         protected void AddMapped(Entity entity)
         {
             entity.Environment = this;
+            entity.Initialize(this);
 
             this._idMappings.Add(entity.EntityId, entity);
             this.Entities.Add(entity);
