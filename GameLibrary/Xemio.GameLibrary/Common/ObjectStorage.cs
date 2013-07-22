@@ -15,13 +15,13 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public ObjectStorage()
         {
-            this._typeParser = new TypeParser();
+            this._typeParser = new TypeParserManager();
             this._values = new Dictionary<string, object>();
         }
         #endregion
 
         #region Fields
-        private readonly TypeParser _typeParser;
+        private readonly TypeParserManager _typeParser;
         private readonly Dictionary<string, object> _values;
         #endregion
         
@@ -57,7 +57,7 @@ namespace Xemio.GameLibrary.Common
             if (this.Contains(key))
             {
                 object value = this.Retrieve(key);
-                if (value is string)
+                if (value is string && typeof(T) != typeof(string))
                 {
                     return (T)this._typeParser.Parse(value as string);
                 }

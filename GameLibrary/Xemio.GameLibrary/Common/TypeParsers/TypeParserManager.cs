@@ -3,13 +3,13 @@ using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Common.TypeParsers
 {
-    public class TypeParser
+    public class TypeParserManager
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeParser"/> class.
+        /// Initializes a new instance of the <see cref="TypeParserManager"/> class.
         /// </summary>
-        public TypeParser()
+        public TypeParserManager()
         {
             this._implementations = XGL.Components.Get<ImplementationManager>();
         }

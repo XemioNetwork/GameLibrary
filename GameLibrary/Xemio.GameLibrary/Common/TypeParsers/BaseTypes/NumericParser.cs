@@ -2,7 +2,7 @@
 
 namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
 {
-    public class IntegerParser : ITypeParser
+    public class NumericParser : ITypeParser
     {
         #region Implementation of ITypeParser
         /// <summary>
@@ -11,8 +11,8 @@ namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
         /// <param name="input">The input.</param>
         public ParserResult Parse(string input)
         {
-            int value;
-            bool succeed = int.TryParse(input, out value);
+            double value;
+            bool succeed = double.TryParse(input, out value);
 
             return new ParserResult(succeed, value);
         }
@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
         /// </summary>
         public Type Id
         {
-            get { return typeof(int); }
+            get { return typeof(double); }
         }
         #endregion
     }

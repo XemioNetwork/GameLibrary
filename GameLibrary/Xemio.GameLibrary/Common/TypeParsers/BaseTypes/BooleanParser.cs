@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
 
 namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
 {
-    public class DoubleParser : ITypeParser
+    public class BooleanParser : ITypeParser
     {
         #region Implementation of ITypeParser
         /// <summary>
@@ -11,8 +15,8 @@ namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
         /// <param name="input">The input.</param>
         public ParserResult Parse(string input)
         {
-            double value;
-            bool succeed = double.TryParse(input, out value);
+            bool value;
+            bool succeed = bool.TryParse(input, out value);
 
             return new ParserResult(succeed, value);
         }
@@ -21,7 +25,7 @@ namespace Xemio.GameLibrary.Common.TypeParsers.BaseTypes
         /// </summary>
         public Type Id
         {
-            get { return typeof(double); }
+            get { return typeof(bool); }
         }
         #endregion
     }

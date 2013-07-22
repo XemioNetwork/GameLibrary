@@ -37,7 +37,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             }
 
             GenericLinker<TKey, TValue> linker = this._linkers[context]
-                .FirstOrDefault(l => l is GenericLinker<TKey, TValue>);
+                .First(l => l is GenericLinker<TKey, TValue>);
 
             //Temporary set the creation type for the specified linker, to
             //provide access to the instance creation feature of our GenericLinker class
