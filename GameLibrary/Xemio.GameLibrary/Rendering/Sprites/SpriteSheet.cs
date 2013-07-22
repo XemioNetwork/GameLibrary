@@ -36,15 +36,15 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             Image image = Image.FromStream(stream);
             ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
 
-            int columns = image.Width / frameWidth;
-            int rows = image.Height / frameHeight;
+            this.Columns = image.Width / frameWidth;
+            this.Rows = image.Height / frameHeight;
 
-            Bitmap[] sprites = new Bitmap[columns * rows];
-            for (int y = 0; y < rows; y++)
+            Bitmap[] sprites = new Bitmap[this.Columns * this.Rows];
+            for (int y = 0; y < this.Rows; y++)
             {
-                for (int x = 0; x < columns; x++)
+                for (int x = 0; x < this.Columns; x++)
                 {
-                    int currentIndex = y * columns + x;
+                    int currentIndex = y * this.Columns + x;
                     Bitmap frame = new Bitmap(frameWidth, frameHeight);
 
                     using (Graphics frameGraphics = Graphics.FromImage(frame))
@@ -83,15 +83,15 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
             var textureFactory = XGL.Components.Get<ITextureFactory>();
 
-            int columns = texture.Width / frameWidth;
-            int rows = texture.Height / frameHeight;
+            this.Columns = texture.Width / frameWidth;
+            this.Rows = texture.Height / frameHeight;
 
-            this.Textures = new ITexture[columns*rows];
-            for (int y = 0; y < rows; y++)
+            this.Textures = new ITexture[this.Columns * this.Rows];
+            for (int y = 0; y < this.Rows; y++)
             {
-                for (int x = 0; x < columns; x++)
+                for (int x = 0; x < this.Columns; x++)
                 {
-                    int currentIndex = y*columns + x;
+                    int currentIndex = y * this.Columns + x;
                     IRenderTarget renderTarget =
                         textureFactory.CreateRenderTarget(frameWidth, frameHeight);
 
@@ -123,6 +123,14 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// Gets or sets the height of the frame.
         /// </summary>
         public int FrameHeight { get; private set; }
+        /// <summary>
+        /// Gets the columns.
+        /// </summary>
+        public int Columns { get; private set; }
+        /// <summary>
+        /// Gets the rows.
+        /// </summary>
+        public int Rows { get; private set; }
         /// <summary>
         /// Gets or sets the textures.
         /// </summary>
