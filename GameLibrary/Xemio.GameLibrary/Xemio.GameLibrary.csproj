@@ -64,11 +64,12 @@
     <Compile Include="Common\Singleton.cs" />
     <Compile Include="Common\ThreadInvoker.cs" />
     <Compile Include="Common\TypeHelper.cs" />
-    <Compile Include="Common\TypeParsers\BaseTypes\DoubleParser.cs" />
-    <Compile Include="Common\TypeParsers\BaseTypes\IntegerParser.cs" />
+    <Compile Include="Common\TypeParsers\BaseTypes\BooleanParser.cs" />
+    <Compile Include="Common\TypeParsers\BaseTypes\CharParser.cs" />
+    <Compile Include="Common\TypeParsers\BaseTypes\NumericParser.cs" />
     <Compile Include="Common\TypeParsers\ITypeParser.cs" />
     <Compile Include="Common\TypeParsers\ParserResult.cs" />
-    <Compile Include="Common\TypeParsers\TypeParser.cs" />
+    <Compile Include="Common\TypeParsers\TypeParserManager.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\RectangleParser.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\VectorParser.cs" />
     <Compile Include="Components\ComponentManager.cs" />
@@ -103,6 +104,9 @@
     <Compile Include="Content\Serialization\ShortSerializer.cs" />
     <Compile Include="Content\Serialization\StringSerializer.cs" />
     <Compile Include="Content\Serialization\VectorSerializer.cs" />
+    <Compile Include="Content\Texts\TextReader.cs" />
+    <Compile Include="Content\Texts\TextSerializer.cs" />
+    <Compile Include="Content\Texts\TextWriter.cs" />
     <Compile Include="Rendering\TextureReader.cs" />
     <Compile Include="Entities\IO\EntityReader.cs" />
     <Compile Include="Entities\IO\EntityWriter.cs" />
