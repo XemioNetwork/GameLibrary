@@ -22,9 +22,10 @@ namespace Xemio.GameLibrary.Content.Texts
         /// <summary>
         /// Writes the specified value into the string builder.
         /// </summary>
+        /// <param name="stream">The stream.</param>
         /// <param name="builder">The builder.</param>
         /// <param name="value">The value.</param>
-        protected abstract void Write(StringBuilder builder, T value);
+        protected abstract void Write(Stream stream, StringBuilder builder, T value);
         #endregion
 
         #region Overrides of ContentWriter<T>
@@ -38,7 +39,7 @@ namespace Xemio.GameLibrary.Content.Texts
             StreamWriter streamWriter = new StreamWriter(writer.BaseStream, this.Encoding);
             StringBuilder builder = new StringBuilder();
 
-            this.Write(builder, value);
+            this.Write(writer.BaseStream, builder, value);
 
             streamWriter.Write(builder.ToString());
         }

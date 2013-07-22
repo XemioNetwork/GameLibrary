@@ -22,8 +22,10 @@ namespace Xemio.GameLibrary.Content.Texts
         /// <summary>
         /// Reads the specified input.
         /// </summary>
+        /// <param name="stream">The stream.</param>
         /// <param name="input">The input.</param>
-        protected abstract T Read(string input);
+        /// <returns></returns>
+        protected abstract T Read(Stream stream, string input);
         #endregion
 
         #region Overrides of ContentReader<T>
@@ -36,7 +38,7 @@ namespace Xemio.GameLibrary.Content.Texts
             StreamReader streamReader = new StreamReader(reader.BaseStream, this.Encoding);
             string input = streamReader.ReadToEnd();
 
-            return this.Read(input);
+            return this.Read(reader.BaseStream, input);
         }
         #endregion
     }
