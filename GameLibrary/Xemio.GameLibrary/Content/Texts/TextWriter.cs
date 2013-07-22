@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Content.Texts
         /// <param name="value">The value.</param>
         public override void Write(BinaryWriter writer, T value)
         {
-            StreamWriter streamWriter = new StreamWriter(writer.BaseStream);
+            StreamWriter streamWriter = new StreamWriter(writer.BaseStream, this.Encoding);
             StringBuilder builder = new StringBuilder();
 
             this.Write(builder, value);
