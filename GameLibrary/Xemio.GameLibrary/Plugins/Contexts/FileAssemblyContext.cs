@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.IO;
@@ -32,7 +33,14 @@ namespace Xemio.GameLibrary.Plugins.Contexts
                 if (Path.GetExtension(fileName) == ".dll" ||
                     Path.GetExtension(fileName) == ".exe")
                 {
-                    assemblies.Add(Assembly.LoadFrom(fileName));
+                    try
+                    {
+                        assemblies.Add(Assembly.LoadFrom(fileName));
+                    }
+                    catch (Exception ex)
+                    {
+                        //TODO: logging
+                    }
                 }
             }
 

@@ -37,17 +37,17 @@ namespace Xemio.GameLibrary.Events
         /// Subscribes the specified observer.
         /// </summary>
         /// <param name="observer">The observer.</param>
-        public void Subscribe(IObserver<IEvent> observer)
+        public IDisposable Subscribe(IObserver<IEvent> observer)
         {
-            this._subject.Subscribe(observer);
+            return this._subject.Subscribe(observer);
         }
         /// <summary>
         /// Subscribes the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
-        public void Subscribe<T>(Action<T> action) where T : class, IEvent
+        public IDisposable Subscribe<T>(Action<T> action) where T : class, IEvent
         {
-            this._subject.Subscribe(new ActionObserver<T>(action));
+            return this._subject.Subscribe(new ActionObserver<T>(action));
         }
         /// <summary>
         /// Observes this instance.

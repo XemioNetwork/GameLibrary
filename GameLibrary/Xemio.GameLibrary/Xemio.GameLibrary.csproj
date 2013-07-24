@@ -107,15 +107,16 @@
     <Compile Include="Content\Texts\TextReader.cs" />
     <Compile Include="Content\Texts\TextSerializer.cs" />
     <Compile Include="Content\Texts\TextWriter.cs" />
+    <Compile Include="Entities\Events\EntityPositionChangedEvent.cs" />
     <Compile Include="Math\Collision\CellSizeHelper.cs" />
-    <Compile Include="Math\Collision\CollisionType.cs" />
+    <Compile Include="Math\Collision\Entities\CollidableEntity.cs" />
     <Compile Include="Math\Collision\Entities\CollisionComponent.cs" />
     <Compile Include="Math\Collision\Entities\CollisionEnvironment.cs" />
     <Compile Include="Math\Collision\CollisionGrid.cs" />
     <Compile Include="Math\Collision\CollisionMap.cs" />
     <Compile Include="Math\Collision\Events\CollisionEvent.cs" />
-    <Compile Include="Math\Collision\ICollisionSource.cs" />
-    <Compile Include="Math\Collision\StaticCollisionSource.cs" />
+    <Compile Include="Math\Collision\Sources\ICollisionSource.cs" />
+    <Compile Include="Math\Collision\Sources\StaticCollisionSource.cs" />
     <Compile Include="Rendering\TextureReader.cs" />
     <Compile Include="Entities\IO\EntityReader.cs" />
     <Compile Include="Entities\IO\EntityWriter.cs" />
@@ -311,7 +312,6 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\States\" />
     <Folder Include="Input\Bindings\" />
     <Folder Include="UI\CSS\Properties\" />
   </ItemGroup>

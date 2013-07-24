@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -99,18 +100,25 @@ namespace Xemio.GameLibrary.Common.Link
         /// <param name="assembly">The assembly, that is used to load.</param>
         public void Load(Assembly assembly)
         {
-            Type[] types = assembly.GetTypes();
-
-            foreach (Type type in types)
+            try
             {
-                if (typeof(TValue).IsAssignableFrom(type))
+                Type[] types = assembly.GetTypes();
+
+                foreach (Type type in types)
                 {
-                    if (!type.ContainsGenericParameters && !type.IsAbstract)
+                    if (typeof(TValue).IsAssignableFrom(type))
                     {
-                        TValue instance = (TValue)Activator.CreateInstance(type);
-                        this.Add(instance.Id, instance);
+                        if (!type.ContainsGenericParameters && !type.IsAbstract)
+                        {
+                            TValue instance = (TValue)Activator.CreateInstance(type);
+                            this.Add(instance.Id, instance);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
         /// <summary>

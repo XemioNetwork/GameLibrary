@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Math.Collision.Sources;
 
 namespace Xemio.GameLibrary.Math.Collision.Events
 {
@@ -15,12 +16,10 @@ namespace Xemio.GameLibrary.Math.Collision.Events
         /// </summary>
         /// <param name="first">The first.</param>
         /// <param name="second">The second.</param>
-        /// <param name="type">The type.</param>
-        public CollisionEvent(ICollisionSource first, ICollisionSource second, CollisionType type)
+        public CollisionEvent(ICollisionSource first, ICollisionSource second)
         {
             this.First = first;
             this.Second = second;
-            this.Type = type;
         }
         #endregion
 
@@ -33,10 +32,6 @@ namespace Xemio.GameLibrary.Math.Collision.Events
         /// Gets the second.
         /// </summary>
         public ICollisionSource Second { get; private set; }
-        /// <summary>
-        /// Gets the type.
-        /// </summary>
-        public CollisionType Type { get; private set; }
         #endregion
 
         #region Methods

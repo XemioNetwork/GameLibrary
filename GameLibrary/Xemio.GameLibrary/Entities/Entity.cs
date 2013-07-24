@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Entities.Events;
+using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Math.Collision;
+using Xemio.GameLibrary.Math.Collision.Sources;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public class Entity : ICollisionSource
+    public class Entity
     {
         #region Constructors
         /// <summary>
@@ -21,16 +24,19 @@ namespace Xemio.GameLibrary.Entities
 
             this.Components = new List<EntityComponent>();
             this.Containers = new List<EntityDataContainer>();
+
+            this._eventManager = XGL.Components.Get<EventManager>();
         }
         #endregion
 
         #region Fields
+        private readonly EventManager _eventManager;
         private Vector2 _position;
 
         private bool _resetDirty;
         private bool _handleComponentTick = true;
         #endregion
-
+        
         #region Properties
         /// <summary>
         /// Gets or sets the Id.
@@ -44,11 +50,16 @@ namespace Xemio.GameLibrary.Entities
             get { return this._position; }
             set
             {
-                this.OnPositionChanged(value - this._position);
-                this._position = value;
+                if (value != this._position)
+                {
+                    this._resetDirty = false;
+                    this.IsDirty = true;
 
-                this._resetDirty = false;
-                this.IsDirty = true;
+                    Vector2 lastPosition = this._position;
+                    this._position = value;
+
+                    this.OnPositionChanged(value - lastPosition);
+                }
             }
         }
         /// <summary>
@@ -139,6 +150,7 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="delta">The delta.</param>
         public virtual void OnPositionChanged(Vector2 delta)
         {
+            this._eventManager.Publish(new EntityPositionChangedEvent(this, delta));
         }
         /// <summary>
         /// Initializes this instance.
