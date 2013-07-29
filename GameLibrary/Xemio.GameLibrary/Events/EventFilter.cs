@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Events
         /// Creates a new EventFilter executing the given method.
         /// </summary>
         /// <param name="executeAction">The execute action.</param>
-        public static EventFilter<T> Execute(Action<T> executeAction)
+        public static EventFilter<T> ForMethod(Action<T> executeAction)
         {
             return new EventFilter<T>(executeAction);
         }
@@ -47,11 +47,19 @@ namespace Xemio.GameLibrary.Events
         /// The ex
         /// </summary>
         /// <param name="filter">The filter.</param>
-        public EventFilter<T> When(Func<T, bool> filter)
+        public EventFilter<T> WithCondition(Func<T, bool> filter)
         {
             this.Filters.Add(filter);
 
             return this;
+        }
+        /// <summary>
+        /// Applies a filter function to this EventFilter.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        public EventFilter<T> AndCondition(Func<T, bool> filter)
+        {
+            return this.WithCondition(filter);
         }
         /// <summary>
         /// Creates the configured filter.
