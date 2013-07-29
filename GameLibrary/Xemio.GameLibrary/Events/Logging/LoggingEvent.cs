@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Events.Logging
         /// <summary>
         /// Gets a value indicating whether this <see cref="IEvent"/> is synced.
         /// </summary>
-        public bool Synced
+        public virtual bool Synced
         {
             get { return false; }
         }
