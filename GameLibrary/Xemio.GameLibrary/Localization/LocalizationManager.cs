@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Components;
@@ -46,7 +47,7 @@ namespace Xemio.GameLibrary.Localization
             }
             else
             {
-                this.LogLanguageMissing(language);   
+                this.LogLanguageNotFound(language);   
             }
         }
         /// <summary>
@@ -83,18 +84,25 @@ namespace Xemio.GameLibrary.Localization
         {
             var contentManager = XGL.Components.Get<ContentManager>();
 
-            string[] localizationFiles = contentManager.FileSystem.GetFiles(localizationDirectory);
-            foreach (string file in localizationFiles)
+            try
             {
-                Language language = contentManager.Load<Language>(file);
-                if (!this.Languages.Contains(language))
+                string[] localizationFiles = contentManager.FileSystem.GetFiles(localizationDirectory);
+                foreach (string file in localizationFiles)
                 {
-                    this.Languages.Add(language);
+                    Language language = contentManager.Load<Language>(file);
+                    if (!this.Languages.Contains(language))
+                    {
+                        this.Languages.Add(language);
+                    }
+                    else
+                    {
+                        this.MergeLanguage(language);
+                    }
                 }
-                else
-                {
-                    this.MergeLanguage(language);
-                }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                
             }
         }
         /// <summary>
@@ -117,10 +125,14 @@ namespace Xemio.GameLibrary.Localization
                 }
             }
         }
-        private void LogLanguageMissing(string language)
+        /// <summary>
+        /// Logs that the given language was not found.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        private void LogLanguageNotFound(string language)
         {
             var eventManager = XGL.Components.Get<EventManager>();
-            eventManager.Publish(new LanguageMissingLoggingEvent(language));
+            eventManager.Publish(new LanguageNotFoundLoggingEvent(language));
         }
         #endregion Private Methods
     }

@@ -158,7 +158,7 @@
     <Compile Include="Input\MouseButtons.cs" />
     <Compile Include="Input\MouseListener.cs" />
     <Compile Include="Localization\Language.cs" />
-    <Compile Include="Localization\LanguageMissingLoggingEvent.cs" />
+    <Compile Include="Localization\LanguageNotFoundLoggingEvent.cs" />
     <Compile Include="Localization\LanguageSerializer.cs" />
     <Compile Include="Localization\LocalizationManager.cs" />
     <Compile Include="Localization\LanguageValue.cs" />
