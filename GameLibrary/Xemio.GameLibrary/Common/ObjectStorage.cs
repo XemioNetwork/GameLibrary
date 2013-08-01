@@ -71,6 +71,10 @@ namespace Xemio.GameLibrary.Common
             {
                 return (T)Convert.ChangeType(value, typeof(T));
             }
+            if (value == null)
+            {
+                return default(T);
+            }
 
             return (T)value;
         }

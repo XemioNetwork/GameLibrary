@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Entities;
+using Xemio.GameLibrary.Entities.Data;
 using Xemio.GameLibrary.Network.Synchronization;
 
 namespace Xemio.Testing.Network

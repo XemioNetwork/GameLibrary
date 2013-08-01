@@ -38,9 +38,9 @@ namespace Xemio.GameLibrary.Entities.Network.Perceptions
         public override void OnReceive(Client client, EntityCreationPackage package)
         {
             Type type = Type.GetType(package.TypeName);
-
-            EntityFactory factory = this.Environment.Factory;
-            Entity entity = factory.CreateEntity(type, package.EntityId);
+            
+            Entity entity = (Entity)Activator.CreateInstance(type);
+            entity.EntityId = package.EntityId;
 
             this.Environment.Add(entity);
         }

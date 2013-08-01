@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Entities
 
             this._idMappings = new Dictionary<int, Entity>();
 
-            this.Factory = new EntityFactory();
+            this.Factory = new EntityIdFactory();
             this.Entities = new List<Entity>();
         }
         #endregion
@@ -50,7 +50,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets or sets the factory.
         /// </summary>
-        public EntityFactory Factory { get; set; }
+        public EntityIdFactory Factory { get; set; }
         /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Entities.Entity"/> at the specified index.
         /// </summary>
@@ -112,9 +112,6 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         protected void AddMapped(Entity entity)
         {
-            entity.Environment = this;
-            entity.Initialize(this);
-
             this._idMappings.Add(entity.EntityId, entity);
             this.Entities.Add(entity);
         }
@@ -134,6 +131,9 @@ namespace Xemio.GameLibrary.Entities
                 entity.EntityId = this.Factory.CreateId();
             }
 
+            entity.Environment = this;
+            entity.Initialize(this);
+
             this.AddMapped(entity);
         }
         /// <summary>
@@ -142,9 +142,6 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         protected void RemoveMapped(Entity entity)
         {
-            entity.EntityId = -1;
-            entity.Environment = null;
-
             this._idMappings.Remove(entity.EntityId);
             this.Entities.Remove(entity);
         }
@@ -159,6 +156,9 @@ namespace Xemio.GameLibrary.Entities
                 this._removeCache.Enqueue(entity);
                 return;
             }
+
+            entity.EntityId = -1;
+            entity.Environment = null;
 
             this.RemoveMapped(entity);
         }

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Common.Extensions;
+using Xemio.GameLibrary.Entities.Data;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Packages;
@@ -93,6 +94,5 @@ namespace Xemio.GameLibrary.Entities.Network.Packages
             }
         }
         #endregion
-
     }
 }

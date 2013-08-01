@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Xemio.GameLibrary.Common;
+﻿using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Network.Synchronization;
 
-namespace Xemio.GameLibrary.Entities
+namespace Xemio.GameLibrary.Entities.Data
 {
     public abstract class EntityDataContainer : ISynchronizable
     {

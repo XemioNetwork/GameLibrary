@@ -44,6 +44,7 @@
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
     <Compile Include="Content\FileSystem\IVirtualFileSystem.cs" />
+    <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
     <Compile Include="Common\ICondition.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
@@ -115,15 +116,13 @@
     <Compile Include="Math\Collision\Sources\ICollisionSource.cs" />
     <Compile Include="Math\Collision\Sources\StaticCollisionSource.cs" />
     <Compile Include="Rendering\TextureReader.cs" />
-    <Compile Include="Entities\IO\EntityReader.cs" />
-    <Compile Include="Entities\IO\EntityWriter.cs" />
-    <Compile Include="Entities\EmptyDataContainer.cs" />
-    <Compile Include="Entities\EntityDataContainer.cs" />
+    <Compile Include="Entities\Data\EmptyDataContainer.cs" />
+    <Compile Include="Entities\Data\EntityDataContainer.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponent.cs" />
     <Compile Include="Entities\EntityEnvironment.cs" />
     <Compile Include="Entities\EntityRenderer.cs" />
-    <Compile Include="Entities\EntityFactory.cs" />
+    <Compile Include="Entities\EntityIdFactory.cs" />
     <Compile Include="Entities\Network\Packages\EntityCreationPackage.cs" />
     <Compile Include="Entities\Network\Perceptions\EntityCreationPerception.cs" />
     <Compile Include="Entities\Network\Perceptions\WorldExchangePerception.cs" />
