@@ -51,6 +51,7 @@
     <Compile Include="Common\Link\HashLinker.cs" />
     <Compile Include="Common\Link\ILinkable.cs" />
     <Compile Include="Common\ObjectStorage.cs" />
+    <Compile Include="Common\Pair.cs" />
     <Compile Include="Common\Randomization\IRandom.cs" />
     <Compile Include="Common\Randomization\ISeedable.cs" />
     <Compile Include="Common\Randomization\PerlinNoise.cs" />

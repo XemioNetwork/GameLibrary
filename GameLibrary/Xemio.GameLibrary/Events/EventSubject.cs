@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Events
 {
@@ -17,11 +18,13 @@ namespace Xemio.GameLibrary.Events
         public EventSubject()
         {
             this._observers = new List<dynamic>();
+            this._observerTypeMappings = new Dictionary<Pair<Type, Type>, bool>();
         }
         #endregion
 
         #region Fields
-        private readonly List<dynamic> _observers; 
+        private readonly List<dynamic> _observers;
+        private readonly Dictionary<Pair<Type, Type>, bool> _observerTypeMappings; 
         #endregion
 
         #region Methods
@@ -32,9 +35,17 @@ namespace Xemio.GameLibrary.Events
         private bool IsObserver<TEvent>(dynamic observer)
         {
             Type type = observer.GetType();
-            Type genericType = type.GetGenericArguments().FirstOrDefault();
+            Type targetType = typeof(TEvent);
 
-            return genericType.IsAssignableFrom(typeof(TEvent));
+            Pair<Type, Type> pair = new Pair<Type, Type>(type, targetType);
+
+            if (!this._observerTypeMappings.ContainsKey(pair))
+            {
+                Type genericType = type.GetGenericArguments().First();
+                this._observerTypeMappings.Add(pair, genericType.IsAssignableFrom(targetType));
+            }
+
+            return this._observerTypeMappings[pair];
         }
         /// <summary>
         /// Removes the specified observer.
