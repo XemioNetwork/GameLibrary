@@ -5,30 +5,17 @@ using System.Text;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Common
 {
-    public static class ThreadInvoker
+    public class ThreadInvoker : IComponent
     {
         #region Constructors
         /// <summary>
         /// Initializes the <see cref="ThreadInvoker"/> class.
         /// </summary>
-        static ThreadInvoker()
-        {
-            ThreadInvoker.LazyInitalize();
-        }
-        #endregion
-
-        #region Fields
-        private static Control _invokerControl;
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Initializes the thread invoker.
-        /// </summary>
-        private static void LazyInitalize()
+        public ThreadInvoker()
         {
             if (_invokerControl == null)
             {
@@ -36,11 +23,18 @@ namespace Xemio.GameLibrary.Common
                 _invokerControl.CreateControl();
             }
         }
+        #endregion
+
+        #region Fields
+        private Control _invokerControl;
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Invokes the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
-        public static void Invoke(Action action)
+        public void Invoke(Action action)
         {
             // Searching for a better method to invoke an action
             // inside the main application thread. There is no

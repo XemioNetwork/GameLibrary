@@ -5,14 +5,14 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
-using Xemio.GameLibrary.Network.Subscribers;
 using Xemio.GameLibrary.Entities.Network.Packages;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Network.Logic;
 
 namespace Xemio.GameLibrary.Entities.Network.Perceptions
 {
-    public class WorldUpdatePerception : PerceptionSubscriber<WorldUpdatePackage>
+    public class WorldUpdatePerception : ClientLogic<WorldUpdatePackage>
     {
         #region Constructors
         /// <summary>

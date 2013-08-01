@@ -156,6 +156,7 @@ namespace Xemio.GameLibrary.Game.Timing
         private void InternalLoop()
         {
             Stopwatch gameTime = Stopwatch.StartNew();
+            ThreadInvoker invoker = XGL.Components.Get<ThreadInvoker>();
 
             bool requestRender = true;
 
@@ -180,7 +181,7 @@ namespace Xemio.GameLibrary.Game.Timing
                     elapsedRenderTime = gameTime.Elapsed.TotalMilliseconds - lastRender;
                     lastRender = gameTime.Elapsed.TotalMilliseconds;
 
-                    ThreadInvoker.Invoke(() => this.OnRender((float)elapsedRenderTime));
+                    invoker.Invoke(() => this.OnRender((float)elapsedRenderTime));
 
                     requestRender = false;
                 }
@@ -199,7 +200,7 @@ namespace Xemio.GameLibrary.Game.Timing
 
                     for (int i = 0; i < tickCount; i++)
                     {
-                        ThreadInvoker.Invoke(() => this.OnTick(tickElapsed));
+                        invoker.Invoke(() => this.OnTick(tickElapsed));
                     }
 
                     elapsedTickTime = 0;

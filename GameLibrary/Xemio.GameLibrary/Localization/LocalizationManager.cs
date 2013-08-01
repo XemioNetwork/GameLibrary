@@ -84,25 +84,21 @@ namespace Xemio.GameLibrary.Localization
         {
             var contentManager = XGL.Components.Get<ContentManager>();
 
-            try
+            if (!contentManager.FileSystem.DirectoryExists(localizationDirectory))
+                return;
+
+            string[] localizationFiles = contentManager.FileSystem.GetFiles(localizationDirectory);
+            foreach (string file in localizationFiles)
             {
-                string[] localizationFiles = contentManager.FileSystem.GetFiles(localizationDirectory);
-                foreach (string file in localizationFiles)
+                Language language = contentManager.Load<Language>(file);
+                if (!this.Languages.Contains(language))
                 {
-                    Language language = contentManager.Load<Language>(file);
-                    if (!this.Languages.Contains(language))
-                    {
-                        this.Languages.Add(language);
-                    }
-                    else
-                    {
-                        this.MergeLanguage(language);
-                    }
+                    this.Languages.Add(language);
                 }
-            }
-            catch (DirectoryNotFoundException)
-            {
-                
+                else
+                {
+                    this.MergeLanguage(language);
+                }
             }
         }
         /// <summary>

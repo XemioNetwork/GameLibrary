@@ -29,7 +29,6 @@ namespace Xemio.GameLibrary.Math.Collision.Entities
         #endregion
 
         #region Fields
-        private bool _activeCollisionCheck;
         private readonly EventManager _eventManager;
         #endregion
 
@@ -84,13 +83,11 @@ namespace Xemio.GameLibrary.Math.Collision.Entities
         /// <param name="e">The event.</param>
         private void PositionChanged(EntityPositionChangedEvent e)
         {
-            if (this._activeCollisionCheck)
-                return;
-
-            this._activeCollisionCheck = true;
             if (e.Entity == this.Entity && this.CollidableEntity.IsDirty)
             {
+                this.CollidableEntity.NotifyPositionChanged = false;
                 var environment = this.CollidableEntity.Environment as CollisionEnvironment;
+
                 if (environment != null)
                 {
                     this.CollidableEntity.Position -= e.Delta;
@@ -135,9 +132,9 @@ namespace Xemio.GameLibrary.Math.Collision.Entities
                         }
                     }
                 }
-            }
 
-            this._activeCollisionCheck = false;
+                this.CollidableEntity.NotifyPositionChanged = true;
+            }
         }
         #endregion
     }

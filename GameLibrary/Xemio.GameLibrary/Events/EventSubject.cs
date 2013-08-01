@@ -17,17 +17,42 @@ namespace Xemio.GameLibrary.Events
         /// </summary>
         public EventSubject()
         {
+            this._typeMappings = new Dictionary<Type, List<dynamic>>();
             this._observers = new List<dynamic>();
-            this._observerTypeMappings = new Dictionary<Pair<Type, Type>, bool>();
         }
+
         #endregion
 
         #region Fields
         private readonly List<dynamic> _observers;
-        private readonly Dictionary<Pair<Type, Type>, bool> _observerTypeMappings; 
+        private readonly Dictionary<Type, List<dynamic>> _typeMappings; 
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Caches the oberservers for the specified event type.
+        /// </summary>
+        private void CacheOberservers<T>() where T : IEvent
+        {
+            Type type = typeof(T);
+
+            this._typeMappings.Add(type, new List<dynamic>(
+                this._observers.Where(observer => this.IsObserver<T>(observer))));
+        }
+        /// <summary>
+        /// Gets the observers.
+        /// </summary>
+        private IEnumerable<dynamic> GetObservers<T>() where T : IEvent
+        {
+            Type type = typeof(T);
+
+            if (!this._typeMappings.ContainsKey(type))
+            {
+                this.CacheOberservers<T>();
+            }
+
+            return this._typeMappings[type];
+        }
         /// <summary>
         /// Determines whether the specified observer is observing the specified type.
         /// </summary>
@@ -36,16 +61,9 @@ namespace Xemio.GameLibrary.Events
         {
             Type type = observer.GetType();
             Type targetType = typeof(TEvent);
+            Type genericType = type.GetGenericArguments().First();
 
-            Pair<Type, Type> pair = new Pair<Type, Type>(type, targetType);
-
-            if (!this._observerTypeMappings.ContainsKey(pair))
-            {
-                Type genericType = type.GetGenericArguments().First();
-                this._observerTypeMappings.Add(pair, genericType.IsAssignableFrom(targetType));
-            }
-
-            return this._observerTypeMappings[pair];
+            return genericType.IsAssignableFrom(targetType);
         }
         /// <summary>
         /// Removes the specified observer.
@@ -60,15 +78,11 @@ namespace Xemio.GameLibrary.Events
         /// </summary>
         /// <typeparam name="TEvent">The event type.</typeparam>
         /// <param name="e">The e.</param>
-        public void Publish<TEvent>(TEvent e)
+        public void Publish<TEvent>(TEvent e) where TEvent : IEvent
         {
             try
             {
-                IEnumerable<IObserver<TEvent>> observers = this._observers
-                    .Where(observer => this.IsObserver<TEvent>(observer))
-                    .Select(observer => observer as IObserver<TEvent>);
-
-                foreach (IObserver<TEvent> observer in observers)
+                foreach (IObserver<TEvent> observer in this.GetObservers<TEvent>())
                 {
                     observer.OnNext(e);
                 }
@@ -88,6 +102,8 @@ namespace Xemio.GameLibrary.Events
         public IDisposable Subscribe(IObserver<IEvent> observer)
         {
             this._observers.Add(observer);
+            this._typeMappings.Clear();
+
             return new EventDisposer(this, observer);
         }
         #endregion

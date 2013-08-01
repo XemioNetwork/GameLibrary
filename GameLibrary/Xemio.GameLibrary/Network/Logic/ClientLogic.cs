@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Network.Subscribers
+namespace Xemio.GameLibrary.Network.Logic
 {
-    public abstract class PerceptionSubscriber<T> : IPerceptionSubscriber where T : Package
+    public abstract class ClientLogic<T> : IClientLogic where T : Package
     {
         #region Methods
         /// <summary>
@@ -56,7 +52,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IPerceptionSubscriber.OnReceive(Client client, Package package)
+        void IClientLogic.OnReceive(Client client, Package package)
         {
             this.OnReceive(client, package as T);
         }
@@ -65,7 +61,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IPerceptionSubscriber.OnBeginSend(Client client, Package package)
+        void IClientLogic.OnBeginSend(Client client, Package package)
         {
             this.OnBeginSend(client, package as T);
         }
@@ -74,7 +70,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IPerceptionSubscriber.OnSent(Client client, Package package)
+        void IClientLogic.OnSent(Client client, Package package)
         {
             this.OnSent(client, package as T);
         }

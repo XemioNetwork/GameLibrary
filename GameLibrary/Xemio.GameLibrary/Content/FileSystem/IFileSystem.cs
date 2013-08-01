@@ -9,29 +9,33 @@ namespace Xemio.GameLibrary.Content.FileSystem
     public interface IFileSystem
     {
         /// <summary>
-        /// Opens the specified file.
+        /// Opens the specified file. Throws an exception if the file or the
+        /// containing directory doesn't exist.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
         Stream Open(string fileName);
         /// <summary>
-        /// Creates the specified file.
+        /// Creates the specified file. Throws an exception if the
+        /// containing directory doesn't exist.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
         Stream Create(string fileName);
         /// <summary>
-        /// Deletes the specified file.
+        /// Deletes the specified file. Throws an exception if the file
+        /// doesn't exist.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         void Delete(string fileName);
         /// <summary>
-        /// Creates the specified directory.
+        /// Creates the specified directory and all parenting directories.
         /// </summary>
         /// <param name="path">The path.</param>
         void CreateDirectory(string path);
         /// <summary>
-        /// Deletes the specified directory.
+        /// Deletes the specified directory. Throws an exception if the
+        /// directory doesn't exist.
         /// </summary>
         /// <param name="path">The path.</param>
         void DeleteDirectory(string path);
@@ -39,14 +43,21 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// Determines wether the specified file exists.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        bool Exists(string fileName);
+        bool FileExists(string fileName);
         /// <summary>
-        /// Gets all files inside the specified directory.
+        /// Determines wether the specified directory exists.
+        /// </summary>
+        /// <param name="directoryName">Name of the directory.</param>
+        bool DirectoryExists(string directoryName);
+        /// <summary>
+        /// Gets all files inside the specified directory. Returns an empty array
+        /// if the directory doesn't exist.
         /// </summary>
         /// <param name="directory">The directory.</param>
         string[] GetFiles(string directory);
         /// <summary>
-        /// Gets all directories inside the specified directory.
+        /// Gets all directories inside the specified directory. Returns an empty array
+        /// if the directory doesn't exist.
         /// </summary>
         /// <param name="directory">The directory.</param>
         string[] GetDirectories(string directory);

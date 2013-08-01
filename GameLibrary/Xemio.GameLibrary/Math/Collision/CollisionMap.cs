@@ -14,15 +14,11 @@ namespace Xemio.GameLibrary.Math.Collision
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        /// <param name="cellSize">Size of the cell.</param>
-        public CollisionMap(int width, int height, int cellSize)
+        public CollisionMap(int width, int height)
         {
-            CellSizeHelper.ValidateCellSize(cellSize);
-            
             this.Width = width;
             this.Height = height;
 
-            this.CellSize = cellSize;
             this.Cells = new bool[width, height];
         }
         #endregion
@@ -36,10 +32,6 @@ namespace Xemio.GameLibrary.Math.Collision
         /// Gets the height.
         /// </summary>
         public int Height { get; private set; }
-        /// <summary>
-        /// Gets the size of the cell.
-        /// </summary>
-        public int CellSize { get; private set; }
         /// <summary>
         /// Gets or sets the cells.
         /// </summary>

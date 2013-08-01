@@ -117,7 +117,6 @@ namespace Xemio.GameLibrary.Game.Scenes
         private void Tick(Scene scene, float elapsed)
         {
             if (scene.Paused) return;
-            if (!scene.Visible) return;
             if (!scene.Loaded) scene.InternalLoadContent();
 
             scene.Tick(elapsed);
@@ -151,8 +150,8 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="scene">The scene.</param>
         private void Render(Scene scene)
         {
-            if (!scene.Loaded) return;
             if (!scene.Visible) return;
+            if (!scene.Loaded) return;
 
             this.GraphicsDevice.RenderManager.Translate(Vector2.Zero);
             scene.Render();

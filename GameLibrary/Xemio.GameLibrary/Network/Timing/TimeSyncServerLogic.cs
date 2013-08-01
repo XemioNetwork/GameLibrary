@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using Xemio.GameLibrary.Network.Subscribers;
+using Xemio.GameLibrary.Network.Logic;
 
 namespace Xemio.GameLibrary.Network.Timing
 {
-    public class TimeSyncAction : ActionSubscriber<TimeSyncPackage>
+    public class TimeSyncServerLogic : ServerLogic<TimeSyncPackage>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSyncAction"/> class.
+        /// Initializes a new instance of the <see cref="TimeSyncServerLogic"/> class.
         /// </summary>
-        public TimeSyncAction()
+        public TimeSyncServerLogic()
         {
             this._firstSync = true;
             this._elapsed = 0;

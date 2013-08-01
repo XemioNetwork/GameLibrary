@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Game.Timing;
+using Xemio.GameLibrary.Network.Logic;
 using Xemio.GameLibrary.Network.Protocols;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;
@@ -13,7 +14,6 @@ using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
-using Xemio.GameLibrary.Network.Subscribers;
 using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
@@ -26,13 +26,13 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public Client(IClientProtocol protocol)
         {
-            this._subscribers = new List<IPerceptionSubscriber>();
+            this._subscribers = new List<IClientLogic>();
 
             this.Protocol = protocol;
             this.Protocol.Client = this;
 
-            this.Subscribe(new LatencyPerception());
-            this.Subscribe(new TimeSyncPerception());
+            this.Subscribe(new LatencyClientLogic());
+            this.Subscribe(new TimeSyncClientLogic());
 
             this.Active = true;
             this.PackageManager = new PackageManager();
@@ -46,7 +46,7 @@ namespace Xemio.GameLibrary.Network
         #endregion
 
         #region Fields
-        private List<IPerceptionSubscriber> _subscribers;
+        private List<IClientLogic> _subscribers;
         #endregion
 
         #region Properties
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Network
         /// Gets the subscribers.
         /// </summary>
         /// <param name="package">The package.</param>
-        private IEnumerable<IPerceptionSubscriber> GetSubscribers(Package package)
+        private IEnumerable<IClientLogic> GetSubscribers(Package package)
         {
             return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));            
         }
@@ -81,7 +81,7 @@ namespace Xemio.GameLibrary.Network
         /// Subscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Subscribe(IPerceptionSubscriber subscriber)
+        public void Subscribe(IClientLogic subscriber)
         {
             this._subscribers.Add(subscriber);
         }
@@ -89,7 +89,7 @@ namespace Xemio.GameLibrary.Network
         /// Unsubscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Unsubscribe(IPerceptionSubscriber subscriber)
+        public void Unsubscribe(IClientLogic subscriber)
         {
             this._subscribers.Remove(subscriber);
         }
@@ -113,12 +113,14 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         private void ClientLoop()
         {
+            var invoker = XGL.Components.Get<ThreadInvoker>();
+
             while (this.Active)
             {
                 Package package = this.Protocol.Receive();
                 if (package != null)
                 {
-                    ThreadInvoker.Invoke(() => this.Receive(package));
+                    invoker.Invoke(() => this.Receive(package));
 
                     EventManager eventManager = XGL.Components.Get<EventManager>();
                     eventManager.Publish(new ReceivedPackageEvent(package));
@@ -131,8 +133,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Receive(Package package)
         {
-            IEnumerable<IPerceptionSubscriber> subscribers = this.GetSubscribers(package);
-            foreach (IPerceptionSubscriber subscriber in subscribers)
+            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
+            foreach (IClientLogic subscriber in subscribers)
             {
                 subscriber.OnReceive(this, package);
             }
@@ -143,8 +145,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            IEnumerable<IPerceptionSubscriber> subscribers = this.GetSubscribers(package);
-            foreach (IPerceptionSubscriber subscriber in subscribers)
+            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
+            foreach (IClientLogic subscriber in subscribers)
             {
                 subscriber.OnBeginSend(this, package);
             }
@@ -154,7 +156,7 @@ namespace Xemio.GameLibrary.Network
             EventManager eventManager = XGL.Components.Get<EventManager>();
             eventManager.Publish(new SentPackageEvent(package));
 
-            foreach (IPerceptionSubscriber subscriber in subscribers)
+            foreach (IClientLogic subscriber in subscribers)
             {
                 subscriber.OnSent(this, package);
             }
@@ -168,7 +170,7 @@ namespace Xemio.GameLibrary.Network
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
-            foreach (IPerceptionSubscriber subscriber in this._subscribers)
+            foreach (IClientLogic subscriber in this._subscribers)
             {
                 subscriber.Tick(elapsed);
             }

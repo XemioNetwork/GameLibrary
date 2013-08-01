@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Network.Synchronization;
 
 namespace Xemio.GameLibrary.Common.Extensions
 {

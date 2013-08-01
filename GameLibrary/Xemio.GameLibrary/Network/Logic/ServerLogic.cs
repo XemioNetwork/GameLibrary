@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Network.Subscribers
+namespace Xemio.GameLibrary.Network.Logic
 {
-    public abstract class ActionSubscriber<T> : IActionSubscriber where T : Package
+    public abstract class ServerLogic<T> : IServerLogic where T : Package
     {
         #region Methods
         /// <summary>
@@ -60,7 +56,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        void IActionSubscriber.OnReceive(Server server, Package package, IConnection sender)
+        void IServerLogic.OnReceive(Server server, Package package, IConnection sender)
         {
             this.OnReceive(server, package as T, sender);
         }
@@ -70,7 +66,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IActionSubscriber.OnBeginSend(Server server, Package package, IConnection receiver)
+        void IServerLogic.OnBeginSend(Server server, Package package, IConnection receiver)
         {
             this.OnBeginSend(server, package as T, receiver);
         }
@@ -80,7 +76,7 @@ namespace Xemio.GameLibrary.Network.Subscribers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IActionSubscriber.OnSent(Server server, Package package, IConnection receiver)
+        void IServerLogic.OnSent(Server server, Package package, IConnection receiver)
         {
             this.OnSent(server, package as T, receiver);
         }

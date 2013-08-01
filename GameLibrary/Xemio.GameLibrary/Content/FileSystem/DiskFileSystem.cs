@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Content.FileSystem
 {
-    public class DefaultFileSystem : IFileSystem
+    public class DiskFileSystem : IFileSystem
     {
         #region IFileSystem Member
         /// <summary>
@@ -56,9 +56,17 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        public virtual bool Exists(string fileName)
+        public virtual bool FileExists(string fileName)
         {
             return File.Exists(fileName);
+        }
+        /// <summary>
+        /// Determines wether the specified directory exists.
+        /// </summary>
+        /// <param name="directoryName">Name of the directory.</param>
+        public bool DirectoryExists(string directoryName)
+        {
+            return Directory.Exists(directoryName);
         }
         /// <summary>
         /// Gets all files inside the specified directory.

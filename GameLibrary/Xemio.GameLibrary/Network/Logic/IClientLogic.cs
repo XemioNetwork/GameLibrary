@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Network.Subscribers
+namespace Xemio.GameLibrary.Network.Logic
 {
-    public interface IPerceptionSubscriber
+    public interface IClientLogic
     {
         /// <summary>
         /// Gets the type.

@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Xemio.GameLibrary.Network.Subscribers;
+using Xemio.GameLibrary.Network.Logic;
 
 namespace Xemio.GameLibrary.Network.Timing
 {
-    public class LatencyPerception : PerceptionSubscriber<LatencyPackage>
+    public class TimeSyncClientLogic : ClientLogic<TimeSyncPackage>
     {
         #region Methods
         /// <summary>
-        /// Called when the client receives a latency package.
+        /// Called when the client receives a package.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public override void OnReceive(Client client, LatencyPackage package)
+        public override void OnReceive(Client client, TimeSyncPackage package)
         {
-            client.Latency = package.Latency;
+            client.Send(package);
         }
         #endregion
     }

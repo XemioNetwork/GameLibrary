@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
 {
-    public class VirtualFileSystem : IFileSystem
+    public class VirtualFileSystem : IVirtualFileSystem
     {
         #region Constructors
         /// <summary>
@@ -20,13 +20,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         /// <param name="fileName">Name of the file.</param>
         public VirtualFileSystem(string fileName) : this()
         {
-            if (File.Exists(fileName))
-            {
-                using (FileStream stream = new FileStream(fileName, FileMode.Open))
-                {
-                    this._root = VirtualDirectory.FromStream(stream);
-                }
-            }
+            this.Load(fileName);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualFileSystem"/> class.
@@ -39,7 +33,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         #endregion
 
         #region Fields
-        private readonly VirtualDirectory _root;
+        private VirtualDirectory _root;
         #endregion
 
         #region Methods
@@ -73,29 +67,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
             return directory;
         }
         #endregion
-
-        #region Serialization Methods
-        /// <summary>
-        /// Saves the file system.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        public void Save(string fileName)
-        {
-            using (FileStream stream = new FileStream(fileName, FileMode.Create))
-            {
-                this.Save(stream);
-            }
-        }
-        /// <summary>
-        /// Saves the file system.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        public void Save(Stream stream)
-        {
-            this._root.Save(stream);
-        }
-        #endregion
-
+        
         #region Implementation of IFileSystem
         /// <summary>
         /// Opens the specified file.
@@ -190,13 +162,25 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
         /// Determines wether the specified file exists.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        public bool Exists(string fileName)
+        public bool FileExists(string fileName)
         {
             VirtualPath path = new VirtualPath(fileName);
             VirtualDirectory directory = this.GetDirectory(path);
             
             return directory != null && directory.Files.Any(
                 file => file.Name == path.Name);
+        }
+        /// <summary>
+        /// Determines wether the specified directory exists.
+        /// </summary>
+        /// <param name="directoryName">Name of the directory.</param>
+        public bool DirectoryExists(string directoryName)
+        {
+            VirtualPath path = new VirtualPath(directoryName);
+            VirtualDirectory directory = this.GetDirectory(path);
+
+            return directory != null && directory.Directories.Any(
+                dir => dir.Name == path.Name);
         }
         /// <summary>
         /// Gets all files inside the specified directory.
@@ -225,11 +209,38 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
 
             if (virtualDirectory != null)
             {
-                return virtualDirectory.Directories
-                    .Select(f => f.FullPath).ToArray();
+                return virtualDirectory.Directories.Select(f => f.FullPath).ToArray();
             }
 
             return null;
+        }
+        #endregion
+
+        #region Implementation of IVirtualFileSystem
+        /// <summary>
+        /// Loads the specified file name.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        public void Load(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                using (FileStream stream = new FileStream(fileName, FileMode.Open))
+                {
+                    this._root = VirtualDirectory.FromStream(stream);
+                }
+            }
+        }
+        /// <summary>
+        /// Saves the changes made to the file system.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        public void Persist(string fileName)
+        {
+            using (FileStream stream = new FileStream(fileName, FileMode.Create))
+            {
+                this._root.Save(stream);
+            }
         }
         #endregion
     }

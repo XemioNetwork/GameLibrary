@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         public ContentManager()
         {
-            this.FileSystem = new DefaultFileSystem();
+            this.FileSystem = new DiskFileSystem();
             this._contentMappings = new Dictionary<string, object>();
         }
         #endregion

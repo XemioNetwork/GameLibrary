@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Math.Collision
 {
-    public static class CellSizeHelper
+    internal static class CellSizeHelper
     {
         #region Methods
         /// <summary>

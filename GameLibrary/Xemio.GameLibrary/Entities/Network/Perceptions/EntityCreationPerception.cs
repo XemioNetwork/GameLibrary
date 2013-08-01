@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Network;
-using Xemio.GameLibrary.Network.Subscribers;
 using Xemio.GameLibrary.Entities.Network.Packages;
+using Xemio.GameLibrary.Network.Logic;
 
 namespace Xemio.GameLibrary.Entities.Network.Perceptions
 {
-    public class EntityCreationPerception : PerceptionSubscriber<EntityCreationPackage>
+    public class EntityCreationPerception : ClientLogic<EntityCreationPackage>
     {
         #region Constructors
         /// <summary>

@@ -43,7 +43,8 @@
     <Compile Include="Common\Cryptography\CrytographyHelper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
-    <Compile Include="Common\ExcludeAttribute.cs" />
+    <Compile Include="Content\FileSystem\IVirtualFileSystem.cs" />
+    <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
     <Compile Include="Common\ICondition.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
     <Compile Include="Common\Link\CreationType.cs" />
@@ -79,11 +80,9 @@
     <Compile Include="Content\ContentReader.cs" />
     <Compile Include="Content\ContentSerializer.cs" />
     <Compile Include="Content\ContentWriter.cs" />
-    <Compile Include="Content\FileSystem\Containers\ContainerFileSystem.cs" />
-    <Compile Include="Content\FileSystem\Containers\ContainerPath.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualFileStream.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualFileSystem.cs" />
-    <Compile Include="Content\FileSystem\DefaultFileSystem.cs" />
+    <Compile Include="Content\FileSystem\DiskFileSystem.cs" />
     <Compile Include="Content\FileSystem\IFileSystem.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualDirectory.cs" />
     <Compile Include="Content\FileSystem\Virtualization\VirtualFile.cs" />
@@ -180,13 +179,13 @@
     <Compile Include="Network\Events\SentPackageEvent.cs" />
     <Compile Include="Network\IConnection.cs" />
     <Compile Include="Network\Packages\BinaryPackage.cs" />
-    <Compile Include="Network\Subscribers\IPerceptionSubscriber.cs" />
-    <Compile Include="Network\Subscribers\IActionSubscriber.cs" />
+    <Compile Include="Network\Logic\IClientLogic.cs" />
+    <Compile Include="Network\Logic\IServerLogic.cs" />
     <Compile Include="Network\Packages\PackageHandler.cs" />
-    <Compile Include="Network\Subscribers\PerceptionSubscriber.cs" />
+    <Compile Include="Network\Logic\ClientLogic.cs" />
     <Compile Include="Network\Protocols\Local\QueuePackage.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
-    <Compile Include="Network\Subscribers\ActionSubscriber.cs" />
+    <Compile Include="Network\Logic\ServerLogic.cs" />
     <Compile Include="Network\Synchronization\IPropertyComparator.cs" />
     <Compile Include="Network\Synchronization\ISynchronizable.cs" />
     <Compile Include="Network\Packages\Package.cs" />
@@ -202,11 +201,11 @@
     <Compile Include="Network\Synchronization\Properties.cs" />
     <Compile Include="Network\Synchronization\StaticComparator.cs" />
     <Compile Include="Network\Synchronization\SynchronizationStorage.cs" />
-    <Compile Include="Network\Timing\LatencyPerception.cs" />
+    <Compile Include="Network\Timing\LatencyClientLogic.cs" />
     <Compile Include="Network\Timing\LatencyPackage.cs" />
-    <Compile Include="Network\Timing\TimeSyncPerception.cs" />
+    <Compile Include="Network\Timing\TimeSyncClientLogic.cs" />
     <Compile Include="Network\Timing\TimeSyncPackage.cs" />
-    <Compile Include="Network\Timing\TimeSyncAction.cs" />
+    <Compile Include="Network\Timing\TimeSyncServerLogic.cs" />
     <Compile Include="Plugins\ContextFactory.cs" />
     <Compile Include="Plugins\Contexts\FileAssemblyContext.cs" />
     <Compile Include="Plugins\IAssemblyContext.cs" />
@@ -310,6 +309,8 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\FileSystem\Compressed\" />
+    <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />
     <Folder Include="UI\CSS\Properties\" />
   </ItemGroup>

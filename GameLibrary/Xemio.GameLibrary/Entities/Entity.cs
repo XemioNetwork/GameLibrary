@@ -9,6 +9,7 @@ using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Math.Collision;
 using Xemio.GameLibrary.Math.Collision.Sources;
+using Xemio.GameLibrary.Network.Synchronization;
 
 namespace Xemio.GameLibrary.Entities
 {
@@ -24,6 +25,8 @@ namespace Xemio.GameLibrary.Entities
 
             this.Components = new List<EntityComponent>();
             this.Containers = new List<EntityDataContainer>();
+
+            this.NotifyPositionChanged = true;
 
             this._eventManager = XGL.Components.Get<EventManager>();
         }
@@ -58,10 +61,17 @@ namespace Xemio.GameLibrary.Entities
                     Vector2 lastPosition = this._position;
                     this._position = value;
 
-                    this.OnPositionChanged(value - lastPosition);
+                    if (this.NotifyPositionChanged)
+                    {
+                        this.OnPositionChanged(value - lastPosition);
+                    }
                 }
             }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether to publish an event if the position changed.
+        /// </summary>
+        public bool NotifyPositionChanged { get; set; }
         /// <summary>
         /// Gets a value indicating whether this instance is destroyed.
         /// </summary>

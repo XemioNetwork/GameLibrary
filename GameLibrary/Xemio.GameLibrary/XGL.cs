@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
+using Xemio.GameLibrary.Localization;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Input;
@@ -112,6 +114,8 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new MouseListener(handle));
             XGL.Components.Add(new ContentManager());
             XGL.Components.Add(new ImplementationManager());
+            XGL.Components.Add(new ThreadInvoker());
+            XGL.Components.Add(new LocalizationManager());
 
             XGL.CreateSound();
 

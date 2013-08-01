@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Network.Synchronization;
 
 namespace Xemio.GameLibrary.Network.Packages
 {
