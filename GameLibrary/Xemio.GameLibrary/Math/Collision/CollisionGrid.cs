@@ -61,10 +61,9 @@ namespace Xemio.GameLibrary.Math.Collision
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        /// <param name="source">The source.</param>
         /// <param name="collisionMap">The collision map.</param>
         /// <param name="action">The action.</param>
-        private void PerformAction(int x, int y, ICollisionSource source, CollisionMap collisionMap, Action<IList<ICollisionSource>> action)
+        private void PerformAction(int x, int y, CollisionMap collisionMap, Action<IList<ICollisionSource>> action)
         {
             for (int i = 0; i < collisionMap.Width; i++)
             {
@@ -95,7 +94,6 @@ namespace Xemio.GameLibrary.Math.Collision
                 this.Remove(source, collisionMap);
             
             this.PerformAction(x, y,
-                source,
                 collisionMap,
                 list => list.Add(source));
 
@@ -116,7 +114,6 @@ namespace Xemio.GameLibrary.Math.Collision
                 int y = (int)position.Y / this.CellSize;
 
                 this.PerformAction(x, y,
-                    source,
                     collisionMap,
                     list => list.Remove(source));
 

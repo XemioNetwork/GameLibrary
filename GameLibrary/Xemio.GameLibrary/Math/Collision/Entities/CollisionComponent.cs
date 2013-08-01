@@ -96,16 +96,11 @@ namespace Xemio.GameLibrary.Math.Collision.Entities
                     this.CollidableEntity.Position -= e.Delta;
 
                     Vector2 direction = Vector2.Normalize(e.Delta);
+                    float[] dimensionLengths = { MathHelper.Abs(e.Delta.X), MathHelper.Abs(e.Delta.Y) };
 
                     Vector2[] dimensions = {
                         new Vector2(direction.X, 0),
                         new Vector2(0, direction.Y)
-                    };
-
-                    float[] dimensionLengths =
-                    {
-                        MathHelper.Abs(e.Delta.X),
-                        MathHelper.Abs(e.Delta.Y)
                     };
 
                     for (int i = 0; i < dimensions.Length; i++)

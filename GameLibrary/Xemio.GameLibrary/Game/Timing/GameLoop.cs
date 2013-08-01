@@ -41,9 +41,17 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public int FramesPerSecond { get; private set; }
         /// <summary>
-        /// Gets the frame time.
+        /// Gets the frame time (render time + tick time).
         /// </summary>
         public double FrameTime { get; private set; }
+        /// <summary>
+        /// Gets the tick time.
+        /// </summary>
+        public double TickTime { get; private set; }
+        /// <summary>
+        /// Gets the render time.
+        /// </summary>
+        public double RenderTime { get; private set; }
         /// <summary>
         /// Gets the target tick time.
         /// </summary>
@@ -205,6 +213,9 @@ namespace Xemio.GameLibrary.Game.Timing
 
                 if (gameTime.Elapsed.TotalMilliseconds - lastFrameCount >= 1000.0)
                 {
+                    this.TickTime = this._tickTime;
+                    this.RenderTime = this._renderTime;
+
                     this.FrameTime = this._tickTime + this._renderTime;
                     this.FramesPerSecond = frames;
 
