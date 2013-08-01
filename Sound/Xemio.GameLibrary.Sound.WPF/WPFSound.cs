@@ -19,8 +19,9 @@ namespace Xemio.GameLibrary.Sound.WPF
         {
             string fullPath = Path.GetFullPath(fileName);
             UriBuilder builder = new UriBuilder(fullPath);
+            var invoker = XGL.Components.Get<ThreadInvoker>();
 
-            ThreadInvoker.Invoke(() =>
+            invoker.Invoke(() =>
             {
                 //Safely create the media player inside the main thread to prevent
                 //invoker exceptions using the play method.
