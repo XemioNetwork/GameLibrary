@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Events
         #endregion
 
         #region Fields
-        private List<dynamic> _observers; 
+        private readonly List<dynamic> _observers; 
         #endregion
 
         #region Methods

@@ -124,8 +124,7 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             this.Active = true;
 
-            this._loopTask = new Task(this.InternalLoop);
-            this._loopTask.Start();
+            this._loopTask = Task.Factory.StartNew(InternalLoop);
         }
         /// <summary>
         /// Stops the game loop.

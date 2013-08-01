@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Events
         #endregion
 
         #region Fields
-        private EventSubject _subject;
+        private readonly EventSubject _subject;
         #endregion
 
         #region Methods
