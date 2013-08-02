@@ -58,10 +58,10 @@ namespace Xemio.GameLibrary
         /// </summary>
         public static void CreateGraphics(IntPtr handle, int width, int height)
         {
-            GraphicsDevice graphicsDevice = new GraphicsDevice(handle);
+            var graphicsDevice = new GraphicsDevice(handle);
             XGL.Components.Add(graphicsDevice);
 
-            IGraphicsInitializer graphicsInitializer = XGL.Components.Get<IGraphicsInitializer>();
+            var graphicsInitializer = XGL.Components.Get<IGraphicsInitializer>();
             if (graphicsInitializer == null)
             {
                 throw new InvalidOperationException(
@@ -81,8 +81,8 @@ namespace Xemio.GameLibrary
         /// </summary>
         public static void CreateSound()
         {
-            SoundManager soundManager = new SoundManager();
-            ISoundInitializer soundInitializer = XGL.Components.Get<ISoundInitializer>();
+            var soundManager = new SoundManager();
+            var soundInitializer = XGL.Components.Get<ISoundInitializer>();
 
             if (soundInitializer != null)
             {
@@ -101,9 +101,11 @@ namespace Xemio.GameLibrary
         /// <param name="targetFps">The target FPS.</param>
         public static void Run(IntPtr handle, int width, int height, int targetFps)
         {
-            GameLoop loop = new GameLoop();
-            loop.TargetFrameTime = 1000 / (double)targetFps;
-            loop.TargetTickTime = 1000 / (double)targetFps;
+            GameLoop loop = new GameLoop
+                                {
+                                    TargetFrameTime = 1000 / (double)targetFps,
+                                    TargetTickTime = 1000 / (double)targetFps
+                                };
 
             XGL.CreateGraphics(handle, width, height);
             
@@ -116,10 +118,9 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new ImplementationManager());
             XGL.Components.Add(new ThreadInvoker());
             XGL.Components.Add(new LocalizationManager());
+            XGL.Components.Add(new PackageHandler());
 
             XGL.CreateSound();
-
-            XGL.Components.Add(new PackageHandler());
             XGL.Components.Construct();
 
             loop.Run();
