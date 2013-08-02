@@ -264,54 +264,13 @@
     <Compile Include="Sound\Loops\LoopManager.cs" />
     <Compile Include="Sound\PlayMode.cs" />
     <Compile Include="Sound\SoundManager.cs" />
-    <Compile Include="UI\CSS\Expressions\ClassExpression.cs" />
-    <Compile Include="UI\CSS\Expressions\ElementExpression.cs" />
-    <Compile Include="UI\CSS\Expressions\IdExpression.cs" />
-    <Compile Include="UI\CSS\Namespaces\INamespace.cs" />
-    <Compile Include="UI\CSS\Expressions\IExpression.cs" />
-    <Compile Include="UI\CSS\Namespaces\Namespace.cs" />
     <Compile Include="Common\IParser.cs" />
-    <Compile Include="UI\CSS\Parsers\NamespaceParser.cs" />
-    <Compile Include="UI\CSS\Style.cs" />
-    <Compile Include="UI\CSS\StyleInterpreter.cs" />
-    <Compile Include="UI\CSS\StyleManager.cs" />
-    <Compile Include="UI\CSS\StyleSection.cs" />
-    <Compile Include="UI\DataBindings\Property.cs" />
-    <Compile Include="UI\DataBindings\PropertyBinder.cs" />
-    <Compile Include="UI\DataBindings\PropertyBinding.cs" />
-    <Compile Include="UI\DataBindings\DataBinder.cs" />
-    <Compile Include="UI\Events\KeyEventArgs.cs" />
-    <Compile Include="UI\Events\MouseEventArgs.cs" />
-    <Compile Include="UI\Events\PaintEventArgs.cs" />
-    <Compile Include="UI\IGraphics.cs" />
-    <Compile Include="UI\Shapes\EllipseShape.cs" />
-    <Compile Include="UI\Shapes\IShape.cs" />
-    <Compile Include="UI\Shapes\PositionMode.cs" />
-    <Compile Include="UI\Shapes\RectangleShape.cs" />
-    <Compile Include="UI\Shapes\RoundedRectangleShape.cs" />
-    <Compile Include="UI\Widgets\Button.cs" />
-    <Compile Include="UI\Widgets\ThemedSpriteSheet.cs" />
-    <Compile Include="UI\Widgets\ThemedWidget.cs" />
-    <Compile Include="UI\Widgets\View\ViewStates\Button\ButtonStateHover.cs" />
-    <Compile Include="UI\Widgets\View\ViewStates\Button\ButtonStateNormal.cs" />
-    <Compile Include="UI\Widgets\View\ViewStates\Button\ButtonView.cs" />
-    <Compile Include="UI\Widgets\View\Instructions\DrawShapeInstruction.cs" />
-    <Compile Include="UI\Widgets\View\Instructions\FillShapeInstruction.cs" />
-    <Compile Include="UI\Widgets\View\Instructions\IWidgetViewInstruction.cs" />
-    <Compile Include="UI\Widgets\View\WidgetView.cs" />
-    <Compile Include="UI\Widgets\View\WidgetViewState.cs" />
-    <Compile Include="UI\Widgets\Base\WidgetGraphics.cs" />
-    <Compile Include="UI\Widgets\Base\IWidgetContainer.cs" />
-    <Compile Include="UI\Widgets\Base\Widget.cs" />
-    <Compile Include="UI\Widgets\Base\WidgetContainer.cs" />
-    <Compile Include="UI\Widgets\Base\WidgetState.cs" />
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\FileSystem\Compressed\" />
     <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />
-    <Folder Include="UI\CSS\Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
