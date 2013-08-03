@@ -31,8 +31,8 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         #endregion
 
         #region Fields
-        private TcpClient _tcpClient;
-        private PackageManager _packageManager;
+        private readonly TcpClient _tcpClient;
+        private readonly PackageManager _packageManager;
         #endregion
 
         #region IConnection Member

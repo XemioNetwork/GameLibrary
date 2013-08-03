@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Entities.Network.Packages;
 using Xemio.GameLibrary.Network.Logic;
 
-namespace Xemio.GameLibrary.Entities.Network.Perceptions
+namespace Xemio.GameLibrary.Entities.Network.ClientLogic
 {
-    public class WorldExchangePerception : ClientLogic<WorldExchangePackage>
+    public class EntityCreationClientLogic : ClientLogic<EntityCreationPackage>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="WorldExchangePerception"/> class.
+        /// Initializes a new instance of the <see cref="EntityCreationClientLogic"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public WorldExchangePerception(EntityEnvironment environment)
+        public EntityCreationClientLogic(EntityEnvironment environment)
         {
             this.Environment = environment;
         }
@@ -31,18 +27,18 @@ namespace Xemio.GameLibrary.Entities.Network.Perceptions
 
         #region Methods
         /// <summary>
-        /// Called when the client receives a world exchange package.
+        /// Called when the client receives an entity package.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public override void OnReceive(Client client, WorldExchangePackage package)
+        public override void OnReceive(Client client, EntityCreationPackage package)
         {
-            foreach (EntityCreationPackage creationPackage in package.Packages)
-            {
-                client.Receive(creationPackage);
-            }
+            Type type = Type.GetType(package.TypeName);
+            
+            Entity entity = (Entity)Activator.CreateInstance(type);
+            entity.EntityId = package.EntityId;
 
-            SyncHelper.Read(package.Stream, this.Environment);
+            this.Environment.Add(entity);
         }
         #endregion
     }

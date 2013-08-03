@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Entities.Network.Packages;
-using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Network.Logic;
 
-namespace Xemio.GameLibrary.Entities.Network.Perceptions
+namespace Xemio.GameLibrary.Entities.Network.ClientLogic
 {
-    public class WorldUpdatePerception : ClientLogic<WorldUpdatePackage>
+    public class WorldUpdateClientLogic : ClientLogic<WorldUpdatePackage>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="WorldExchangePerception"/> class.
+        /// Initializes a new instance of the <see cref="WorldExchangeClientLogic"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public WorldUpdatePerception(EntityEnvironment environment)
+        public WorldUpdateClientLogic(EntityEnvironment environment)
         {
             this.Environment = environment;
         }

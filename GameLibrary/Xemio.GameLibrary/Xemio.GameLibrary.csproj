@@ -43,6 +43,7 @@
     <Compile Include="Common\Cryptography\CrytographyHelper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
+    <Compile Include="Common\GlobalExceptionHandler.cs" />
     <Compile Include="Content\FileSystem\IVirtualFileSystem.cs" />
     <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
@@ -124,9 +125,9 @@
     <Compile Include="Entities\EntityRenderer.cs" />
     <Compile Include="Entities\EntityIdFactory.cs" />
     <Compile Include="Entities\Network\Packages\EntityCreationPackage.cs" />
-    <Compile Include="Entities\Network\Perceptions\EntityCreationPerception.cs" />
-    <Compile Include="Entities\Network\Perceptions\WorldExchangePerception.cs" />
-    <Compile Include="Entities\Network\Perceptions\WorldUpdatePerception.cs" />
+    <Compile Include="Entities\Network\ClientLogic\EntityCreationClientLogic.cs" />
+    <Compile Include="Entities\Network\ClientLogic\WorldExchangeClientLogic.cs" />
+    <Compile Include="Entities\Network\ClientLogic\WorldUpdateClientLogic.cs" />
     <Compile Include="Entities\Network\SyncHelper.cs" />
     <Compile Include="Events\ActionObserver.cs" />
     <Compile Include="Events\EventDisposer.cs" />

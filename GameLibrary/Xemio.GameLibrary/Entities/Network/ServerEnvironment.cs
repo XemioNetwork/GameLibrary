@@ -53,8 +53,7 @@ namespace Xemio.GameLibrary.Entities.Network
         {
             Server server = XGL.Components.Get<Server>();
 
-            WorldExchangePackage exchange = new WorldExchangePackage();
-            exchange.Create(this);
+            WorldExchangePackage exchange = new WorldExchangePackage(this);
 
             server.Send(exchange, e.Connection);
         }

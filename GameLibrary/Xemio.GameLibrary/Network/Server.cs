@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Events;
@@ -151,10 +152,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         private void StartServerLoop()
         {
-            Action serverLoop = this.ServerLoop;
-            Task loopTask = new Task(serverLoop);
-
-            loopTask.Start();
+            Task.Factory.StartNew(this.ServerLoop);
         }
         /// <summary>
         /// Accepts incoming client connection requests.
@@ -176,8 +174,7 @@ namespace Xemio.GameLibrary.Network
         /// <param name="connection">The connection.</param>
         private void StartListening(IConnection connection)
         {
-            Task listenTask = new Task(() => this.Listen(connection));
-            listenTask.Start();
+            Task.Factory.StartNew(() => this.Listen(connection));
         }
         /// <summary>
         /// Listens to the specified connection.
@@ -197,10 +194,11 @@ namespace Xemio.GameLibrary.Network
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message + ex.StackTrace);
-                    //TODO: logging
+                    this._eventManager.Publish(new ExceptionEvent(ex));
+
                     this.Connections.Remove(connection);
                     this._eventManager.Publish(new ClientLeftEvent(connection));
+
                     break;
                 }
             }

@@ -29,8 +29,8 @@ namespace Xemio.GameLibrary.Network.Synchronization
         #endregion
 
         #region Fields
-        private Dictionary<PropertyInfo, object> _properties;
-        private List<PropertyInfo> _indexMapping;
+        private readonly Dictionary<PropertyInfo, object> _properties;
+        private readonly List<PropertyInfo> _indexMapping;
         #endregion
 
         #region Properties

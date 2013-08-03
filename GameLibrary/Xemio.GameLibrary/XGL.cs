@@ -119,6 +119,7 @@ namespace Xemio.GameLibrary
             XGL.Components.Add(new ThreadInvoker());
             XGL.Components.Add(new LocalizationManager());
             XGL.Components.Add(new PackageHandler());
+            XGL.Components.Add(new GlobalExceptionHandler());
 
             XGL.CreateSound();
             XGL.Components.Construct();

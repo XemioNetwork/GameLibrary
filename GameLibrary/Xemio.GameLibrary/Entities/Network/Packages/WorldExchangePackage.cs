@@ -45,11 +45,11 @@ namespace Xemio.GameLibrary.Entities.Network.Packages
         public void Create(EntityEnvironment environment)
         {
             List<Entity> createdEntities = environment
-                .Where<Entity>(e => e.IsCreationSynced)
+                .Where(e => e.IsCreationSynced)
                 .ToList();
 
             List<Entity> syncedEntities = environment
-                .Where<Entity>(e => e.IsSynced)
+                .Where(e => e.IsSynced)
                 .ToList();
 
             this.Packages = new EntityCreationPackage[createdEntities.Count];

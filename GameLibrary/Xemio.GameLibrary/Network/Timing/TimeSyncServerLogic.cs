@@ -28,7 +28,7 @@ namespace Xemio.GameLibrary.Network.Timing
         private bool _firstSync;
         private float _elapsed;
 
-        private Dictionary<IConnection, Stopwatch> _watches;
+        private readonly Dictionary<IConnection, Stopwatch> _watches;
         #endregion
 
         #region Properties
@@ -104,8 +104,10 @@ namespace Xemio.GameLibrary.Network.Timing
             float latency = this.GetLatency(sender);
             sender.Latency = latency;
 
-            LatencyPackage latencyPackage = new LatencyPackage();
-            latencyPackage.Latency = latency;
+            LatencyPackage latencyPackage = new LatencyPackage
+                                                {
+                                                    Latency = latency
+                                                };
 
             server.Send(latencyPackage, sender);
         }

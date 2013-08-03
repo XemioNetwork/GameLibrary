@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         #endregion
 
         #region Fields
-        private TcpDelay _delay;
+        private readonly TcpDelay _delay;
         private TcpClient _tcpClient;
         #endregion
 
@@ -52,8 +52,10 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="port">The port.</param>
         public void Connect(string ip, int port)
         {
-            this._tcpClient = new TcpClient();
-            this._tcpClient.NoDelay = (this._delay == TcpDelay.None);
+            this._tcpClient = new TcpClient
+                                  {
+                                      NoDelay = (this._delay == TcpDelay.None)
+                                  };
             this._tcpClient.Connect(IPAddress.Parse(ip), port);
 
             this.Writer = new BinaryWriter(this._tcpClient.GetStream());

@@ -36,8 +36,8 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         #endregion
 
         #region Fields
-        private TcpDelay _delay;
-        private TcpListener _listener;
+        private readonly TcpDelay _delay;
+        private readonly TcpListener _listener;
         #endregion
 
         #region IServerProtocol Member
@@ -53,15 +53,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             {
                 this.Server.PackageManager.Serialize(package, connection.Writer);
             }
-        }
-        /// <summary>
-        /// Receives a package.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        /// <returns></returns>
-        public Package Receive(IConnection connection)
-        {
-            return connection.Receive();
         }
         /// <summary>
         /// Accepts a new connection.

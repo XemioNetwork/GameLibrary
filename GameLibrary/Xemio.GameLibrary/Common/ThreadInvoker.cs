@@ -26,7 +26,7 @@ namespace Xemio.GameLibrary.Common
         #endregion
 
         #region Fields
-        private Control _invokerControl;
+        private readonly Control _invokerControl;
         #endregion
 
         #region Methods

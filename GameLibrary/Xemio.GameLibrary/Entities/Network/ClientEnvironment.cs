@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Entities;
+using Xemio.GameLibrary.Entities.Network.ClientLogic;
 using Xemio.GameLibrary.Entities.Network.Packages;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Packages;
-using Xemio.GameLibrary.Entities.Network.Perceptions;
 
 namespace Xemio.GameLibrary.Entities.Network
 {
@@ -25,9 +25,9 @@ namespace Xemio.GameLibrary.Entities.Network
                 throw new InvalidOperationException("You can not create a client environment on the server side.");
             }
 
-            client.Subscribe(new EntityCreationPerception(this));
-            client.Subscribe(new WorldExchangePerception(this));
-            client.Subscribe(new WorldUpdatePerception(this));
+            client.Subscribe(new EntityCreationClientLogic(this));
+            client.Subscribe(new WorldExchangeClientLogic(this));
+            client.Subscribe(new WorldUpdateClientLogic(this));
         }
         #endregion
     }

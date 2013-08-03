@@ -16,12 +16,6 @@ namespace Xemio.GameLibrary.Network.Protocols
         /// <param name="receiver">The receiver.</param>
         void Send(Package package, IConnection receiver);
         /// <summary>
-        /// Receives a package.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        /// <returns></returns>
-        Package Receive(IConnection connection);
-        /// <summary>
         /// Accepts a new connection.
         /// </summary>
         IConnection AcceptConnection();

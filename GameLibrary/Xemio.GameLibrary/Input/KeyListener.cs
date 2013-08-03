@@ -143,7 +143,6 @@ namespace Xemio.GameLibrary.Input
             catch (InvalidOperationException ex)
             {
                 this.EventManager.Publish(new ExceptionEvent(ex));
-                this.EventManager.Publish(new LoggingEvent(LoggingLevel.Exception, ex.Message));
             }
         }
         /// <summary>

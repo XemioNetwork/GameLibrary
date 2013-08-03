@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryPackage"/> class.
         /// </summary>
-        public BinaryPackage()
+        protected BinaryPackage()
         {
             this.Stream = new MemoryStream();
         }

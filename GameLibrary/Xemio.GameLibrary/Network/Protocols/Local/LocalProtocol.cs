@@ -27,11 +27,11 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         #endregion
 
         #region Fields
-        private int _localSleepTime;
-        private Queue<QueuePackage> _packageQueue;
+        private readonly int _localSleepTime;
+        private readonly Queue<QueuePackage> _packageQueue;
 
-        private static LocalProtocol _clientProtocol = new LocalProtocol();
-        private static LocalProtocol _serverProtocol = new LocalProtocol();
+        private static readonly LocalProtocol _clientProtocol = new LocalProtocol();
+        private static readonly LocalProtocol _serverProtocol = new LocalProtocol();
         #endregion
 
         #region Static Member
@@ -109,7 +109,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <summary>
         /// Receives a package.
         /// </summary>
-        /// <returns></returns>
         public Package Receive()
         {
             while (this._packageQueue.Count == 0)
