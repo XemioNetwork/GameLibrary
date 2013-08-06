@@ -25,107 +25,106 @@ namespace Xemio.GameLibrary
     {
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether this <see cref="XGL"/> is initialized.
-        /// </summary>
-        public static bool Initialized { get; private set; }
-        /// <summary>
-        /// Gets the components.
+        /// Gets the component manager.
         /// </summary>
         public static ComponentManager Components
         {
             get { return ComponentManager.Instance; }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Bootstrapper"/> is initialized.
+        /// </summary>
+        public static bool Initialized { get; private set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Initializes the graphics provider.
+        /// Configures the XGL using the specified bootstrapper.
         /// </summary>
-        public static void Initialize(IGraphicsInitializer initializer)
+        /// <typeparam name="T">The type of the bootstrapper.</typeparam>
+        public static void Run<T>(IntPtr handle) where T : Bootstrapper, new()
         {
-            XGL.Components.Add(new ValueProvider<IGraphicsInitializer>(initializer));
+            T bootstrapper = new T();
+            XGL.Run(handle, bootstrapper);
         }
         /// <summary>
-        /// Initializes the sound system.
+        /// Configures the XGL using the specified bootstrapper.
         /// </summary>
-        /// <param name="initializer">The initializer.</param>
-        public static void Initialize(ISoundInitializer initializer)
+        /// <param name="handle">The handle.</param>
+        /// <param name="bootstrapper">The bootstrapper.</param>
+        public static void Run(IntPtr handle, Bootstrapper bootstrapper)
         {
-            XGL.Components.Add(new ValueProvider<ISoundInitializer>(initializer));
-        }
-        /// <summary>
-        /// Creates the graphics components.
-        /// </summary>
-        public static void CreateGraphics(IntPtr handle, int width, int height)
-        {
-            var graphicsDevice = new GraphicsDevice(handle);
-            XGL.Components.Add(graphicsDevice);
+            if (XGL.Initialized)
+                return;
 
-            var graphicsInitializer = XGL.Components.Get<IGraphicsInitializer>();
-            if (graphicsInitializer == null)
+            bootstrapper.RegisterComponents();
+            foreach (IComponent component in bootstrapper.Components)
             {
-                throw new InvalidOperationException(
-                    "You have to pass in a graphics initializer before creating graphics.");
+                XGL.Components.Add(component);
             }
 
-            if (graphicsInitializer.IsAvailable())
-            {
-                graphicsDevice.Graphics = graphicsInitializer.CreateProvider(graphicsDevice);
-                graphicsDevice.DisplayMode = new DisplayMode(width, height);
-            }
+            XGL.InitializeGraphics(handle, bootstrapper);
+            XGL.InitializeSound(bootstrapper);
+            XGL.InitializeGameLoop(bootstrapper);
+
+            XGL.Components.Construct();
+
+            bootstrapper.RegisterStartScenes();
+
+            var sceneManager = XGL.Components.Get<SceneManager>();
+            sceneManager.Add(bootstrapper.StartScenes);
 
             XGL.Initialized = true;
         }
-        /// <summary>
-        /// Creates the sound components.
-        /// </summary>
-        public static void CreateSound()
-        {
-            var soundManager = new SoundManager();
-            var soundInitializer = XGL.Components.Get<ISoundInitializer>();
+        #endregion
 
-            if (soundInitializer != null)
+        #region Private Methods
+        /// <summary>
+        /// Initializes the graphics.
+        /// </summary>
+        /// <param name="handle">The handle.</param>
+        /// <param name="bootstrapper">The bootstrapper.</param>
+        private static void InitializeGraphics(IntPtr handle, Bootstrapper bootstrapper)
+        {
+            if (bootstrapper.GraphicsInitializer != null && bootstrapper.GraphicsInitializer.IsAvailable())
             {
-                soundManager.Provider = soundInitializer.CreateProvider();
+                var graphicsDevice = new GraphicsDevice(handle);
+                graphicsDevice.Graphics = bootstrapper.GraphicsInitializer.CreateProvider(graphicsDevice);
+                graphicsDevice.DisplayMode = new DisplayMode(bootstrapper.RenderSize);
+
+                XGL.Components.Add(graphicsDevice);
+            }
+        }
+        /// <summary>
+        /// Initializes the sound.
+        /// </summary>
+        private static void InitializeSound(Bootstrapper bootstrapper)
+        {
+            if (bootstrapper.SoundInitializer != null)
+            {
+                var soundManager = new SoundManager
+                {
+                    Provider = bootstrapper.SoundInitializer.CreateProvider()
+                };
 
                 XGL.Components.Add(soundManager);
                 XGL.Components.Add(new LoopManager());
             }
         }
         /// <summary>
-        /// Sets up core components and intializes the rendering pipeline for the specified handle.
+        /// Initializes the game loop.
         /// </summary>
-        /// <param name="handle">The handle.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="targetFps">The target FPS.</param>
-        public static void Run(IntPtr handle, int width, int height, int targetFps)
+        private static void InitializeGameLoop(Bootstrapper bootstrapper)
         {
-            GameLoop loop = new GameLoop
-                                {
-                                    TargetFrameTime = 1000 / (double)targetFps,
-                                    TargetTickTime = 1000 / (double)targetFps
-                                };
+            var gameLoop = XGL.Components.Get<GameLoop>();
+            if (gameLoop == null)
+                return;
 
-            XGL.CreateGraphics(handle, width, height);
-            
-            XGL.Components.Add(loop);
-            XGL.Components.Add(new EventManager());
-            XGL.Components.Add(new SceneManager());
-            XGL.Components.Add(new KeyListener(handle));
-            XGL.Components.Add(new MouseListener(handle));
-            XGL.Components.Add(new ContentManager());
-            XGL.Components.Add(new ImplementationManager());
-            XGL.Components.Add(new ThreadInvoker());
-            XGL.Components.Add(new LocalizationManager());
-            XGL.Components.Add(new PackageHandler());
-            XGL.Components.Add(new GlobalExceptionHandler());
+            gameLoop.TargetFrameTime = 1000 / (double)bootstrapper.FrameRate;
+            gameLoop.TargetTickTime = 1000 / (double)bootstrapper.FrameRate;
 
-            XGL.CreateSound();
-            XGL.Components.Construct();
-
-            loop.Run();
+            gameLoop.Run();
         }
-        #endregion
+        #endregion Private Methods
     }
 }

@@ -13,12 +13,20 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayMode"/> class.
         /// </summary>
+        /// <param name="size">The size.</param>
+        public DisplayMode(Vector2 size)
+        {
+            this.Width = (int)size.X;
+            this.Height = (int)size.Y;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisplayMode"/> class.
+        /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
         public DisplayMode(int width, int height)
+            : this(new Vector2(width, height))
         {
-            this.Width = width;
-            this.Height = height;
         }
         #endregion
         

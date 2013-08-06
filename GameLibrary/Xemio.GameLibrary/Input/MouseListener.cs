@@ -14,21 +14,14 @@ using Xemio.GameLibrary.Rendering;
 
 namespace Xemio.GameLibrary.Input
 {
-    public class MouseListener : IComponent
+    public class MouseListener : IConstructable
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MouseListener"/> class.
         /// </summary>
-        /// <param name="handle">The handle.</param>
-        public MouseListener(IntPtr handle)
+        public MouseListener()
         {
-            Control surface = Control.FromHandle(handle);
-
-            surface.MouseMove += this.SurfaceMouseMove;
-            surface.MouseDown += this.SurfaceMouseDown;
-            surface.MouseUp += this.SurfaceMouseUp;
-
             this._buttonStates = new Dictionary<MouseButtons, bool>();
         }
         #endregion
@@ -124,5 +117,21 @@ namespace Xemio.GameLibrary.Input
             this.EventManager.Publish(new MouseUpEvent(this.Position, (MouseButtons)e.Button));
         }
         #endregion
+
+        #region IConstructable Member
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
+
+            Control surface = Control.FromHandle(graphicsDevice.Handle);
+
+            surface.MouseMove += this.SurfaceMouseMove;
+            surface.MouseDown += this.SurfaceMouseDown;
+            surface.MouseUp += this.SurfaceMouseUp;
+        }
+        #endregion IConstructable Member
     }
 }

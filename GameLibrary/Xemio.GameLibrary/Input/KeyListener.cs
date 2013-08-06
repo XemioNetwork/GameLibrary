@@ -11,6 +11,7 @@ using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Input.Events.Keyboard;
+using Xemio.GameLibrary.Rendering;
 
 namespace Xemio.GameLibrary.Input
 {
@@ -20,14 +21,8 @@ namespace Xemio.GameLibrary.Input
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyListener"/> class.
         /// </summary>
-        /// <param name="handle">The handle.</param>
-        public KeyListener(IntPtr handle)
+        public KeyListener()
         {
-            var surface = Control.FromHandle(handle);
-
-            surface.KeyDown += this.SurfaceKeyDown;
-            surface.KeyUp += this.SurfaceKeyUp;
-
             this._keyStates = new Dictionary<Keys, bool>();
             this._lastStates = new Dictionary<Keys, bool>();
         }
@@ -161,6 +156,13 @@ namespace Xemio.GameLibrary.Input
         {
             GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
+
+            GraphicsDevice graphicsDevice = XGL.Components.Get<GraphicsDevice>();
+            
+            var surface = Control.FromHandle(graphicsDevice.Handle);
+
+            surface.KeyDown += this.SurfaceKeyDown;
+            surface.KeyUp += this.SurfaceKeyUp;
         }
         #endregion
 
