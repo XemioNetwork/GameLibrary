@@ -31,7 +31,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         #endregion
 
         #region Fields
-        private Pen _nativePen;
+        private readonly Pen _nativePen;
         #endregion
 
         #region Methods

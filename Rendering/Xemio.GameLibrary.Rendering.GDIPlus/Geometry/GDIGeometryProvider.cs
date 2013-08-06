@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         #endregion
 
         #region Fields
-        private GDIRenderManager _renderManager;
+        private readonly GDIRenderManager _renderManager;
         #endregion
 
         #region IGeometryProvider Member

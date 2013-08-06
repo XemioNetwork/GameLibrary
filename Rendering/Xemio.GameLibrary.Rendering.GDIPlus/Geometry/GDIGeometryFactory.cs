@@ -14,31 +14,11 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
 
     public class GDIGeometryFactory : IGeometryFactory
     {
-        #region Constructors
-        public GDIGeometryFactory()
-        {
-
-        }
-        #endregion
-
-        #region Fields
-
-        #endregion
-
-        #region Properties
-
-        #endregion
-
-        #region Methods
-
-        #endregion
-
         #region IGeometryFactory Member
         /// <summary>
         /// Creates a pen.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns></returns>
         public IPen CreatePen(Color color)
         {
             return new GDIPen(color, 1);
@@ -48,7 +28,6 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="thickness">The thickness.</param>
-        /// <returns></returns>
         public IPen CreatePen(Color color, float thickness)
         {
             return new GDIPen(color, thickness);
@@ -57,7 +36,6 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// Creates a solid brush.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns></returns>
         public IBrush CreateSolid(Color color)
         {
             return new GDIBrush(new SolidBrush(GDIHelper.Convert(color)));
@@ -69,7 +47,6 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// <param name="bottom">The bottom.</param>
         /// <param name="from">First point.</param>
         /// <param name="to">Second point.</param>
-        /// <returns></returns>
         public IBrush CreateGradient(Color top, Color bottom, Vector2 from, Vector2 to)
         {
             return new GDIBrush(
@@ -83,7 +60,6 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         /// Creates a texture brush.
         /// </summary>
         /// <param name="texture">The texture.</param>
-        /// <returns></returns>
         public IBrush CreateTexture(ITexture texture)
         {
             GDITexture gdiTexture = texture as GDITexture;

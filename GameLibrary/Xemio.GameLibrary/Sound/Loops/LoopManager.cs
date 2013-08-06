@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Sound.Loops
         #endregion
 
         #region Fields
-        private Dictionary<ISound, LoopController> _controllers;
+        private readonly Dictionary<ISound, LoopController> _controllers;
         #endregion
 
         #region Methods

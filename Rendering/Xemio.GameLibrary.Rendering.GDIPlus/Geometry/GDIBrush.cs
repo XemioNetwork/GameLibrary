@@ -23,14 +23,13 @@ namespace Xemio.GameLibrary.Rendering.GDIPlus.Geometry
         #endregion
 
         #region Fields
-        private Brush _nativeBrush;
+        private readonly Brush _nativeBrush;
         #endregion
 
         #region Methods
         /// <summary>
         /// Gets the native brush.
         /// </summary>
-        /// <returns></returns>
         public Brush GetNativeBrush()
         {
             return this._nativeBrush;
