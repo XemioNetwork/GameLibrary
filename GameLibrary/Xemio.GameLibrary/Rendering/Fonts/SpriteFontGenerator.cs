@@ -11,43 +11,40 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Creates a sprite font for the specified font family.
         /// </summary>
-        /// <param name="factory">The factory.</param>
         /// <param name="fontFamily">The font family.</param>
         /// <param name="size">The size.</param>
-        public static SpriteFont Create(ITextureFactory factory, string fontFamily, int size)
+        public static SpriteFont Create(string fontFamily, int size)
         {
-            return SpriteFontGenerator.Create(factory, fontFamily, size, Color.White);
+            return SpriteFontGenerator.Create(fontFamily, size, Color.White);
         }
         /// <summary>
         /// Returns a sprite font for the specified font.
         /// </summary>
-        /// <param name="factory">The factory.</param>
         /// <param name="font">The font.</param>
-        public static SpriteFont Create(ITextureFactory factory, Font font)
+        public static SpriteFont Create(Font font)
         {
-            return SpriteFontGenerator.Create(factory, font, Color.White);
+            return SpriteFontGenerator.Create(font, Color.White);
         }
         /// <summary>
         /// Creates a sprite font for the specified font family.
         /// </summary>
-        /// <param name="factory">The factory.</param>
         /// <param name="fontFamily">The font family.</param>
         /// <param name="size">The size.</param>
         /// <param name="color">The color.</param>
-        public static SpriteFont Create(ITextureFactory factory, string fontFamily, int size, Color color)
+        public static SpriteFont Create(string fontFamily, int size, Color color)
         {
-            return SpriteFontGenerator.Create(factory, new Font(fontFamily, size), color);
+            return SpriteFontGenerator.Create(new Font(fontFamily, size), color);
         }
         /// <summary>
         /// Returns a sprite font for the specified font.
         /// </summary>
-        /// <param name="factory">The factory.</param>
         /// <param name="font">The font.</param>
         /// <param name="color">The color.</param>
-        public static SpriteFont Create(ITextureFactory factory, Font font, Color color)
+        public static SpriteFont Create(Font font, Color color)
         {
             Bitmap measureBitmap = new Bitmap(1, 1);
             Graphics graphics = Graphics.FromImage(measureBitmap);
+            ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
 
             Brush brush = new SolidBrush(
                 System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B));
@@ -80,11 +77,11 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Creates a new spritefont.
         /// </summary>
-        /// <param name="factory">The factory.</param>
         /// <param name="bitmaps">The data.</param>
-        public static SpriteFont Create(ITextureFactory factory, Bitmap[] bitmaps)
+        public static SpriteFont Create(Bitmap[] bitmaps)
         {
             SpriteFont spriteFont = new SpriteFont();
+            ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
 
             for (int i = 0; i < bitmaps.Length; i++)
             {

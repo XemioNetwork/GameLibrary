@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Sound
 {
-    public interface ISoundInitializer : IComponent
+    public interface ISoundInitializer
     {
         /// <summary>
         /// Creates the provider.

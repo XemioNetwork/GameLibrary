@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Content;
 
-namespace Xemio.GameLibrary.Content.Serialization
+namespace Xemio.GameLibrary.Rendering
 {
     public class TextureReader : ContentReader<ITexture>
     {

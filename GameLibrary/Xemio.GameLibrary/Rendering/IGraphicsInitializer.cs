@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Rendering
 {
-    public interface IGraphicsInitializer : IComponent
+    public interface IGraphicsInitializer
     {
         /// <summary>
         /// Determines whether this instance is available.
