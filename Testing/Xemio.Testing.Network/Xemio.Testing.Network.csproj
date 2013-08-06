@@ -51,10 +51,6 @@
     <Compile Include="TestEntity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Rendering\Xemio.GameLibrary.Rendering.GDIPlus\Xemio.GameLibrary.Rendering.GDIPlus.csproj">
-      <Project>{B2587704-FF2B-4028-A43B-336A3BB8FA43}</Project>
-      <Name>Xemio.GameLibrary.Rendering.GDIPlus</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\GameLibrary\Xemio.GameLibrary\Xemio.GameLibrary.csproj">
       <Project>{474CA844-EA03-48DC-A790-5F18510799AC}</Project>
       <Name>Xemio.GameLibrary</Name>

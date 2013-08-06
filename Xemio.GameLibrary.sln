@@ -3,52 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary", "GameLibrary\Xemio.GameLibrary\Xemio.GameLibrary.csproj", "{474CA844-EA03-48DC-A790-5F18510799AC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rendering", "Rendering", "{B6438755-1B31-4AC3-8F7F-4F328D79227E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.GDIPlus", "Rendering\Xemio.GameLibrary.Rendering.GDIPlus\Xemio.GameLibrary.Rendering.GDIPlus.csproj", "{B2587704-FF2B-4028-A43B-336A3BB8FA43}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameLibrary", "GameLibrary", "{0534896C-1686-4CE7-A78B-0E58A515D000}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{14F9A976-6AE6-45BE-9C5E-C94087FA06D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Sound", "Testing\Xemio.Testing.Sound\Xemio.Testing.Sound.csproj", "{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sound", "Sound", "{71A94458-C203-48EA-8B5E-1034A897BF68}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Sound.WPF", "Sound\Xemio.GameLibrary.Sound.WPF\Xemio.GameLibrary.Sound.WPF.csproj", "{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Network", "Testing\Xemio.Testing.Network\Xemio.Testing.Network.csproj", "{F1DA53F3-76C8-4178-B772-B1F048F7F9E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.EventSystem", "Testing\Xemio.Testing.EventSystem\Xemio.Testing.EventSystem.csproj", "{B1EB1380-0429-4378-9669-3781CF996560}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{2A171C25-F948-4A32-A52A-8079D5158648}"
-	ProjectSection(SolutionItems) = preProject
-		Libraries\jpeg.dll = Libraries\jpeg.dll
-		Libraries\libfreetype-6.dll = Libraries\libfreetype-6.dll
-		Libraries\libogg-0.dll = Libraries\libogg-0.dll
-		Libraries\libpng12-0.dll = Libraries\libpng12-0.dll
-		Libraries\libtiff-3.dll = Libraries\libtiff-3.dll
-		Libraries\libvorbis-0.dll = Libraries\libvorbis-0.dll
-		Libraries\libvorbisfile-3.dll = Libraries\libvorbisfile-3.dll
-		Libraries\SDL.dll = Libraries\SDL.dll
-		Libraries\SDL_gfx.dll = Libraries\SDL_gfx.dll
-		Libraries\SDL_image.dll = Libraries\SDL_image.dll
-		Libraries\SDL_mixer.dll = Libraries\SDL_mixer.dll
-		Libraries\SDL_net.dll = Libraries\SDL_net.dll
-		Libraries\SDL_ttf.dll = Libraries\SDL_ttf.dll
-		Libraries\SdlDotNet.dll = Libraries\SdlDotNet.dll
-		Libraries\smpeg.dll = Libraries\smpeg.dll
-		Libraries\Tao.Sdl.dll = Libraries\Tao.Sdl.dll
-		Libraries\zlib1.dll = Libraries\zlib1.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Script", "Testing\Xemio.Testing.Script\Xemio.Testing.Script.csproj", "{654D61AC-4895-480A-81E4-774FA33C95C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.FileSystem", "Testing\Xemio.Testing.FileSystem\Xemio.Testing.FileSystem.csproj", "{45CEDC4A-A304-4365-A753-5F620189E434}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Localization", "Testing\Xemio.Testing.Localization\Xemio.Testing.Localization.csproj", "{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary.Rendering.SDL", "Rendering\Xemio.GameLibrary.Rendering.SDL\Xemio.GameLibrary.Rendering.SDL.csproj", "{138F725D-4569-4256-8718-53D2CDF411F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.ReactiveExtensions", "Testing\Xemio.Testing.ReactiveExtensions\Xemio.Testing.ReactiveExtensions.csproj", "{7718E8C1-87DA-4883-9D23-DC5951312CF4}"
 EndProject
@@ -72,16 +41,6 @@ Global
 		{474CA844-EA03-48DC-A790-5F18510799AC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{474CA844-EA03-48DC-A790-5F18510799AC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{474CA844-EA03-48DC-A790-5F18510799AC}.Release|x86.ActiveCfg = Release|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43}.Release|x86.ActiveCfg = Release|Any CPU
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -92,16 +51,6 @@ Global
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}.Release|Mixed Platforms.Build.0 = Release|x86
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}.Release|x86.ActiveCfg = Release|x86
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746}.Release|x86.Build.0 = Release|x86
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04}.Release|x86.ActiveCfg = Release|Any CPU
 		{F1DA53F3-76C8-4178-B772-B1F048F7F9E2}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{F1DA53F3-76C8-4178-B772-B1F048F7F9E2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{F1DA53F3-76C8-4178-B772-B1F048F7F9E2}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -152,16 +101,6 @@ Global
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}.Release|x86.ActiveCfg = Release|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{138F725D-4569-4256-8718-53D2CDF411F1}.Release|x86.ActiveCfg = Release|Any CPU
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -178,8 +117,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{474CA844-EA03-48DC-A790-5F18510799AC} = {0534896C-1686-4CE7-A78B-0E58A515D000}
-		{B2587704-FF2B-4028-A43B-336A3BB8FA43} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}
-		{138F725D-4569-4256-8718-53D2CDF411F1} = {B6438755-1B31-4AC3-8F7F-4F328D79227E}
 		{1ECA2DFB-D720-4F1D-B156-0CE3DF55E746} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{F1DA53F3-76C8-4178-B772-B1F048F7F9E2} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{B1EB1380-0429-4378-9669-3781CF996560} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
@@ -187,6 +124,5 @@ Global
 		{45CEDC4A-A304-4365-A753-5F620189E434} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
-		{72E7EA25-BFC7-4218-8FF0-F8C9173AAF04} = {71A94458-C203-48EA-8B5E-1034A897BF68}
 	EndGlobalSection
 EndGlobal

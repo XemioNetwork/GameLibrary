@@ -123,13 +123,14 @@ namespace Xemio.GameLibrary
         private static void InitializeGameLoop(Configuration config)
         {
             var gameLoop = XGL.Components.Get<GameLoop>();
-            if (gameLoop == null)
-                return;
 
-            gameLoop.TargetFrameTime = 1000 / (double)config.FrameRate;
-            gameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
+            if (gameLoop != null)
+            {
+                gameLoop.TargetFrameTime = 1000/(double) config.FrameRate;
+                gameLoop.TargetTickTime = 1000/(double) config.FrameRate;
 
-            gameLoop.Run();
+                gameLoop.Run();
+            }
         }
         #endregion Private Methods
     }
