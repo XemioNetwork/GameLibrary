@@ -20,10 +20,10 @@ using Xemio.GameLibrary.Sound.Loops;
 namespace Xemio.GameLibrary
 {
     /// <summary>
-    /// Works as a bootstrapper for the XGL.
+    /// Works as a configuration for the XGL.
     /// Subclass it and configure everything.
     /// </summary>
-    public abstract class Bootstrapper
+    public abstract class Configuration
     {
         #region Properties
         /// <summary>
@@ -37,11 +37,11 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets or sets the size of the render.
         /// </summary>
-        public Vector2 RenderSize { get; protected set; }
+        public Vector2 BackBufferSize { get; set; }
         /// <summary>
         /// Gets or sets the frame rate.
         /// </summary>
-        public int FrameRate { get; protected set; }
+        public int FrameRate { get; set; }
         /// <summary>
         /// Gets or sets the graphics initializer.
         /// </summary>
@@ -54,14 +54,14 @@ namespace Xemio.GameLibrary
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Bootstrapper"/> class.
+        /// Initializes a new instance of the <see cref="Configuration"/> class.
         /// </summary>
-        protected Bootstrapper()
+        protected Configuration()
         {
             this.StartScenes = new List<Scene>();
             this.Components = new List<IComponent>();
 
-            this.RenderSize = new Vector2(1280, 720);
+            this.BackBufferSize = new Vector2(1280, 720);
             this.FrameRate = 60;
         }
         #endregion Constructors
@@ -72,7 +72,6 @@ namespace Xemio.GameLibrary
         /// </summary>
         public virtual void RegisterStartScenes()
         {
-            
         }
         /// <summary>
         /// Registers the default components.

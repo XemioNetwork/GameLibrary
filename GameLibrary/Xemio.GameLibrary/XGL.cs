@@ -32,47 +32,53 @@ namespace Xemio.GameLibrary
             get { return ComponentManager.Instance; }
         }
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Bootstrapper"/> is initialized.
+        /// Gets or sets a value indicating whether this <see cref="Configuration"/> is initialized.
         /// </summary>
         public static bool Initialized { get; private set; }
         #endregion
 
         #region Methods
         /// <summary>
+        /// Configures the XGL fluently.
+        /// </summary>
+        public static FluentConfigurator Configure()
+        {
+            return new FluentConfigurator();
+        }
+        /// <summary>
         /// Configures the XGL using the specified bootstrapper.
         /// </summary>
-        /// <typeparam name="T">The type of the bootstrapper.</typeparam>
-        public static void Run<T>(IntPtr handle) where T : Bootstrapper, new()
+        /// <typeparam name="T">The type of the configuration.</typeparam>
+        public static void Run<T>(IntPtr handle) where T : Configuration, new()
         {
-            T bootstrapper = new T();
-            XGL.Run(handle, bootstrapper);
+            XGL.Run(handle, new T());
         }
         /// <summary>
         /// Configures the XGL using the specified bootstrapper.
         /// </summary>
         /// <param name="handle">The handle.</param>
-        /// <param name="bootstrapper">The bootstrapper.</param>
-        public static void Run(IntPtr handle, Bootstrapper bootstrapper)
+        /// <param name="config">The configuration.</param>
+        public static void Run(IntPtr handle, Configuration config)
         {
             if (XGL.Initialized)
                 return;
 
-            bootstrapper.RegisterComponents();
-            foreach (IComponent component in bootstrapper.Components)
+            config.RegisterComponents();
+            foreach (IComponent component in config.Components)
             {
                 XGL.Components.Add(component);
             }
 
-            XGL.InitializeGraphics(handle, bootstrapper);
-            XGL.InitializeSound(bootstrapper);
-            XGL.InitializeGameLoop(bootstrapper);
+            XGL.InitializeGraphics(handle, config);
+            XGL.InitializeSound(config);
+            XGL.InitializeGameLoop(config);
 
             XGL.Components.Construct();
 
-            bootstrapper.RegisterStartScenes();
+            config.RegisterStartScenes();
 
             var sceneManager = XGL.Components.Get<SceneManager>();
-            sceneManager.Add(bootstrapper.StartScenes);
+            sceneManager.Add(config.StartScenes);
 
             XGL.Initialized = true;
         }
@@ -83,14 +89,14 @@ namespace Xemio.GameLibrary
         /// Initializes the graphics.
         /// </summary>
         /// <param name="handle">The handle.</param>
-        /// <param name="bootstrapper">The bootstrapper.</param>
-        private static void InitializeGraphics(IntPtr handle, Bootstrapper bootstrapper)
+        /// <param name="config">The bootstrapper.</param>
+        private static void InitializeGraphics(IntPtr handle, Configuration config)
         {
-            if (bootstrapper.GraphicsInitializer != null && bootstrapper.GraphicsInitializer.IsAvailable())
+            if (config.GraphicsInitializer != null && config.GraphicsInitializer.IsAvailable())
             {
                 var graphicsDevice = new GraphicsDevice(handle);
-                graphicsDevice.Graphics = bootstrapper.GraphicsInitializer.CreateProvider(graphicsDevice);
-                graphicsDevice.DisplayMode = new DisplayMode(bootstrapper.RenderSize);
+                graphicsDevice.Graphics = config.GraphicsInitializer.CreateProvider(graphicsDevice);
+                graphicsDevice.DisplayMode = new DisplayMode(config.BackBufferSize);
 
                 XGL.Components.Add(graphicsDevice);
             }
@@ -98,13 +104,13 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the sound.
         /// </summary>
-        private static void InitializeSound(Bootstrapper bootstrapper)
+        private static void InitializeSound(Configuration config)
         {
-            if (bootstrapper.SoundInitializer != null)
+            if (config.SoundInitializer != null)
             {
                 var soundManager = new SoundManager
                 {
-                    Provider = bootstrapper.SoundInitializer.CreateProvider()
+                    Provider = config.SoundInitializer.CreateProvider()
                 };
 
                 XGL.Components.Add(soundManager);
@@ -114,14 +120,14 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the game loop.
         /// </summary>
-        private static void InitializeGameLoop(Bootstrapper bootstrapper)
+        private static void InitializeGameLoop(Configuration config)
         {
             var gameLoop = XGL.Components.Get<GameLoop>();
             if (gameLoop == null)
                 return;
 
-            gameLoop.TargetFrameTime = 1000 / (double)bootstrapper.FrameRate;
-            gameLoop.TargetTickTime = 1000 / (double)bootstrapper.FrameRate;
+            gameLoop.TargetFrameTime = 1000 / (double)config.FrameRate;
+            gameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
 
             gameLoop.Run();
         }

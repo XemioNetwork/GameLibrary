@@ -40,13 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Common\Cryptography\CrytographyHelper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Common\Extensions\BinaryWriterExtensions.cs" />
     <Compile Include="Common\GlobalExceptionHandler.cs" />
     <Compile Include="Content\FileSystem\IVirtualFileSystem.cs" />
     <Compile Include="Entities\EntitySerializer.cs" />
+    <Compile Include="FluentConfiguration.cs" />
+    <Compile Include="FluentConfigurator.cs" />
     <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
     <Compile Include="Common\ICondition.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
