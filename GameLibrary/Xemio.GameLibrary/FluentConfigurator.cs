@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -120,6 +121,25 @@ namespace Xemio.GameLibrary
         public FluentConfigurator Scenes(Func<IEnumerable<Scene>> scenesFunction)
         {
             return this.Scenes(scenesFunction().ToArray());
+        }
+        /// <summary>
+        /// Sets the backbuffer size to the specified value.
+        /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        public FluentConfigurator BackBuffer(int width, int height)
+        {
+            this._configuration.BackBufferSize = new Vector2(width, height);
+            return this;
+        }
+        /// <summary>
+        /// Sets the backbuffer size to the specified value.
+        /// </summary>
+        /// <param name="size">The size.</param>
+        public FluentConfigurator BackBuffer(Size size)
+        {
+            this._configuration.BackBufferSize = new Vector2(size.Width, size.Height);
+            return this;
         }
         /// <summary>
         /// Sets the backbuffer size to the specified value.
