@@ -182,7 +182,6 @@
     <Compile Include="Network\Packages\BinaryPackage.cs" />
     <Compile Include="Network\Logic\IClientLogic.cs" />
     <Compile Include="Network\Logic\IServerLogic.cs" />
-    <Compile Include="Network\Packages\PackageHandler.cs" />
     <Compile Include="Network\Logic\ClientLogic.cs" />
     <Compile Include="Network\Protocols\Local\QueuePackage.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
@@ -190,7 +189,7 @@
     <Compile Include="Network\Synchronization\IPropertyComparator.cs" />
     <Compile Include="Network\Synchronization\ISynchronizable.cs" />
     <Compile Include="Network\Packages\Package.cs" />
-    <Compile Include="Network\Packages\PackageManager.cs" />
+    <Compile Include="Network\Packages\PackageSerializer.cs" />
     <Compile Include="Network\Protocols\IClientProtocol.cs" />
     <Compile Include="Network\Protocols\IServerProtocol.cs" />
     <Compile Include="Network\Protocols\Local\LocalProtocol.cs" />

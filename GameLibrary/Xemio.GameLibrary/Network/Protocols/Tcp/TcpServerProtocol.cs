@@ -51,7 +51,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             TcpConnection connection = receiver as TcpConnection;
             if (connection != null)
             {
-                this.Server.PackageManager.Serialize(package, connection.Writer);
+                this.Server.Serializer.Serialize(package, connection.Writer);
             }
         }
         /// <summary>
@@ -61,7 +61,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         public IConnection AcceptConnection()
         {
             return new TcpConnection(
-                this.Server.PackageManager,
+                this.Server.Serializer,
                 this._listener.AcceptTcpClient(),
                 this._delay);
         }

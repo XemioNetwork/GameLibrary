@@ -44,7 +44,6 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         {
             Bitmap measureBitmap = new Bitmap(1, 1);
             Graphics graphics = Graphics.FromImage(measureBitmap);
-            ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
 
             Brush brush = new SolidBrush(
                 System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B));
@@ -72,7 +71,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                 }
             }
 
-            return SpriteFontGenerator.Create(factory, bitmaps);
+            return SpriteFontGenerator.Create(bitmaps);
         }
         /// <summary>
         /// Creates a new spritefont.

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Components;
 
@@ -73,6 +74,16 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             }
 
             return value;
+        }
+        /// <summary>
+        /// Resolves the type for the specified key.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="key">The key.</param>
+        public Type GetType<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
+        {
+            return this.Get<TKey, TValue>(key).GetType();
         }
         /// <summary>
         /// Resolves all instances for the specified type.

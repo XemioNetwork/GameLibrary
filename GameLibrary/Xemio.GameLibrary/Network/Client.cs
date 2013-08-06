@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Network
             this.Subscribe(new TimeSyncClientLogic());
 
             this.Active = true;
-            this.PackageManager = new PackageManager();
+            this.Serializer = new PackageSerializer();
 
             this.StartLoop();
             this.ProvideComponent();
@@ -65,7 +65,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the package manager.
         /// </summary>
-        public PackageManager PackageManager { get; private set; }
+        public PackageSerializer Serializer { get; private set; }
         #endregion
 
         #region Methods

@@ -56,6 +56,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
                                   {
                                       NoDelay = (this._delay == TcpDelay.None)
                                   };
+
             this._tcpClient.Connect(IPAddress.Parse(ip), port);
 
             this.Writer = new BinaryWriter(this._tcpClient.GetStream());
@@ -74,16 +75,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            PackageManager packageManager = this.Client.PackageManager;
-            packageManager.Serialize(package, this.Writer);
+            this.Client.Serializer.Serialize(package, this.Writer);
         }
         /// <summary>
         /// Receives a package.
         /// </summary>
         public Package Receive()
         {
-            PackageManager packageManager = this.Client.PackageManager;
-            return packageManager.Deserialize(this.Reader);
+            return this.Client.Serializer.Deserialize(this.Reader);
         }
         #endregion
 

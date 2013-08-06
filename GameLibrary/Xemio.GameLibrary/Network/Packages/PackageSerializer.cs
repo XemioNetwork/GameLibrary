@@ -6,29 +6,12 @@ using System.IO;
 using System.Reflection;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Common.Extensions;
+using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Network.Packages
 {
-    public class PackageManager
+    public class PackageSerializer
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PackageManager"/> class.
-        /// </summary>
-        public PackageManager()
-        {
-            this.Linker = new GenericLinker<int, Package>();
-            this.Linker.CreationType = CreationType.Singleton;
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets the package linker.
-        /// </summary>
-        public GenericLinker<int, Package> Linker { get; private set; }
-        #endregion
-
         #region Methods
         /// <summary>
         /// Serializes the specified package.
@@ -47,10 +30,12 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <returns></returns>
         public Package Deserialize(BinaryReader reader)
         {
-            int identifier = reader.ReadInt32();
-            Package package = this.Linker.Resolve(identifier);
+            var implementations = XGL.Components.Get<ImplementationManager>();
 
-            return (Package)reader.ReadInstance(package.GetType());
+            int packageId = reader.ReadInt32();
+            Type packageType = implementations.GetType<int, Package>(packageId);
+
+            return (Package)reader.ReadInstance(packageType);
         }
         #endregion
     }

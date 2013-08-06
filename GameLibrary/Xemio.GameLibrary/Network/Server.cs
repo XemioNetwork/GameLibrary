@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Network
             this.Protocol = protocol;
             this.Protocol.Server = this;
 
-            this.PackageManager = new PackageManager();
+            this.Serializer = new PackageSerializer();
             this.Connections = new List<IConnection>();
 
             this._eventManager = XGL.Components.Get<EventManager>();
@@ -65,7 +65,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the package manager.
         /// </summary>
-        public PackageManager PackageManager { get; private set; }
+        public PackageSerializer Serializer { get; private set; }
         /// <summary>
         /// Gets the connections.
         /// </summary>

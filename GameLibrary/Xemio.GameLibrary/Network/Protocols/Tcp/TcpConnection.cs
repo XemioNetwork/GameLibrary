@@ -15,15 +15,15 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpConnection"/> class.
         /// </summary>
-        /// <param name="packageManager">The package manager.</param>
+        /// <param name="serializer">The serializer.</param>
         /// <param name="tcpClient">The TCP client.</param>
         /// <param name="delay">The delay.</param>
-        public TcpConnection(PackageManager packageManager, TcpClient tcpClient, TcpDelay delay)
+        public TcpConnection(PackageSerializer serializer, TcpClient tcpClient, TcpDelay delay)
         {
             this._tcpClient = tcpClient;
             this._tcpClient.NoDelay = (delay == TcpDelay.None);
 
-            this._packageManager = packageManager;
+            this._serializer = serializer;
 
             this.Writer = new BinaryWriter(tcpClient.GetStream());
             this.Reader = new BinaryReader(tcpClient.GetStream());
@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
         #region Fields
         private readonly TcpClient _tcpClient;
-        private readonly PackageManager _packageManager;
+        private readonly PackageSerializer _serializer;
         #endregion
 
         #region IConnection Member
@@ -87,14 +87,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this._packageManager.Serialize(package, this.Writer);
+            this._serializer.Serialize(package, this.Writer);
         }
         /// <summary>
         /// Receives a package.
         /// </summary>
         public Package Receive()
         {
-            return this._packageManager.Deserialize(this.Reader);
+            return this._serializer.Deserialize(this.Reader);
         }
         #endregion
 
