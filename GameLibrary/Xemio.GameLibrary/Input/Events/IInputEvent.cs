@@ -12,5 +12,15 @@ namespace Xemio.GameLibrary.Input.Events
     /// </summary>
     public interface IInputEvent : IEvent
     {
+        /// <summary>
+        /// Gets the index of the player.
+        /// </summary>
+        int PlayerIndex { get; }
+
+        /// <summary>
+        /// Applies this event to the specified player input.
+        /// </summary>
+        /// <param name="playerInput">The player input.</param>
+        void Apply(PlayerInput playerInput);
     }
 }

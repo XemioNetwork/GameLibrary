@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-namespace Xemio.GameLibrary.Input
+﻿namespace Xemio.GameLibrary.Input.Keyboard
 {
     public enum Keys
     {

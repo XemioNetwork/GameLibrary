@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Input.Keyboard;
+using Xemio.GameLibrary.Input.Mouse;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Rendering.Geometry;
@@ -82,18 +84,11 @@ namespace Xemio.GameLibrary.Game.Scenes
             get { return this.GraphicsDevice.Geometry; }
         }
         /// <summary>
-        /// Gets the key listener.
-        /// </summary>
-        public KeyListener Keyboard
-        {
-            get { return XGL.Components.Get<KeyListener>(); }
-        }
-        /// <summary>
         /// Gets the mouse listener.
         /// </summary>
-        public MouseListener Mouse
+        public InputManager Input
         {
-            get { return XGL.Components.Get<MouseListener>(); }
+            get { return XGL.Components.Get<InputManager>(); }
         }
         /// <summary>
         /// Gets the scene manager.

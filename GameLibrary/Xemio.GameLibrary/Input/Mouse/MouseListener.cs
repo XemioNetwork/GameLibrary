@@ -1,35 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Game;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Input.Events;
-using Xemio.GameLibrary.Input.Events.Mouse;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 
-namespace Xemio.GameLibrary.Input
+namespace Xemio.GameLibrary.Input.Mouse
 {
-    public class MouseListener : IConstructable
+    public class MouseListener : IInputListener
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MouseListener"/> class.
-        /// </summary>
-        public MouseListener()
-        {
-            this._buttonStates = new Dictionary<MouseButtons, bool>();
-        }
-        #endregion
-
-        #region Fields
-        private readonly Dictionary<MouseButtons, bool> _buttonStates;
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets the event manager.
@@ -42,39 +22,6 @@ namespace Xemio.GameLibrary.Input
         /// Gets the position.
         /// </summary>
         public Vector2 Position { get; private set; }
-        #endregion
-        
-        #region Methods
-        /// <summary>
-        /// Determines whether the specified button is pressed.
-        /// </summary>
-        /// <param name="button">The button.</param>
-        public bool IsButtonPressed(MouseButtons button)
-        {
-            return this._buttonStates.ContainsKey(button) && this._buttonStates[button];
-        }
-        /// <summary>
-        /// Determines whether the specified button is released.
-        /// </summary>
-        /// <param name="button">The button.</param>
-        public bool IsButtonReleased(MouseButtons button)
-        {
-            return this._buttonStates.ContainsKey(button) && this._buttonStates[button];
-        }
-        /// <summary>
-        /// Sets the state of the button.
-        /// </summary>
-        /// <param name="button">The button.</param>
-        /// <param name="state">if set to <c>true</c> [state].</param>
-        private void SetButtonState(MouseButtons button, bool state)
-        {
-            if (!this._buttonStates.ContainsKey(button))
-            {
-                this._buttonStates.Add(button, state);
-            }
-
-            this._buttonStates[button] = state;
-        }
         #endregion
 
         #region Event Handlers
@@ -92,9 +39,9 @@ namespace Xemio.GameLibrary.Input
             {
                 divider = graphicsDevice.Scale;
             }
-
+            
             this.Position = new Vector2(e.X, e.Y) / divider;
-            this.EventManager.Publish(new MouseMoveEvent(this.Position, (MouseButtons)e.Button));
+            this.EventManager.Publish(new MouseMoveEvent(this.Position, this.PlayerIndex.Value));
         }
         /// <summary>
         /// Handles the MouseDown event of the surface control.
@@ -103,8 +50,8 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseDown(object sender, MouseEventArgs e)
         {
-            this.SetButtonState((MouseButtons)e.Button, true);
-            this.EventManager.Publish(new MouseDownEvent(this.Position, (MouseButtons)e.Button));
+            var mouseEvent = new MouseEvent(this.Position, (MouseButtons) e.Button, new InputState(true, 1.0f), this.PlayerIndex.Value);
+            this.EventManager.Publish(mouseEvent);
         }
         /// <summary>
         /// Handles the MouseUp event of the surface control.
@@ -113,16 +60,20 @@ namespace Xemio.GameLibrary.Input
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseUp(object sender, MouseEventArgs e)
         {
-            this.SetButtonState((MouseButtons)e.Button, false);
-            this.EventManager.Publish(new MouseUpEvent(this.Position, (MouseButtons)e.Button));
+            var mouseEvent = new MouseEvent(this.Position, (MouseButtons) e.Button, new InputState(false, 0.0f), this.PlayerIndex.Value);
+            this.EventManager.Publish(mouseEvent);
         }
         #endregion
-
-        #region IConstructable Member
+        
+        #region Implementation of IInputListener
         /// <summary>
-        /// Constructs this instance.
+        /// Gets or sets the index of the player.
         /// </summary>
-        public void Construct()
+        public int? PlayerIndex { get; set; }
+        /// <summary>
+        /// Called when the input listener was attached to the player.
+        /// </summary>
+        public void OnAttached()
         {
             var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
 
@@ -132,6 +83,19 @@ namespace Xemio.GameLibrary.Input
             surface.MouseDown += this.SurfaceMouseDown;
             surface.MouseUp += this.SurfaceMouseUp;
         }
-        #endregion IConstructable Member
+        /// <summary>
+        /// Called when the input listener was detached from the player.
+        /// </summary>
+        public void OnDetached()
+        {
+            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
+
+            Control surface = Control.FromHandle(graphicsDevice.Handle);
+
+            surface.MouseMove -= this.SurfaceMouseMove;
+            surface.MouseDown -= this.SurfaceMouseDown;
+            surface.MouseUp -= this.SurfaceMouseUp;
+        }
+        #endregion
     }
 }

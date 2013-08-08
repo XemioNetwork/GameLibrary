@@ -8,6 +8,8 @@ using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
+using Xemio.GameLibrary.Input.Keyboard;
+using Xemio.GameLibrary.Input.Mouse;
 using Xemio.GameLibrary.Localization;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
@@ -72,6 +74,7 @@ namespace Xemio.GameLibrary
             XGL.InitializeGraphics(handle, config);
             XGL.InitializeSound(config);
             XGL.InitializeGameLoop(config);
+            XGL.InitializeInput(config);
 
             XGL.Components.Construct();
 
@@ -137,6 +140,21 @@ namespace Xemio.GameLibrary
                 gameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
 
                 gameLoop.Run();
+            }
+        }
+        /// <summary>
+        /// Initializes the input.
+        /// </summary>
+        /// <param name="config">The config.</param>
+        private static void InitializeInput(Configuration config)
+        {
+            var inputManager = XGL.Components.Get<InputManager>();
+
+            if (inputManager != null && config.DefaultPlayerInput)
+            {
+                PlayerInput playerInput = inputManager.CreateInput();
+                inputManager.AddListener(new MouseListener(), playerInput.PlayerIndex);
+                inputManager.AddListener(new KeyboardListener(), playerInput.PlayerIndex);
             }
         }
         #endregion Private Methods

@@ -9,6 +9,8 @@ using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Input.Keyboard;
+using Xemio.GameLibrary.Input.Mouse;
 using Xemio.GameLibrary.Localization;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Network.Packages;
@@ -50,6 +52,10 @@ namespace Xemio.GameLibrary
         /// Gets or sets the sound initializer.
         /// </summary>
         public abstract ISoundInitializer SoundInitializer { get; }
+        /// <summary>
+        /// Gets a value indicating whether to create a default player input.
+        /// </summary>
+        public bool DefaultPlayerInput { get; set; }
         #endregion Properties
 
         #region Constructors
@@ -63,6 +69,8 @@ namespace Xemio.GameLibrary
 
             this.BackBufferSize = new Vector2(1280, 720);
             this.FrameRate = 60;
+
+            this.DefaultPlayerInput = true;
         }
         #endregion Constructors
 
@@ -81,8 +89,7 @@ namespace Xemio.GameLibrary
             this.Components.Add(new GameLoop());
             this.Components.Add(new EventManager());
             this.Components.Add(new SceneManager());
-            this.Components.Add(new KeyListener());
-            this.Components.Add(new MouseListener());
+            this.Components.Add(new InputManager());
             this.Components.Add(new ContentManager());
             this.Components.Add(new ImplementationManager());
             this.Components.Add(new ThreadInvoker());

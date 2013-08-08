@@ -38,6 +38,14 @@ namespace Xemio.GameLibrary
             return this;
         }
         /// <summary>
+        /// Creates a default player input.
+        /// </summary>
+        public FluentConfigurator WithDefaultInput()
+        {
+            this._configuration.DefaultPlayerInput = true;
+            return this;
+        }
+        /// <summary>
         /// Sets the graphics system.
         /// </summary>
         /// <typeparam name="T">The graphics initializer type.</typeparam>
