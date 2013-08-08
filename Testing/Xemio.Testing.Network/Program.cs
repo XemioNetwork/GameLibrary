@@ -8,7 +8,6 @@ using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Protocols.Local;
 using Xemio.GameLibrary;
-using Xemio.GameLibrary.Rendering.GDIPlus;
 using Xemio.GameLibrary.Game;
 
 namespace Xemio.Testing.Network
@@ -39,10 +38,7 @@ namespace Xemio.Testing.Network
         public void Run()
         {
             Form form = new Form();
-
-            XGL.Initialize(new GDIGraphicsInitializer());
-            XGL.Run(form.Handle, 400, 300, 60);
-
+            
             LocalProtocol.GetServer().Latency = 100;
             LocalProtocol.GetClient().Latency = 100;
 

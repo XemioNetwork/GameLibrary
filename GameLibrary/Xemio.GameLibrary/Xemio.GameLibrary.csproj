@@ -271,6 +271,7 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common\Collections\" />
     <Folder Include="Content\FileSystem\Compressed\" />
     <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />

@@ -109,7 +109,7 @@ namespace Xemio.GameLibrary
         {
             foreach (Scene scene in scenes)
             {
-                this._configuration.StartScenes.Add(scene);
+                this._configuration.Scenes.Add(scene);
             }
 
             return this;

@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets the start scenes.
         /// </summary>
-        public IList<Scene> StartScenes { get; private set; } 
+        public IList<Scene> Scenes { get; private set; } 
         /// <summary>
         /// Gets or sets the components.
         /// </summary>
@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         protected Configuration()
         {
-            this.StartScenes = new List<Scene>();
+            this.Scenes = new List<Scene>();
             this.Components = new List<IComponent>();
 
             this.BackBufferSize = new Vector2(1280, 720);
@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Registers the start scenes.
         /// </summary>
-        public virtual void RegisterStartScenes()
+        public virtual void RegisterScenes()
         {
         }
         /// <summary>
@@ -88,6 +88,7 @@ namespace Xemio.GameLibrary
             this.Components.Add(new ThreadInvoker());
             this.Components.Add(new LocalizationManager());
             this.Components.Add(new GlobalExceptionHandler());
+            this.Components.Add(new GameTime());
         }
         #endregion Methods
     }

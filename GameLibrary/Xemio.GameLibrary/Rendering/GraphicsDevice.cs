@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Gets or sets the provider.
         /// </summary>
-        public IGraphicsProvider Graphics { get; set; }
+        public IGraphicsProvider Provider { get; set; }
         /// <summary>
         /// Gets the scale.
         /// </summary>
@@ -62,9 +62,9 @@ namespace Xemio.GameLibrary.Rendering
         {
             get
             {
-                if (this.Graphics.IsGeometrySupported)
+                if (this.Provider.IsGeometrySupported)
                 {
-                    return this.Graphics.Geometry;
+                    return this.Provider.Geometry;
                 }
 
                 return GeometryProvider.Empty;
@@ -75,14 +75,14 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public ITextureFactory TextureFactory
         {
-            get { return this.Graphics.TextureFactory; }
+            get { return this.Provider.TextureFactory; }
         }
         /// <summary>
         /// Gets the render manager.
         /// </summary>
         public IRenderManager RenderManager
         {
-            get { return this.Graphics.RenderManager; }
+            get { return this.Provider.RenderManager; }
         }
         /// <summary>
         /// Gets the display mode.
@@ -92,6 +92,11 @@ namespace Xemio.GameLibrary.Rendering
             get { return this._displayMode; }
             set
             {
+                if (this._displayMode != null)
+                {
+                    this.CreateBackBuffer(value);
+                }
+
                 this._displayMode = value;
                 if (this.ResolutionChanged != null)
                 {
@@ -99,6 +104,10 @@ namespace Xemio.GameLibrary.Rendering
                 }
             }
         }
+        /// <summary>
+        /// Gets the back buffer.
+        /// </summary>
+        public IRenderTarget BackBuffer { get; private set; }
         /// <summary>
         /// Gets the current render target.
         /// </summary>
@@ -109,7 +118,7 @@ namespace Xemio.GameLibrary.Rendering
                 if (this.Targets.Count > 0)
                     return this.Targets.First();
 
-                return this.RenderManager.BackBuffer;
+                return this.BackBuffer;
             }
         }
         /// <summary>
@@ -127,12 +136,22 @@ namespace Xemio.GameLibrary.Rendering
 
         #region Methods
         /// <summary>
+        /// Creates the back buffer.
+        /// </summary>
+        /// <param name="displayMode">The display mode.</param>
+        private void CreateBackBuffer(DisplayMode displayMode)
+        {
+            this.BackBuffer = this.TextureFactory.CreateRenderTarget(
+                displayMode.Width,
+                displayMode.Height);
+        }
+        /// <summary>
         /// Clears the screen.
         /// </summary>
         /// <param name="color">The color.</param>
         public void Clear(Color color)
         {
-            this.Graphics.RenderManager.Clear(color);
+            this.Provider.RenderManager.Clear(color);
         }
         /// <summary>
         /// Renders to the specified render target.
@@ -148,7 +167,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public void Present()
         {
-            this.Graphics.RenderManager.Present();
+            this.Provider.RenderManager.Present();
         }
         #endregion
 
@@ -158,20 +177,13 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public void Construct()
         {
-            ComponentManager.Instance.Add(
-                new ValueProvider<ITextureFactory>(this.TextureFactory));
+            XGL.Components.Add(new ValueProvider<ITextureFactory>(this.TextureFactory));
+            XGL.Components.Add(new ValueProvider<IRenderManager>(this.RenderManager));
+            XGL.Components.Add(new ValueProvider<IGeometryProvider>(this.Geometry));
+            XGL.Components.Add(new ValueProvider<IGeometryFactory>(this.Geometry.Factory));
+            XGL.Components.Add(new ValueProvider<IGraphicsProvider>(this.Provider));
 
-            ComponentManager.Instance.Add(
-                new ValueProvider<IRenderManager>(this.RenderManager));
-
-            ComponentManager.Instance.Add(
-                new ValueProvider<IGeometryProvider>(this.Geometry));
-
-            ComponentManager.Instance.Add(
-                new ValueProvider<IGeometryFactory>(this.Geometry.Factory));
-
-            ComponentManager.Instance.Add(
-                new ValueProvider<IGraphicsProvider>(this.Graphics));
+            this.CreateBackBuffer(this.DisplayMode);
         }
         #endregion
     }

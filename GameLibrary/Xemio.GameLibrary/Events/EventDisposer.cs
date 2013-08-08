@@ -13,6 +13,7 @@ namespace Xemio.GameLibrary.Events
         /// Initializes a new instance of the <see cref="EventDisposer"/> class.
         /// </summary>
         /// <param name="subject">The subject.</param>
+        /// <param name="observer">The observer.</param>
         public EventDisposer(EventSubject subject, IObserver<IEvent> observer)
         {
             this._subject = subject;

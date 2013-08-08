@@ -58,7 +58,6 @@ namespace Xemio.GameLibrary.Rendering
 
             throw new InvalidOperationException("Your system doesn't support any rendering providers.");
         }
-
         #endregion
     }
 }

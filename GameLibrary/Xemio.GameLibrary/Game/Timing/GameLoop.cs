@@ -123,7 +123,6 @@ namespace Xemio.GameLibrary.Game.Timing
         public void Run()
         {
             this.Active = true;
-
             this._loopTask = Task.Factory.StartNew(InternalLoop);
         }
         /// <summary>

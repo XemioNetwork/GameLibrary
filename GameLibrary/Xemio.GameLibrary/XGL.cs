@@ -75,10 +75,10 @@ namespace Xemio.GameLibrary
 
             XGL.Components.Construct();
 
-            config.RegisterStartScenes();
+            config.RegisterScenes();
 
             var sceneManager = XGL.Components.Get<SceneManager>();
-            sceneManager.Add(config.StartScenes);
+            sceneManager.Add(config.Scenes);
 
             XGL.Initialized = true;
         }
@@ -92,11 +92,18 @@ namespace Xemio.GameLibrary
         /// <param name="config">The bootstrapper.</param>
         private static void InitializeGraphics(IntPtr handle, Configuration config)
         {
-            if (config.GraphicsInitializer != null && config.GraphicsInitializer.IsAvailable())
+            if (config.GraphicsInitializer != null)
             {
+                if (!config.GraphicsInitializer.IsAvailable())
+                {
+                    throw new InvalidOperationException(
+                        "The selected graphics initializer is unavailable. Maybe your PC doesn't support the selected graphics engine.");
+                }
+
                 var graphicsDevice = new GraphicsDevice(handle);
-                graphicsDevice.Graphics = config.GraphicsInitializer.CreateProvider(graphicsDevice);
+
                 graphicsDevice.DisplayMode = new DisplayMode(config.BackBufferSize);
+                graphicsDevice.Provider = config.GraphicsInitializer.CreateProvider(graphicsDevice);
 
                 XGL.Components.Add(graphicsDevice);
             }
@@ -126,8 +133,8 @@ namespace Xemio.GameLibrary
 
             if (gameLoop != null)
             {
-                gameLoop.TargetFrameTime = 1000/(double) config.FrameRate;
-                gameLoop.TargetTickTime = 1000/(double) config.FrameRate;
+                gameLoop.TargetFrameTime = 1000 / (double)config.FrameRate;
+                gameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
 
                 gameLoop.Run();
             }
