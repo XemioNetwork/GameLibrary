@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xemio.GameLibrary;
+using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
 
 namespace Xemio.Testing.EventSystem

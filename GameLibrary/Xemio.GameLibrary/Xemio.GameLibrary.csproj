@@ -40,6 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Collections\CachedDictionary.cs" />
+    <Compile Include="Common\Collections\DictionaryActions\AddAction.cs" />
+    <Compile Include="Common\Collections\DictionaryActions\ClearAction.cs" />
+    <Compile Include="Common\Collections\DictionaryActions\IDictionaryAction.cs" />
+    <Compile Include="Common\Collections\DictionaryActions\IndexerAction.cs" />
+    <Compile Include="Common\Collections\DictionaryActions\RemoveAction.cs" />
+    <Compile Include="Common\Collections\ListActions\AddAction.cs" />
+    <Compile Include="Common\Collections\ListActions\ClearAction.cs" />
+    <Compile Include="Common\Collections\ListActions\IndexerAction.cs" />
+    <Compile Include="Common\Collections\ListActions\InsertAction.cs" />
+    <Compile Include="Common\Collections\ListActions\RemoveAction.cs" />
+    <Compile Include="Common\Collections\ListActions\RemoveAtAction.cs" />
+    <Compile Include="Common\Collections\CachedList.cs" />
+    <Compile Include="Common\Collections\ListActions\IListAction.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Common\Cryptography\CrytographyHelper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
@@ -271,7 +285,6 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\Collections\" />
     <Folder Include="Content\FileSystem\Compressed\" />
     <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />

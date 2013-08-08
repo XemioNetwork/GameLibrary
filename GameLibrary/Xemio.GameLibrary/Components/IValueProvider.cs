@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         object Value { get; }
     }
-    public interface IValueProvider<T> : IValueProvider
+    public interface IValueProvider<out T> : IValueProvider
     {
         /// <summary>
         /// Gets the value.
