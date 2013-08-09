@@ -112,7 +112,7 @@ namespace Xemio.GameLibrary.Input
                 return;
 
             PlayerInput playerInput = this.PlayerInputs[stateEvent.PlayerIndex];
-            stateEvent.Apply(playerInput);
+            playerInput.SetState(stateEvent.Key, stateEvent.State);
         }
         #endregion Event Handlers
 
