@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Components
         public ComponentManager()
         {
             this._valueMappings = new Dictionary<Type, IValueProvider>();
-            this.Components = new CachedList<IComponent> {AutoApplyChanges = true};
+            this.Components = new CachedList<IComponent>();
         }
         #endregion
 
@@ -80,14 +80,15 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         public void Construct()
         {
-            this.Components.ApplyChanges();
-
-            foreach (IComponent component in this.Components)
-            {
-                IConstructable constructable = component as IConstructable;
-                if (constructable != null)
+            using (this.Components.StartCaching())
+            { 
+                foreach (IComponent component in this.Components)
                 {
-                    constructable.Construct();
+                    IConstructable constructable = component as IConstructable;
+                    if (constructable != null)
+                    {
+                        constructable.Construct();
+                    }
                 }
             }
         }
@@ -146,8 +147,7 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Gets a component by a specified type.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The type of the component.</typeparam>
         public T Get<T>() where T : IComponent
         {
             if (this._valueMappings.ContainsKey(typeof(T)))

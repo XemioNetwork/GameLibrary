@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ActionDisposer.cs" />
     <Compile Include="Common\Collections\CachedDictionary.cs" />
     <Compile Include="Common\Collections\DictionaryActions\AddAction.cs" />
     <Compile Include="Common\Collections\DictionaryActions\ClearAction.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="Common\Link\HashLinker.cs" />
     <Compile Include="Common\Link\ILinkable.cs" />
     <Compile Include="Common\ObjectStorage.cs" />
-    <Compile Include="Common\Pair.cs" />
     <Compile Include="Common\Profiler.cs" />
     <Compile Include="Common\Randomization\IRandom.cs" />
     <Compile Include="Common\Randomization\ISeedable.cs" />
@@ -85,7 +85,6 @@
     <Compile Include="Common\Randomization\SeedableRandom.cs" />
     <Compile Include="Common\Singleton.cs" />
     <Compile Include="Common\ThreadInvoker.cs" />
-    <Compile Include="Common\TypeHelper.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\BooleanParser.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\CharParser.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\NumericParser.cs" />
