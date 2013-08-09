@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xemio.GameLibrary.Input;
-using Xemio.GameLibrary.Input.Keyboard;
-using Xemio.GameLibrary.Input.Mouse;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Rendering.Geometry;

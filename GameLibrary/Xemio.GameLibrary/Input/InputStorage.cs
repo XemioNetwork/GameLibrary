@@ -4,29 +4,29 @@ using System.Collections.Generic;
 
 namespace Xemio.GameLibrary.Input
 {
-    public class InputDevice<T>
+    public class InputStorage
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="InputDevice&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="InputStorage"/> class.
         /// </summary>
-        public InputDevice()
+        public InputStorage()
         {
-            this._states = new Dictionary<T, InputState>();
-            this._lastStates = new Dictionary<T, InputState>();
+            this._states = new Dictionary<Keys, InputState>();
+            this._lastStates = new Dictionary<Keys, InputState>();
         }
         #endregion
 
         #region Fields
-        private readonly Dictionary<T, InputState> _states;
-        private readonly Dictionary<T, InputState> _lastStates;
+        private readonly Dictionary<Keys, InputState> _states;
+        private readonly Dictionary<Keys, InputState> _lastStates;
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Input.InputState"/> with the specified key.
         /// </summary>
-        public InputState this[T key]
+        public InputState this[Keys key]
         {
             get
             {
@@ -45,7 +45,7 @@ namespace Xemio.GameLibrary.Input
         /// Gets the current active state for the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
-        private bool GetValue(T key)
+        private bool GetValue(Keys key)
         {
             return this._states.ContainsKey(key) && this._states[key].Active;
         }
@@ -53,7 +53,7 @@ namespace Xemio.GameLibrary.Input
         /// Gets the last active state for the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
-        private bool GetLastValue(T key)
+        private bool GetLastValue(Keys key)
         {
             return this._lastStates.ContainsKey(key) && this._lastStates[key].Active;
         }
@@ -61,7 +61,7 @@ namespace Xemio.GameLibrary.Input
         /// Determines whether the specified key is down.
         /// </summary>
         /// <param name="key">The key.</param>
-        public bool IsKeyDown(T key)
+        public bool IsKeyDown(Keys key)
         {
             return this.GetValue(key);
         }
@@ -69,7 +69,7 @@ namespace Xemio.GameLibrary.Input
         /// Determines whether the specified key is up.
         /// </summary>
         /// <param name="key">The key.</param>
-        public bool IsKeyUp(T key)
+        public bool IsKeyUp(Keys key)
         {
             return !this.GetValue(key);
         }
@@ -77,7 +77,7 @@ namespace Xemio.GameLibrary.Input
         /// Determines whether the specified key is first down inside the current frame.
         /// </summary>
         /// <param name="key">The key.</param>
-        public bool IsKeyPressed(T key)
+        public bool IsKeyPressed(Keys key)
         {
             return this.GetValue(key) && !this.GetLastValue(key);
         }
@@ -85,7 +85,7 @@ namespace Xemio.GameLibrary.Input
         /// Determines whether the specified key is first up inside the current frame.
         /// </summary>
         /// <param name="key">The key.</param>
-        public bool IsKeyReleased(T key)
+        public bool IsKeyReleased(Keys key)
         {
             return !this.GetValue(key) && this.GetLastValue(key);
         }
@@ -94,7 +94,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="state">The state.</param>
-        public void SetState(T key, InputState state)
+        public void SetState(Keys key, InputState state)
         {
             if (!this._states.ContainsKey(key))
             {
@@ -108,7 +108,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public InputState GetLastState(T key)
+        public InputState GetLastState(Keys key)
         {
             if (!this._lastStates.ContainsKey(key))
             {
@@ -121,21 +121,21 @@ namespace Xemio.GameLibrary.Input
         /// Gets the inputs matching the given filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        public IEnumerable<T> GetKeys(Func<KeyValuePair<T, InputState>, bool> filter)
+        public IEnumerable<Keys> GetKeys(Func<KeyValuePair<Keys, InputState>, bool> filter)
         {
             return this._states.Where(filter).Select(f => f.Key);
         }
         /// <summary>
         /// Gets the pressed inputs.
         /// </summary>
-        public IEnumerable<T> GetPressedKeys()
+        public IEnumerable<Keys> GetPressedKeys()
         {
             return this.GetKeys(f => this.IsKeyPressed(f.Key) && this[f.Key].Active);
         }
         /// <summary>
         /// Gets the released inputs.
         /// </summary>
-        public IEnumerable<T> GetReleasedKeys()
+        public IEnumerable<Keys> GetReleasedKeys()
         {
             return this.GetKeys(f => this.IsKeyReleased(f.Key) && this[f.Key].Active == false);
         }
@@ -145,7 +145,7 @@ namespace Xemio.GameLibrary.Input
         public void UpdateStates()
         {
             this._lastStates.Clear();
-            foreach (KeyValuePair<T, InputState> pair in this._states)
+            foreach (KeyValuePair<Keys, InputState> pair in this._states)
             {
                 this._lastStates.Add(pair.Key, pair.Value);
             }

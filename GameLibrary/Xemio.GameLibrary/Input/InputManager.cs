@@ -103,14 +103,14 @@ namespace Xemio.GameLibrary.Input
         /// <summary>
         /// Handles the input event.
         /// </summary>
-        /// <param name="inputEvent">The key event.</param>
-        private void HandleInputEvent(IInputEvent inputEvent)
+        /// <param name="stateEvent">The key event.</param>
+        private void HandleInputEvent(InputStateEvent stateEvent)
         {
-            if (!this.IsPlayerIndexValid(inputEvent.PlayerIndex))
+            if (!this.IsPlayerIndexValid(stateEvent.PlayerIndex))
                 return;
 
-            PlayerInput playerInput = this.PlayerInputs[inputEvent.PlayerIndex];
-            inputEvent.Apply(playerInput);
+            PlayerInput playerInput = this.PlayerInputs[stateEvent.PlayerIndex];
+            stateEvent.Apply(playerInput);
         }
         #endregion Event Handlers
 
@@ -121,7 +121,7 @@ namespace Xemio.GameLibrary.Input
         public void Construct()
         {
             var eventManager = XGL.Components.Get<EventManager>();
-            eventManager.Subscribe<IInputEvent>(this.HandleInputEvent);
+            eventManager.Subscribe<InputStateEvent>(this.HandleInputEvent);
         }
         #endregion Implementation of IConstructable
 

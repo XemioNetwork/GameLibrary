@@ -9,8 +9,6 @@ using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
-using Xemio.GameLibrary.Input.Keyboard;
-using Xemio.GameLibrary.Input.Mouse;
 using Xemio.GameLibrary.Localization;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Network.Packages;

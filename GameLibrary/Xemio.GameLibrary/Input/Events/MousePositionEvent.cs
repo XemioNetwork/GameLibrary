@@ -1,22 +1,22 @@
-﻿using Xemio.GameLibrary.Input.Mouse;
+﻿using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Input.Events
 {
-    public class MouseMoveEvent : IInputEvent
+    public class MousePositionEvent : IEvent
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="MouseMoveEvent" /> class.
+        /// Initializes a new instance of the <see cref="MousePositionEvent" /> class.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <param name="playerIndex">The player index.</param>
-        public MouseMoveEvent(Vector2 position, int playerIndex)
+        public MousePositionEvent(Vector2 position, int playerIndex)
         {
             this.Position = position;
             this.PlayerIndex = playerIndex;
         }
-        #endregion Constructors
+        #endregion
 
         #region Properties
         /// <summary>
@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Input.Events
         /// Gets the index of the player.
         /// </summary>
         public int PlayerIndex { get; private set; }
-        #endregion Properties
+        #endregion
 
         #region Implementation of IInputEvent
         /// <summary>
@@ -38,6 +38,6 @@ namespace Xemio.GameLibrary.Input.Events
         {
             playerInput.MousePosition = this.Position;
         }
-        #endregion Implementation of IInputEvent
+        #endregion
     }
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xemio.GameLibrary.Input.Keyboard;
-using Xemio.GameLibrary.Input.Mouse;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Input
@@ -18,16 +16,12 @@ namespace Xemio.GameLibrary.Input
         /// <summary>
         /// Gets the key states.
         /// </summary>
-        public InputDevice<Keys> Keyboard { get; private set; }
-        /// <summary>
-        /// Gets the mouse states.
-        /// </summary>
-        public InputDevice<MouseButtons> Mouse { get; private set; }
+        public InputStorage Storage { get; private set; }
         /// <summary>
         /// Gets or sets the mouse position.
         /// </summary>
         public Vector2 MousePosition { get; internal set; }
-        #endregion Properties
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -37,11 +31,9 @@ namespace Xemio.GameLibrary.Input
         public PlayerInput(int playerIndex)
         {
             this.PlayerIndex = playerIndex;
-
-            this.Keyboard = new InputDevice<Keys>();
-            this.Mouse = new InputDevice<MouseButtons>();
+            this.Storage = new InputStorage();
         }
-        #endregion Constructors
+        #endregion
 
         #region Methods
         /// <summary>
@@ -49,9 +41,8 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public void Update()
         {
-            this.Keyboard.UpdateStates();
-            this.Mouse.UpdateStates();
+            this.Storage.UpdateStates();
         }
-        #endregion Methods
+        #endregion
     }
 }
