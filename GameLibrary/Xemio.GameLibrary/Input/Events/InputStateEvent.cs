@@ -33,16 +33,5 @@ namespace Xemio.GameLibrary.Input.Events
         /// </summary>
         public int PlayerIndex { get; set; }
         #endregion
-
-        #region Implementation of IInputEvent
-        /// <summary>
-        /// Applies this event to the specified player input.
-        /// </summary>
-        /// <param name="playerInput">The player input.</param>
-        public void Apply(PlayerInput playerInput)
-        {
-            playerInput.SetState(this.Key, this.State);
-        }
-        #endregion
     }
 }
