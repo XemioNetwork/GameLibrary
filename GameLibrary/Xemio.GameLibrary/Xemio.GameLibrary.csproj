@@ -68,6 +68,7 @@
     <Compile Include="Input\InputDevice.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
+    <Compile Include="Network\Protocols\ProtocolFactory.cs" />
     <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
     <Compile Include="Common\ICondition.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />

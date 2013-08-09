@@ -9,13 +9,11 @@ namespace Xemio.GameLibrary.Input.Events
         /// <summary>
         /// Initializes a new instance of the <see cref="MouseEvent" /> class.
         /// </summary>
-        /// <param name="position">The position.</param>
         /// <param name="button">The button.</param>
         /// <param name="state">The state.</param>
         /// <param name="playerIndex">Index of the player.</param>
-        public MouseEvent(Vector2 position, MouseButtons button, InputState state, int playerIndex)
+        public MouseEvent(MouseButtons button, InputState state, int playerIndex)
         {
-            this.Position = position;
             this.Button = button;
             this.State = state;
             this.PlayerIndex = playerIndex;
@@ -23,10 +21,6 @@ namespace Xemio.GameLibrary.Input.Events
         #endregion
         
         #region Properties
-        /// <summary>
-        /// Gets the position.
-        /// </summary>
-        public Vector2 Position { get; private set; }
         /// <summary>
         /// Gets the button.
         /// </summary>

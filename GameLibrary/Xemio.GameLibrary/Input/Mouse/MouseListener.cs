@@ -50,7 +50,7 @@ namespace Xemio.GameLibrary.Input.Mouse
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseDown(object sender, MouseEventArgs e)
         {
-            var mouseEvent = new MouseEvent(this.Position, (MouseButtons) e.Button, new InputState(true, 1.0f), this.PlayerIndex.Value);
+            var mouseEvent = new MouseEvent((MouseButtons)e.Button, new InputState(true, 1.0f), this.PlayerIndex.Value);
             this.EventManager.Publish(mouseEvent);
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace Xemio.GameLibrary.Input.Mouse
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseUp(object sender, MouseEventArgs e)
         {
-            var mouseEvent = new MouseEvent(this.Position, (MouseButtons) e.Button, new InputState(false, 0.0f), this.PlayerIndex.Value);
+            var mouseEvent = new MouseEvent((MouseButtons)e.Button, new InputState(false, 0.0f), this.PlayerIndex.Value);
             this.EventManager.Publish(mouseEvent);
         }
         #endregion

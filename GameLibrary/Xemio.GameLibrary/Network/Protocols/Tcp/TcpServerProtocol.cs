@@ -18,18 +18,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpServerProtocol"/> class.
         /// </summary>
-        /// <param name="port">The port.</param>
-        public TcpServerProtocol(int port)
+        public TcpServerProtocol()
         {
-            this._listener = new TcpListener(IPAddress.Any, port);
-            this._listener.Start();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpServerProtocol"/> class.
         /// </summary>
-        /// <param name="port">The port.</param>
         /// <param name="delay">The delay.</param>
-        public TcpServerProtocol(int port, TcpDelay delay) : this(port)
+        public TcpServerProtocol(TcpDelay delay)
         {
             this._delay = delay;
         }
@@ -37,10 +33,19 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
         #region Fields
         private readonly TcpDelay _delay;
-        private readonly TcpListener _listener;
+        private TcpListener _listener;
         #endregion
 
         #region IServerProtocol Member
+        /// <summary>
+        /// Hosts the specified port.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        public void Host(int port)
+        {
+            this._listener = new TcpListener(IPAddress.Any, port);
+            this._listener.Start();
+        }
         /// <summary>
         /// Sends the specified package to the specified receiver.
         /// </summary>

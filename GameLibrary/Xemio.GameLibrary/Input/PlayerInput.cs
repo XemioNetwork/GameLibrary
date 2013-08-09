@@ -49,8 +49,8 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public void Update()
         {
-            this.Keyboard.UpdateChanges();
-            this.Mouse.UpdateChanges();
+            this.Keyboard.UpdateStates();
+            this.Mouse.UpdateStates();
         }
         #endregion Methods
     }

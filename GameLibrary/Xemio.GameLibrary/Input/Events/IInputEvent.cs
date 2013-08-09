@@ -16,7 +16,6 @@ namespace Xemio.GameLibrary.Input.Events
         /// Gets the index of the player.
         /// </summary>
         int PlayerIndex { get; }
-
         /// <summary>
         /// Applies this event to the specified player input.
         /// </summary>

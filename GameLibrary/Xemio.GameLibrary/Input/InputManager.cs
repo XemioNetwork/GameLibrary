@@ -12,7 +12,7 @@ namespace Xemio.GameLibrary.Input
     public class InputManager : IConstructable, IGameHandler
     {
         #region Fields
-        private IList<IInputListener> _listeners = new List<IInputListener>();
+        private readonly IList<IInputListener> _listeners;
         #endregion Fields
 
         #region Properties
@@ -28,6 +28,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public InputManager()
         {
+            this._listeners = new List<IInputListener>();
             this.PlayerInputs = new List<PlayerInput>();
         }
         #endregion Constructors

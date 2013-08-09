@@ -33,6 +33,10 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public bool Active { get; private set; }
         /// <summary>
+        /// Gets the current frame index.
+        /// </summary>
+        public long FrameIndex { get; private set; }
+        /// <summary>
         /// Gets or sets the precision.
         /// </summary>
         public GameLoopPrecision Precision { get; set; }
@@ -81,6 +85,11 @@ namespace Xemio.GameLibrary.Game.Timing
         public virtual void OnTick(float elapsed)
         {
             Stopwatch tickWatch = Stopwatch.StartNew();
+
+            //Increment the frame index, since a frame has passed. A
+            //frame can only pass inside a tick call, since render isn't called
+            //as frequent as tick
+            this.FrameIndex++;
 
             if (this.Tick != null)
             {
