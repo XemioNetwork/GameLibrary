@@ -20,6 +20,8 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <param name="writer">The writer.</param>
         public void Serialize(Package package, BinaryWriter writer)
         {
+            package.OnSerialize();
+
             writer.Write(package.Id);
             writer.WriteInstance(package);
         }
@@ -35,7 +37,10 @@ namespace Xemio.GameLibrary.Network.Packages
             int packageId = reader.ReadInt32();
             Type packageType = implementations.GetType<int, Package>(packageId);
 
-            return (Package)reader.ReadInstance(packageType);
+            Package package = (Package)reader.ReadInstance(packageType);
+            package.OnDeserialize();
+
+            return package;
         }
         #endregion
     }

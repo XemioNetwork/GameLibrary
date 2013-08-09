@@ -8,6 +8,7 @@ namespace Xemio.GameLibrary.Input
 {
     public class InputState
     {
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="InputState"/> class.
         /// </summary>
@@ -18,7 +19,9 @@ namespace Xemio.GameLibrary.Input
             this.Active = active;
             this.Value = value;
         }
+        #endregion
 
+        #region Properties
         /// <summary>
         /// Gets a value indicating whether this <see cref="InputState"/> is active.
         /// </summary>
@@ -27,16 +30,10 @@ namespace Xemio.GameLibrary.Input
         /// Gets the value.
         /// </summary>
         public float Value { get; private set; }
+        #endregion
 
         #region Empty
-        private static readonly InputState _empty = new InputState(false, 0.0f);
-        /// <summary>
-        /// The empty
-        /// </summary>
-        public static InputState Empty
-        {
-            get { return InputState._empty; }
-        }
-        #endregion Empty
+        public static readonly InputState Empty = new InputState(false, 0.0f);
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,130 @@ namespace Xemio.GameLibrary.Common.Extensions
 {
     public static class BinaryReaderExtensions
     {
+        #region Private Methods
+        /// <summary>
+        /// Reads an array.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="type">The type.</param>
+        private static Array ReadArray(BinaryReader reader, Type type)
+        {
+            int length = reader.ReadInt32();
+            object[] array = new object[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                array[i] = reader.ReadInstance(type.GetElementType());
+            }
+
+            return array;
+        }
+        /// <summary>
+        /// Reads a list.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="type">The type.</param>
+        private static IList ReadList(BinaryReader reader, Type type)
+        {
+            Type elementType = type.GetGenericArguments().First();
+            Type listType = typeof(List<>).MakeGenericType(elementType);
+
+            int count = reader.ReadInt32();
+            IList list = (IList)Activator.CreateInstance(listType);
+
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(reader.ReadInstance(elementType));
+            }
+
+            return list;
+        }
+        /// <summary>
+        /// Reads a dictionary.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="type">The type.</param>
+        private static IDictionary ReadDictionary(BinaryReader reader, Type type)
+        {
+            Type[] genericArguments = type.GetGenericArguments();
+
+            Type keyType = genericArguments[0];
+            Type valueType = genericArguments[1];
+
+            Type dictionaryType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
+
+            int count = reader.ReadInt32();
+            IDictionary dictionary = (IDictionary)Activator.CreateInstance(dictionaryType);
+
+            for (int i = 0; i < count; i++)
+            {
+                dictionary.Add(
+                    reader.ReadInstance(keyType),
+                    reader.ReadInstance(valueType));
+            }
+
+            return dictionary;
+        }
+        /// <summary>
+        /// Reads an enum.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="type">The type.</param>
+        private static object ReadEnum(BinaryReader reader, Type type)
+        {
+            return Enum.ToObject(type, reader.ReadInt32());
+        }
+        /// <summary>
+        /// Reads a all properties for the specified type and creates an instance.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="type">The type.</param>
+        private static object ReadProperties(BinaryReader reader, Type type)
+        {
+            object instance = Activator.CreateInstance(type);
+
+            PropertyInfo[] properties = type.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                if (!property.GetCustomAttributes(true)
+                    .Any(attribute => attribute is ExcludeSyncAttribute))
+                {
+                    bool isNull = reader.ReadBoolean();
+                    object propertyValue = isNull ? null : reader.ReadInstance(property.PropertyType);
+
+                    property.SetValue(instance, propertyValue, null);
+                }
+            }
+
+            return instance;
+        }
+        private static object ReadReferenceBasedObject(BinaryReader reader, Type type)
+        {
+            if (type.IsArray) 
+                return ReadArray(reader, type);
+
+            if (typeof(IList).IsAssignableFrom(type)) 
+                return ReadList(reader, type);
+
+            if (typeof(IDictionary).IsAssignableFrom(type))
+                return ReadDictionary(reader, type);
+
+            if (type.IsEnum)
+                return ReadEnum(reader, type);
+
+            if (type == typeof(Vector2)) 
+                return reader.ReadVector2();
+
+            if (type == typeof(Rectangle))
+                return reader.ReadRectangle();
+
+            //If the specified type isn't any known special case,
+            //just read all properties and create an instance.
+
+            return ReadProperties(reader, type);
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Reads a vector2.
@@ -91,47 +216,7 @@ namespace Xemio.GameLibrary.Common.Extensions
                     value = reader.ReadUInt64();
                     break;
                 default:
-                    if (type.IsArray)
-                    {
-                        int length = reader.ReadInt32();
-                        object[] array = new object[length];
-
-                        for (int i = 0; i < length; i++)
-                        {
-                            array[i] = reader.ReadInstance(type.GetElementType());
-                        }
-
-                        value = array;
-                    }
-                    else if (type.IsEnum)
-                    {
-                        value = Enum.ToObject(type, reader.ReadInt32());
-                    }
-                    else if (type == typeof(Vector2))
-                    {
-                        value = reader.ReadVector2();
-                    }
-                    else if (type == typeof(Rectangle))
-                    {
-                        value = reader.ReadRectangle();
-                    }
-                    else
-                    {
-                        value = Activator.CreateInstance(type);
-
-                        PropertyInfo[] properties = type.GetProperties();
-                        foreach (PropertyInfo property in properties)
-                        {
-                            if (!property.GetCustomAttributes(true)
-                                .Any(attribute => attribute is ExcludeSyncAttribute))
-                            {
-                                bool isNull = reader.ReadBoolean();
-                                object propertyValue = isNull ? null : reader.ReadInstance(property.PropertyType);
-
-                                property.SetValue(value, propertyValue, null);
-                            }
-                        }
-                    }
+                    value = ReadReferenceBasedObject(reader, type);
                     break;
             }
 

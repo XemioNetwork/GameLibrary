@@ -1,27 +1,37 @@
-﻿using System.Collections.Generic;
-using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Events;
+﻿using Xemio.GameLibrary.Events;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 
-namespace Xemio.GameLibrary.Input.Mouse
+namespace Xemio.GameLibrary.Input.Listeners
 {
     public class MouseListener : IInputListener
     {
-        #region Properties
+        #region Methods
         /// <summary>
-        /// Gets the event manager.
+        /// Converts mouse buttons into our keys enum.
         /// </summary>
-        protected EventManager EventManager
+        /// <param name="button">The button.</param>
+        private Keys GetKeys(MouseButtons button)
         {
-            get { return XGL.Components.Get<EventManager>(); }
+            Keys key = Keys.None;
+
+            if (button == MouseButtons.Left) key = Keys.LeftMouse;
+            if (button == MouseButtons.Right) key = Keys.RightMouse;
+            if (button == MouseButtons.Middle) key = Keys.MouseWheel;
+
+            return key;
         }
         /// <summary>
-        /// Gets the position.
+        /// Publishes the event.
         /// </summary>
-        public Vector2 Position { get; private set; }
+        /// <param name="e">The event.</param>
+        protected virtual void PublishEvent(IEvent e)
+        {
+            var eventManager = XGL.Components.Get<EventManager>();
+            eventManager.Publish(e);
+        }
         #endregion
 
         #region Event Handlers
@@ -39,9 +49,9 @@ namespace Xemio.GameLibrary.Input.Mouse
             {
                 divider = graphicsDevice.Scale;
             }
-            
-            this.Position = new Vector2(e.X, e.Y) / divider;
-            this.EventManager.Publish(new MouseMoveEvent(this.Position, this.PlayerIndex.Value));
+
+            Vector2 position = new Vector2(e.X, e.Y) / divider;
+            this.PublishEvent(new MousePositionEvent(position, this.PlayerIndex.Value));
         }
         /// <summary>
         /// Handles the MouseDown event of the surface control.
@@ -50,8 +60,13 @@ namespace Xemio.GameLibrary.Input.Mouse
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseDown(object sender, MouseEventArgs e)
         {
-            var mouseEvent = new MouseEvent(this.Position, (MouseButtons) e.Button, new InputState(true, 1.0f), this.PlayerIndex.Value);
-            this.EventManager.Publish(mouseEvent);
+            Keys key = this.GetKeys(e.Button);
+
+            if (key == Keys.None)
+                return;
+
+            var mouseEvent = new InputStateEvent(key, new InputState(true, 1.0f), this.PlayerIndex.Value);
+            this.PublishEvent(mouseEvent);
         }
         /// <summary>
         /// Handles the MouseUp event of the surface control.
@@ -60,8 +75,13 @@ namespace Xemio.GameLibrary.Input.Mouse
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void SurfaceMouseUp(object sender, MouseEventArgs e)
         {
-            var mouseEvent = new MouseEvent(this.Position, (MouseButtons) e.Button, new InputState(false, 0.0f), this.PlayerIndex.Value);
-            this.EventManager.Publish(mouseEvent);
+            Keys key = this.GetKeys(e.Button);
+
+            if (key == Keys.None)
+                return;
+
+            var mouseEvent = new InputStateEvent(key, new InputState(false, 0.0f), this.PlayerIndex.Value);
+            this.PublishEvent(mouseEvent);
         }
         #endregion
         
@@ -76,7 +96,6 @@ namespace Xemio.GameLibrary.Input.Mouse
         public void OnAttached()
         {
             var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-
             Control surface = Control.FromHandle(graphicsDevice.Handle);
 
             surface.MouseMove += this.SurfaceMouseMove;
@@ -89,7 +108,6 @@ namespace Xemio.GameLibrary.Input.Mouse
         public void OnDetached()
         {
             var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-
             Control surface = Control.FromHandle(graphicsDevice.Handle);
 
             surface.MouseMove -= this.SurfaceMouseMove;

@@ -1,4 +1,4 @@
-﻿namespace Xemio.GameLibrary.Input.Keyboard
+﻿namespace Xemio.GameLibrary.Input
 {
     public enum Keys
     {
@@ -196,5 +196,8 @@
         Shift = 65536,
         Control = 131072,
         Alt = 262144,
+        LeftMouse = 524288,
+        RightMouse = 1048576,
+        MouseWheel = 2097152 
     }
 }

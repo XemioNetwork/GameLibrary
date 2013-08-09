@@ -140,6 +140,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// </summary>
         public Server Server { get; set; }
         /// <summary>
+        /// Hosts the specified port.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        public void Host(int port)
+        {
+        }
+        /// <summary>
         /// Sends the specified package to the specified receiver.
         /// </summary>
         /// <param name="package">The package.</param>

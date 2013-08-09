@@ -41,7 +41,6 @@ namespace Xemio.GameLibrary.Network
             this.Subscribe(new TimeSyncServerLogic());
 
             this.StartServerLoop();
-            this.ProvideComponent();
 
             GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
@@ -96,13 +95,6 @@ namespace Xemio.GameLibrary.Network
         private IEnumerable<IServerLogic> GetSubscribers(Package package)
         {
             return this._subscribers.Where(s => s.Type.IsInstanceOfType(package));
-        }
-        /// <summary>
-        /// Provides the component.
-        /// </summary>
-        public void ProvideComponent()
-        {
-            XGL.Components.Add(new ValueProvider<Server>(this));
         }
         /// <summary>
         /// Called when the server received a package.

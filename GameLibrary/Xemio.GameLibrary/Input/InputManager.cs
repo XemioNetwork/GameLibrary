@@ -12,15 +12,28 @@ namespace Xemio.GameLibrary.Input
     public class InputManager : IConstructable, IGameHandler
     {
         #region Fields
-        private IList<IInputListener> _listeners = new List<IInputListener>();
-        #endregion Fields
+        private readonly IList<IInputListener> _listeners;
+        #endregion
 
         #region Properties
         /// <summary>
         /// Gets the player inputs.
         /// </summary>
         public IList<PlayerInput> PlayerInputs { get; private set; }
-        #endregion Properties
+        /// <summary>
+        /// Gets the <see cref="Xemio.GameLibrary.Input.PlayerInput"/> with the specified player index.
+        /// </summary>
+        public PlayerInput this[int playerIndex]
+        {
+            get
+            {
+                if (!this.IsPlayerIndexValid(playerIndex))
+                    return null;
+
+                return this.PlayerInputs[playerIndex];
+            }
+        }
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -28,22 +41,12 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public InputManager()
         {
+            this._listeners = new List<IInputListener>();
             this.PlayerInputs = new List<PlayerInput>();
         }
         #endregion Constructors
-
+        
         #region Methods
-        /// <summary>
-        /// Gets the player input with the specified player index.
-        /// </summary>
-        /// <param name="playerIndex">Index of the player.</param>
-        public PlayerInput GetPlayerInput(int playerIndex)
-        {
-            if (!this.IsPlayerIndexValid(playerIndex))
-                return null;
-
-            return this.PlayerInputs[playerIndex];
-        }
         /// <summary>
         /// Creates a player input.
         /// </summary>
@@ -85,7 +88,7 @@ namespace Xemio.GameLibrary.Input
         {
             return this._listeners.Where(listener => listener.PlayerIndex == playerIndex);
         }
-        #endregion Methods
+        #endregion
 
         #region Private Methods
         /// <summary>
@@ -96,20 +99,20 @@ namespace Xemio.GameLibrary.Input
         {
             return playerIndex < this.PlayerInputs.Count;
         }
-        #endregion Private Methods
+        #endregion
 
         #region Event Handlers
         /// <summary>
         /// Handles the input event.
         /// </summary>
-        /// <param name="inputEvent">The key event.</param>
-        private void HandleInputEvent(IInputEvent inputEvent)
+        /// <param name="stateEvent">The key event.</param>
+        private void HandleInputEvent(InputStateEvent stateEvent)
         {
-            if (!this.IsPlayerIndexValid(inputEvent.PlayerIndex))
+            if (!this.IsPlayerIndexValid(stateEvent.PlayerIndex))
                 return;
 
-            PlayerInput playerInput = this.PlayerInputs[inputEvent.PlayerIndex];
-            inputEvent.Apply(playerInput);
+            PlayerInput playerInput = this.PlayerInputs[stateEvent.PlayerIndex];
+            stateEvent.Apply(playerInput);
         }
         #endregion Event Handlers
 
@@ -120,9 +123,9 @@ namespace Xemio.GameLibrary.Input
         public void Construct()
         {
             var eventManager = XGL.Components.Get<EventManager>();
-            eventManager.Subscribe<IInputEvent>(this.HandleInputEvent);
+            eventManager.Subscribe<InputStateEvent>(this.HandleInputEvent);
         }
-        #endregion Implementation of IConstructable
+        #endregion
 
         #region Implementation of IGameHandler
         /// <summary>
@@ -133,10 +136,9 @@ namespace Xemio.GameLibrary.Input
         {
             foreach (PlayerInput playerInput in this.PlayerInputs)
             {
-                playerInput.Update();
+                playerInput.UpdateStates();
             }
         }
-
         /// <summary>
         /// Handles render calls.
         /// </summary>

@@ -38,7 +38,6 @@ namespace Xemio.GameLibrary.Network
             this.Serializer = new PackageSerializer();
 
             this.StartLoop();
-            this.ProvideComponent();
 
             GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
@@ -73,9 +72,11 @@ namespace Xemio.GameLibrary.Network
         /// Gets the subscribers.
         /// </summary>
         /// <param name="package">The package.</param>
-        private IEnumerable<IClientLogic> GetSubscribers(Package package)
+        private IList<IClientLogic> GetSubscribers(Package package)
         {
-            return this._subscribers.Where(s => s.Type.IsAssignableFrom(package.GetType()));            
+            return this._subscribers
+                .Where(s => s.Type.IsInstanceOfType(package))
+                .ToList();
         }
         /// <summary>
         /// Subscribes the specified subscriber.
@@ -94,19 +95,11 @@ namespace Xemio.GameLibrary.Network
             this._subscribers.Remove(subscriber);
         }
         /// <summary>
-        /// Provides the component.
-        /// </summary>
-        public void ProvideComponent()
-        {
-            XGL.Components.Add(new ValueProvider<Client>(this));
-        }
-        /// <summary>
         /// Starts the client loop.
         /// </summary>
         private void StartLoop()
         {
-            Task loopTask = new Task(this.ClientLoop);
-            loopTask.Start();
+            Task.Factory.StartNew(this.ClientLoop);
         }
         /// <summary>
         /// Listens to the specified protocol and receives packages.

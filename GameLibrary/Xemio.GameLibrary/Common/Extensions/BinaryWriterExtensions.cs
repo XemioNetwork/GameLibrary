@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,116 @@ namespace Xemio.GameLibrary.Common.Extensions
 {
     public static class BinaryWriterExtensions
     {
+        #region Private Methods
+        /// <summary>
+        /// Writes the specified array.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The value.</param>
+        private static void WriteArray(BinaryWriter writer, object value)
+        {
+            Array array = (Array)value;
+
+            writer.Write(array.Length);
+            for (int i = 0; i < array.Length; i++)
+            {
+                writer.WriteInstance(array.GetValue(i));
+            }
+        }
+        /// <summary>
+        /// Writes the specified list.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The value.</param>
+        private static void WriteList(BinaryWriter writer, object value)
+        {
+            IList list = (IList)value;
+
+            writer.Write(list.Count);
+            foreach (object instance in list)
+            {
+                writer.WriteInstance(instance);
+            }
+        }
+        /// <summary>
+        /// Writes the specified dictionary.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The value.</param>
+        private static void WriteDictionary(BinaryWriter writer, object value)
+        {
+            IDictionary dictionary = (IDictionary)value;
+
+            writer.Write(dictionary.Count);
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                writer.WriteInstance(entry.Key);
+                writer.WriteInstance(entry.Value);
+            }
+        }
+        /// <summary>
+        /// Writes all object properties.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The value.</param>
+        private static void WriteProperties(BinaryWriter writer, object value)
+        {
+            PropertyInfo[] properties = value.GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                if (!property.GetCustomAttributes(true)
+                    .Any(attribute => attribute is ExcludeSyncAttribute))
+                {
+                    object propertyValue = property.GetValue(value, null);
+
+                    writer.Write(propertyValue == null);
+                    if (propertyValue != null)
+                    {
+                        writer.WriteInstance(propertyValue);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Writes a reference based object.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The value.</param>
+        private static void WriteReferenceBasedObject(BinaryWriter writer, object value)
+        {
+            Type type = value.GetType();
+
+            if (type.IsArray)
+            {
+                WriteArray(writer, value);
+            }
+            else if (typeof(IList).IsAssignableFrom(type))
+            {
+                WriteList(writer, value);
+            }
+            else if (typeof(IDictionary).IsAssignableFrom(type))
+            {
+                WriteDictionary(writer, value);
+            }
+            else if (type.IsEnum)
+            {
+                writer.Write((int)value);
+            }
+            else if (type == typeof(Vector2))
+            {
+                writer.Write((Vector2)value);
+            }
+            else if (type == typeof(Rectangle))
+            {
+                writer.Write((Rectangle)value);
+            }
+            else
+            {
+                WriteProperties(writer, value);
+            }
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Writes the specified vector.
@@ -88,46 +199,7 @@ namespace Xemio.GameLibrary.Common.Extensions
                     writer.Write((ulong)value);
                     break;
                 default:
-                    if (type.IsArray)
-                    {
-                        Array array = value as Array;
-                        
-                        writer.Write(array.Length);
-                        for (int i = 0; i < array.Length; i++)
-                        {
-                            writer.WriteInstance(array.GetValue(i));
-                        }
-                    }
-                    else if (type.IsEnum)
-                    {
-                        writer.Write((int)value);
-                    }
-                    else if (type == typeof(Vector2))
-                    {
-                        writer.Write((Vector2)value);
-                    }
-                    else if (type == typeof(Rectangle))
-                    {
-                        writer.Write((Rectangle)value);
-                    }
-                    else
-                    {
-                        PropertyInfo[] properties = type.GetProperties();
-                        foreach (PropertyInfo property in properties)
-                        {
-                            if (!property.GetCustomAttributes(true)
-                                .Any(attribute => attribute is ExcludeSyncAttribute))
-                            {
-                                object propertyValue = property.GetValue(value, null);
-
-                                writer.Write(propertyValue == null);
-                                if (propertyValue != null)
-                                {
-                                    writer.WriteInstance(propertyValue);
-                                }
-                            }
-                        }
-                    }
+                    WriteReferenceBasedObject(writer, value);
                     break;
             }
         }

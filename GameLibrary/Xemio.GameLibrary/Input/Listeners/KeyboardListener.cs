@@ -2,21 +2,24 @@
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Rendering;
+using Keys = Xemio.GameLibrary.Input.Keys;
 
-namespace Xemio.GameLibrary.Input.Keyboard
+namespace Xemio.GameLibrary.Input.Listeners
 {
     public class KeyboardListener : IInputListener
     {
-        #region Properties
+        #region Methods
         /// <summary>
-        /// Gets the event manager.
+        /// Publishes the specified event.
         /// </summary>
-        protected EventManager EventManager
+        /// <param name="keyEvent">The key event.</param>
+        protected virtual void PublishEvent(InputStateEvent keyEvent)
         {
-            get { return XGL.Components.Get<EventManager>(); }
+            var eventManager = XGL.Components.Get<EventManager>();
+            eventManager.Publish(keyEvent);
         }
         #endregion
-        
+
         #region Event Handlers
         /// <summary>
         /// Handles the KeyDown event of the surface.
@@ -25,7 +28,7 @@ namespace Xemio.GameLibrary.Input.Keyboard
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
         private void SurfaceKeyDown(object sender, KeyEventArgs e)
         {
-            this.EventManager.Publish(new KeyEvent((Keys)e.KeyCode, new InputState(true, 1.0f), this.PlayerIndex.Value));
+            this.PublishEvent(new InputStateEvent((Keys)e.KeyCode, new InputState(true, 1.0f), this.PlayerIndex.Value));
         }
         /// <summary>
         /// Handles the KeyUp event of the surface.
@@ -34,7 +37,7 @@ namespace Xemio.GameLibrary.Input.Keyboard
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
         private void SurfaceKeyUp(object sender, KeyEventArgs e)
         {
-            this.EventManager.Publish(new KeyEvent((Keys)e.KeyCode, new InputState(false, 0.0f), this.PlayerIndex.Value));
+            this.PublishEvent(new InputStateEvent((Keys)e.KeyCode, new InputState(false, 0.0f), this.PlayerIndex.Value));
         }
         #endregion
 
