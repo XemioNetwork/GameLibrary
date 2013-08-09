@@ -65,7 +65,6 @@
     <Compile Include="FluentConfigurator.cs" />
     <Compile Include="Input\IInputListener.cs" />
     <Compile Include="Input\InputManager.cs" />
-    <Compile Include="Input\InputStorage.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
