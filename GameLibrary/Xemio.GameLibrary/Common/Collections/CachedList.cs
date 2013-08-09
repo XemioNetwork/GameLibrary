@@ -41,31 +41,36 @@ namespace Xemio.GameLibrary.Common.Collections
 
         #region Fields
         private readonly List<T> _list;
-        private readonly List<IListAction<T>> _actions;  
+        private readonly List<IListAction<T>> _actions;
+        private int _startCachingCount = 0;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether to automatically apply changes.
+        /// Gets a value indicating whether this instance is caching.
         /// </summary>
-        public bool AutoApplyChanges { get; set; }
-        /// <summary>
-        /// Gets the enumerable.
-        /// </summary>
-        protected IEnumerable<T> Enumerable
+        public bool IsCaching
         {
-            get
-            {
-                foreach (T item in this._list)
-                    yield return item;
-
-                if (this.AutoApplyChanges)
-                    this.ApplyChanges();
-            }
+            get { return this._startCachingCount > 0; }
         }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Starts the caching.
+        /// </summary>
+        public IDisposable StartCaching()
+        {
+            this._startCachingCount++;
+
+            return new ActionDisposer(() =>
+                                          {
+                                              this._startCachingCount--;
+
+                                              if (this.IsCaching == false)
+                                                  this.ApplyChanges();
+                                          });
+        }
         /// <summary>
         /// Applies the changes.
         /// </summary>
@@ -86,7 +91,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// </summary>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.Enumerable.GetEnumerator();
+            return this._list.GetEnumerator();
         }
         /// <summary>
         /// Gets the enumerator.
@@ -104,14 +109,26 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="item">The item.</param>
         public void Add(T item)
         {
-            this._actions.Add(new AddAction<T>(item));
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new AddAction<T>(item));
+                return;
+            }
+
+            this._list.Add(item);
         }
         /// <summary>
         /// Removes all items from the list.
         /// </summary>
         public void Clear()
         {
-            this._actions.Add(new ClearAction<T>());
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new ClearAction<T>());
+                return;
+            }
+
+            this._list.Clear();
         }
         /// <summary>
         /// Determines wether the specified item is inside the list.
@@ -136,8 +153,13 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="item">The item.</param>
         public bool Remove(T item)
         {
-            this._actions.Add(new RemoveAction<T>(item));
-            return true;
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new RemoveAction<T>(item));
+                return true;
+            }
+
+            return this._list.Remove(item);
         }
         /// <summary>
         /// Gets the item count.
@@ -171,7 +193,13 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="item">The item.</param>
         public void Insert(int index, T item)
         {
-            this._actions.Add(new InsertAction<T>(index, item));
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new InsertAction<T>(index, item));
+                return;
+            }
+
+            this._list.Insert(index, item);
         }
         /// <summary>
         /// Removes the item at the specified index.
@@ -179,7 +207,13 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="index">The index.</param>
         public void RemoveAt(int index)
         {
-            this._actions.Add(new RemoveAtAction<T>(index));
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new RemoveAtAction<T>(index));
+                return;
+            }
+
+            this._list.RemoveAt(index);
         }
         /// <summary>
         /// Gets or sets an item at the specified index.
@@ -188,7 +222,16 @@ namespace Xemio.GameLibrary.Common.Collections
         public T this[int index]
         {
             get { return this._list[index]; }
-            set { this._actions.Add(new IndexerAction<T>(index, value)); }
+            set
+            {
+                if (this.IsCaching)
+                { 
+                    this._actions.Add(new IndexerAction<T>(index, value));
+                    return;
+                }
+
+                this._list[index] = value;
+            }
         }
         #endregion
     }

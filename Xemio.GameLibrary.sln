@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.GameLibrary", "GameLibrary\Xemio.GameLibrary\Xemio.GameLibrary.csproj", "{474CA844-EA03-48DC-A790-5F18510799AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameLibrary", "GameLibrary", "{0534896C-1686-4CE7-A78B-0E58A515D000}"
@@ -14,8 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.EventSystem", "Testing\Xemio.Testing.EventSystem\Xemio.Testing.EventSystem.csproj", "{B1EB1380-0429-4378-9669-3781CF996560}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Script", "Testing\Xemio.Testing.Script\Xemio.Testing.Script.csproj", "{654D61AC-4895-480A-81E4-774FA33C95C9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.FileSystem", "Testing\Xemio.Testing.FileSystem\Xemio.Testing.FileSystem.csproj", "{45CEDC4A-A304-4365-A753-5F620189E434}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Localization", "Testing\Xemio.Testing.Localization\Xemio.Testing.Localization.csproj", "{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}"
 EndProject
@@ -81,16 +79,6 @@ Global
 		{654D61AC-4895-480A-81E4-774FA33C95C9}.Release|Mixed Platforms.Build.0 = Release|x86
 		{654D61AC-4895-480A-81E4-774FA33C95C9}.Release|x86.ActiveCfg = Release|x86
 		{654D61AC-4895-480A-81E4-774FA33C95C9}.Release|x86.Build.0 = Release|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Debug|x86.ActiveCfg = Debug|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Debug|x86.Build.0 = Debug|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|Any CPU.ActiveCfg = Release|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|Mixed Platforms.Build.0 = Release|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|x86.ActiveCfg = Release|x86
-		{45CEDC4A-A304-4365-A753-5F620189E434}.Release|x86.Build.0 = Release|x86
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -121,7 +109,6 @@ Global
 		{F1DA53F3-76C8-4178-B772-B1F048F7F9E2} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{B1EB1380-0429-4378-9669-3781CF996560} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{654D61AC-4895-480A-81E4-774FA33C95C9} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
-		{45CEDC4A-A304-4365-A753-5F620189E434} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 	EndGlobalSection

@@ -10,15 +10,6 @@ namespace Xemio.GameLibrary.Sound
 {
     public class SoundManager : IComponent, ISoundFactory
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoundManager"/> class.
-        /// </summary>
-        public SoundManager()
-        {
-        }
-        #endregion
-
         #region Fields
         private ISoundProvider _provider;
         #endregion

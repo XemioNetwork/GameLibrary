@@ -18,35 +18,18 @@ namespace Xemio.GameLibrary.Common.Collections
         {
             this._dictionary = new Dictionary<TKey, TValue>();
             this._actions = new List<IDictionaryAction<TKey, TValue>>();
+
+            this._startCachingCount = 0;
         }
         #endregion
 
         #region Fields
         private readonly Dictionary<TKey, TValue> _dictionary;
         private readonly List<IDictionaryAction<TKey, TValue>> _actions;
+
+        private int _startCachingCount;
         #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets a value indicating whether to automatically apply changes.
-        /// </summary>
-        public bool AutoApplyChanges { get; set; }
-        /// <summary>
-        /// Gets the enumerable.
-        /// </summary>
-        protected IEnumerable<KeyValuePair<TKey, TValue>> Enumerable
-        {
-            get
-            {
-                foreach (KeyValuePair<TKey, TValue> pair in this._dictionary)
-                    yield return pair;
-
-                if (this.AutoApplyChanges)
-                    this.ApplyChanges();
-            }
-        }
-        #endregion
-
+        
         #region Methods
         /// <summary>
         /// Applies the changes.
@@ -58,15 +41,40 @@ namespace Xemio.GameLibrary.Common.Collections
                 action.Apply(this._dictionary);
             }
         }
+        /// <summary>
+        /// Starts the caching.
+        /// </summary>
+        public IDisposable StartCaching()
+        {
+            this._startCachingCount++;
+
+            return new ActionDisposer(() =>
+                                          {
+                                              this._startCachingCount--;
+
+                                              if (this.IsCaching == false)
+                                                  this.ApplyChanges();
+                                          });
+        }
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// Gets a value indicating whether this instance is caching.
+        /// </summary>
+        public bool IsCaching
+        {
+            get { return this._startCachingCount > 0; }
+        }
+        #endregion Properties
+        
         #region Implementation of IEnumerable
         /// <summary>
         /// Gets the enumerator.
         /// </summary>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return this.Enumerable.GetEnumerator();
+            return this._dictionary.GetEnumerator();
         }
         /// <summary>
         /// Gets the enumerator.
@@ -91,7 +99,13 @@ namespace Xemio.GameLibrary.Common.Collections
         /// </summary>
         public void Clear()
         {
-            this._actions.Add(new ClearAction<TKey, TValue>());
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new ClearAction<TKey, TValue>());
+                return;
+            }
+
+            this._dictionary.Clear();
         }
         /// <summary>
         /// Determines whether the dictionary contains the specified item.
@@ -158,7 +172,13 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="value">The value.</param>
         public void Add(TKey key, TValue value)
         {
-            this._actions.Add(new AddAction<TKey, TValue>(key, value));
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new AddAction<TKey, TValue>(key, value));
+                return;
+            }
+
+            this._dictionary.Add(key, value);
         }
         /// <summary>
         /// Removes the specified key.
@@ -166,8 +186,13 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="key">The key.</param>
         public bool Remove(TKey key)
         {
-            this._actions.Add(new RemoveAction<TKey, TValue>(key));
-            return true;
+            if (this.IsCaching)
+            { 
+                this._actions.Add(new RemoveAction<TKey, TValue>(key));
+                return true;
+            }
+
+            return this._dictionary.Remove(key);
         }
         /// <summary>
         /// Tries to get a value for the specified key.
@@ -184,7 +209,16 @@ namespace Xemio.GameLibrary.Common.Collections
         public TValue this[TKey key]
         {
             get { return this._dictionary[key]; }
-            set { this._actions.Add(new IndexerAction<TKey, TValue>(key, value)); }
+            set
+            {
+                if (this.IsCaching)
+                { 
+                    this._actions.Add(new IndexerAction<TKey, TValue>(key, value));
+                    return;
+                }
+
+                this._dictionary[key] = value;
+            }
         }
         /// <summary>
         /// Gets the keys.
