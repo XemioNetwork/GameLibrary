@@ -48,7 +48,7 @@ namespace Xemio.GameLibrary.Common.Collections
         {
             this._startCachingCount++;
 
-            return new ActionDisposer(() =>
+            return new ActionDisposable(() =>
                                           {
                                               this._startCachingCount--;
 
