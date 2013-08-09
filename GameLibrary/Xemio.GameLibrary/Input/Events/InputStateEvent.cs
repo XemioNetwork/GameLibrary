@@ -41,7 +41,7 @@ namespace Xemio.GameLibrary.Input.Events
         /// <param name="playerInput">The player input.</param>
         public void Apply(PlayerInput playerInput)
         {
-            playerInput.Storage.SetState(this.Key, this.State);
+            playerInput.SetState(this.Key, this.State);
         }
         #endregion
     }
