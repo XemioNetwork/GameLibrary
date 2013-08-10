@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Components
 {
-    public class ComponentManager : IComponentProvider
+    public class ComponentManager
     {
         #region Constructors
         /// <summary>
@@ -106,7 +106,7 @@ namespace Xemio.GameLibrary.Components
             if (component is IValueProvider)
             {
                 IValueProvider valueProvider = component as IValueProvider;
-                this._valueMappings.Add(valueProvider.Id, valueProvider);
+                this.Add(valueProvider.Id, valueProvider);
 
                 return;
             }
@@ -117,7 +117,7 @@ namespace Xemio.GameLibrary.Components
             this.Add(interfaceType, value);
             if (interfaceType != component.GetType())
             {
-                this.Add(component.GetType(), value);
+                this.Add(value.Id, value);
             }
         }
         /// <summary>
