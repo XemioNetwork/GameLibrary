@@ -16,8 +16,8 @@ namespace Xemio.GameLibrary.Network.Packages
     internal class PackageSender
     {
         #region Fields
+        private readonly ConcurrentQueue<QueuedPackage> _packageQueue; 
         private readonly AutoResetEvent _waitHandle = new AutoResetEvent(false);
-        private readonly ConcurrentQueue<Tuple<IPackageSender, Package>> _packageQueue = new ConcurrentQueue<Tuple<IPackageSender, Package>>();
         #endregion Fields
 
         #region Constructors
@@ -26,6 +26,7 @@ namespace Xemio.GameLibrary.Network.Packages
         /// </summary>
         public PackageSender()
         {
+            this._packageQueue = new ConcurrentQueue<QueuedPackage>();
             Task.Factory.StartNew(this.SendPackageLoop);
         }
         #endregion Constructors
@@ -38,8 +39,7 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <param name="receiver">The receiver.</param>
         public void Send(Package package, IPackageSender receiver)
         {
-            this._packageQueue.Enqueue(new Tuple<IPackageSender, Package>(receiver, package));
-
+            this._packageQueue.Enqueue(new QueuedPackage(package, receiver));
             this._waitHandle.Set();
         }
         #endregion Methods
@@ -54,10 +54,10 @@ namespace Xemio.GameLibrary.Network.Packages
             {
                 this._waitHandle.WaitOne();
 
-                Tuple<IPackageSender, Package> tuple;
-                if (this._packageQueue.TryDequeue(out tuple))
+                QueuedPackage queuedPackage;
+                while (this._packageQueue.TryDequeue(out queuedPackage))
                 {
-                    tuple.Item1.Send(tuple.Item2);
+                    queuedPackage.Receiver.Send(queuedPackage.Package);
                 }
             }
         }

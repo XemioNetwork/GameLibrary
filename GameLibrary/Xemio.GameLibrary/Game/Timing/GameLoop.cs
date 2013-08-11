@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace Xemio.GameLibrary.Game.Timing
         public GameLoop()
         {
             this._handlers = new List<IGameHandler>();
+            this.LagCompensation = LagCompensation.ExecuteMissedTicks;
         }
         #endregion
 
@@ -40,6 +42,10 @@ namespace Xemio.GameLibrary.Game.Timing
         /// Gets or sets the precision.
         /// </summary>
         public GameLoopPrecision Precision { get; set; }
+        /// <summary>
+        /// Gets or sets the lag compensation.
+        /// </summary>
+        public LagCompensation LagCompensation { get; set; }
         /// <summary>
         /// Gets the frames per second.
         /// </summary>
@@ -206,9 +212,17 @@ namespace Xemio.GameLibrary.Game.Timing
                     float tickElapsed = (float)(elapsedTickTime / tickCount);
                     unprocessedTicks -= tickCount;
 
-                    for (int i = 0; i < tickCount; i++)
+                    switch (this.LagCompensation)
                     {
-                        invoker.Invoke(() => this.OnTick(tickElapsed));
+                        case LagCompensation.None:
+                            invoker.Invoke(() => this.OnTick((float)elapsedTickTime));
+                            break;
+                        case LagCompensation.ExecuteMissedTicks:
+                            for (int i = 0; i < tickCount; i++)
+                            {
+                                invoker.Invoke(() => this.OnTick(tickElapsed));
+                            }
+                            break;
                     }
 
                     elapsedTickTime = 0;

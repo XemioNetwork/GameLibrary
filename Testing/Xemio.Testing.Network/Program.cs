@@ -45,7 +45,6 @@ namespace Xemio.Testing.Network
             XGL.Run(control.Handle, config);
 
             Server server = ProtocolFactory.CreateServerFor<TcpServerProtocol>(8000);
-
             Client client = ProtocolFactory.CreateClientFor<TcpClientProtocol>("127.0.0.1", 8000);
 
             Task.Factory.StartNew(() => A(client));
