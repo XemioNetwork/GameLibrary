@@ -64,6 +64,7 @@
     <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
+    <Compile Include="Game\Scenes\SceneProvider.cs" />
     <Compile Include="Input\IInputListener.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputState.cs" />
@@ -165,12 +166,10 @@
     <Compile Include="Events\Logging\ExceptionEvent.cs" />
     <Compile Include="Events\Logging\LoggingEvent.cs" />
     <Compile Include="Events\Logging\LoggingLevel.cs" />
-    <Compile Include="Game\Scenes\CachedSceneProvider.cs" />
     <Compile Include="Game\Timing\GameLoop.cs" />
     <Compile Include="Game\Timing\GameTime.cs" />
     <Compile Include="Game\Timing\GameTimeMode.cs" />
     <Compile Include="Game\IGameHandler.cs" />
-    <Compile Include="Game\Scenes\ISceneProvider.cs" />
     <Compile Include="Game\Timing\GameLoopPrecision.cs" />
     <Compile Include="Game\Scenes\SceneWrapper.cs" />
     <Compile Include="Input\Events\InputStateEvent.cs" />

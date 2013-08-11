@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Sound
             {
                 if (this._provider == null)
                 {
-                    throw new InvalidOperationException("No sound provider defined. Use the XGL.Initialize method to initialize the sound system.");
+                    throw new InvalidOperationException("No sound provider defined.");
                 }
 
                 return this._provider;

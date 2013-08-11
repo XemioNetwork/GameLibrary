@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Content;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
-    public abstract class Scene : CachedSceneProvider, IEnumerable<Scene>
+    public abstract class Scene : SceneProvider, IEnumerable<Scene>
     {
         #region Constructors
         /// <summary>
@@ -18,17 +18,11 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         protected Scene()
         {
-            this._scenes = new List<Scene>();
-
             this.Visible = true;
             this.Paused = false;
         }
         #endregion
-
-        #region Fields
-        private readonly List<Scene> _scenes;
-        #endregion
-
+        
         #region Properties
         /// <summary>
         /// Gets a value indicating whether this <see cref="Scene"/> is loaded.
@@ -45,20 +39,13 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Gets the parent.
         /// </summary>
-        public ISceneProvider Parent { get; internal set; }
+        public SceneProvider Parent { get; internal set; }
         /// <summary>
         /// Gets the content manager.
         /// </summary>
         public ContentManager Content
         {
             get { return XGL.Components.Get<ContentManager>(); }
-        }
-        /// <summary>
-        /// Gets the graphics device.
-        /// </summary>
-        public GraphicsDevice GraphicsDevice
-        {
-            get { return XGL.Components.Get<GraphicsDevice>(); }
         }
         /// <summary>
         /// Gets the texture factory.
@@ -133,7 +120,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Loads the content for the specified scene.
         /// </summary>
-        internal void InternalLoadContent()
+        internal void TryLoadContent()
         {
             if (!this.Loaded)
             {
@@ -148,47 +135,19 @@ namespace Xemio.GameLibrary.Game.Scenes
         {
             this.Parent.Remove(this);
         }
-        /// <summary>
-        /// Gets a scene.
-        /// </summary>
-        public T GetScene<T>() where T : Scene
-        {
-            return (T)this.GetScene(scene => scene is T);
-        }
-        /// <summary>
-        /// Gets a scene.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        public Scene GetScene(Func<Scene, bool> predicate)
-        {
-            return this._scenes.FirstOrDefault(predicate);
-        }
         #endregion
 
         #region Virtual Methods
         /// <summary>
         /// Initializes the scene.
         /// </summary>
-        public virtual void Initialize()
+        public virtual void OnAttached()
         {
         }
         /// <summary>
         /// Loads the scene content.
         /// </summary>
         public virtual void LoadContent()
-        {
-        }
-        /// <summary>
-        /// Handles a game tick.
-        /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        public virtual void Tick(float elapsed)
-        {
-        }
-        /// <summary>
-        /// Handles a game render request.
-        /// </summary>
-        public virtual void Render()
         {
         }
         #endregion
@@ -204,34 +163,14 @@ namespace Xemio.GameLibrary.Game.Scenes
             return new SceneWrapper(gameHandler);    
         }
         #endregion
-
-        #region CachedSceneProvider Methods
-        /// <summary>
-        /// Called when a scene gets added.
-        /// </summary>
-        /// <param name="scene">The scene.</param>
-        protected override void OnAddScene(Scene scene)
-        {
-            scene.InternalLoadContent();
-            this._scenes.Add(scene);
-        }
-        /// <summary>
-        /// Called when a scene gets removed.
-        /// </summary>
-        /// <param name="scene">The scene.</param>
-        protected override void OnRemoveScene(Scene scene)
-        {
-            this._scenes.Remove(scene);
-        }
-        #endregion
-
+        
         #region IEnumerable<Scene> Member
         /// <summary>
         /// Gets the enumerator.
         /// </summary>
         public IEnumerator<Scene> GetEnumerator()
         {
-            return this._scenes.GetEnumerator();
+            return this._subScenes.GetEnumerator();
         }
         #endregion
 
