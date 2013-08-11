@@ -19,9 +19,25 @@ namespace Xemio.GameLibrary.Network
         /// Gets or sets the latency.
         /// </summary>
         float Latency { get; set; }
+    }
+    public static class ConnectionExtensions
+    {
+        #region Methods
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
+        /// Resolves the specified connection and removes the INestedConnection wrapper.
         /// </summary>
-        bool Connected { get; }
+        /// <typeparam name="T">The connection type</typeparam>
+        /// <param name="connection">The connection.</param>
+        public static T Resolve<T>(this IConnection connection)
+        {
+            IConnection current = connection;
+            while (current is INestedConnection && !(current is T))
+            {
+                current = (current as INestedConnection).Connection;
+            }
+
+            return (T)current;
+        }
+        #endregion
     }
 }

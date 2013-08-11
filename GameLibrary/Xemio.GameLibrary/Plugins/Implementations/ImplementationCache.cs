@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Xemio.GameLibrary.Common.Link;
 
 namespace Xemio.GameLibrary.Plugins.Implementations
@@ -13,11 +14,13 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// </summary>
         public ImplementationCache()
         {
+            this._cachedAssemblies = new Dictionary<Assembly, bool>();
             this._linkers = new Dictionary<IAssemblyContext, List<dynamic>>();
         }
         #endregion
 
         #region Fields
+        private readonly Dictionary<Assembly, bool> _cachedAssemblies; 
         private readonly Dictionary<IAssemblyContext, List<dynamic>> _linkers;
         #endregion
 
@@ -32,7 +35,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="creationType">Type of the creation.</param>
         public TValue Resolve<TKey, TValue>(IAssemblyContext context, TKey key, CreationType creationType) where TValue : ILinkable<TKey>
         {
-            if (!this.InCache<TKey, TValue>(context))
+            if (!this.InCache(context))
             {
                 this.Cache<TKey, TValue>(context);
             }
@@ -57,26 +60,22 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="context">The context.</param>
         public IEnumerable<TValue> Resolve<TKey, TValue>(IAssemblyContext context) where TValue : ILinkable<TKey>
         {
-            if (!this.InCache<TKey, TValue>(context))
+            if (!this.InCache(context))
             {
                 this.Cache<TKey, TValue>(context);
             }
 
             return this._linkers[context]
                 .OfType<GenericLinker<TKey, TValue>>()
-                .SelectMany(genericLinker => genericLinker);
+                .SelectMany(linker => linker);
         }
-
         /// <summary>
         /// Returns a value that determines wether the specified context was already cached or not.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="context">The context.</param>
-        public bool InCache<TKey, TValue>(IAssemblyContext context) where TValue : ILinkable<TKey>
+        public bool InCache(IAssemblyContext context)
         {
-            return this._linkers.ContainsKey(context) &&
-                   this._linkers[context].Any(linker => linker is GenericLinker<TKey, TValue>);
+            return context.Assemblies.All(a => this._cachedAssemblies.ContainsKey(a));
         }
         /// <summary>
         /// Caches the specified context.
@@ -86,15 +85,28 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="context">The context.</param>
         public void Cache<TKey, TValue>(IAssemblyContext context) where TValue : ILinkable<TKey>
         {
-            var linker = new GenericLinker<TKey, TValue>();
-            linker.Load(context.Assemblies);
-
             if (!this._linkers.ContainsKey(context))
             {
                 this._linkers.Add(context, new List<dynamic>());
             }
 
-            this._linkers[context].Add(linker);
+            foreach (Assembly assembly in context.Assemblies)
+            {
+                if (!this._cachedAssemblies.ContainsKey(assembly))
+                {
+                    var linker = this._linkers[context]
+                        .FirstOrDefault(l => l is GenericLinker<TKey, TValue>);
+
+                    if (linker == null)
+                    {
+                        linker = new GenericLinker<TKey, TValue>();
+                        this._linkers[context].Add(linker);
+                    }
+
+                    linker.Load(assembly);
+                    this._cachedAssemblies.Add(assembly, true);
+                }
+            }
         }
         #endregion
     }

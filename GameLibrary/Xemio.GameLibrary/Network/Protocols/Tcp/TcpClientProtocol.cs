@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net.Sockets;
 using System.Net;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
@@ -15,7 +16,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpClientProtocol"/> class.
         /// </summary>
-        public TcpClientProtocol()
+        public TcpClientProtocol() : this(TcpDelay.None)
         {
         }
         /// <summary>
@@ -24,24 +25,23 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="delay">The delay.</param>
         public TcpClientProtocol(TcpDelay delay)
         {
+            this._serializer = new PackageSerializer();
             this._delay = delay;
         }
         #endregion
 
         #region Fields
+        private readonly PackageSerializer _serializer;
         private readonly TcpDelay _delay;
+
         private TcpClient _tcpClient;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the writer.
+        /// Gets the stream.
         /// </summary>
-        public BinaryWriter Writer { get; private set; }
-        /// <summary>
-        /// Gets the reader.
-        /// </summary>
-        public BinaryReader Reader { get; private set; }
+        public Stream Stream { get; private set; }
         #endregion
 
         #region IProtocol Member
@@ -58,9 +58,11 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
                                   };
 
             this._tcpClient.Connect(IPAddress.Parse(ip), port);
+            this.Stream = this._tcpClient.GetStream();
 
-            this.Writer = new BinaryWriter(this._tcpClient.GetStream());
-            this.Reader = new BinaryReader(this._tcpClient.GetStream());
+            while (!this._tcpClient.Connected)
+            {
+            }
         }
         /// <summary>
         /// Disconnects the client.
@@ -75,14 +77,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this.Client.Serializer.Serialize(package, this.Writer);
+            this._serializer.Serialize(package, this.Stream);
         }
         /// <summary>
         /// Receives a package.
         /// </summary>
         public Package Receive()
         {
-            return this.Client.Serializer.Deserialize(this.Reader);
+            return this._serializer.Deserialize(this.Stream);
         }
         #endregion
 
@@ -91,6 +93,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// Gets or sets the client.
         /// </summary>
         public Client Client { get; set; }
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IClientProtocol"/> is connected.
+        /// </summary>
+        public bool Connected
+        {
+            get { return this._tcpClient != null && this._tcpClient.Connected; }
+        }
         #endregion
     }
 }

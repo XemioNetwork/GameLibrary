@@ -100,25 +100,18 @@ namespace Xemio.GameLibrary.Common.Link
         /// <param name="assembly">The assembly, that is used to load.</param>
         public void Load(Assembly assembly)
         {
-            try
-            {
-                Type[] types = assembly.GetTypes();
+            Type[] types = assembly.GetTypes();
 
-                foreach (Type type in types)
+            foreach (Type type in types)
+            {
+                if (typeof(TValue).IsAssignableFrom(type))
                 {
-                    if (typeof(TValue).IsAssignableFrom(type))
+                    if (!type.ContainsGenericParameters && !type.IsAbstract)
                     {
-                        if (!type.ContainsGenericParameters && !type.IsAbstract)
-                        {
-                            TValue instance = (TValue)Activator.CreateInstance(type);
-                            this.Add(instance.Id, instance);
-                        }
+                        TValue instance = (TValue)Activator.CreateInstance(type);
+                        this.Add(instance.Id, instance);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
             }
         }
         /// <summary>

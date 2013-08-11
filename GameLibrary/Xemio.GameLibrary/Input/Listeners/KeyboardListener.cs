@@ -51,8 +51,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         public void OnAttached()
         {
-            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-            var surface = Control.FromHandle(graphicsDevice.Handle);
+            var surface = Control.FromHandle(XGL.Handle);
 
             surface.KeyDown += this.SurfaceKeyDown;
             surface.KeyUp += this.SurfaceKeyUp;
@@ -62,8 +61,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         public void OnDetached()
         {
-            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-            var surface = Control.FromHandle(graphicsDevice.Handle);
+            var surface = Control.FromHandle(XGL.Handle);
 
             surface.KeyDown -= this.SurfaceKeyDown;
             surface.KeyUp -= this.SurfaceKeyUp;

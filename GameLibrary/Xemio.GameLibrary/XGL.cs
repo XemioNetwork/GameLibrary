@@ -26,6 +26,10 @@ namespace Xemio.GameLibrary
     {
         #region Properties
         /// <summary>
+        /// Gets the handle.
+        /// </summary>
+        public static IntPtr Handle { get; private set; }
+        /// <summary>
         /// Gets the component manager.
         /// </summary>
         public static ComponentManager Components
@@ -63,6 +67,8 @@ namespace Xemio.GameLibrary
         {
             if (XGL.Initialized)
                 return;
+
+            XGL.Handle = handle;
 
             config.RegisterComponents();
             foreach (IComponent component in config.Components)

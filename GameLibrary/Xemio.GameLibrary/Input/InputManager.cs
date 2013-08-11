@@ -5,6 +5,7 @@ using System.Text;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input.Events;
 
 namespace Xemio.GameLibrary.Input
@@ -124,6 +125,9 @@ namespace Xemio.GameLibrary.Input
         {
             var eventManager = XGL.Components.Get<EventManager>();
             eventManager.Subscribe<InputStateEvent>(this.HandleInputEvent);
+
+            var gameLoop = XGL.Components.Get<GameLoop>();
+            gameLoop.Subscribe(this);
         }
         #endregion
 

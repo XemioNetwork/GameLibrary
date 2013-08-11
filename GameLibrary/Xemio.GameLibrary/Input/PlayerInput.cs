@@ -71,6 +71,14 @@ namespace Xemio.GameLibrary.Input
             return this._lastStates.ContainsKey(key) && this._lastStates[key].Active;
         }
         /// <summary>
+        /// Determines whether the specified key has a state.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        public bool HasState(Keys key)
+        {
+            return this._states.ContainsKey(key);
+        }
+        /// <summary>
         /// Determines whether the specified key is down.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -134,23 +142,23 @@ namespace Xemio.GameLibrary.Input
         /// Gets the inputs matching the given filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        public IEnumerable<Keys> GetKeys(Func<KeyValuePair<Keys, InputState>, bool> filter)
+        public IEnumerable<Keys> GetKeys(Func<Keys, bool> filter)
         {
-            return this._states.Where(filter).Select(f => f.Key);
+            return Enum.GetValues(typeof(Keys)).Cast<Keys>().Where(filter);
         }
         /// <summary>
         /// Gets the pressed inputs.
         /// </summary>
         public IEnumerable<Keys> GetPressedKeys()
         {
-            return this.GetKeys(f => this.IsKeyPressed(f.Key) && this[f.Key].Active);
+            return this.GetKeys(this.IsKeyPressed);
         }
         /// <summary>
         /// Gets the released inputs.
         /// </summary>
         public IEnumerable<Keys> GetReleasedKeys()
         {
-            return this.GetKeys(f => this.IsKeyReleased(f.Key) && this[f.Key].Active == false);
+            return this.GetKeys(this.IsKeyReleased);
         }
         /// <summary>
         /// Updates the changes from the current into the last state.

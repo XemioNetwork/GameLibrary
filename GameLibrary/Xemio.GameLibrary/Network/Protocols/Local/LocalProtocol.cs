@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading;
 using System.Diagnostics;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Local
@@ -17,58 +18,41 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalProtocol"/> class.
         /// </summary>
-        public LocalProtocol()
+        private LocalProtocol()
         {
             this._localSleepTime = 1000;
-            this._packageQueue = new Queue<QueuePackage>();
-
-            this.IP = IPAddress.Parse("127.0.0.1");
+            this._packageQueue = new CachedList<QueuePackage>();
         }
         #endregion
 
         #region Fields
         private readonly int _localSleepTime;
-        private readonly Queue<QueuePackage> _packageQueue;
-
-        private static readonly LocalProtocol _clientProtocol = new LocalProtocol();
-        private static readonly LocalProtocol _serverProtocol = new LocalProtocol();
+        private readonly CachedList<QueuePackage> _packageQueue;
         #endregion
 
-        #region Static Member
-        /// <summary>
-        /// Gets the client instance.
-        /// </summary>
-        public static LocalProtocol GetClient()
-        {
-            return _clientProtocol;
-        }
-        /// <summary>
-        /// Sets the server instance.
-        /// </summary>
-        public static LocalProtocol GetServer()
-        {
-            return _serverProtocol;
-        }
+        #region Static Fields
+        public static readonly LocalProtocol ClientProtocol = new LocalProtocol();
+        public static readonly LocalProtocol ServerProtocol = new LocalProtocol();
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets or sets the simulated latency in milliseconds.
         /// </summary>
-        public float Latency { get; set; }
+        public float SimulatedLatency { get; set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Receives the specified package.
+        /// Adds the specified package.
         /// </summary>
         /// <param name="package">The package.</param>
-        protected void Receive(Package package)
+        protected void Add(Package package)
         {
-            lock (this._packageQueue)
-            {
-                this._packageQueue.Enqueue(new QueuePackage(package, this.Latency));
-            }
+            var invoker = XGL.Components.Get<ThreadInvoker>();
+            var queuePackage = new QueuePackage(package, this.SimulatedLatency);
+
+            invoker.Invoke(() => this._packageQueue.Add(queuePackage));
         }
         #endregion
 
@@ -97,13 +81,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            if (this == LocalProtocol.GetServer())
+            if (this == LocalProtocol.ServerProtocol)
             {
-                LocalProtocol.GetClient().Receive(package);
+                LocalProtocol.ClientProtocol.Add(package);
             }
             else
             {
-                LocalProtocol.GetServer().Receive(package);
+                LocalProtocol.ServerProtocol.Add(package);
             }
         }
         /// <summary>
@@ -113,22 +97,26 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         {
             while (this._packageQueue.Count == 0)
             {
+                //Just needed to stress the CPU a little bit less.
+                Thread.Sleep(1);
             }
 
-            QueuePackage queuePackage = this._packageQueue.Dequeue();
-            float sleepTime = queuePackage.Time;
+            ThreadInvoker invoker = XGL.Components.Get<ThreadInvoker>();
+            QueuePackage queuePackage = null;
 
-            lock (this._packageQueue)
+            invoker.Invoke(() =>
             {
+                queuePackage = this._packageQueue.FirstOrDefault();
+
                 foreach (QueuePackage package in this._packageQueue)
                 {
-                    for (int i = 0; i < sleepTime; i++)
-                    {
-                        Thread.Sleep(1);
-                        package.Time--;
-                    }
+                    package.Time -= queuePackage.Time;
                 }
-            }
+
+                this._packageQueue.Remove(queuePackage);
+            });
+
+            Thread.Sleep((int)queuePackage.Time);
 
             return queuePackage.Package; 
         }
@@ -139,13 +127,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// Sets the server.
         /// </summary>
         public Server Server { get; set; }
-        /// <summary>
-        /// Hosts the specified port.
-        /// </summary>
-        /// <param name="port">The port.</param>
-        public void Host(int port)
-        {
-        }
         /// <summary>
         /// Sends the specified package to the specified receiver.
         /// </summary>
@@ -169,13 +150,12 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// </summary>
         public IConnection AcceptConnection()
         {
-            while (this.Connected)
+            while (LocalProtocol.ServerProtocol.Server.Connections.Count > 0)
             {
                 Thread.Sleep(this._localSleepTime);
             }
 
-            this.Connected = true;
-            return this;
+            return LocalProtocol.ServerProtocol;
         }
         #endregion
 
@@ -183,11 +163,21 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <summary>
         /// Gets the IP.
         /// </summary>
-        public IPAddress IP { get; private set; }
+        public IPAddress IP
+        {
+            get { return IPAddress.Parse("127.0.0.1"); }
+        }
+        /// <summary>
+        /// Gets or sets the latency.
+        /// </summary>
+        public float Latency { get; set; }
         /// <summary>
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>
-        public bool Connected { get; private set; }
+        public bool Connected
+        {
+            get { return true; }
+        }
         #endregion
     }
 }

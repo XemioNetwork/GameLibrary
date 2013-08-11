@@ -33,6 +33,22 @@ namespace Xemio.GameLibrary.Network.Logic
         public virtual void OnSent(Server server, T package, IConnection receiver)
         {
         }
+        /// <summary>
+        /// Called when a client left the server.
+        /// </summary>
+        /// <param name="server">The server.</param>
+        /// <param name="connection">The connection.</param>
+        public virtual void OnClientLeft(Server server, IConnection connection)
+        {
+        }
+        /// <summary>
+        /// Called when a client joined the server.
+        /// </summary>
+        /// <param name="server">The server.</param>
+        /// <param name="connection">The connection.</param>
+        public virtual void OnClientJoined(Server server, IConnection connection)
+        {
+        }
         #endregion
 
         #region IServerSubscriber Member
@@ -46,8 +62,9 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <summary>
         /// Handles a game tick.
         /// </summary>
+        /// <param name="server">The server.</param>
         /// <param name="elapsed">The elapsed.</param>
-        public virtual void Tick(float elapsed)
+        public virtual void Tick(Server server, float elapsed)
         {
         }
         /// <summary>

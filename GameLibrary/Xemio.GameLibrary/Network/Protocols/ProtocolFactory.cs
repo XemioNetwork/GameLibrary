@@ -31,10 +31,7 @@ namespace Xemio.GameLibrary.Network.Protocols
         /// <returns></returns>
         public static Server CreateServerFor<T>(int port) where T : IServerProtocol, new()
         {
-            T protocol = new T();
-            protocol.Host(port);
-
-            return new Server(protocol);
+            return new Server(new T());
         }
         #endregion
     }

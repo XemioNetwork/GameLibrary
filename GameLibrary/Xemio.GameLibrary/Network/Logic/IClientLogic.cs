@@ -30,7 +30,8 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <summary>
         /// Handles a game tick.
         /// </summary>
+        /// <param name="client">The client.</param>
         /// <param name="elapsed">The elapsed.</param>
-        void Tick(float elapsed);
+        void Tick(Client client, float elapsed);
     }
 }

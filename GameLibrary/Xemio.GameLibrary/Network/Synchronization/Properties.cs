@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Network.Synchronization
         /// </summary>
         public static IPropertyComparator Changes
         {
-            get { return new PropertyComparator(); }
+            get { return new ChangedComparator(); }
         }
         /// <summary>
         /// Gets the comparator for all properties.

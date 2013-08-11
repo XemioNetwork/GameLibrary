@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Network.Synchronization
 {
-    public class PropertyComparator : IPropertyComparator
+    public class ChangedComparator : IPropertyComparator
     {
         #region IPropertyComparator Member
         /// <summary>

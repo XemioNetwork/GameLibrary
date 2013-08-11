@@ -17,8 +17,6 @@ namespace Xemio.Testing.Network
         {
             this.IsSynced = true;
             this.IsCreationSynced = true;
-
-            this.Components.Add(new TestComponent(this));
         }
         #endregion
     }

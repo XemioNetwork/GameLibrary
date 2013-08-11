@@ -52,6 +52,12 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         public TValue GetNew<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
         {
             TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.CreateNew);
+            bool isDefaultKey = object.Equals(key, this.GetDefaultValue<TKey>());
+
+            if (value == default(TValue) && isDefaultKey)
+            {
+                throw new InvalidOperationException("No value was found for the default key.");
+            }
             if (value == default(TValue))
             {
                 return GetNew<TKey, TValue>(this.GetDefaultValue<TKey>());
@@ -68,6 +74,12 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         public TValue Get<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
         {
             TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.Singleton);
+            bool isDefaultKey = object.Equals(key, this.GetDefaultValue<TKey>());
+            
+            if (value == default(TValue) && isDefaultKey)
+            {
+                throw new InvalidOperationException("No value was found for the default key.");
+            }
             if (value == default(TValue))
             {
                 return Get<TKey, TValue>(this.GetDefaultValue<TKey>());

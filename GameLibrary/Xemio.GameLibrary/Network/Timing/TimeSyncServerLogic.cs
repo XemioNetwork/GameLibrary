@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Network.Timing
             this._elapsed = 0;
 
             this._watches = new Dictionary<IConnection, Stopwatch>();
-            this.SyncDelay = 5000;
+            this.SyncDelay = 3000;
         }
         #endregion
 
@@ -68,8 +68,9 @@ namespace Xemio.GameLibrary.Network.Timing
         /// <summary>
         /// Handles a game tick.
         /// </summary>
+        /// <param name="server">The server.</param>
         /// <param name="elapsed">The elapsed.</param>
-        public override void Tick(float elapsed)
+        public override void Tick(Server server, float elapsed)
         {
             this._elapsed += elapsed;
             if (this._elapsed >= this.SyncDelay || this._firstSync)
@@ -77,9 +78,7 @@ namespace Xemio.GameLibrary.Network.Timing
                 this._elapsed = 0;
                 this._firstSync = false;
 
-                Server server = XGL.Components.Get<Server>();
                 TimeSyncPackage syncPackage = new TimeSyncPackage();
-
                 server.Send(syncPackage);
             }
         }

@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Xemio.GameLibrary.Entities.Network;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Protocols.Local;
 using Xemio.GameLibrary;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Network.Protocols.Tcp;
+using Xemio.GameLibrary.Network.Timing;
 
 namespace Xemio.Testing.Network
 {
@@ -25,35 +28,52 @@ namespace Xemio.Testing.Network
             program.Run();
         }
         #endregion
-
-        #region Fields
-        private ServerEnvironment _environment;
-        private ClientEnvironment _clientEnvironment;
-        #endregion
-
+        
         #region Methods
         /// <summary>
         /// Runs this instance.
         /// </summary>
         public void Run()
         {
-            Form form = new Form();
-            
-            LocalProtocol.GetServer().Latency = 100;
-            LocalProtocol.GetClient().Latency = 100;
+            var control = new Control();
+            var config = XGL.Configure()
+                .WithDefaultComponents()
+                .WithDefaultInput()
+                .BuildConfiguration();
 
-            Server server = new Server(LocalProtocol.GetServer());
-            Client client = new Client(LocalProtocol.GetClient());
+            XGL.Run(control.Handle, config);
 
-            this._environment = new ServerEnvironment();
-            this._clientEnvironment = new ClientEnvironment();
+            Server server = new Server(new TcpServerProtocol(8000));
 
-            TestEntity entity = new TestEntity();
-            this._environment.Add(entity);
+            Client client = new Client(new TcpClientProtocol());
+            client.Protocol.Connect("127.0.0.1", 8000);
 
-            XGL.Components.Get<GameLoop>().Subscribe(this);
+            Task.Factory.StartNew(() => A(client));
+            Task.Factory.StartNew(() => B(server));
 
-            Application.Run(form);
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine(a);
+                Thread.Sleep(1000);
+            }
+        }
+
+        private int a;
+        private void A(Client client)
+        {
+            while (true)
+            {
+                client.Send(new LatencyPackage());
+            }
+        }
+        private void B(Server server)
+        {
+            while (true)
+            {
+                a++;
+                server.Send(new TimeSyncPackage());
+            }
         }
         #endregion
 
@@ -64,8 +84,6 @@ namespace Xemio.Testing.Network
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
-            this._environment.Tick(elapsed);
-            this._clientEnvironment.Tick(elapsed);
         }
         /// <summary>
         /// Handles render calls.

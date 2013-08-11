@@ -18,34 +18,33 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpServerProtocol"/> class.
         /// </summary>
-        public TcpServerProtocol()
+        /// <param name="port">The port.</param>
+        public TcpServerProtocol(int port) : this(port, TcpDelay.None)
         {
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpServerProtocol"/> class.
         /// </summary>
+        /// <param name="port">The port.</param>
         /// <param name="delay">The delay.</param>
-        public TcpServerProtocol(TcpDelay delay)
+        public TcpServerProtocol(int port, TcpDelay delay)
         {
+            this._serializer = new PackageSerializer();
             this._delay = delay;
+
+            this._listener = new TcpListener(IPAddress.Any, port);
+            this._listener.Start();
         }
         #endregion
 
         #region Fields
+        private readonly PackageSerializer _serializer;
+
         private readonly TcpDelay _delay;
-        private TcpListener _listener;
+        private readonly TcpListener _listener;
         #endregion
 
         #region IServerProtocol Member
-        /// <summary>
-        /// Hosts the specified port.
-        /// </summary>
-        /// <param name="port">The port.</param>
-        public void Host(int port)
-        {
-            this._listener = new TcpListener(IPAddress.Any, port);
-            this._listener.Start();
-        }
         /// <summary>
         /// Sends the specified package to the specified receiver.
         /// </summary>
@@ -53,11 +52,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="receiver">The receiver.</param>
         public void Send(Package package, IConnection receiver)
         {
-            TcpConnection connection = receiver as TcpConnection;
-            if (connection != null)
-            {
-                this.Server.Serializer.Serialize(package, connection.Writer);
-            }
+            receiver.Send(package);
         }
         /// <summary>
         /// Accepts a new connection.
@@ -66,7 +61,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         public IConnection AcceptConnection()
         {
             return new TcpConnection(
-                this.Server.Serializer,
+                this._serializer,
                 this._listener.AcceptTcpClient(),
                 this._delay);
         }

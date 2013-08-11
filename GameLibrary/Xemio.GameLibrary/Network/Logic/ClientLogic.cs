@@ -43,8 +43,9 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <summary>
         /// Handles a game tick.
         /// </summary>
+        /// <param name="client">The client.</param>
         /// <param name="elapsed">The elapsed.</param>
-        public virtual void Tick(float elapsed)
+        public virtual void Tick(Client client, float elapsed)
         {
         }
         /// <summary>

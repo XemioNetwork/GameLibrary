@@ -95,8 +95,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         public void OnAttached()
         {
-            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-            Control surface = Control.FromHandle(graphicsDevice.Handle);
+            Control surface = Control.FromHandle(XGL.Handle);
 
             surface.MouseMove += this.SurfaceMouseMove;
             surface.MouseDown += this.SurfaceMouseDown;
@@ -107,8 +106,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         public void OnDetached()
         {
-            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-            Control surface = Control.FromHandle(graphicsDevice.Handle);
+            Control surface = Control.FromHandle(XGL.Handle);
 
             surface.MouseMove -= this.SurfaceMouseMove;
             surface.MouseDown -= this.SurfaceMouseDown;

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
@@ -22,11 +23,9 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             this._tcpClient = tcpClient;
             this._tcpClient.NoDelay = (delay == TcpDelay.None);
-
+            
             this._serializer = serializer;
-
-            this.Writer = new BinaryWriter(tcpClient.GetStream());
-            this.Reader = new BinaryReader(tcpClient.GetStream());
+            this.Stream = tcpClient.GetStream();
         }
         #endregion
 
@@ -48,13 +47,9 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// </summary>
         public float Latency { get; set; }
         /// <summary>
-        /// Gets the writer.
+        /// Gets the stream.
         /// </summary>
-        public BinaryWriter Writer { get; private set; }
-        /// <summary>
-        /// Gets the reader.
-        /// </summary>
-        public BinaryReader Reader { get; private set; }
+        public Stream Stream { get; private set; }
         /// <summary>
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>
@@ -72,7 +67,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="port">The port.</param>
         public void Connect(string ip, int port)
         {
-            //Not needed, because the connection is only held server-sided.
         }
         /// <summary>
         /// Disconnects the client.
@@ -87,14 +81,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this._serializer.Serialize(package, this.Writer);
+            this._serializer.Serialize(package, this.Stream);
         }
         /// <summary>
         /// Receives a package.
         /// </summary>
         public Package Receive()
         {
-            return this._serializer.Deserialize(this.Reader);
+            return this._serializer.Deserialize(this.Stream);
         }
         #endregion
 

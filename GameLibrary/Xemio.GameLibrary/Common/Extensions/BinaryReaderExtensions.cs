@@ -31,6 +31,38 @@ namespace Xemio.GameLibrary.Common.Extensions
             return array;
         }
         /// <summary>
+        /// Determines whether the specified type is a generic dictionary.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        private static bool IsGenericDictionary(Type type)
+        {
+            if (!type.IsGenericType)
+                return false;
+
+            var genericArguments = type.GetGenericArguments();
+            if (genericArguments.Length != 2)
+                return false;
+
+            var dictType = typeof(IDictionary<,>).MakeGenericType(genericArguments);
+            return dictType.IsAssignableFrom(type);
+        }
+        /// <summary>
+        /// Determines whether the specified type is a generic list.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        private static bool IsGenericList(Type type)
+        {
+            if (!type.IsGenericType)
+                return false;
+
+            var genericArguments = type.GetGenericArguments();
+            if (genericArguments.Length != 1)
+                return false;
+
+            var listType = typeof(IList<>).MakeGenericType(genericArguments);
+            return listType.IsAssignableFrom(type);
+        }
+        /// <summary>
         /// Reads a list.
         /// </summary>
         /// <param name="reader">The reader.</param>
@@ -86,39 +118,92 @@ namespace Xemio.GameLibrary.Common.Extensions
             return Enum.ToObject(type, reader.ReadInt32());
         }
         /// <summary>
+        /// Reads all properties for the specified type.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="type">The type.</param>
+        private static IEnumerable<KeyValuePair<PropertyInfo, object>> ReadProperties(BinaryReader reader, Type type)
+        {
+            foreach (PropertyInfo property in type.GetProperties())
+            {
+                if (!property.GetCustomAttributes(true).Any(attribute => attribute is ExcludeSyncAttribute))
+                {
+                    bool isNull = reader.ReadBoolean();
+                    var propertyValue = isNull ? null : reader.ReadInstance(property.PropertyType);
+
+                    yield return new KeyValuePair<PropertyInfo, object>(property, propertyValue);
+                }
+            }
+        }
+
+        /// <summary>
         /// Reads a all properties for the specified type and creates an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="type">The type.</param>
-        private static object ReadProperties(BinaryReader reader, Type type)
+        private static object ReadKnownObject(BinaryReader reader, Type type)
         {
-            object instance = Activator.CreateInstance(type);
-
+            object instance = null;
             PropertyInfo[] properties = type.GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                if (!property.GetCustomAttributes(true)
-                    .Any(attribute => attribute is ExcludeSyncAttribute))
-                {
-                    bool isNull = reader.ReadBoolean();
-                    object propertyValue = isNull ? null : reader.ReadInstance(property.PropertyType);
+            var propertyValues = ReadProperties(reader, type).ToList();
 
-                    property.SetValue(instance, propertyValue, null);
+            foreach (ConstructorInfo constructor in type.GetConstructors())
+            {
+                List<ParameterInfo> parameters = constructor.GetParameters().ToList();
+
+                bool validConstructor =
+                    parameters.All(
+                        parameter => properties.Any(
+                            property => property.Name.ToLower() == parameter.Name.ToLower()));
+
+                if (validConstructor)
+                {
+                    object[] constructorParameters = new object[parameters.Count];
+
+                    foreach (KeyValuePair<PropertyInfo, object> pair in propertyValues)
+                    {
+                        ParameterInfo parameter = parameters.FirstOrDefault(p => p.Name.ToLower() == pair.Key.Name.ToLower());
+
+                        if (parameter != null)
+                        {
+                            int index = parameters.IndexOf(parameter);
+                            constructorParameters[index] = pair.Value;
+                        }
+                    }
+
+                    instance = constructor.Invoke(constructorParameters);
+                }
+                else if (parameters.Count == 0)
+                {
+                    instance = constructor.Invoke(null);
                 }
             }
 
+            foreach (KeyValuePair<PropertyInfo, object> pair in propertyValues)
+            {
+                if (pair.Key.GetSetMethod() != null)
+                {
+                    pair.Key.SetValue(instance, pair.Value, null);
+                }
+            }
+            
             return instance;
         }
+        /// <summary>
+        /// Reads a reference based object.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="type">The type.</param>
         private static object ReadReferenceBasedObject(BinaryReader reader, Type type)
         {
-            if (type.IsArray) 
+            if (type.IsArray)
                 return ReadArray(reader, type);
 
-            if (typeof(IList).IsAssignableFrom(type)) 
-                return ReadList(reader, type);
-
-            if (typeof(IDictionary).IsAssignableFrom(type))
+            if (IsGenericDictionary(type))
                 return ReadDictionary(reader, type);
+
+            if (IsGenericList(type)) 
+                return ReadList(reader, type);
 
             if (type.IsEnum)
                 return ReadEnum(reader, type);
@@ -132,7 +217,7 @@ namespace Xemio.GameLibrary.Common.Extensions
             //If the specified type isn't any known special case,
             //just read all properties and create an instance.
 
-            return ReadProperties(reader, type);
+            return ReadKnownObject(reader, type);
         }
         #endregion
 

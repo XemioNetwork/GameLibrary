@@ -12,21 +12,6 @@ namespace Xemio.GameLibrary.Network.Packages
 {
     public abstract class Package : ILinkable
     {
-        #region Methods
-        /// <summary>
-        /// Called before the package gets serialized.
-        /// </summary>
-        public virtual void OnSerialize()
-        {
-        }
-        /// <summary>
-        /// Called after the package get deserialized.
-        /// </summary>
-        public virtual void OnDeserialize()
-        {
-        }
-        #endregion
-
         #region ILinkable<int> Member
         /// <summary>
         /// Gets the identifier.
