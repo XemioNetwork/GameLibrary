@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.IO;
+using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Events.Logging;
 
 namespace Xemio.GameLibrary.Plugins.Contexts
 {
@@ -37,9 +39,10 @@ namespace Xemio.GameLibrary.Plugins.Contexts
                     {
                         assemblies.Add(Assembly.LoadFrom(fileName));
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
-                        //TODO: logging
+                        var eventManager = XGL.Components.Get<EventManager>();
+                        eventManager.Publish(new ExceptionEvent(exception));
                     }
                 }
             }

@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\ActionDisposer.cs" />
+    <Compile Include="Common\ActionDisposable.cs" />
     <Compile Include="Common\Collections\CachedDictionary.cs" />
     <Compile Include="Common\Collections\DictionaryActions\AddAction.cs" />
     <Compile Include="Common\Collections\DictionaryActions\ClearAction.cs" />
@@ -103,7 +103,6 @@
     <Compile Include="Common\TypeParsers\BaseTypes\VectorParser.cs" />
     <Compile Include="Components\ComponentManager.cs" />
     <Compile Include="Components\IComponent.cs" />
-    <Compile Include="Components\IComponentProvider.cs" />
     <Compile Include="Components\IConstructable.cs" />
     <Compile Include="Components\IValueProvider.cs" />
     <Compile Include="Components\ValueProvider.cs" />

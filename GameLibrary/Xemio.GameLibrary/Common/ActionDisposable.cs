@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Xemio.GameLibrary.Common
 {
-    public class ActionDisposer : IDisposable
+    public class ActionDisposable : IDisposable
     {
         #region Properties
         /// <summary>
@@ -16,10 +16,10 @@ namespace Xemio.GameLibrary.Common
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActionDisposer"/> class.
+        /// Initializes a new instance of the <see cref="ActionDisposable"/> class.
         /// </summary>
         /// <param name="method">The method.</param>
-        public ActionDisposer(Action method)
+        public ActionDisposable(Action method)
         {
             this.Method = method;
         }

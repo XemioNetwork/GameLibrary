@@ -30,7 +30,6 @@ namespace Xemio.GameLibrary.Content
         /// Reads a value out of the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
         public abstract T Read(BinaryReader reader);
         /// <summary>
         /// Writes the specified value.
@@ -45,7 +44,6 @@ namespace Xemio.GameLibrary.Content
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
         object IContentReader.Read(BinaryReader reader)
         {
             return this.Read(reader);
