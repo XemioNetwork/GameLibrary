@@ -145,6 +145,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         {
         }
         /// <summary>
+        /// Gets a value indicating whether this <see cref="IServerProtocol"/> is hosted.
+        /// </summary>
+        public bool Hosted
+        {
+            get { return true; }
+        }
+        /// <summary>
         /// Accepts a new connection.
         /// </summary>
         public IConnection AcceptConnection()

@@ -15,6 +15,10 @@ namespace Xemio.GameLibrary.Network.Protocols
         /// <param name="port">The port.</param>
         void Host(int port);
         /// <summary>
+        /// Gets a value indicating whether this <see cref="IServerProtocol"/> is hosted.
+        /// </summary>
+        bool Hosted { get; }
+        /// <summary>
         /// Accepts a new connection.
         /// </summary>
         IConnection AcceptConnection();

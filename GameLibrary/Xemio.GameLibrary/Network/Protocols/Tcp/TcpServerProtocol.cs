@@ -38,16 +38,24 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         #endregion
 
         #region IServerProtocol Member
-
         /// <summary>
         /// Hosts at the specified port.
         /// </summary>
         /// <param name="port">The port.</param>
         public void Host(int port)
         {
+            if (this.Hosted)
+                return;
+
             this._listener = new TcpListener(IPAddress.Any, port);
             this._listener.Start();
+
+            this.Hosted = true;
         }
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IServerProtocol"/> is hosted.
+        /// </summary>
+        public bool Hosted { get; private set; }
         /// <summary>
         /// Accepts a new connection.
         /// </summary>

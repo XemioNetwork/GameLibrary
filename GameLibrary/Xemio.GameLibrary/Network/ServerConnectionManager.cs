@@ -12,6 +12,7 @@ namespace Xemio.GameLibrary.Network
         #region Fields
         private readonly Server _server;
         private readonly ServerPackageReceiver _receiver;
+
         #endregion Fields
 
         #region Constructors
@@ -28,12 +29,23 @@ namespace Xemio.GameLibrary.Network
 
         #region Methods
         /// <summary>
+        /// Awaits the protocol to host its connection.
+        /// </summary>
+        private void AwaitHosting()
+        {
+            while (!this._server.Protocol.Hosted)
+            {
+            }
+        }
+        /// <summary>
         /// Starts to accept the accepting connections.
         /// </summary>
         public void StartAcceptingConnections()
         {
             Task.Factory.StartNew(() =>
             {
+                this.AwaitHosting();
+
                 while (this._server.Active)
                 {
                     IConnection connection = this._server.AcceptConnection();

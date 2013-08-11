@@ -64,6 +64,7 @@
     <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
+    <Compile Include="Game\Timing\LagCompensation.cs" />
     <Compile Include="Input\IInputListener.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputState.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Network\NestedConnection.cs" />
     <Compile Include="Network\Packages\ClientPackageReceiver.cs" />
     <Compile Include="Network\Packages\PackageSender.cs" />
+    <Compile Include="Network\Packages\QueuedPackage.cs" />
     <Compile Include="Network\Packages\ServerPackageReceiver.cs" />
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
     <Compile Include="Network\ServerConnectionManager.cs" />
