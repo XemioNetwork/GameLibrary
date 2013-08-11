@@ -160,11 +160,8 @@
     <Compile Include="Entities\EntityRenderer.cs" />
     <Compile Include="Entities\EntityIdFactory.cs" />
     <Compile Include="Events\ActionObserver.cs" />
-    <Compile Include="Events\EventDisposer.cs" />
-    <Compile Include="Events\EventSubject.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\ISyncedEvent.cs" />
     <Compile Include="Events\Logging\ExceptionEvent.cs" />
     <Compile Include="Events\Logging\LoggingEvent.cs" />
     <Compile Include="Events\Logging\LoggingLevel.cs" />

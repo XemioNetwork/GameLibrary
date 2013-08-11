@@ -15,7 +15,6 @@ namespace Xemio.Testing.EventSystem
         /// </summary>
         public TestEvent(string message)
         {
-            this.Synced = false;
             this.Message = message;
         }
         #endregion
@@ -25,13 +24,6 @@ namespace Xemio.Testing.EventSystem
         /// Gets or sets the message.
         /// </summary>
         public string Message { get; set; }
-        #endregion
-
-        #region Implementation of IEvent
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IEvent"/> is synced.
-        /// </summary>
-        public bool Synced { get; private set; }
         #endregion
     }
 }
