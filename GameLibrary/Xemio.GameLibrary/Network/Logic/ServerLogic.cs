@@ -12,7 +12,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        public virtual void OnReceive(Server server, T package, IConnection sender)
+        public virtual void OnReceive(IServer server, T package, IConnection sender)
         {
         }
         /// <summary>
@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public virtual void OnBeginSend(Server server, T package, IConnection receiver)
+        public virtual void OnBeginSend(IServer server, T package, IConnection receiver)
         {
         }
         /// <summary>
@@ -30,7 +30,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public virtual void OnSent(Server server, T package, IConnection receiver)
+        public virtual void OnSent(IServer server, T package, IConnection receiver)
         {
         }
         /// <summary>
@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="connection">The connection.</param>
-        public virtual void OnClientLeft(Server server, IConnection connection)
+        public virtual void OnClientLeft(IServer server, IConnection connection)
         {
         }
         /// <summary>
@@ -46,16 +46,16 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="connection">The connection.</param>
-        public virtual void OnClientJoined(Server server, IConnection connection)
+        public virtual void OnClientJoined(IServer server, IConnection connection)
         {
         }
         #endregion
 
         #region IServerSubscriber Member
         /// <summary>
-        /// Gets the type.
+        /// Gets the type of the package.
         /// </summary>
-        public Type Type
+        public Type PackageType
         {
             get { return typeof(T); }
         }
@@ -64,7 +64,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="elapsed">The elapsed.</param>
-        public virtual void Tick(Server server, float elapsed)
+        public virtual void Tick(IServer server, float elapsed)
         {
         }
         /// <summary>
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        void IServerLogic.OnReceive(Server server, Package package, IConnection sender)
+        void IServerLogic.OnReceive(IServer server, Package package, IConnection sender)
         {
             this.OnReceive(server, package as T, sender);
         }
@@ -83,7 +83,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IServerLogic.OnBeginSend(Server server, Package package, IConnection receiver)
+        void IServerLogic.OnBeginSend(IServer server, Package package, IConnection receiver)
         {
             this.OnBeginSend(server, package as T, receiver);
         }
@@ -93,7 +93,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IServerLogic.OnSent(Server server, Package package, IConnection receiver)
+        void IServerLogic.OnSent(IServer server, Package package, IConnection receiver)
         {
             this.OnSent(server, package as T, receiver);
         }

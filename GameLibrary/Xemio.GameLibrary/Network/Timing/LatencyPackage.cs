@@ -9,15 +9,6 @@ namespace Xemio.GameLibrary.Network.Timing
 {
     public class LatencyPackage : Package
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LatencyPackage"/> class.
-        /// </summary>
-        public LatencyPackage()
-        {
-        }
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets or sets the latency.

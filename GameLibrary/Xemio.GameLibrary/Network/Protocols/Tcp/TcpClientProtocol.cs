@@ -16,7 +16,8 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpClientProtocol"/> class.
         /// </summary>
-        public TcpClientProtocol() : this(TcpDelay.None)
+        public TcpClientProtocol() 
+            : this(TcpDelay.None)
         {
         }
         /// <summary>

@@ -16,17 +16,27 @@ namespace Xemio.GameLibrary.Network.Logic.Forwarding
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        public override void OnReceive(Server server, Package package, IConnection sender)
+        public override void OnReceive(IServer server, Package package, IConnection sender)
         {
-            if (package is IForwarded == false)
+            IForwarded forwardedPackage = package as IForwarded;
+
+            if (forwardedPackage == null)
                 return;
 
-            foreach (IConnection connection in server.Connections)
+            switch (forwardedPackage.Options)
             {
-                if (connection == sender)
-                    continue;
-
-                connection.Send(package);
+                case ForwardingOptions.All:
+                    server.Send(package);
+                    break;
+                case ForwardingOptions.AllOther:
+                    foreach (IConnection connection in server.Connections.Where(f => f != sender))
+                    {
+                        server.Send(package, connection);
+                    }
+                    break;
+                case ForwardingOptions.Sender:
+                    server.Send(package, sender);
+                    break;
             }
 
             base.OnReceive(server, package, sender);

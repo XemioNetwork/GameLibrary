@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
+using Xemio.GameLibrary.Network.Protocols;
 using Xemio.GameLibrary.Network.Protocols.Local;
 using Xemio.GameLibrary;
 using Xemio.GameLibrary.Game;
@@ -43,10 +44,9 @@ namespace Xemio.Testing.Network
 
             XGL.Run(control.Handle, config);
 
-            Server server = new Server(new TcpServerProtocol(8000));
+            Server server = ProtocolFactory.CreateServerFor<TcpServerProtocol>(8000);
 
-            Client client = new Client(new TcpClientProtocol());
-            client.Protocol.Connect("127.0.0.1", 8000);
+            Client client = ProtocolFactory.CreateClientFor<TcpClientProtocol>("127.0.0.1", 8000);
 
             Task.Factory.StartNew(() => A(client));
             Task.Factory.StartNew(() => B(server));
@@ -64,6 +64,7 @@ namespace Xemio.Testing.Network
         {
             while (true)
             {
+                Thread.Sleep(16);
                 client.Send(new LatencyPackage());
             }
         }
@@ -71,6 +72,7 @@ namespace Xemio.Testing.Network
         {
             while (true)
             {
+                Thread.Sleep(16);
                 a++;
                 server.Send(new TimeSyncPackage());
             }

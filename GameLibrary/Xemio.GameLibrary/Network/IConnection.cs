@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Network;
+using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Protocols;
 using System.Net;
 
 namespace Xemio.GameLibrary.Network
 {
-    public interface IConnection : IClientProtocol
+    public interface IConnection : IPackageSender
     {
         /// <summary>
         /// Gets the IP.
@@ -18,7 +19,19 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets or sets the latency.
         /// </summary>
-        float Latency { get; set; }
+        float Latency { get; set; }        
+        /// <summary>
+        /// Disconnects the client.
+        /// </summary>
+        void Disconnect();
+        /// <summary>
+        /// Receives a package.
+        /// </summary>
+        Package Receive();
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IClientProtocol"/> is connected.
+        /// </summary>
+        bool Connected { get; }
     }
     public static class ConnectionExtensions
     {

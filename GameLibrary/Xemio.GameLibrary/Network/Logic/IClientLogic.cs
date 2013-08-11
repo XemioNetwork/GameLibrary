@@ -6,32 +6,32 @@ namespace Xemio.GameLibrary.Network.Logic
     public interface IClientLogic
     {
         /// <summary>
-        /// Gets the type.
+        /// Gets the type of the package.
         /// </summary>
-        Type Type { get; }
+        Type PackageType { get; }
         /// <summary>
         /// Called when a package arrives.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void OnReceive(Client client, Package package);
+        void OnReceive(IClient client, Package package);
         /// <summary>
         /// Called when a package is being sent.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void OnBeginSend(Client client, Package package);
+        void OnBeginSend(IClient client, Package package);
         /// <summary>
         /// Called when a package was sent.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void OnSent(Client client, Package package);
+        void OnSent(IClient client, Package package);
         /// <summary>
         /// Handles a game tick.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="elapsed">The elapsed.</param>
-        void Tick(Client client, float elapsed);
+        void Tick(IClient client, float elapsed);
     }
 }

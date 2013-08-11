@@ -10,11 +10,10 @@ namespace Xemio.GameLibrary.Network.Protocols
     public interface IServerProtocol
     {
         /// <summary>
-        /// Sends the specified package to the specified receiver.
+        /// Hosts at the specified port.
         /// </summary>
-        /// <param name="package">The package.</param>
-        /// <param name="receiver">The receiver.</param>
-        void Send(Package package, IConnection receiver);
+        /// <param name="port">The port.</param>
+        void Host(int port);
         /// <summary>
         /// Accepts a new connection.
         /// </summary>

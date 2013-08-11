@@ -29,6 +29,7 @@ namespace Xemio.GameLibrary.Network
         {
             this._subscribers = new List<IClientLogic>();
             this._sender = new PackageSender();
+            this._receiver = new ClientPackageReceiver(this);
 
             this.Protocol = protocol;
             this.Protocol.Client = this;
@@ -37,7 +38,8 @@ namespace Xemio.GameLibrary.Network
             this.Subscribe(new TimeSyncClientLogic());
 
             this.Active = true;
-            this.StartLoop();
+
+            this._receiver.StartReceivingPackages();
 
             GameLoop loop = XGL.Components.Get<GameLoop>();
             loop.Subscribe(this);
@@ -47,6 +49,7 @@ namespace Xemio.GameLibrary.Network
         #region Fields
         private readonly List<IClientLogic> _subscribers;
         private readonly PackageSender _sender;
+        private readonly ClientPackageReceiver _receiver;
         #endregion
 
         #region Properties
@@ -61,68 +64,45 @@ namespace Xemio.GameLibrary.Network
         /// Gets the subscribers.
         /// </summary>
         /// <param name="package">The package.</param>
-        private IList<IClientLogic> GetSubscribers(Package package)
+        private IEnumerable<IClientLogic> GetSubscribers(Package package)
         {
             return this._subscribers
-                .Where(s => s.Type.IsInstanceOfType(package))
-                .ToList();
+                .Where(s => s.PackageType.IsInstanceOfType(package));
         }
         /// <summary>
-        /// Starts the client loop.
-        /// </summary>
-        private void StartLoop()
-        {
-            Task.Factory.StartNew(this.ClientLoop);
-        }
-        /// <summary>
-        /// Awaits the connection.
-        /// </summary>
-        private void AwaitConnection()
-        {
-            while (!this.Protocol.Connected)
-            {
-            }
-        }
-        /// <summary>
-        /// Listens to the specified protocol and receives packages.
-        /// </summary>
-        private void ClientLoop()
-        {
-            var eventManager = XGL.Components.Get<EventManager>();
-            var invoker = XGL.Components.Get<ThreadInvoker>();
-
-            this.AwaitConnection();
-
-            try
-            {
-                while (this.Active && this.Protocol.Connected)
-                {
-                    Package package = this.Protocol.Receive();
-                    if (package != null)
-                    {
-                        this.Receive(package);
-                        eventManager.Publish(new ReceivedPackageEvent(package));
-                    }
-                }
-            }
-            catch (IOException ex)
-            {
-                eventManager.Publish(new ExceptionEvent(ex));
-            }
-        }
-        /// <summary>
-        /// Receives the specified package.
+        /// Calls the IClientLogics when the specified package was received.
         /// </summary>
         /// <param name="package">The package.</param>
-        public void Receive(Package package)
+        protected internal virtual void OnReceivePackage(Package package)
         {
-            if (!this.Protocol.Connected)
-                throw new InvalidOperationException("You have to connect to a server first.");
-
             IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
             foreach (IClientLogic subscriber in subscribers)
             {
                 subscriber.OnReceive(this, package);
+            }
+        }
+        /// <summary>
+        /// Calls the IClientLogics when the specified package is going to be send.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        protected virtual void OnBeginSendPackage(Package package)
+        {
+            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
+            foreach (IClientLogic subscriber in subscribers)
+            {
+                subscriber.OnBeginSend(this, package);
+            }
+        }
+        /// <summary>
+        /// Calls the IClientLogics when the specified package is sent.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        protected virtual void OnSentPackage(Package package)
+        {
+            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
+            foreach (IClientLogic subscriber in subscribers)
+            {
+                subscriber.OnSent(this, package);
             }
         }
         #endregion
@@ -151,7 +131,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the latency.
         /// </summary>
-        public float Latency { get; internal set; }
+        public float Latency { get; set; }
         /// <summary>
         /// Gets or sets the protocol.
         /// </summary>
@@ -165,21 +145,11 @@ namespace Xemio.GameLibrary.Network
             if (!this.Protocol.Connected)
                 throw new InvalidOperationException("You have to connect to a server first.");
 
-            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
-            foreach (IClientLogic subscriber in subscribers)
-            {
-                subscriber.OnBeginSend(this, package);
-            }
+            this.OnBeginSendPackage(package);
 
             this._sender.Send(package, this.Protocol);
 
-            EventManager eventManager = XGL.Components.Get<EventManager>();
-            eventManager.Publish(new SentPackageEvent(package));
-
-            foreach (IClientLogic subscriber in subscribers)
-            {
-                subscriber.OnSent(this, package);
-            }
+            this.OnSentPackage(package);
         }
         /// <summary>
         /// Subscribes the specified subscriber.

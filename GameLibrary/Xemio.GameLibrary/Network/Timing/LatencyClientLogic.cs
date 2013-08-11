@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public override void OnReceive(Client client, LatencyPackage package)
+        public override void OnReceive(IClient client, LatencyPackage package)
         {
             client.Latency = package.Latency;
         }

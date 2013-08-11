@@ -11,7 +11,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public virtual void OnReceive(Client client, T package)
+        public virtual void OnReceive(IClient client, T package)
         {
         }
         /// <summary>
@@ -19,7 +19,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public virtual void OnBeginSend(Client client, T package)
+        public virtual void OnBeginSend(IClient client, T package)
         {
         }
         /// <summary>
@@ -27,16 +27,16 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public virtual void OnSent(Client client, T package)
+        public virtual void OnSent(IClient client, T package)
         {
         }
         #endregion
 
         #region IPackageSubscriber Member
         /// <summary>
-        /// Gets the type.
+        /// Gets the type of the package.
         /// </summary>
-        public Type Type
+        public Type PackageType
         {
             get { return typeof(T); }
         }
@@ -45,7 +45,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="elapsed">The elapsed.</param>
-        public virtual void Tick(Client client, float elapsed)
+        public virtual void Tick(IClient client, float elapsed)
         {
         }
         /// <summary>
@@ -53,7 +53,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientLogic.OnReceive(Client client, Package package)
+        void IClientLogic.OnReceive(IClient client, Package package)
         {
             this.OnReceive(client, package as T);
         }
@@ -62,7 +62,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientLogic.OnBeginSend(Client client, Package package)
+        void IClientLogic.OnBeginSend(IClient client, Package package)
         {
             this.OnBeginSend(client, package as T);
         }
@@ -71,7 +71,7 @@ namespace Xemio.GameLibrary.Network.Logic
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientLogic.OnSent(Client client, Package package)
+        void IClientLogic.OnSent(IClient client, Package package)
         {
             this.OnSent(client, package as T);
         }

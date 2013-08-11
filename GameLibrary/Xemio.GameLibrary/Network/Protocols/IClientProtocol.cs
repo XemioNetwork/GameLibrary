@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols
 {
-    public interface IClientProtocol
+    public interface IClientProtocol : IPackageSender
     {
         /// <summary>
         /// Connects to the specified ip.
@@ -20,11 +20,6 @@ namespace Xemio.GameLibrary.Network.Protocols
         /// Disconnects the client.
         /// </summary>
         void Disconnect();
-        /// <summary>
-        /// Sends the specified package.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        void Send(Package package);
         /// <summary>
         /// Receives a package.
         /// </summary>

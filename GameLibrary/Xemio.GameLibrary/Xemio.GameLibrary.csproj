@@ -70,13 +70,17 @@
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="Network\IClient.cs" />
     <Compile Include="Network\INestedConnection.cs" />
+    <Compile Include="Network\IPackageSender.cs" />
     <Compile Include="Network\IServer.cs" />
     <Compile Include="Network\Logic\Forwarding\ForwardingOptions.cs" />
     <Compile Include="Network\Logic\Forwarding\ForwardingServerLogic.cs" />
     <Compile Include="Network\Logic\Forwarding\IForwarded.cs" />
     <Compile Include="Network\NestedConnection.cs" />
+    <Compile Include="Network\Packages\ClientPackageReceiver.cs" />
     <Compile Include="Network\Packages\PackageSender.cs" />
+    <Compile Include="Network\Packages\ServerPackageReceiver.cs" />
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
+    <Compile Include="Network\ServerConnectionManager.cs" />
     <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
     <Compile Include="Common\ICondition.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />

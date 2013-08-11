@@ -29,16 +29,7 @@ namespace Xemio.GameLibrary.Network
         public T Connection { get; private set; }
         #endregion
         
-        #region Implementation of IClientProtocol
-        /// <summary>
-        /// Connects to the specified ip.
-        /// </summary>
-        /// <param name="ip">The ip.</param>
-        /// <param name="port">The port.</param>
-        public virtual void Connect(string ip, int port)
-        {
-            this.Connection.Connect(ip, port);
-        }
+        #region Implementation of IClientProtocl
         /// <summary>
         /// Disconnects the client.
         /// </summary>
@@ -60,13 +51,6 @@ namespace Xemio.GameLibrary.Network
         public virtual Package Receive()
         {
             return this.Connection.Receive();
-        }
-        /// <summary>
-        /// Sets the client.
-        /// </summary>
-        public virtual Client Client
-        {
-            set { this.Connection.Client = value; }
         }
         /// <summary>
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.

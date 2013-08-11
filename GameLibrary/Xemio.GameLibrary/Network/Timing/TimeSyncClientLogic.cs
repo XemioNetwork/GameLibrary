@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public override void OnReceive(Client client, TimeSyncPackage package)
+        public override void OnReceive(IClient client, TimeSyncPackage package)
         {
             client.Send(package);
         }

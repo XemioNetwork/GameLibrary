@@ -16,15 +16,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpConnection"/> class.
         /// </summary>
-        /// <param name="serializer">The serializer.</param>
         /// <param name="tcpClient">The TCP client.</param>
         /// <param name="delay">The delay.</param>
-        public TcpConnection(PackageSerializer serializer, TcpClient tcpClient, TcpDelay delay)
+        public TcpConnection(TcpClient tcpClient, TcpDelay delay)
         {
             this._tcpClient = tcpClient;
             this._tcpClient.NoDelay = (delay == TcpDelay.None);
             
-            this._serializer = serializer;
+            this._serializer = new PackageSerializer();
             this.Stream = tcpClient.GetStream();
         }
         #endregion
@@ -33,6 +32,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         private readonly TcpClient _tcpClient;
         private readonly PackageSerializer _serializer;
         #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the stream.
+        /// </summary>
+        public Stream Stream { get; private set; }
+        #endregion Properties
 
         #region IConnection Member
         /// <summary>
@@ -47,26 +53,11 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// </summary>
         public float Latency { get; set; }
         /// <summary>
-        /// Gets the stream.
-        /// </summary>
-        public Stream Stream { get; private set; }
-        /// <summary>
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>
         public bool Connected
         {
             get { return this._tcpClient.Connected; }
-        }
-        #endregion
-
-        #region IClientProtocol Member
-        /// <summary>
-        /// Connects to the specified ip.
-        /// </summary>
-        /// <param name="ip">The ip.</param>
-        /// <param name="port">The port.</param>
-        public void Connect(string ip, int port)
-        {
         }
         /// <summary>
         /// Disconnects the client.
@@ -90,13 +81,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             return this._serializer.Deserialize(this.Stream);
         }
-        #endregion
-
-        #region IClientProtocol Member
-        /// <summary>
-        /// Sets the client.
-        /// </summary>
-        public Client Client { get; set; }
         #endregion
     }
 }

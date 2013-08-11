@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the latency.
         /// </summary>
-        float Latency { get; }
+        float Latency { get; set; }
         /// <summary>
         /// Gets the protocol.
         /// </summary>

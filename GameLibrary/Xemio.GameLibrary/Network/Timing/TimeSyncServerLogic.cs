@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="elapsed">The elapsed.</param>
-        public override void Tick(Server server, float elapsed)
+        public override void Tick(IServer server, float elapsed)
         {
             this._elapsed += elapsed;
             if (this._elapsed >= this.SyncDelay || this._firstSync)
@@ -88,7 +88,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public override void OnBeginSend(Server server, TimeSyncPackage package, IConnection receiver)
+        public override void OnBeginSend(IServer server, TimeSyncPackage package, IConnection receiver)
         {
             this.StartWatch(receiver);
         }
@@ -98,7 +98,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        public override void OnReceive(Server server, TimeSyncPackage package, IConnection sender)
+        public override void OnReceive(IServer server, TimeSyncPackage package, IConnection sender)
         {
             float latency = this.GetLatency(sender);
             sender.Latency = latency;

@@ -19,7 +19,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the connections.
         /// </summary>
-        List<IConnection> Connections { get; }
+        IList<IConnection> Connections { get; }
         /// <summary>
         /// Sends the specified package.
         /// </summary>

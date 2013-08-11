@@ -128,15 +128,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// </summary>
         public Server Server { get; set; }
         /// <summary>
-        /// Sends the specified package to the specified receiver.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        /// <param name="receiver">The receiver.</param>
-        public void Send(Package package, IConnection receiver)
-        {
-            this.Send(package);
-        }
-        /// <summary>
         /// Receives a package.
         /// </summary>
         /// <param name="connection">The connection.</param>
@@ -144,6 +135,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         public Package Receive(IConnection connection)
         {
             return this.Receive();
+        }
+
+        /// <summary>
+        /// Hosts at the specified port.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        public void Host(int port)
+        {
         }
         /// <summary>
         /// Accepts a new connection.
