@@ -7,20 +7,19 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network
 {
-    internal class ServerConnectionManager
+    internal class ConnectionManager
     {
         #region Fields
         private readonly Server _server;
         private readonly ServerPackageReceiver _receiver;
-
         #endregion Fields
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServerConnectionManager"/> class.
+        /// Initializes a new instance of the <see cref="ConnectionManager"/> class.
         /// </summary>
         /// <param name="server">The server.</param>
-        public ServerConnectionManager(Server server)
+        public ConnectionManager(Server server)
         {
             this._server = server;
             this._receiver = new ServerPackageReceiver(server);

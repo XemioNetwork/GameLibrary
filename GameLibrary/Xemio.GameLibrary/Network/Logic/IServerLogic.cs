@@ -1,4 +1,5 @@
 ﻿using System;
+using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Logic

@@ -41,17 +41,9 @@ namespace Xemio.GameLibrary.Game.Scenes
         
         #region IGameHandler Member
         /// <summary>
-        /// Handles a game tick.
-        /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        public new void Tick(float elapsed)
-        {
-            base.Tick(elapsed);
-        }
-        /// <summary>
         /// Handles a game render request.
         /// </summary>
-        public new void Render()
+        public override void Render()
         {
             base.Render();
 
