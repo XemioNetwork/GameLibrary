@@ -18,6 +18,8 @@ namespace Xemio.GameLibrary.Common
         {
             this._typeParser = new TypeParserManager();
             this._values = new Dictionary<string, object>();
+
+            this.AutoParseStrings = true;
         }
         #endregion
 
@@ -25,7 +27,14 @@ namespace Xemio.GameLibrary.Common
         private readonly TypeParserManager _typeParser;
         private readonly Dictionary<string, object> _values;
         #endregion
-        
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets a value indicating whether [auto parse strings].
+        /// </summary>
+        public bool AutoParseStrings { get; set; }
+        #endregion Properties
+
         #region Methods
         /// <summary>
         /// Stores the specified value into an internal dictionary.
@@ -50,7 +59,7 @@ namespace Xemio.GameLibrary.Common
             if (this.Contains(key))
             {
                 object value = this._values[key];
-                if (value is string)
+                if (value is string && this.AutoParseStrings)
                 {
                     value = this._typeParser.Parse(value as string);
                 }
