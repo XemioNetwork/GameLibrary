@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Rendering.Geometry
 {
-    public interface IGeometryProvider
+    [AbstractComponent]
+    public interface IGeometryProvider : IComponent
     {
         /// <summary>
         /// Draws a rectangle.

@@ -10,6 +10,7 @@ using Xemio.GameLibrary.Network.Protocols;
 
 namespace Xemio.GameLibrary.Network
 {
+    [AbstractComponent]
     public interface IServer : IComponent
     {
         /// <summary>

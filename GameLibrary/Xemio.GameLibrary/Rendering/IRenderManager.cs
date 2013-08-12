@@ -8,6 +8,7 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Rendering
 {
+    [AbstractComponent]
     public interface IRenderManager : IComponent
     {
         /// <summary>

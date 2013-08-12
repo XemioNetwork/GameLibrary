@@ -17,13 +17,13 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         public ComponentManager()
         {
-            this._valueMappings = new Dictionary<Type, IValueProvider>();
+            this._componentMappings = new Dictionary<Type, IComponent>();
             this.Components = new CachedList<IComponent>();
         }
         #endregion
 
         #region Fields
-        private readonly Dictionary<Type, IValueProvider> _valueMappings;
+        private readonly Dictionary<Type, IComponent> _componentMappings;
         #endregion
 
         #region Properties
@@ -31,64 +31,73 @@ namespace Xemio.GameLibrary.Components
         /// Gets the components.
         /// </summary>
         protected CachedList<IComponent> Components { get; private set; }
-        #endregion
-
-        #region Singleton
         /// <summary>
-        /// Gets the singleton instance.
+        /// Gets a value indicating whether this <see cref="ComponentManager"/> is constructed.
         /// </summary>
-        internal static ComponentManager Instance
-        {
-            get { return Singleton<ComponentManager>.Value; }
-        }
+        public bool IsConstructed { get; private set; }
         #endregion
-
+        
         #region Methods
         /// <summary>
         /// Adds the specified value.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        private void Add(Type key, IValueProvider value)
+        private void Add(Type key, IComponent value)
         {
-            if (this._valueMappings.ContainsKey(key))
-                this._valueMappings[key] = value;
+            if (this._componentMappings.ContainsKey(key))
+                this._componentMappings[key] = value;
             else
-                this._valueMappings.Add(key, value);
+                this._componentMappings.Add(key, value);
         }
         /// <summary>
         /// Gets the type of the interface.
         /// </summary>
-        /// <param name="component">The component.</param>
-        private Type GetInterfaceType(IComponent component)
+        /// <param name="type">The component type.</param>
+        private IEnumerable<Type> GetInterfaceTypes(Type type)
         {
-            Type componentType = component.GetType();
-            foreach (Type interfaceType in componentType.GetInterfaces())
+            List<Type> types = new List<Type>(from abstraction in type.GetInterfaces()
+                                              where abstraction.GetCustomAttributes(typeof(AbstractComponentAttribute), false).Length > 0
+                                              select abstraction);
+
+            Type currentBaseType = type.BaseType;
+            while (currentBaseType != typeof(object))
             {
-                if (typeof(IComponent).IsAssignableFrom(interfaceType) &&
-                    typeof(IComponent) != interfaceType &&
-                    typeof(IConstructable) != interfaceType)
-                {
-                    return interfaceType;
-                }
+                if (currentBaseType.GetCustomAttributes(typeof(AbstractComponentAttribute), false).Length > 0)
+                    types.Add(currentBaseType);
+
+                currentBaseType = currentBaseType.BaseType;
             }
 
-            return componentType;
+            types.Add(type);
+
+            return types.Distinct();
+        }
+        /// <summary>
+        /// Constructs the specified component if it's an IConstructable.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        private void Construct(IComponent component)
+        {
+            IConstructable constructable = component as IConstructable;
+            if (constructable != null)
+            {
+                constructable.Construct();
+            }
         }
         /// <summary>
         /// Constructs all loaded components.
         /// </summary>
         public void Construct()
         {
+            if (this.IsConstructed)
+                return;
+
             using (this.Components.StartCaching())
             { 
                 foreach (IComponent component in this.Components)
                 {
-                    IConstructable constructable = component as IConstructable;
-                    if (constructable != null)
-                    {
-                        constructable.Construct();
-                    }
+                    this.Construct(component);
                 }
             }
         }
@@ -103,22 +112,13 @@ namespace Xemio.GameLibrary.Components
         {
             this.Components.Add(component);
             
-            if (component is IValueProvider)
+            IEnumerable<Type> interfaceTypes = this.GetInterfaceTypes(component.GetType());
+            foreach (Type interfaceType in interfaceTypes)
             {
-                IValueProvider valueProvider = component as IValueProvider;
-                this.Add(valueProvider.Id, valueProvider);
-
-                return;
+                this.Add(interfaceType, component);
             }
-            
-            var value = new ValueProvider(component);
-            Type interfaceType = this.GetInterfaceType(component);
 
-            this.Add(interfaceType, value);
-            if (interfaceType != component.GetType())
-            {
-                this.Add(value.Id, value);
-            }
+            this.Construct(component);
         }
         /// <summary>
         /// Removes the specified component.
@@ -127,21 +127,11 @@ namespace Xemio.GameLibrary.Components
         public void Remove(IComponent component)
         {
             this.Components.Remove(component);
-
-            if (component is IValueProvider)
-            {
-                IValueProvider valueProvider = component as IValueProvider;
-                this._valueMappings.Remove(valueProvider.Id);
-
-                return;
-            }
-
-            Type interfaceType = this.GetInterfaceType(component);
-
-            this._valueMappings.Remove(interfaceType);
-            if (interfaceType != component.GetType())
-            {
-                this._valueMappings.Remove(component.GetType());
+            
+            IEnumerable<Type> interfaceTypes = this.GetInterfaceTypes(component.GetType());
+            foreach (Type interfaceType in interfaceTypes)
+            { 
+                this._componentMappings.Remove(interfaceType);
             }
         }
         /// <summary>
@@ -150,9 +140,9 @@ namespace Xemio.GameLibrary.Components
         /// <typeparam name="T">The type of the component.</typeparam>
         public T Get<T>() where T : IComponent
         {
-            if (this._valueMappings.ContainsKey(typeof(T)))
+            if (this._componentMappings.ContainsKey(typeof(T)))
             {
-                return (T)this._valueMappings[typeof(T)].Value;
+                return (T)this._componentMappings[typeof(T)];
             }
 
             return default(T);

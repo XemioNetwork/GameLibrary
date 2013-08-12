@@ -9,6 +9,7 @@ using Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.Rendering
 {
+    [AbstractComponent]
     public interface IGraphicsProvider : IComponent
     {
         /// <summary>

@@ -1,8 +1,10 @@
-﻿using Xemio.GameLibrary.Math;
+﻿using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Rendering.Geometry
 {
-    public interface IGeometryFactory
+    [AbstractComponent]
+    public interface IGeometryFactory : IComponent
     {
         /// <summary>
         /// Creates a pen.
