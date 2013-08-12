@@ -11,13 +11,14 @@ namespace Xemio.GameLibrary.Common.Cryptography
     {
         #region Methods
         /// <summary>
-        /// Computes the md5 hash for the specified data array.
+        /// Computes the hash for the specified data array using the specified hash algorithm.
         /// </summary>
-        /// <param name="algorithm">The algorithm.</param>
         /// <param name="data">The data.</param>
-        public static string ComputeHash(HashAlgorithm algorithm, byte[] data)
+        public static string ComputeHash<T>(byte[] data) where T : HashAlgorithm
         {
-            byte[] hash = algorithm.ComputeHash(data);
+            T hashAlgorithm = (T)HashAlgorithm.Create(typeof(T).ToString());
+
+            byte[] hash = hashAlgorithm.ComputeHash(data);
             StringBuilder builder = new StringBuilder();
 
             for (int i = 0; i < hash.Length; i++)
@@ -25,20 +26,16 @@ namespace Xemio.GameLibrary.Common.Cryptography
                 builder.Append(hash[i].ToString("X2"));
             }
 
-            string result = builder.ToString();
-            result = result.ToLower();
-
-            return result;
+            return builder.ToString().ToLower();
         }
         /// <summary>
-        /// Computes the MD5 hash for the specified file.
+        /// Computes the hash for the specified file using the specified hash algorithm.
         /// </summary>
-        /// <param name="algorithm">The algorithm.</param>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        public static string ComputeHash(HashAlgorithm algorithm, string fileName)
+        public static string ComputeHash<T>(string fileName) where T : HashAlgorithm
         {
-            return CrytographyHelper.ComputeHash(algorithm, File.ReadAllBytes(fileName));
+            return CrytographyHelper.ComputeHash<T>(File.ReadAllBytes(fileName));
         }
         #endregion
     }
