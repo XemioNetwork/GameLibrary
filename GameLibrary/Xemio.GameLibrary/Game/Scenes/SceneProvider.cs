@@ -112,7 +112,9 @@ namespace Xemio.GameLibrary.Game.Scenes
                         !scene.Loaded)
                         continue;
 
-                    this.GraphicsDevice.RenderManager.Translate(Vector2.Zero);
+                    if (this.GraphicsDevice != null)
+                        this.GraphicsDevice.RenderManager.Translate(Vector2.Zero);
+
                     scene.Render();
                 }
             }

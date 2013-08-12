@@ -55,7 +55,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         {
             base.Render();
 
-            if (this.PresentChanges)
+            if (this.PresentChanges && this.GraphicsDevice != null)
                 this.GraphicsDevice.Present();
         }
         #endregion
