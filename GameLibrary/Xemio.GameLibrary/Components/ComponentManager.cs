@@ -118,7 +118,8 @@ namespace Xemio.GameLibrary.Components
                 this.Add(interfaceType, component);
             }
 
-            this.Construct(component);
+            if (this.IsConstructed)
+                this.Construct(component);
         }
         /// <summary>
         /// Removes the specified component.
