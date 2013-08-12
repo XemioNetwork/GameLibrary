@@ -17,6 +17,8 @@ namespace Xemio.GameLibrary.Game.Timing
         public GameLoop()
         {
             this._handlers = new List<IGameHandler>();
+
+            this.Precision = GameLoopPrecision.High;
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
         }
         #endregion
@@ -259,10 +261,16 @@ namespace Xemio.GameLibrary.Game.Timing
                     //Use busy waiting for the game loop
                     break;
                 case GameLoopPrecision.High:
+                    Thread.SpinWait(10000);
+                    break;
+                case GameLoopPrecision.Normal:
                     Thread.Sleep(1);
                     break;
                 case GameLoopPrecision.Low:
                     Thread.Sleep(5);
+                    break;
+                case GameLoopPrecision.Lowest:
+                    Thread.Sleep(10);
                     break;
             }
         }

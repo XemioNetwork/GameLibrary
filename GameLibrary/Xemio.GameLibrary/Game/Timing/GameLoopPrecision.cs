@@ -4,6 +4,8 @@
     {
         Highest,
         High,
-        Low
+        Normal,
+        Low,
+        Lowest
     }
 }
