@@ -83,53 +83,51 @@ namespace Xemio.GameLibrary.Math.Collision.Entities
         /// <param name="e">The event.</param>
         private void PositionChanged(EntityPositionChangedEvent e)
         {
-            if (e.Entity == this.Entity && this.CollidableEntity.IsDirty)
+            var environment = this.CollidableEntity.Environment as CollisionEnvironment;
+
+            if (e.Delta.LengthSquared > 0 && this.CollidableEntity.IsDirty &&
+                e.Entity == this.Entity && environment != null)
             {
                 this.CollidableEntity.NotifyPositionChanged = false;
-                var environment = this.CollidableEntity.Environment as CollisionEnvironment;
+                this.CollidableEntity.Position -= e.Delta;
 
-                if (environment != null)
+                Vector2 direction = Vector2.Normalize(e.Delta);
+                float[] dimensionLengths = { MathHelper.Abs(e.Delta.X), MathHelper.Abs(e.Delta.Y) };
+
+                Vector2[] dimensions = {
+                    new Vector2(direction.X, 0),
+                    new Vector2(0, direction.Y)
+                };
+
+                for (int i = 0; i < dimensions.Length; i++)
                 {
-                    this.CollidableEntity.Position -= e.Delta;
+                    float length = dimensionLengths[i];
 
-                    Vector2 direction = Vector2.Normalize(e.Delta);
-                    float[] dimensionLengths = { MathHelper.Abs(e.Delta.X), MathHelper.Abs(e.Delta.Y) };
-
-                    Vector2[] dimensions = {
-                        new Vector2(direction.X, 0),
-                        new Vector2(0, direction.Y)
-                    };
-
-                    for (int i = 0; i < dimensions.Length; i++)
+                    while (length > 0)
                     {
-                        float length = dimensionLengths[i];
+                        float multiplier = environment.Grid.CellSize;
 
-                        while (length > 0)
+                        if (length < environment.Grid.CellSize)
+                            multiplier = length;
+
+                        Vector2 lastPosition = this.CollidableEntity.Position;
+                        this.CollidableEntity.Position += dimensions[i] * multiplier;
+
+                        environment.Grid.Update(this.CollidableEntity, this.CollisionMap);
+
+                        int x = (int)this.CollidableEntity.Position.X / environment.Grid.CellSize;
+                        int y = (int)this.CollidableEntity.Position.Y / environment.Grid.CellSize;
+
+                        if (environment.Grid.Collides(x, y, this.CollidableEntity, this.CollisionMap))
                         {
-                            float multiplier = environment.Grid.CellSize;
+                            this.CollidableEntity.Position = lastPosition;
+                            environment.Grid.Update(this.CollidableEntity, this.CollisionMap);
 
-                            if (length < environment.Grid.CellSize)
-                                multiplier = length;
-
-                            this.CollidableEntity.Position += dimensions[i] * multiplier;
-
-                            environment.Grid.Update(
-                                this.CollidableEntity,
-                                this.CollisionMap);
-
-                            int x = (int)this.CollidableEntity.Position.X / environment.Grid.CellSize;
-                            int y = (int)this.CollidableEntity.Position.Y / environment.Grid.CellSize;
-
-                            if (environment.Grid.Collides(x, y, this.CollidableEntity, this.CollisionMap))
-                            {
-                                this.CollidableEntity.Position -= dimensions[i] * multiplier;
-                                this.FireCollisionEvents(x, y, environment);
-
-                                break;
-                            }
-
-                            length -= environment.Grid.CellSize;
+                            this.FireCollisionEvents(x, y, environment);
+                            break;
                         }
+
+                        length -= environment.Grid.CellSize;
                     }
                 }
 
