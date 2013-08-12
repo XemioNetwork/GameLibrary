@@ -12,6 +12,7 @@ using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Localization;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Network.Packages;
+using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Sound;
@@ -94,6 +95,7 @@ namespace Xemio.GameLibrary
             this.Components.Add(new LocalizationManager());
             this.Components.Add(new GlobalExceptionHandler());
             this.Components.Add(new GameTime());
+            this.Components.Add(new LibraryLoader());
         }
         #endregion Methods
     }

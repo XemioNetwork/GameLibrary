@@ -4,10 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Plugins
 {
-    public class LibraryLoader
+    public class LibraryLoader : IConstructable
     {
         #region Methods
         /// <summary>
@@ -27,6 +28,16 @@ namespace Xemio.GameLibrary.Plugins
             {
                 initializer.Initialize();
             }
+        }
+        #endregion
+
+        #region Implementation of IConstructable
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            this.LoadLibraries(ContextFactory.CreateFileAssemblyContext("."));
         }
         #endregion
     }
