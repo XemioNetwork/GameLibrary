@@ -16,9 +16,8 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicsDevice"/> class.
         /// </summary>
-        public GraphicsDevice(IntPtr handle)
+        public GraphicsDevice()
         {
-            this.Handle = handle;
             this.Targets = new Stack<IRenderTarget>();
         }
         #endregion
@@ -28,10 +27,6 @@ namespace Xemio.GameLibrary.Rendering
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets the handle.
-        /// </summary>
-        public IntPtr Handle { get; set; }
         /// <summary>
         /// Gets or sets the provider.
         /// </summary>
@@ -43,7 +38,7 @@ namespace Xemio.GameLibrary.Rendering
         {
             get
             {
-                Control control = Control.FromHandle(this.Handle);
+                Control control = Control.FromHandle(XGL.Handle);
                 if (control == null)
                 {
                     return new Vector2(1, 1);
@@ -177,11 +172,11 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public void Construct()
         {
-            XGL.Components.Add(new ValueProvider<ITextureFactory>(this.TextureFactory));
-            XGL.Components.Add(new ValueProvider<IRenderManager>(this.RenderManager));
-            XGL.Components.Add(new ValueProvider<IGeometryProvider>(this.Geometry));
-            XGL.Components.Add(new ValueProvider<IGeometryFactory>(this.Geometry.Factory));
-            XGL.Components.Add(new ValueProvider<IGraphicsProvider>(this.Provider));
+            XGL.Components.Add(this.TextureFactory);
+            XGL.Components.Add(this.RenderManager);
+            XGL.Components.Add(this.Geometry);
+            XGL.Components.Add(this.Geometry.Factory);
+            XGL.Components.Add(this.Provider);
 
             this.CreateBackBuffer(this.DisplayMode);
         }
