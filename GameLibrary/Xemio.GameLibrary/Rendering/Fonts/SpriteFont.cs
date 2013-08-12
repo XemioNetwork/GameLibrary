@@ -22,14 +22,14 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteFont"/> class.
         /// </summary>
-        public SpriteFont() : this(0)
+        internal SpriteFont() : this(0)
         {
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteFont"/> class.
         /// </summary>
         /// <param name="kerning">The kerning.</param>
-        public SpriteFont(int kerning)
+        internal SpriteFont(int kerning)
         {
             this.Kerning = kerning;
             this.Spacing = 15;

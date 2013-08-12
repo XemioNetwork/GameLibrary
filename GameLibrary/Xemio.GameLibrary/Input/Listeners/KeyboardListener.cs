@@ -2,7 +2,6 @@
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Rendering;
-using Keys = Xemio.GameLibrary.Input.Keys;
 
 namespace Xemio.GameLibrary.Input.Listeners
 {

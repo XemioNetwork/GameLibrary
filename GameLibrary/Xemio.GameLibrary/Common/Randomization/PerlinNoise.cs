@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         #endregion
         
         #region Fields
-        private IRandom _random;
+        private readonly IRandom _random;
         #endregion
 
         #region Methods
@@ -68,10 +68,10 @@ namespace Xemio.GameLibrary.Common.Randomization
 
                     float verticalBlend = (y - y0) * frequency;
 
-                    float top = Interpolate(baseNoise[x0, y0], baseNoise[x1, y0], horizontalBlend);
-                    float bottom = Interpolate(baseNoise[x0, y1], baseNoise[x1, y1], horizontalBlend);
+                    float top = this.Interpolate(baseNoise[x0, y0], baseNoise[x1, y0], horizontalBlend);
+                    float bottom = this.Interpolate(baseNoise[x0, y1], baseNoise[x1, y1], horizontalBlend);
 
-                    smoothNoise[x, y] = Interpolate(top, bottom, verticalBlend);
+                    smoothNoise[x, y] = this.Interpolate(top, bottom, verticalBlend);
                 }
             }
 
@@ -161,7 +161,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// <param name="x0">The x0.</param>
         /// <param name="x1">The x1.</param>
         /// <param name="alpha">The amount.</param>
-        public float Interpolate(float x0, float x1, float alpha)
+        private float Interpolate(float x0, float x1, float alpha)
         {
             return x0 * (1 - alpha) + alpha * x1;
         }

@@ -9,7 +9,7 @@ namespace Xemio.GameLibrary.Common
     public static class Singleton<T> where T : class, new()
     {
         #region Fields
-        private static Lazy<T> _lazy = new Lazy<T>();
+        private static readonly Lazy<T> _lazy = new Lazy<T>();
         #endregion
 
         #region Properties

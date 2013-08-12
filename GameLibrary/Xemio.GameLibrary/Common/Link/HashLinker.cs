@@ -13,9 +13,8 @@ namespace Xemio.GameLibrary.Common.Link
         /// <summary>
         /// Initializes a new instance of the <see cref="HashLinker&lt;TKey, TValue&gt;"/> class.
         /// </summary>
-        public HashLinker() : base()
+        public HashLinker()
         {
-            this.InitializeMappings();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HashLinker&lt;TKey, TValue&gt;"/> class.
@@ -23,7 +22,6 @@ namespace Xemio.GameLibrary.Common.Link
         /// <param name="assembly">The assembly.</param>
         public HashLinker(Assembly assembly) : base(assembly)
         {
-            this.InitializeMappings();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HashLinker&lt;TKey, TValue&gt;"/> class.
@@ -31,7 +29,6 @@ namespace Xemio.GameLibrary.Common.Link
         /// <param name="assemblies">The assemblies.</param>
         public HashLinker(IEnumerable<string> assemblies) : base(assemblies)
         {
-            this.InitializeMappings();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HashLinker&lt;TKey, TValue&gt;"/> class.
@@ -39,7 +36,6 @@ namespace Xemio.GameLibrary.Common.Link
         /// <param name="assemblies">The assemblies.</param>
         public HashLinker(IEnumerable<Assembly> assemblies) : base(assemblies)
         {
-            this.InitializeMappings();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HashLinker&lt;TKey, TValue&gt;"/> class.
@@ -47,22 +43,14 @@ namespace Xemio.GameLibrary.Common.Link
         /// <param name="assemblyName">Name of the assembly.</param>
         public HashLinker(string assemblyName) : base(assemblyName)
         {
-            this.InitializeMappings();
         }
         #endregion
 
         #region Fields
-        private Dictionary<int, TValue> _hashMappings; 
+        private readonly Dictionary<int, TValue> _hashMappings = new Dictionary<int, TValue>(); 
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Initializes the mappings.
-        /// </summary>
-        private void InitializeMappings()
-        {
-            this._hashMappings = new Dictionary<int, TValue>();
-        }
         /// <summary>
         /// Adds the specified key.
         /// </summary>
