@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Math;
@@ -155,7 +156,7 @@ namespace Xemio.GameLibrary.Rendering
         public IDisposable RenderTo(IRenderTarget target)
         {
             this.Targets.Push(target);
-            return new RenderTargetDisposer(this);
+            return new ActionDisposable(() => this.Targets.Pop());
         }
         /// <summary>
         /// Presents all drawn data.

@@ -228,7 +228,6 @@
     <Compile Include="Rendering\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\IRenderTarget.cs" />
     <Compile Include="Rendering\PriorizedInitializer.cs" />
-    <Compile Include="Rendering\RenderTargetDisposer.cs" />
     <Compile Include="Rendering\Sprites\Animation.cs" />
     <Compile Include="Rendering\Sprites\AnimationInstance.cs" />
     <Compile Include="Rendering\Sprites\SpriteSheet.cs" />

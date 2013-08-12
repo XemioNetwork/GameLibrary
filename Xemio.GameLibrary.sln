@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Localization"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.ReactiveExtensions", "Testing\Xemio.Testing.ReactiveExtensions\Xemio.Testing.ReactiveExtensions.csproj", "{7718E8C1-87DA-4883-9D23-DC5951312CF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.SceneManager", "Testing\Xemio.Testing.SceneManager\Xemio.Testing.SceneManager.csproj", "{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,16 +99,6 @@ Global
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Release|x86.ActiveCfg = Release|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +111,5 @@ Global
 		{654D61AC-4895-480A-81E4-774FA33C95C9} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
-		{5D8FC7F3-D9EC-4348-8C31-FA8E94207355} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 	EndGlobalSection
 EndGlobal

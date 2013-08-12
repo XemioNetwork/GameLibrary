@@ -103,7 +103,7 @@ namespace Xemio.GameLibrary.Content
         /// <summary>
         /// Loads the specified file.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of the content.</typeparam>
         /// <typeparam name="TReader">The type of the reader.</typeparam>
         /// <param name="fileName">Name of the file.</param>
         public virtual T Load<T, TReader>(string fileName) where TReader : IContentReader, new()
