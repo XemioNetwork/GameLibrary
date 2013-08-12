@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Network
 
             this._subscribers = new List<IServerLogic>();
             this._sender = new PackageSender();
-            this._connectionManager = new ServerConnectionManager(this);
+            this._connectionManager = new ConnectionManager(this);
 
             this.Active = true;
 
@@ -51,7 +51,7 @@ namespace Xemio.GameLibrary.Network
         #endregion
 
         #region Fields
-        private readonly ServerConnectionManager _connectionManager;
+        private readonly ConnectionManager _connectionManager;
         private readonly List<IServerLogic> _subscribers;
         private readonly PackageSender _sender;
         private readonly CachedList<IConnection> _connections;

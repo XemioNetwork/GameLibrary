@@ -18,6 +18,13 @@ namespace Xemio.GameLibrary.Input
 
         #region Properties
         /// <summary>
+        /// Gets the local player input.
+        /// </summary>
+        public PlayerInput LocalInput
+        {
+            get { return this.PlayerInputs.First(); }
+        }
+        /// <summary>
         /// Gets the player inputs.
         /// </summary>
         public IList<PlayerInput> PlayerInputs { get; private set; }

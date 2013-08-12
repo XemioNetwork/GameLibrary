@@ -18,11 +18,11 @@ namespace Xemio.GameLibrary.Network.Logic.Forwarding
         /// <param name="sender">The sender.</param>
         public override void OnReceive(IServer server, Package package, IConnection sender)
         {
-            IForwarded forwardedPackage = package as IForwarded;
-
-            if (forwardedPackage == null)
+            if (package is IForwarded == false)
                 return;
 
+            IForwarded forwardedPackage = (IForwarded)package;
+            
             switch (forwardedPackage.Options)
             {
                 case ForwardingOptions.All:

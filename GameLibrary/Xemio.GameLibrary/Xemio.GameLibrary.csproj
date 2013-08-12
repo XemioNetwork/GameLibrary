@@ -84,7 +84,7 @@
     <Compile Include="Network\Packages\QueuedPackage.cs" />
     <Compile Include="Network\Packages\ServerPackageReceiver.cs" />
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
-    <Compile Include="Network\ServerConnectionManager.cs" />
+    <Compile Include="Network\ConnectionManager.cs" />
     <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
     <Compile Include="Common\Link\CreationType.cs" />
@@ -277,6 +277,7 @@
     <Compile Include="XGL.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AI\" />
     <Folder Include="Content\FileSystem\Compressed\" />
     <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />

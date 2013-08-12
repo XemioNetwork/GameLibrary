@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -11,6 +12,11 @@ namespace Xemio.GameLibrary.Rendering
     [AbstractComponent]
     public interface ITextureFactory : IComponent
     {
+        /// <summary>
+        /// Creates a texture.
+        /// </summary>
+        /// <param name="bitmap">The bitmap.</param>
+        ITexture CreateTexture(Bitmap bitmap);
         /// <summary>
         /// Creates a texture.
         /// </summary>
