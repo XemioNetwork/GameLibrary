@@ -15,13 +15,13 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// </summary>
         public ImplementationCache()
         {
-            this._cachedContexts = new Dictionary<IAssemblyContext, bool>();
+            this._cachedContexts = new Dictionary<IAssemblyContext, HashSet<Type>>();
             this._linkers = new Dictionary<Type, dynamic>();
         }
         #endregion
 
         #region Fields
-        private readonly Dictionary<IAssemblyContext, bool> _cachedContexts;
+        private readonly Dictionary<IAssemblyContext, HashSet<Type>> _cachedContexts;
         private readonly Dictionary<Type, dynamic> _linkers;
         #endregion
 
@@ -77,6 +77,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         {
             return
                 this._cachedContexts.ContainsKey(context) && 
+                this._cachedContexts[context].Contains(typeof(TValue)) &&
                 this._linkers.ContainsKey(typeof(TValue));
         }
         /// <summary>
@@ -91,8 +92,12 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             {
                 this._linkers.Add(typeof(TValue), new GenericLinker<TKey, TValue>());
             }
+            if (!this._cachedContexts.ContainsKey(context))
+            {
+                this._cachedContexts.Add(context, new HashSet<Type>());
+            }
 
-            this._cachedContexts.Add(context, true);
+            this._cachedContexts[context].Add(typeof(TValue));
 
             GenericLinker<TKey, TValue> linker = this._linkers[typeof(TValue)];
             foreach (Assembly assembly in context.Assemblies)
