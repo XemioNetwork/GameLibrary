@@ -1,35 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Script
 {
     public class CommandEvaluator
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandEvaluator"/> class.
-        /// </summary>
-        public CommandEvaluator()
-        {
-            this.Commands = new List<ICommand>();
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandEvaluator"/> class.
-        /// </summary>
-        /// <param name="commands">The commands.</param>
-        public CommandEvaluator(IEnumerable<ICommand> commands)
-        {
-            this.Commands = commands.ToList();
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets the commands.
-        /// </summary>
-        public List<ICommand> Commands { get; private set; }
-        #endregion
-
         #region Methods
         /// <summary>
         /// Evaluates the specified source.
@@ -41,7 +17,9 @@ namespace Xemio.GameLibrary.Script
             source = source.Replace("\r", string.Empty);
             source = source.Replace("\t", " ");
 
-            foreach (ICommand command in this.Commands)
+            var implementations = XGL.Components.Get<ImplementationManager>();
+
+            foreach (ICommand command in implementations.All<string, ICommand>())
             {
                 int length = command.Id.Length;
                 List<int> indices = new List<int>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Windows.Forms;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
@@ -34,7 +35,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public static ComponentManager Components
         {
-            get { return ComponentManager.Instance; }
+            get { return Singleton<ComponentManager>.Value; }
         }
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Configuration"/> is initialized.
@@ -51,7 +52,15 @@ namespace Xemio.GameLibrary
             return new FluentConfigurator();
         }
         /// <summary>
-        /// Configures the XGL using the specified bootstrapper.
+        /// Configures the XGL using the specified configuration.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public static void Run<T>() where T : Configuration, new()
+        {
+            XGL.Run(new T());
+        }
+        /// <summary>
+        /// Configures the XGL using the specified configuration.
         /// </summary>
         /// <typeparam name="T">The type of the configuration.</typeparam>
         public static void Run<T>(IntPtr handle) where T : Configuration, new()
@@ -59,7 +68,16 @@ namespace Xemio.GameLibrary
             XGL.Run(handle, new T());
         }
         /// <summary>
-        /// Configures the XGL using the specified bootstrapper.
+        /// Configures the XGL using the specified configuration.
+        /// </summary>
+        /// <param name="config">The config.</param>
+        public static void Run(Configuration config)
+        {
+            var control = new Control();
+            XGL.Run(control.Handle, config);
+        }
+        /// <summary>
+        /// Configures the XGL using the specified configuration.
         /// </summary>
         /// <param name="handle">The handle.</param>
         /// <param name="config">The configuration.</param>
@@ -76,7 +94,7 @@ namespace Xemio.GameLibrary
                 XGL.Components.Add(component);
             }
 
-            XGL.InitializeGraphics(handle, config);
+            XGL.InitializeGraphics(config);
             XGL.InitializeSound(config);
             XGL.InitializeGameLoop(config);
             XGL.InitializeInput(config);
@@ -96,9 +114,8 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the graphics.
         /// </summary>
-        /// <param name="handle">The handle.</param>
-        /// <param name="config">The bootstrapper.</param>
-        private static void InitializeGraphics(IntPtr handle, Configuration config)
+        /// <param name="config">The configuration.</param>
+        private static void InitializeGraphics(Configuration config)
         {
             if (config.GraphicsInitializer != null)
             {
@@ -108,7 +125,7 @@ namespace Xemio.GameLibrary
                         "The selected graphics initializer is unavailable. Maybe your PC doesn't support the selected graphics engine.");
                 }
 
-                var graphicsDevice = new GraphicsDevice(handle);
+                var graphicsDevice = new GraphicsDevice();
 
                 graphicsDevice.DisplayMode = new DisplayMode(config.BackBufferSize);
                 graphicsDevice.Provider = config.GraphicsInitializer.CreateProvider(graphicsDevice);
@@ -119,6 +136,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the sound.
         /// </summary>
+        /// <param name="config">The configuration.</param>
         private static void InitializeSound(Configuration config)
         {
             if (config.SoundInitializer != null)
@@ -135,6 +153,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the game loop.
         /// </summary>
+        /// <param name="config">The configuration.</param>
         private static void InitializeGameLoop(Configuration config)
         {
             var gameLoop = XGL.Components.Get<GameLoop>();
@@ -150,7 +169,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the input.
         /// </summary>
-        /// <param name="config">The config.</param>
+        /// <param name="config">The configuration.</param>
         private static void InitializeInput(Configuration config)
         {
             var inputManager = XGL.Components.Get<InputManager>();

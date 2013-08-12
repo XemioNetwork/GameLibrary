@@ -16,11 +16,9 @@ namespace Xemio.GameLibrary.Script
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptCompiler"/> class.
         /// </summary>
-        /// <param name="commands">The commands.</param>
-        public ScriptCompiler(IEnumerable<ICommand> commands)
+        public ScriptCompiler()
         {
             this.Assemblies = new List<string>();
-            this.Commands = new GenericLinker<string, ICommand> {commands};
         }
         #endregion
 
@@ -36,10 +34,6 @@ namespace Xemio.GameLibrary.Script
         /// Gets the assemblies.
         /// </summary>
         public List<string> Assemblies { get; private set; }
-        /// <summary>
-        /// Gets the commands.
-        /// </summary>
-        public GenericLinker<string, ICommand> Commands { get; private set; } 
         #endregion
 
         #region Methods
@@ -94,7 +88,7 @@ namespace Xemio.GameLibrary.Script
         public CompilerResult Compile(params string[] sources)
         {
             CSharpCodeProvider codeProvider = new CSharpCodeProvider();
-            CommandEvaluator evaluator = new CommandEvaluator(this.Commands);
+            CommandEvaluator evaluator = new CommandEvaluator();
 
             string[] evaluatedSources = sources
                 .Select(evaluator.Evaluate)

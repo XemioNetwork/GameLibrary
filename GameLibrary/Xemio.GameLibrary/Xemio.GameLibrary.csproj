@@ -55,6 +55,7 @@
     <Compile Include="Common\Collections\ListActions\RemoveAtAction.cs" />
     <Compile Include="Common\Collections\CachedList.cs" />
     <Compile Include="Common\Collections\ListActions\IListAction.cs" />
+    <Compile Include="Components\AbstractComponentAttribute.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Common\Cryptography\CrytographyHelper.cs" />
     <Compile Include="Common\Extensions\BinaryReaderExtensions.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
     <Compile Include="Network\ServerConnectionManager.cs" />
     <Compile Include="Network\Synchronization\ExcludeAttribute.cs" />
-    <Compile Include="Common\ICondition.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
     <Compile Include="Common\Link\CreationType.cs" />
     <Compile Include="Common\Link\GenericLinker.cs" />
@@ -111,8 +111,6 @@
     <Compile Include="Components\ComponentManager.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\IConstructable.cs" />
-    <Compile Include="Components\IValueProvider.cs" />
-    <Compile Include="Components\ValueProvider.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\ContentReader.cs" />
     <Compile Include="Content\ContentSerializer.cs" />

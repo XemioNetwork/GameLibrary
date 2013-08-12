@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Xemio.GameLibrary;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Extensions;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
 using Xemio.GameLibrary.Plugins.Implementations;
@@ -17,14 +20,21 @@ namespace Xemio.Testing.EventSystem
     {
         static void Main(string[] args)
         {
-            EventManager eventManager = new EventManager();
-            eventManager.Subscribe<TestEvent>(Program.OnNext);
-            eventManager.Subscribe<RedEvent>(Program.OnRed);
+            var config = XGL.Configure()
+                .WithDefaultComponents()
+                .BuildConfiguration();
 
-            eventManager.Publish(new TestEvent("Hallo Welt"));
-            eventManager.Publish(new RedEvent("Hallo bloody Welt"));
+            XGL.Run(config);
 
-            Console.ReadLine();
+            EventManager eventManager = XGL.Components.Get<EventManager>();
+            eventManager.Subscribe<ExceptionEvent>(Program.OnException);
+
+            throw new InvalidOperationException("Some exception text.");
+        }
+
+        private static void OnException(ExceptionEvent obj)
+        {
+            Console.WriteLine(obj.Message);
         }
 
         public static void OnNext(TestEvent value)
