@@ -12,7 +12,6 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// Reads a value out of the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
         public override SpriteFont Read(BinaryReader reader)
         {
             SpriteFont font = new SpriteFont();
