@@ -26,7 +26,7 @@ namespace Xemio.Testing.EventSystem
                 .WithDefaultComponents()
                 .BuildConfiguration();
 
-            XGL.Run(config);
+            XGL.Run(config, );
 
             EventManager eventManager = XGL.Components.Get<EventManager>();
             disposable = eventManager.Subscribe<ExceptionEvent>(Program.OnException);
