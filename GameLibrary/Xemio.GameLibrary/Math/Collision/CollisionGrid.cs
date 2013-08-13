@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Math.Collision
         /// <param name="cellSize">Size of the cell.</param>
         public CollisionGrid(int width, int height, int cellSize)
         {
-            CellSizeHelper.ValidateCellSize(cellSize);
+            SizeHelper.ValidateCellSize(cellSize);
 
             this.Width = width;
             this.Height = height;
@@ -93,10 +93,7 @@ namespace Xemio.GameLibrary.Math.Collision
             if (this._positionMappings.ContainsKey(source))
                 this.Remove(source, collisionMap);
             
-            this.PerformAction(x, y,
-                collisionMap,
-                list => list.Add(source));
-
+            this.PerformAction(x, y, collisionMap, list => list.Add(source));
             this._positionMappings.Add(source, source.Position);
         }
         /// <summary>
@@ -113,10 +110,7 @@ namespace Xemio.GameLibrary.Math.Collision
                 int x = (int)position.X / this.CellSize;
                 int y = (int)position.Y / this.CellSize;
 
-                this.PerformAction(x, y,
-                    collisionMap,
-                    list => list.Remove(source));
-
+                this.PerformAction(x, y, collisionMap, list => list.Remove(source));
                 this._positionMappings.Remove(source);
             }
         }
