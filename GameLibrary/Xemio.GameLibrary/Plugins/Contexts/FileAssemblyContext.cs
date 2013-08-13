@@ -34,6 +34,8 @@ namespace Xemio.GameLibrary.Plugins.Contexts
         /// <param name="directory">The directory.</param>
         private void LoadAssemblies(string directory)
         {
+            var eventManager = XGL.Components.Get<EventManager>();
+
             foreach (string fileName in Directory.GetFiles(directory))
             {
                 if (Path.GetExtension(fileName) == ".dll" ||
@@ -45,7 +47,6 @@ namespace Xemio.GameLibrary.Plugins.Contexts
                     }
                     catch (Exception exception)
                     {
-                        var eventManager = XGL.Components.Get<EventManager>();
                         eventManager.Publish(new ExceptionEvent(exception));
                     }
                 }
