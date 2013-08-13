@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
-    public class GameLoop : IComponent
+    public class GameLoop : IConstructable
     {
         #region Constructors
         /// <summary>
@@ -25,10 +25,25 @@ namespace Xemio.GameLibrary.Game.Timing
 
         #region Fields
         private Task _loopTask;
+        private ThreadInvoker _invoker;
+        private Stopwatch _gameTime;
+
         private readonly List<IGameHandler> _handlers;
 
         private double _renderTime;
         private double _tickTime;
+
+        private bool _requestRender;
+        private double _unprocessedTicks;
+
+        private double _elapsedTickTime;
+        private double _elapsedRenderTime;
+
+        private int _fpsCount;
+        private double _lastFpsMeasure;
+
+        private double _lastTick;
+        private double _lastRender;
         #endregion
 
         #region Properties
@@ -41,11 +56,14 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public long FrameIndex { get; private set; }
         /// <summary>
-        /// Gets or sets the precision.
+        /// Gets or sets the precision. The precision level determines the amount of "Thread.Sleep"
+        /// used to wait for the next frame. The higher the precision level, the lower the amount
+        /// of Thread.Sleep used.
         /// </summary>
         public PrecisionLevel Precision { get; set; }
         /// <summary>
-        /// Gets or sets the lag compensation.
+        /// Gets or sets the lag compensation. If set to ExecuteMissedTicks, the game loop will
+        /// always run at the same tick frequency.
         /// </summary>
         public LagCompensation LagCompensation { get; set; }
         /// <summary>
@@ -55,15 +73,24 @@ namespace Xemio.GameLibrary.Game.Timing
         /// <summary>
         /// Gets the frame time (render time + tick time).
         /// </summary>
-        public double FrameTime { get; private set; }
+        public double FrameTime
+        {
+            get { return this._tickTime + this._renderTime; }
+        }
         /// <summary>
         /// Gets the tick time.
         /// </summary>
-        public double TickTime { get; private set; }
+        public double TickTime
+        {
+            get { return this._tickTime; }
+        }
         /// <summary>
         /// Gets the render time.
         /// </summary>
-        public double RenderTime { get; private set; }
+        public double RenderTime
+        {
+            get { return this._renderTime; }
+        }
         /// <summary>
         /// Gets the target tick time.
         /// </summary>
@@ -139,16 +166,22 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public void Run()
         {
-            this.Active = true;
-            this._loopTask = Task.Factory.StartNew(InternalLoop);
+            if (!this.Active)
+            {
+                this.Active = true;
+                this._loopTask = Task.Factory.StartNew(InternalLoop);
+            }
         }
         /// <summary>
         /// Stops the game loop.
         /// </summary>
         public void Stop()
         {
-            this.Active = false;
-            this._loopTask.Wait();
+            if (this.Active)
+            {
+                this.Active = false;
+                this._loopTask.Wait();
+            }
         }
         /// <summary>
         /// Subscribes and adds the handler to the gameloop.
@@ -171,82 +204,103 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void InternalLoop()
         {
-            Stopwatch gameTime = Stopwatch.StartNew();
-            ThreadInvoker invoker = XGL.Components.Get<ThreadInvoker>();
+            this._gameTime = Stopwatch.StartNew();
+            this._requestRender = true;
 
-            bool requestRender = true;
-
-            double unprocessedTicks = 0;
-
-            double elapsedTickTime = 0;
-            double elapsedRenderTime = 0;
-
-            double lastFrameCount = gameTime.Elapsed.TotalMilliseconds;
-            
-            double lastTick = gameTime.Elapsed.TotalMilliseconds;
-            double lastRender = gameTime.Elapsed.TotalMilliseconds;
-
-            int frames = 0;
+            this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
+            this._lastTick = this._gameTime.Elapsed.TotalMilliseconds;
+            this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
             
             while (this.Active)
             {
-                if (requestRender)
+                this.HandleRenderRequest();
+                this.HandleUnprocessedTicks();
+
+                this.CheckRenderRequest();
+                this.UpdateFramesPerSecond();
+            }
+        }
+        /// <summary>
+        /// Handles all unprocessed ticks.
+        /// </summary>
+        private void HandleUnprocessedTicks()
+        {
+            //Time since the last handled tick.
+            double elapsed = this._gameTime.Elapsed.TotalMilliseconds - this._lastTick;
+
+            this._elapsedTickTime += elapsed;
+            this._unprocessedTicks += elapsed / this.TargetTickTime;
+            this._lastTick = this._gameTime.Elapsed.TotalMilliseconds;
+
+            //If there are unprocessed ticks, call OnTick.
+            if (this._unprocessedTicks >= 1)
+            {
+                int tickCount = (int)this._unprocessedTicks;
+
+                //Subtract unprocessed ticks as an integer, since we want
+                //to keep digits for the next tick. (Example: unprocessedTicks = 3.11, => tickCount = 3)
+                this._unprocessedTicks -= tickCount;
+
+                switch (this.LagCompensation)
                 {
-                    frames++;
+                    case LagCompensation.None:
+                        this._invoker.Invoke(() => this.OnTick((float)this._elapsedTickTime));
+                        break;
+                    case LagCompensation.ExecuteMissedTicks:
+                        //Handle unprocessed ticks by calling the OnTick method as often
+                        //as needed for the elapsed tick time.
+                        //Example: elapsedTickTime = 32ms, TargetFrameTime = 16ms => call OnTick twice.
 
-                    elapsedRenderTime = gameTime.Elapsed.TotalMilliseconds - lastRender;
-                    lastRender = gameTime.Elapsed.TotalMilliseconds;
-
-                    invoker.Invoke(() => this.OnRender((float)elapsedRenderTime));
-
-                    requestRender = false;
+                        float tickElapsed = (float)(this._elapsedTickTime / tickCount);
+                        for (int i = 0; i < tickCount; i++)
+                        {
+                            this._invoker.Invoke(() => this.OnTick(tickElapsed));
+                        }
+                        break;
                 }
 
-                double elapsed = gameTime.Elapsed.TotalMilliseconds - lastTick;
+                this._elapsedTickTime = 0;
+                this.ManagePrecisionLevel();
+            }
+        }
+        /// <summary>
+        /// Checks for render requests.
+        /// </summary>
+        private void CheckRenderRequest()
+        {
+            if (this._gameTime.Elapsed.TotalMilliseconds - this._lastRender >= this.TargetFrameTime)
+            {
+                this._requestRender = true;
+            }
+        }
+        /// <summary>
+        /// Updates the timing properties for FramesPerSecond.
+        /// </summary>
+        private void UpdateFramesPerSecond()
+        {
+            if (this._gameTime.Elapsed.TotalMilliseconds - this._lastFpsMeasure >= 1000.0)
+            {
+                this.FramesPerSecond = this._fpsCount;
 
-                elapsedTickTime += elapsed;
-                unprocessedTicks += elapsed / this.TargetTickTime;
-                lastTick = gameTime.Elapsed.TotalMilliseconds;
+                this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
+                this._fpsCount = 0;
+            }
+        }
+        /// <summary>
+        /// Handles render requests.
+        /// </summary>
+        private void HandleRenderRequest()
+        {
+            if (this._requestRender)
+            {
+                this._fpsCount++;
 
-                int tickCount = (int)unprocessedTicks;
-                if (unprocessedTicks >= 1)
-                {
-                    float tickElapsed = (float)(elapsedTickTime / tickCount);
-                    unprocessedTicks -= tickCount;
+                this._elapsedRenderTime = this._gameTime.Elapsed.TotalMilliseconds - this._lastRender;
+                this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
 
-                    switch (this.LagCompensation)
-                    {
-                        case LagCompensation.None:
-                            invoker.Invoke(() => this.OnTick((float)elapsedTickTime));
-                            break;
-                        case LagCompensation.ExecuteMissedTicks:
-                            for (int i = 0; i < tickCount; i++)
-                            {
-                                invoker.Invoke(() => this.OnTick(tickElapsed));
-                            }
-                            break;
-                    }
+                this._invoker.Invoke(() => this.OnRender((float)this._elapsedRenderTime));
 
-                    elapsedTickTime = 0;
-                    this.ManagePrecisionLevel();
-                }
-
-                if (gameTime.Elapsed.TotalMilliseconds - lastRender >= this.TargetFrameTime)
-                {
-                    requestRender = true;
-                }
-
-                if (gameTime.Elapsed.TotalMilliseconds - lastFrameCount >= 1000.0)
-                {
-                    this.TickTime = this._tickTime;
-                    this.RenderTime = this._renderTime;
-
-                    this.FrameTime = this._tickTime + this._renderTime;
-                    this.FramesPerSecond = frames;
-
-                    lastFrameCount = gameTime.Elapsed.TotalMilliseconds;
-                    frames = 0;
-                }
+                this._requestRender = false;
             }
         }
         /// <summary>
@@ -278,6 +332,16 @@ namespace Xemio.GameLibrary.Game.Timing
                     Thread.Sleep(timeTillNextFrame);
                     break;
             }
+        }
+        #endregion
+
+        #region Implementation of IConstructable
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            this._invoker = XGL.Components.Get<ThreadInvoker>();
         }
         #endregion
     }
