@@ -34,27 +34,34 @@ namespace Xemio.GameLibrary.Plugins.Contexts
         /// <param name="directory">The directory.</param>
         private void LoadAssemblies(string directory)
         {
-            foreach (string fileName in Directory.GetFiles(directory))
+            try
             {
-                if (Path.GetExtension(fileName) == ".dll" ||
-                    Path.GetExtension(fileName) == ".exe")
+                foreach (string fileName in Directory.GetFiles(directory))
                 {
-                    try
+                    if (Path.GetExtension(fileName) == ".dll" ||
+                        Path.GetExtension(fileName) == ".exe")
                     {
-                        this._assemblies.Add(Assembly.LoadFrom(fileName));
-                    }
-                    catch (Exception exception)
-                    {
-                        var eventManager = XGL.Components.Get<EventManager>();
-                        eventManager.Publish(new ExceptionEvent(exception));
+                        try
+                        {
+                            this._assemblies.Add(Assembly.LoadFrom(fileName));
+                        }
+                        catch (Exception exception)
+                        {
+                            var eventManager = XGL.Components.Get<EventManager>();
+                            eventManager.Publish(new ExceptionEvent(exception));
+                        }
                     }
                 }
-            }
 
-            this._assemblies = this._assemblies.Distinct().ToList();
-            foreach (string subDirectory in Directory.GetDirectories(directory))
+                this._assemblies = this._assemblies.Distinct().ToList();
+                foreach (string subDirectory in Directory.GetDirectories(directory))
+                {
+                    this.LoadAssemblies(subDirectory);
+                }
+            }
+            catch (Exception ex)
             {
-                this.LoadAssemblies(subDirectory);
+                Console.WriteLine(ex.Message);
             }
         }
         #endregion

@@ -18,6 +18,8 @@ namespace Xemio.Testing.EventSystem
 {
     public class Program
     {
+        private static IDisposable disposable;
+
         static void Main(string[] args)
         {
             var config = XGL.Configure()
@@ -27,13 +29,14 @@ namespace Xemio.Testing.EventSystem
             XGL.Run(config);
 
             EventManager eventManager = XGL.Components.Get<EventManager>();
-            eventManager.Subscribe<ExceptionEvent>(Program.OnException);
+            disposable = eventManager.Subscribe<ExceptionEvent>(Program.OnException);
 
             throw new InvalidOperationException("Some exception text.");
         }
 
         private static void OnException(ExceptionEvent obj)
         {
+            disposable.Dispose();
             Console.WriteLine(obj.Message);
         }
 
