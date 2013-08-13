@@ -15,6 +15,7 @@ using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Sound.Loops;
 

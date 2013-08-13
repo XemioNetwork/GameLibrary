@@ -225,9 +225,9 @@
     <Compile Include="Plugins\Contexts\SingleAssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Fonts\SpriteFontSerializer.cs" />
-    <Compile Include="Rendering\IGraphicsInitializer.cs" />
+    <Compile Include="Rendering\Initialization\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\IRenderTarget.cs" />
-    <Compile Include="Rendering\PriorizedInitializer.cs" />
+    <Compile Include="Rendering\Initialization\PriorizedInitializer.cs" />
     <Compile Include="Rendering\Sprites\Animation.cs" />
     <Compile Include="Rendering\Sprites\AnimationInstance.cs" />
     <Compile Include="Rendering\Sprites\SpriteSheet.cs" />
