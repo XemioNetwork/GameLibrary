@@ -12,7 +12,7 @@ namespace Xemio.GameLibrary.Plugins.Contexts
     internal class FileAssemblyContext : IAssemblyContext
     {
         #region Fields
-        private List<Assembly> _assemblies;
+        private readonly HashSet<Assembly> _assemblies;
         #endregion Fields
 
         #region Constructors
@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Plugins.Contexts
         /// <param name="directory">The directory.</param>
         public FileAssemblyContext(string directory)
         {
-            this._assemblies = new List<Assembly>();
+            this._assemblies = new HashSet<Assembly>();
             this.LoadAssemblies(directory);
         }
         #endregion
@@ -51,7 +51,6 @@ namespace Xemio.GameLibrary.Plugins.Contexts
                 }
             }
 
-            this._assemblies = this._assemblies.Distinct().ToList();
             foreach (string subDirectory in Directory.GetDirectories(directory))
             {
                 this.LoadAssemblies(subDirectory);
