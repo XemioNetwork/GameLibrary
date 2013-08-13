@@ -38,17 +38,16 @@ namespace Xemio.GameLibrary.Plugins.Contexts
 
             foreach (string fileName in Directory.GetFiles(directory))
             {
-                if (Path.GetExtension(fileName) == ".dll" ||
-                    Path.GetExtension(fileName) == ".exe")
+                if (Path.GetExtension(fileName) != ".dll" && Path.GetExtension(fileName) != ".exe")
+                    continue;
+
+                try
                 {
-                    try
-                    {
-                        this._assemblies.Add(Assembly.LoadFrom(fileName));
-                    }
-                    catch (Exception exception)
-                    {
-                        eventManager.Publish(new ExceptionEvent(exception));
-                    }
+                    this._assemblies.Add(Assembly.LoadFrom(fileName));
+                }
+                catch (Exception exception)
+                {
+                    eventManager.Publish(new ExceptionEvent(exception));
                 }
             }
 
