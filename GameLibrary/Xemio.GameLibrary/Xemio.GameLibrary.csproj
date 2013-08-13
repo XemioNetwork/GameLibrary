@@ -262,7 +262,6 @@
     <Compile Include="Script\ScriptCollection.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
     <Compile Include="Script\ScriptInterpreter.cs" />
-    <Compile Include="Script\TestCommand.cs" />
     <Compile Include="Script\CommandEvaluator.cs" />
     <Compile Include="Sound\ISound.cs" />
     <Compile Include="Sound\ISoundInitializer.cs" />
