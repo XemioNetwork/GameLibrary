@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
@@ -60,7 +61,7 @@ namespace Xemio.GameLibrary
         /// <param name="initializer">The initializer.</param>
         public FluentConfigurator Graphics(IGraphicsInitializer initializer)
         {
-            this._configuration.SetInitializer(initializer);
+            this._configuration.Set(initializer);
             return this;
         }
         /// <summary>
@@ -77,7 +78,24 @@ namespace Xemio.GameLibrary
         /// <param name="initializer">The initializer.</param>
         public FluentConfigurator Sound(ISoundInitializer initializer)
         {
-            this._configuration.SetInitializer(initializer);
+            this._configuration.Set(initializer);
+            return this;
+        }
+        /// <summary>
+        /// Sets the file system.
+        /// </summary>
+        /// <typeparam name="T">The file system type.</typeparam>
+        public FluentConfigurator FileSystem<T>() where T : IFileSystem, new ()
+        {
+            return this.FileSystem(new T());
+        }
+        /// <summary>
+        /// Sets the file system.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        public FluentConfigurator FileSystem(IFileSystem fileSystem)
+        {
+            this._configuration.Set(fileSystem);
             return this;
         }
         /// <summary>

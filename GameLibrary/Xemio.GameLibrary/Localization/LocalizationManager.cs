@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Events.Logging;
 
@@ -12,6 +13,16 @@ namespace Xemio.GameLibrary.Localization
 {
     public class LocalizationManager : IConstructable
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalizationManager"/> class.
+        /// </summary>
+        public LocalizationManager()
+        {
+            this.Languages = new List<Language>();
+        }
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the current language.
@@ -21,7 +32,7 @@ namespace Xemio.GameLibrary.Localization
         /// Gets the languages.
         /// </summary>
         public List<Language> Languages { get; private set; }
-        #endregion Properties
+        #endregion
 
         #region IConstructable Member
         /// <summary>
@@ -31,7 +42,7 @@ namespace Xemio.GameLibrary.Localization
         {
             this.LoadLanguagesFrom("/Languages/");
         }
-        #endregion IConstructable Member
+        #endregion
         
         #region Methods
         /// <summary>
@@ -73,7 +84,7 @@ namespace Xemio.GameLibrary.Localization
 
             this.LoadLocalizations(directory);
         }
-        #endregion Methods
+        #endregion
         
         #region Private Methods
         /// <summary>
@@ -82,23 +93,24 @@ namespace Xemio.GameLibrary.Localization
         /// <param name="localizationDirectory">The localization directory.</param>
         private void LoadLocalizations(string localizationDirectory)
         {
-            var contentManager = XGL.Components.Get<ContentManager>();
+            var content = XGL.Components.Get<ContentManager>();
+            var fileSystem = XGL.Components.Get<IFileSystem>();
 
-            if (!contentManager.FileSystem.DirectoryExists(localizationDirectory))
+            if (!fileSystem.DirectoryExists(localizationDirectory))
                 return;
 
-            string[] localizationFiles = contentManager.FileSystem.GetFiles(localizationDirectory);
+            string[] localizationFiles = fileSystem.GetFiles(localizationDirectory);
             foreach (string file in localizationFiles)
             {
-                Language language = contentManager.Load<Language>(file);
-                if (!this.Languages.Contains(language))
-                {
-                    this.Languages.Add(language);
-                }
-                else
+                Language language = content.Load<Language>(file);
+
+                if (this.Languages.Contains(language))
                 {
                     this.MergeLanguage(language);
+                    continue;
                 }
+
+                this.Languages.Add(language);
             }
         }
         /// <summary>
@@ -130,6 +142,6 @@ namespace Xemio.GameLibrary.Localization
             var eventManager = XGL.Components.Get<EventManager>();
             eventManager.Publish(new LanguageNotFoundLoggingEvent(language));
         }
-        #endregion Private Methods
+        #endregion
     }
 }

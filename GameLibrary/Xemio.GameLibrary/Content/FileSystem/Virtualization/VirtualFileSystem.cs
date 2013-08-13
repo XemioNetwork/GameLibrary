@@ -196,7 +196,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
                 return virtualDirectory.Files.Select(f => f.FullPath).ToArray();
             }
 
-            return null;
+            return new string[0];
         }
         /// <summary>
         /// Gets all directories inside the specified directory.
@@ -212,7 +212,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Virtualization
                 return virtualDirectory.Directories.Select(f => f.FullPath).ToArray();
             }
 
-            return null;
+            return new string[0];
         }
         #endregion
 

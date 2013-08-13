@@ -5,6 +5,7 @@ using System.Text;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
@@ -53,6 +54,10 @@ namespace Xemio.GameLibrary
         /// </summary>
         public abstract ISoundInitializer SoundInitializer { get; }
         /// <summary>
+        /// Gets the file system.
+        /// </summary>
+        public abstract IFileSystem FileSystem { get; }
+        /// <summary>
         /// Gets a value indicating whether to create a default player input.
         /// </summary>
         public bool DefaultPlayerInput { get; set; }
@@ -86,6 +91,8 @@ namespace Xemio.GameLibrary
         /// </summary>
         public virtual void RegisterComponents()
         {
+            this.Components.Add(this.FileSystem);
+
             this.Components.Add(new GameLoop());
             this.Components.Add(new EventManager());
             this.Components.Add(new SceneManager());

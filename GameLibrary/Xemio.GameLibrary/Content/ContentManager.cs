@@ -21,7 +21,6 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         public ContentManager()
         {
-            this.FileSystem = new DiskFileSystem();
             this._contentMappings = new Dictionary<string, object>();
         }
         #endregion
@@ -29,14 +28,7 @@ namespace Xemio.GameLibrary.Content
         #region Fields
         private readonly Dictionary<string, object> _contentMappings;
         #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets the file system.
-        /// </summary>
-        public IFileSystem FileSystem { get; set; }
-        #endregion
-
+        
         #region Methods
         /// <summary>
         /// Gets the reader for the specified type.
@@ -49,21 +41,11 @@ namespace Xemio.GameLibrary.Content
         /// Gets the content reader for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns></returns>
         public IContentReader GetReader(Type type)
         {
-            var implementations = XGL.Components.Get<ImplementationManager>();
-            var reader = implementations.Get<Type, IContentReader>(type);
-
-            if (reader == null)
-            {
-                const string format = "No reader found for '{0}'.";
-                string message = string.Format(format, type.FullName);
-
-                throw new InvalidOperationException(message);
-            }
-
-            return reader;
+            return XGL.Components
+                .Get<ImplementationManager>()
+                .Get<Type, IContentReader>(type);
         }
         /// <summary>
         /// Gets the writer for the specified type.
@@ -76,11 +58,11 @@ namespace Xemio.GameLibrary.Content
         /// Gets the content writer for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns></returns>
         public IContentWriter GetWriter(Type type)
         {
-            var implementations = XGL.Components.Get<ImplementationManager>();
-            return implementations.Get<Type, IContentWriter>(type);
+            return XGL.Components
+                .Get<ImplementationManager>()
+                .Get<Type, IContentWriter>(type);
         }
         /// <summary>
         /// Loads the specified file.
@@ -89,9 +71,10 @@ namespace Xemio.GameLibrary.Content
         /// <param name="contentReader">The content reader.</param>
         private object Load(string fileName, IContentReader contentReader)
         {
+            IFileSystem fileSystem = XGL.Components.Get<IFileSystem>();
             if (!this._contentMappings.ContainsKey(fileName))
             {
-                using (FileStream stream = new FileStream(fileName, FileMode.Open))
+                using (Stream stream = fileSystem.Open(fileName))
                 {
                     BinaryReader reader = new BinaryReader(stream);
                     this._contentMappings[fileName] = contentReader.Read(reader);
@@ -113,7 +96,7 @@ namespace Xemio.GameLibrary.Content
         /// <summary>
         /// Loads the specified file.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The content type.</typeparam>
         /// <param name="fileName">Name of the file.</param>
         public virtual T Load<T>(string fileName)
         {
@@ -126,7 +109,8 @@ namespace Xemio.GameLibrary.Content
         /// <param name="fileName">Name of the file.</param>
         public virtual void Save(object value, string fileName)
         {
-            using (FileStream stream = new FileStream(fileName, FileMode.Create))
+            IFileSystem fileSystem = XGL.Components.Get<IFileSystem>();
+            using (Stream stream = fileSystem.Create(fileName))
             {
                 IContentWriter contentWriter = this.GetWriter(value.GetType());
                 BinaryWriter writer = new BinaryWriter(stream);
