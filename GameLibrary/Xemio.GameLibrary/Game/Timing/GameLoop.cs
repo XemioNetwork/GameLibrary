@@ -103,9 +103,9 @@ namespace Xemio.GameLibrary.Game.Timing
             {
                 this.Tick(elapsed);
             }
-            for (int i = 0; i < this._handlers.Count; i++)
+            foreach (IGameHandler gameHandler in this._handlers)
             {
-                this._handlers[i].Tick(elapsed);
+                gameHandler.Tick(elapsed);
             }
 
             tickWatch.Stop();
@@ -123,9 +123,9 @@ namespace Xemio.GameLibrary.Game.Timing
             {
                 this.Render(elapsed);
             }
-            for (int i = 0; i < this._handlers.Count; i++)
+            foreach (IGameHandler gameHandler in this._handlers)
             {
-                this._handlers[i].Render();
+                gameHandler.Render();
             }
 
             renderWatch.Stop();
@@ -255,22 +255,27 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void ManagePrecisionLevel()
         {
+            int timeTillNextFrame = (int)(this.TargetFrameTime - this.FrameTime);
+
+            if (timeTillNextFrame < 0)
+                return;
+
             switch (this.Precision)
             {
                 case GameLoopPrecision.Highest:
                     //Use busy waiting for the game loop
                     break;
                 case GameLoopPrecision.High:
-                    Thread.SpinWait(10000);
+                    Thread.Sleep(timeTillNextFrame / 8);
                     break;
                 case GameLoopPrecision.Normal:
-                    Thread.Sleep(1);
+                    Thread.Sleep(timeTillNextFrame / 4);
                     break;
                 case GameLoopPrecision.Low:
-                    Thread.Sleep(5);
+                    Thread.Sleep(timeTillNextFrame / 2);
                     break;
                 case GameLoopPrecision.Lowest:
-                    Thread.Sleep(10);
+                    Thread.Sleep(timeTillNextFrame);
                     break;
             }
         }
