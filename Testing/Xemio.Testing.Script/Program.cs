@@ -12,7 +12,7 @@ namespace Xemio.Testing.Script
     {
         static void Main(string[] args)
         {
-            ScriptCompiler compiler = new ScriptCompiler(new List<ICommand>() {new TestCommand()});
+            ScriptCompiler compiler = new ScriptCompiler();
 
             compiler.Assemblies.Add("XGL.dll");
             compiler.OutputAssembly = "test.dll";
