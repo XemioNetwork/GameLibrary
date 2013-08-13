@@ -25,5 +25,5 @@
     </metadata>
 	<files>
 		<file src="..\GameLibrary\Xemio.GameLibrary\bin\Release\XGL.dll" target="lib\net40\XGL.dll" />
-	<files>
+	</files>
 </package>
