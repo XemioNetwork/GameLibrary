@@ -23,4 +23,7 @@
             <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="" />
         </frameworkAssemblies>
     </metadata>
+	<files>
+		<file src="..\GameLibrary\Xemio.GameLibrary\bin\Release\XGL.dll" target="lib\net40\XGL.dll" />
+	<files>
 </package>
