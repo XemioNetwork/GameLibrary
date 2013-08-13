@@ -12,7 +12,7 @@
         <summary />
         <copyright>XemioNetwork</copyright>
         <language>en-US</language>
-        <tags>xemio game library indie 2d xna gdi render rendering sound input</tags>
+        <tags>xemio game library indie 2d xna gdi render rendering sound input xgl</tags>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
             <frameworkAssembly assemblyName="System" targetFramework="" />
