@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
-    public class GameLoop : IConstructable
+    public class GameLoop : IComponent
     {
         #region Constructors
         /// <summary>
@@ -16,6 +16,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public GameLoop()
         {
+            this._invoker = new ThreadInvoker();
             this._handlers = new List<IGameHandler>();
 
             this.Precision = PrecisionLevel.High;
@@ -25,9 +26,9 @@ namespace Xemio.GameLibrary.Game.Timing
 
         #region Fields
         private Task _loopTask;
-        private ThreadInvoker _invoker;
         private Stopwatch _gameTime;
 
+        private readonly ThreadInvoker _invoker;
         private readonly List<IGameHandler> _handlers;
 
         private double _renderTime;
@@ -200,12 +201,26 @@ namespace Xemio.GameLibrary.Game.Timing
             this._handlers.Remove(handler);
         }
         /// <summary>
+        /// Resets all important fields.
+        /// </summary>
+        private void ResetFields()
+        {
+            this._unprocessedTicks = 0;
+            this._elapsedRenderTime = 0;
+            this._elapsedTickTime = 0;
+            this._fpsCount = 0;
+            this._tickTime = 0;
+            this._renderTime = 0;
+        }
+        /// <summary>
         /// A function representing the internal game loop logic.
         /// </summary>
         private void InternalLoop()
         {
             this._gameTime = Stopwatch.StartNew();
             this._requestRender = true;
+
+            this.ResetFields();
 
             this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
             this._lastTick = this._gameTime.Elapsed.TotalMilliseconds;
@@ -218,6 +233,31 @@ namespace Xemio.GameLibrary.Game.Timing
 
                 this.CheckRenderRequest();
                 this.UpdateFramesPerSecond();
+            }
+        }
+        /// <summary>
+        /// Determines whether the specified time has elapsed.
+        /// </summary>
+        /// <param name="pointInTime">The point in time.</param>
+        /// <param name="elapsed">The elapsed.</param>
+        private bool IsElapsed(double pointInTime, double elapsed)
+        {
+            return this._gameTime.Elapsed.TotalMilliseconds - pointInTime >= elapsed;
+        }
+        /// <summary>
+        /// Handles render requests.
+        /// </summary>
+        private void HandleRenderRequest()
+        {
+            if (this._requestRender)
+            {
+                this._fpsCount++;
+
+                this._elapsedRenderTime = this._gameTime.Elapsed.TotalMilliseconds - this._lastRender;
+                this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
+
+                this._invoker.Invoke(() => this.OnRender((float)this._elapsedRenderTime));
+                this._requestRender = false;
             }
         }
         /// <summary>
@@ -268,7 +308,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void CheckRenderRequest()
         {
-            if (this._gameTime.Elapsed.TotalMilliseconds - this._lastRender >= this.TargetFrameTime)
+            if (this.IsElapsed(this._lastRender, this.TargetFrameTime))
             {
                 this._requestRender = true;
             }
@@ -278,29 +318,12 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void UpdateFramesPerSecond()
         {
-            if (this._gameTime.Elapsed.TotalMilliseconds - this._lastFpsMeasure >= 1000.0)
+            if (this.IsElapsed(this._lastFpsMeasure, 1000.0))
             {
                 this.FramesPerSecond = this._fpsCount;
 
                 this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
                 this._fpsCount = 0;
-            }
-        }
-        /// <summary>
-        /// Handles render requests.
-        /// </summary>
-        private void HandleRenderRequest()
-        {
-            if (this._requestRender)
-            {
-                this._fpsCount++;
-
-                this._elapsedRenderTime = this._gameTime.Elapsed.TotalMilliseconds - this._lastRender;
-                this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
-
-                this._invoker.Invoke(() => this.OnRender((float)this._elapsedRenderTime));
-
-                this._requestRender = false;
             }
         }
         /// <summary>
@@ -332,16 +355,6 @@ namespace Xemio.GameLibrary.Game.Timing
                     Thread.Sleep(timeTillNextFrame);
                     break;
             }
-        }
-        #endregion
-
-        #region Implementation of IConstructable
-        /// <summary>
-        /// Constructs this instance.
-        /// </summary>
-        public void Construct()
-        {
-            this._invoker = XGL.Components.Get<ThreadInvoker>();
         }
         #endregion
     }
