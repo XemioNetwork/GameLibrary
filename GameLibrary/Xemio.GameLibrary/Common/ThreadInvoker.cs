@@ -5,7 +5,6 @@ using System.Text;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Common
@@ -18,12 +17,16 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public ThreadInvoker()
         {
-            this._dispatcher = Dispatcher.CurrentDispatcher;
+            if (_invokerControl == null)
+            {
+                _invokerControl = new Control();
+                _invokerControl.CreateControl();
+            }
         }
         #endregion
 
         #region Fields
-        private readonly Dispatcher _dispatcher;
+        private readonly Control _invokerControl;
         #endregion
 
         #region Methods
@@ -33,7 +36,15 @@ namespace Xemio.GameLibrary.Common
         /// <param name="action">The action.</param>
         public void Invoke(Action action)
         {
-            this._dispatcher.Invoke(action, null);
+            // Searching for a better method to invoke an action
+            // inside the main application thread. There is no
+            // other solution doing that, even though the implementation
+            // is not really good it has to stay like that.
+
+            if (_invokerControl.IsHandleCreated && !_invokerControl.IsDisposed)
+            {
+                _invokerControl.Invoke(action);
+            }
         }
         #endregion
     }
