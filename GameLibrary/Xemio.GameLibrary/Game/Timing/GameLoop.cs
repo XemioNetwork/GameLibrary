@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             this._handlers = new List<IGameHandler>();
 
-            this.Precision = GameLoopPrecision.High;
+            this.Precision = PrecisionLevel.High;
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
         }
         #endregion
@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// <summary>
         /// Gets or sets the precision.
         /// </summary>
-        public GameLoopPrecision Precision { get; set; }
+        public PrecisionLevel Precision { get; set; }
         /// <summary>
         /// Gets or sets the lag compensation.
         /// </summary>
@@ -228,6 +228,7 @@ namespace Xemio.GameLibrary.Game.Timing
                     }
 
                     elapsedTickTime = 0;
+                    this.ManagePrecisionLevel();
                 }
 
                 if (gameTime.Elapsed.TotalMilliseconds - lastRender >= this.TargetFrameTime)
@@ -246,8 +247,6 @@ namespace Xemio.GameLibrary.Game.Timing
                     lastFrameCount = gameTime.Elapsed.TotalMilliseconds;
                     frames = 0;
                 }
-
-                this.ManagePrecisionLevel();
             }
         }
         /// <summary>
@@ -255,26 +254,27 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void ManagePrecisionLevel()
         {
-            int timeTillNextFrame = (int)(this.TargetFrameTime - this.FrameTime);
+            double frameTime = this._renderTime + this._tickTime;
+            int timeTillNextFrame = (int)(this.TargetFrameTime - frameTime);
 
             if (timeTillNextFrame < 0)
                 return;
 
             switch (this.Precision)
             {
-                case GameLoopPrecision.Highest:
+                case PrecisionLevel.Highest:
                     //Use busy waiting for the game loop
                     break;
-                case GameLoopPrecision.High:
+                case PrecisionLevel.High:
                     Thread.Sleep(timeTillNextFrame / 8);
                     break;
-                case GameLoopPrecision.Normal:
+                case PrecisionLevel.Normal:
                     Thread.Sleep(timeTillNextFrame / 4);
                     break;
-                case GameLoopPrecision.Low:
+                case PrecisionLevel.Low:
                     Thread.Sleep(timeTillNextFrame / 2);
                     break;
-                case GameLoopPrecision.Lowest:
+                case PrecisionLevel.Lowest:
                     Thread.Sleep(timeTillNextFrame);
                     break;
             }

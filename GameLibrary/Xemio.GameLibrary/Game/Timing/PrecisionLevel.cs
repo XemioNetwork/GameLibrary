@@ -1,6 +1,6 @@
 ﻿namespace Xemio.GameLibrary.Game.Timing
 {
-    public enum GameLoopPrecision
+    public enum PrecisionLevel
     {
         Highest,
         High,

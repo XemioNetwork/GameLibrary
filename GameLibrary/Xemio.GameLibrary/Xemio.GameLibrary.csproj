@@ -167,7 +167,7 @@
     <Compile Include="Game\Timing\GameTime.cs" />
     <Compile Include="Game\Timing\GameTimeMode.cs" />
     <Compile Include="Game\IGameHandler.cs" />
-    <Compile Include="Game\Timing\GameLoopPrecision.cs" />
+    <Compile Include="Game\Timing\PrecisionLevel.cs" />
     <Compile Include="Game\Scenes\SceneWrapper.cs" />
     <Compile Include="Input\Events\InputStateEvent.cs" />
     <Compile Include="Input\Events\MousePositionEvent.cs" />
