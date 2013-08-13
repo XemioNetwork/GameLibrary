@@ -38,8 +38,8 @@ namespace Xemio.Testing.Network
         {
             var control = new Control();
             var config = XGL.Configure()
-                .WithDefaultComponents()
-                .WithDefaultInput()
+                .DefaultComponents()
+                .DefaultInput()
                 .BuildConfiguration();
 
             XGL.Run(control.Handle, config);
