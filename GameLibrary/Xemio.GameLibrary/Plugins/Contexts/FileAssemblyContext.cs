@@ -34,34 +34,27 @@ namespace Xemio.GameLibrary.Plugins.Contexts
         /// <param name="directory">The directory.</param>
         private void LoadAssemblies(string directory)
         {
-            try
+            foreach (string fileName in Directory.GetFiles(directory))
             {
-                foreach (string fileName in Directory.GetFiles(directory))
+                if (Path.GetExtension(fileName) == ".dll" ||
+                    Path.GetExtension(fileName) == ".exe")
                 {
-                    if (Path.GetExtension(fileName) == ".dll" ||
-                        Path.GetExtension(fileName) == ".exe")
+                    try
                     {
-                        try
-                        {
-                            this._assemblies.Add(Assembly.LoadFrom(fileName));
-                        }
-                        catch (Exception exception)
-                        {
-                            var eventManager = XGL.Components.Get<EventManager>();
-                            eventManager.Publish(new ExceptionEvent(exception));
-                        }
+                        this._assemblies.Add(Assembly.LoadFrom(fileName));
+                    }
+                    catch (Exception exception)
+                    {
+                        var eventManager = XGL.Components.Get<EventManager>();
+                        eventManager.Publish(new ExceptionEvent(exception));
                     }
                 }
-
-                this._assemblies = this._assemblies.Distinct().ToList();
-                foreach (string subDirectory in Directory.GetDirectories(directory))
-                {
-                    this.LoadAssemblies(subDirectory);
-                }
             }
-            catch (Exception ex)
+
+            this._assemblies = this._assemblies.Distinct().ToList();
+            foreach (string subDirectory in Directory.GetDirectories(directory))
             {
-                Console.WriteLine(ex.Message);
+                this.LoadAssemblies(subDirectory);
             }
         }
         #endregion
