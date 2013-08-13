@@ -63,16 +63,9 @@ namespace Xemio.GameLibrary.Events
         /// <param name="e">The event.</param>
         public void Publish<TEvent>(TEvent e) where TEvent : IEvent
         {
-            try
+            foreach (IObserver<TEvent> observer in this.GetObservers<TEvent>())
             {
-                foreach (IObserver<TEvent> observer in this.GetObservers<TEvent>())
-                {
-                    observer.OnNext(e);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
+                observer.OnNext(e);
             }
         }
         /// <summary>
