@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
 using System.IO;
 using System.Resources;
 using Xemio.GameLibrary.Components;
 
-namespace Xemio.GameLibrary.Rendering
+namespace Xemio.GameLibrary.Rendering.Textures
 {
     [AbstractComponent]
     public interface ITextureFactory : IComponent

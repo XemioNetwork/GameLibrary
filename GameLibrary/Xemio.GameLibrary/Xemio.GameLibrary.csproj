@@ -149,7 +149,7 @@
     <Compile Include="Math\Collision\Events\CollisionEvent.cs" />
     <Compile Include="Math\Collision\Sources\ICollisionSource.cs" />
     <Compile Include="Math\Collision\Sources\StaticCollisionSource.cs" />
-    <Compile Include="Rendering\TextureReader.cs" />
+    <Compile Include="Rendering\Textures\TextureReader.cs" />
     <Compile Include="Entities\Data\EmptyDataContainer.cs" />
     <Compile Include="Entities\Data\EntityDataContainer.cs" />
     <Compile Include="Entities\Entity.cs" />
@@ -245,8 +245,8 @@
     <Compile Include="Rendering\GraphicsDevice.cs" />
     <Compile Include="Rendering\IGraphicsProvider.cs" />
     <Compile Include="Rendering\IRenderManager.cs" />
-    <Compile Include="Rendering\ITexture.cs" />
-    <Compile Include="Rendering\ITextureFactory.cs" />
+    <Compile Include="Rendering\Textures\ITexture.cs" />
+    <Compile Include="Rendering\Textures\ITextureFactory.cs" />
     <Compile Include="Game\Scenes\Scene.cs" />
     <Compile Include="Game\Scenes\SceneManager.cs" />
     <Compile Include="Script\CompilerError.cs" />

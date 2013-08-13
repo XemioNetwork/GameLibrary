@@ -1,5 +1,6 @@
 ﻿using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Rendering.Geometry
 {

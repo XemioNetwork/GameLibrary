@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Textures;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Content;

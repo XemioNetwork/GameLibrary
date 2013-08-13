@@ -8,6 +8,7 @@ using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Math;
 using System.Windows.Forms;
+using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Rendering
 {

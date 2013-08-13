@@ -9,6 +9,7 @@ using System.Drawing;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using System.Drawing.Imaging;
+using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Rendering.Sprites
 {
