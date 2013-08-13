@@ -8,6 +8,7 @@ using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary

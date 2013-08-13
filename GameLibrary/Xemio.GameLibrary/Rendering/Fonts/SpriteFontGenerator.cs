@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Text;
 using System.Drawing.Imaging;
+using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Rendering.Fonts
 {

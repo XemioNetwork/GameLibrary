@@ -1,5 +1,6 @@
 using System;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary
