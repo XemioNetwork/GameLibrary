@@ -33,7 +33,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Registers the default components to the component registry.
         /// </summary>
-        public FluentConfigurator WithDefaultComponents()
+        public FluentConfigurator DefaultComponents()
         {
             this._configuration.RegisterDefaultComponents = true;
             return this;
@@ -41,7 +41,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Creates a default player input.
         /// </summary>
-        public FluentConfigurator WithDefaultInput()
+        public FluentConfigurator DefaultInput()
         {
             this._configuration.DefaultPlayerInput = true;
             return this;
