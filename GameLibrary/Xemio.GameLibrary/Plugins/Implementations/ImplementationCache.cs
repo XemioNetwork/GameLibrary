@@ -21,7 +21,13 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         #endregion
 
         #region Fields
+        /// <summary>
+        /// Holding a reference from a IAssemblyContext to all Types that we're already loaded from that context.
+        /// </summary>
         private readonly Dictionary<IAssemblyContext, HashSet<Type>> _cachedContexts;
+        /// <summary>
+        /// Holding a reference from a already loaded Type to it's linker.
+        /// </summary>
         private readonly Dictionary<Type, dynamic> _linkers;
         #endregion
 
