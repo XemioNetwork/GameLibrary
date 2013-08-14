@@ -40,6 +40,14 @@ namespace Xemio.GameLibrary.Rendering.Initialization
             return true;
         }
         /// <summary>
+        /// Gets or sets the smoothing mode.
+        /// </summary>
+        public SmoothingMode SmoothingMode { get; set; }
+        /// <summary>
+        /// Gets or sets the interpolation mode.
+        /// </summary>
+        public InterpolationMode InterpolationMode { get; set; }
+        /// <summary>
         /// Creates the graphics provider.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
@@ -49,6 +57,9 @@ namespace Xemio.GameLibrary.Rendering.Initialization
             {
                 if (initializer.IsAvailable())
                 {
+                    initializer.SmoothingMode = this.SmoothingMode;
+                    initializer.InterpolationMode = this.InterpolationMode;
+
                     return initializer.CreateProvider(graphicsDevice);
                 }
             }

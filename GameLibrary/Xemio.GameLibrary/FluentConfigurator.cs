@@ -66,10 +66,34 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Sets the graphics system.
         /// </summary>
+        /// <typeparam name="T">The graphics initializer type.</typeparam>
+        /// <param name="smoothing">The smoothing mode.</param>
+        /// <param name="interpolation">The interpolation mode.</param>
+        public FluentConfigurator Graphics<T>(SmoothingMode smoothing, InterpolationMode interpolation) where T : IGraphicsInitializer, new()
+        {
+            return this.Graphics(new T(), smoothing, interpolation);
+        }
+        /// <summary>
+        /// Sets the graphics system.
+        /// </summary>
         /// <param name="initializer">The initializer.</param>
         public FluentConfigurator Graphics(IGraphicsInitializer initializer)
         {
+            return this.Graphics(initializer, SmoothingMode.AntiAliased, InterpolationMode.Bicubic);
+        }
+        /// <summary>
+        /// Sets the graphics system.
+        /// </summary>
+        /// <param name="initializer">The initializer.</param>
+        /// <param name="smoothing">The smoothing mode.</param>
+        /// <param name="interpolation">The interpolation mode.</param>
+        public FluentConfigurator Graphics(IGraphicsInitializer initializer, SmoothingMode smoothing, InterpolationMode interpolation)
+        {
+            initializer.SmoothingMode = smoothing;
+            initializer.InterpolationMode = interpolation;
+            
             this._configuration.Set(initializer);
+
             return this;
         }
         /// <summary>
