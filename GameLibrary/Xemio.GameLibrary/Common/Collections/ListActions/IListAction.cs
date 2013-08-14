@@ -2,7 +2,7 @@
 
 namespace Xemio.GameLibrary.Common.Collections.ListActions
 {
-    public interface IListAction<T>
+    internal interface IListAction<T>
     {
         /// <summary>
         /// Applies action to the specified list.

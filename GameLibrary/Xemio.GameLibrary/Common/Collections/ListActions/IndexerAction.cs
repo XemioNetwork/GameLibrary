@@ -2,7 +2,7 @@
 
 namespace Xemio.GameLibrary.Common.Collections.ListActions
 {
-    public class IndexerAction<T> : IListAction<T>
+    internal class IndexerAction<T> : IListAction<T>
     {
         #region Constructors
         /// <summary>

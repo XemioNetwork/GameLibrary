@@ -61,6 +61,17 @@ namespace Xemio.GameLibrary
         }
         /// <summary>
         /// Starts the XGL with the specified configuration.
+        /// The XGL will render to the given form.
+        /// Also calls "Application.Run".
+        /// </summary>
+        /// <typeparam name="T">The type of the configuration.</typeparam>
+        /// <param name="form">The form.</param>
+        public static void Run<T>(Form form) where T : Configuration, new()
+        {
+            XGL.Run(form, new T());
+        }
+        /// <summary>
+        /// Starts the XGL with the specified configuration.
         /// </summary>
         /// <typeparam name="T">The type of the configuration.</typeparam>
         public static void Run<T>(IntPtr handle) where T : Configuration, new()
@@ -75,6 +86,18 @@ namespace Xemio.GameLibrary
         {
             var control = new Control();
             XGL.Run(control.Handle, config);
+        }
+        /// <summary>
+        /// Starts the XGL with the specified configuration.
+        /// The XGL will render to the given form.
+        /// Also calls "Application.Run".
+        /// </summary>
+        /// <param name="form">The form.</param>
+        /// <param name="config">The config.</param>
+        public static void Run(Form form, Configuration config)
+        {
+            XGL.Run(form.Handle, config);
+            Application.Run(form);
         }
         /// <summary>
         /// Starts the XGL with the specified configuration.
@@ -103,29 +126,6 @@ namespace Xemio.GameLibrary
 
             XGL.InitializeScenes(config);
             XGL.Initialized = true;
-        }
-        /// <summary>
-        /// Starts the XGL with the specified configuration.
-        /// The XGL will render to the given form.
-        /// Also calls "Application.Run".
-        /// </summary>
-        /// <param name="form">The form.</param>
-        /// <param name="config">The config.</param>
-        public static void Run(Form form, Configuration config)
-        {
-            XGL.Run(form.Handle, config);
-            Application.Run(form);
-        }
-        /// <summary>
-        /// Starts the XGL with the specified configuration.
-        /// The XGL will render to the given form.
-        /// Also calls "Application.Run".
-        /// </summary>
-        /// <typeparam name="T">The type of the configuration.</typeparam>
-        /// <param name="form">The form.</param>
-        public static void Run<T>(Form form) where T : Configuration, new()
-        {
-            XGL.Run(form, new T());
         }
         #endregion
 

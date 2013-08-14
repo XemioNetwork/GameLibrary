@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Common.Collections.DictionaryActions
 {
-    public class ClearAction<TKey, TValue> : IDictionaryAction<TKey, TValue>
+    internal class ClearAction<TKey, TValue> : IDictionaryAction<TKey, TValue>
     {
         #region Implementation of IDictionaryAction<TKey,TValue>
         /// <summary>

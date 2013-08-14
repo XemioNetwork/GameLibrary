@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Common.Collections.DictionaryActions
 {
-    public interface IDictionaryAction<TKey, TValue>
+    internal interface IDictionaryAction<TKey, TValue>
     {
         /// <summary>
         /// Applies the action to the specified dictionary.
