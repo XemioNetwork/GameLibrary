@@ -155,6 +155,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Rendering\ResolutionChangedEvent.cs" />
     <Compile Include="Rendering\Textures\TextureReader.cs" />
     <Compile Include="Entities\Data\EmptyDataContainer.cs" />
     <Compile Include="Entities\Data\EntityDataContainer.cs" />

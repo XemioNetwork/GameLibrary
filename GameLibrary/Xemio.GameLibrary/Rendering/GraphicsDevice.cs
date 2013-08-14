@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Math;
 using System.Windows.Forms;
@@ -95,10 +96,9 @@ namespace Xemio.GameLibrary.Rendering
                 }
 
                 this._displayMode = value;
-                if (this.ResolutionChanged != null)
-                {
-                    this.ResolutionChanged(this, EventArgs.Empty);
-                }
+
+                var eventManager = XGL.Components.Get<EventManager>();
+                eventManager.Publish(new ResolutionChangedEvent(this._displayMode));
             }
         }
         /// <summary>
@@ -122,13 +122,6 @@ namespace Xemio.GameLibrary.Rendering
         /// Gets the render target stack.
         /// </summary>
         internal Stack<IRenderTarget> Targets { get; private set; }
-        #endregion
-
-        #region Events
-        /// <summary>
-        /// Occurs when the screen resolution changed.
-        /// </summary>
-        public event EventHandler ResolutionChanged;
         #endregion
 
         #region Methods
