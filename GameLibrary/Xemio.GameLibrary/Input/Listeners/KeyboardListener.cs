@@ -9,13 +9,14 @@ namespace Xemio.GameLibrary.Input.Listeners
     {
         #region Methods
         /// <summary>
-        /// Publishes the specified event.
+        /// Publishes the event.
         /// </summary>
-        /// <param name="keyEvent">The key event.</param>
-        protected virtual void PublishEvent(InputStateEvent keyEvent)
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
+        /// <param name="e">The event.</param>
+        protected virtual void PublishEvent<TEvent>(TEvent e) where TEvent : IEvent
         {
             var eventManager = XGL.Components.Get<EventManager>();
-            eventManager.Publish(keyEvent);
+            eventManager.Publish(e);
         }
         #endregion
 

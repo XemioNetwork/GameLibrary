@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Localization"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.ReactiveExtensions", "Testing\Xemio.Testing.ReactiveExtensions\Xemio.Testing.ReactiveExtensions.csproj", "{7718E8C1-87DA-4883-9D23-DC5951312CF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xemio.Testing.Input", "Testing\Xemio.Testing.Input\Xemio.Testing.Input.csproj", "{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,16 @@ Global
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Debug|x86.ActiveCfg = Debug|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Debug|x86.Build.0 = Debug|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Release|Any CPU.ActiveCfg = Release|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Release|x86.ActiveCfg = Release|x86
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,5 +123,6 @@ Global
 		{654D61AC-4895-480A-81E4-774FA33C95C9} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{CA1E82AD-5BF7-4E1A-B4FE-4385AFCC6A96} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 		{7718E8C1-87DA-4883-9D23-DC5951312CF4} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
+		{E7F994DD-CB56-44AD-9C70-E3E76DD702BF} = {14F9A976-6AE6-45BE-9C5E-C94087FA06D1}
 	EndGlobalSection
 EndGlobal

@@ -26,8 +26,9 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// <summary>
         /// Publishes the event.
         /// </summary>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="e">The event.</param>
-        protected virtual void PublishEvent(IEvent e)
+        protected virtual void PublishEvent<TEvent>(TEvent e) where TEvent : IEvent
         {
             var eventManager = XGL.Components.Get<EventManager>();
             eventManager.Publish(e);
