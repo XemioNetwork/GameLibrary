@@ -66,6 +66,7 @@
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
     <Compile Include="Game\Scenes\SceneProvider.cs" />
+    <Compile Include="Game\Scenes\SplashScreen.cs" />
     <Compile Include="Game\Timing\LagCompensation.cs" />
     <Compile Include="Input\IInputListener.cs" />
     <Compile Include="Input\InputManager.cs" />
@@ -149,6 +150,11 @@
     <Compile Include="Math\Collision\Events\CollisionEvent.cs" />
     <Compile Include="Math\Collision\Sources\ICollisionSource.cs" />
     <Compile Include="Math\Collision\Sources\StaticCollisionSource.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Rendering\Textures\TextureReader.cs" />
     <Compile Include="Entities\Data\EmptyDataContainer.cs" />
     <Compile Include="Entities\Data\EntityDataContainer.cs" />
@@ -279,6 +285,15 @@
     <Folder Include="Content\FileSystem\Compressed\" />
     <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\intro.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

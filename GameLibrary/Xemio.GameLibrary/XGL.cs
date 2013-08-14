@@ -104,7 +104,9 @@ namespace Xemio.GameLibrary
             config.RegisterScenes();
 
             var sceneManager = XGL.Components.Get<SceneManager>();
-            sceneManager.Add(config.Scenes);
+            var splashScreen = new SplashScreen(config.Scenes);
+
+            sceneManager.Add(splashScreen);
 
             XGL.Initialized = true;
         }
