@@ -122,6 +122,18 @@ namespace Xemio.GameLibrary.Input
             PlayerInput playerInput = this.PlayerInputs[stateEvent.PlayerIndex];
             playerInput.SetState(stateEvent.Key, stateEvent.State);
         }
+        /// <summary>
+        /// Handles a mouse position event.
+        /// </summary>
+        /// <param name="mouseEvent">The mouse event.</param>
+        private void HandleMousePositionEvent(MousePositionEvent mouseEvent)
+        {
+            if (!this.IsPlayerIndexValid(mouseEvent.PlayerIndex))
+                return;
+
+            PlayerInput playerInput = this.PlayerInputs[mouseEvent.PlayerIndex];
+            playerInput.MousePosition = mouseEvent.Position;
+        }
         #endregion Event Handlers
 
         #region Implementation of IConstructable
@@ -131,7 +143,9 @@ namespace Xemio.GameLibrary.Input
         public void Construct()
         {
             var eventManager = XGL.Components.Get<EventManager>();
+
             eventManager.Subscribe<InputStateEvent>(this.HandleInputEvent);
+            eventManager.Subscribe<MousePositionEvent>(this.HandleMousePositionEvent);
 
             var gameLoop = XGL.Components.Get<GameLoop>();
             gameLoop.Subscribe(this);

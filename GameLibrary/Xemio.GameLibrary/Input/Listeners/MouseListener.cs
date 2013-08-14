@@ -15,13 +15,13 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// <param name="button">The button.</param>
         private Keys GetKeys(MouseButtons button)
         {
-            Keys key = Keys.None;
+            Keys keys = Keys.None;
 
-            if (button == MouseButtons.Left) key = Keys.LeftMouse;
-            if (button == MouseButtons.Right) key = Keys.RightMouse;
-            if (button == MouseButtons.Middle) key = Keys.MouseWheel;
+            if (button.HasFlag(MouseButtons.Left)) keys |= Keys.LeftMouse;
+            if (button.HasFlag(MouseButtons.Right)) keys |= Keys.RightMouse;
+            if (button.HasFlag(MouseButtons.Middle)) keys |= Keys.MouseWheel;
 
-            return key;
+            return keys;
         }
         /// <summary>
         /// Publishes the event.
@@ -65,8 +65,7 @@ namespace Xemio.GameLibrary.Input.Listeners
             if (key == Keys.None)
                 return;
 
-            var mouseEvent = new InputStateEvent(key, new InputState(true, 1.0f), this.PlayerIndex.Value);
-            this.PublishEvent(mouseEvent);
+            this.PublishEvent(new InputStateEvent(key, new InputState(true, 1.0f), this.PlayerIndex.Value));
         }
         /// <summary>
         /// Handles the MouseUp event of the surface control.
@@ -80,8 +79,7 @@ namespace Xemio.GameLibrary.Input.Listeners
             if (key == Keys.None)
                 return;
 
-            var mouseEvent = new InputStateEvent(key, new InputState(false, 0.0f), this.PlayerIndex.Value);
-            this.PublishEvent(mouseEvent);
+            this.PublishEvent(new InputStateEvent(key, new InputState(false, 0.0f), this.PlayerIndex.Value));
         }
         #endregion
         
