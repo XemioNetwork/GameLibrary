@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public FluentConfigurator DisableSplashScreen()
         {
-            this._configuration.SplashScreen = false;
+            this._configuration.ShowSplashScreen = false;
             return this;
         }
         /// <summary>
@@ -190,7 +190,6 @@ namespace Xemio.GameLibrary
         /// </summary>
         public Configuration BuildConfiguration()
         {
-            this._configuration.ConfigurationFinished();
             return this._configuration;
         }
         #endregion

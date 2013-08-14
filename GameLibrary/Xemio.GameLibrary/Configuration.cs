@@ -61,6 +61,10 @@ namespace Xemio.GameLibrary
         /// Gets a value indicating whether to create a default player input.
         /// </summary>
         public bool DefaultPlayerInput { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether to show splash screen.
+        /// </summary>
+        public bool ShowSplashScreen { get; set; }
         #endregion Properties
 
         #region Constructors
@@ -76,6 +80,7 @@ namespace Xemio.GameLibrary
             this.FrameRate = 60;
 
             this.DefaultPlayerInput = true;
+            this.ShowSplashScreen = true;
         }
         #endregion Constructors
 

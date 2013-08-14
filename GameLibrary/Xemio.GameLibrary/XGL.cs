@@ -101,10 +101,7 @@ namespace Xemio.GameLibrary
 
             XGL.Components.Construct();
 
-            config.RegisterScenes();
-
-            var sceneManager = XGL.Components.Get<SceneManager>();
-            sceneManager.Add(config.Scenes);
+            XGL.InitializeScenes(config);
 
             XGL.Initialized = true;
         }
@@ -202,6 +199,26 @@ namespace Xemio.GameLibrary
                 PlayerInput playerInput = inputManager.CreateInput();
                 inputManager.AddListener(new MouseListener(), playerInput.PlayerIndex);
                 inputManager.AddListener(new KeyboardListener(), playerInput.PlayerIndex);
+            }
+        }
+        /// <summary>
+        /// Initializes the scenes.
+        /// </summary>
+        /// <param name="config">The config.</param>
+        private static void InitializeScenes(Configuration config)
+        {
+            config.RegisterScenes();
+
+            var sceneManager = XGL.Components.Get<SceneManager>();
+
+            if (config.ShowSplashScreen)
+            {
+                var splashScreen = new SplashScreen(config.Scenes);
+                sceneManager.Add(splashScreen);
+            }
+            else 
+            { 
+                sceneManager.Add(config.Scenes);
             }
         }
         #endregion Private Methods

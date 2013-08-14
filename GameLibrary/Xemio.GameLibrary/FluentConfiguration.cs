@@ -16,7 +16,6 @@ namespace Xemio.GameLibrary
         public FluentConfiguration()
         {
             this._fileSystem = new DiskFileSystem();
-            this.SplashScreen = true;
         }
         #endregion
 
@@ -31,25 +30,9 @@ namespace Xemio.GameLibrary
         /// Gets or sets a value indicating whether to register the default components.
         /// </summary>
         public bool RegisterDefaultComponents { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether to show the splashscreen.
-        /// </summary>
-        public bool SplashScreen { get; set; }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Called when the configuration finished.
-        /// </summary>
-        public void ConfigurationFinished()
-        {
-            if (this.SplashScreen)
-            {
-                var splashScreen = new SplashScreen(this.Scenes);
-                this.Scenes.Clear();
-                this.Scenes.Add(splashScreen);
-            }
-        }
         /// <summary>
         /// Sets the specified file system.
         /// </summary>
