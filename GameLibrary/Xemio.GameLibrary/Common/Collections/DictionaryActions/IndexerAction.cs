@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Common.Collections.DictionaryActions
 {
-    public class IndexerAction<TKey, TValue> : IDictionaryAction<TKey, TValue>
+    internal class IndexerAction<TKey, TValue> : IDictionaryAction<TKey, TValue>
     {
         #region Constructors
         /// <summary>

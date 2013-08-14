@@ -2,7 +2,7 @@
 
 namespace Xemio.GameLibrary.Common.Collections.ListActions
 {
-    public class RemoveAtAction<T> : IListAction<T>
+    internal class RemoveAtAction<T> : IListAction<T>
     {
         #region Constructors
         /// <summary>

@@ -2,7 +2,7 @@
 
 namespace Xemio.GameLibrary.Common.Collections.ListActions
 {
-    public class ClearAction<T> : IListAction<T>
+    internal class ClearAction<T> : IListAction<T>
     {
         #region Implementation of IListAction<T>
         /// <summary>
