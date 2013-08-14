@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Disables the splashscreen.
         /// </summary>
-        public FluentConfigurator WithoutSplashscreen()
+        public FluentConfigurator DisableSplashscreen()
         {
             this._configuration.SplashScreen = false;
             return this;
