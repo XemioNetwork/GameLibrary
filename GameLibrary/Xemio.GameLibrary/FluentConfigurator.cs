@@ -32,6 +32,14 @@ namespace Xemio.GameLibrary
         
         #region Methods
         /// <summary>
+        /// Disables the splashscreen.
+        /// </summary>
+        public FluentConfigurator WithoutSplashscreen()
+        {
+            this._configuration.SplashScreen = false;
+            return this;
+        }
+        /// <summary>
         /// Registers the default components to the component registry.
         /// </summary>
         public FluentConfigurator DefaultComponents()
@@ -182,6 +190,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public Configuration BuildConfiguration()
         {
+            this._configuration.ConfigurationFinished();
             return this._configuration;
         }
         #endregion
