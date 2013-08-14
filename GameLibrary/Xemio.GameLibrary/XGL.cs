@@ -102,7 +102,6 @@ namespace Xemio.GameLibrary
             XGL.Components.Construct();
 
             XGL.InitializeScenes(config);
-
             XGL.Initialized = true;
         }
         /// <summary>
@@ -162,9 +161,9 @@ namespace Xemio.GameLibrary
             if (config.SoundInitializer != null)
             {
                 var soundManager = new SoundManager
-                {
-                    Provider = config.SoundInitializer.CreateProvider()
-                };
+                                       {
+                                           Provider = config.SoundInitializer.CreateProvider()
+                                       };
 
                 XGL.Components.Add(soundManager);
                 XGL.Components.Add(new LoopManager());
@@ -207,10 +206,11 @@ namespace Xemio.GameLibrary
         /// <param name="config">The config.</param>
         private static void InitializeScenes(Configuration config)
         {
-            config.RegisterScenes();
-
             var sceneManager = XGL.Components.Get<SceneManager>();
+            if (sceneManager == null)
+                return;
 
+            config.RegisterScenes();
             if (config.ShowSplashScreen)
             {
                 var splashScreen = new SplashScreen(config.Scenes);
