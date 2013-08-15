@@ -207,18 +207,19 @@ namespace Xemio.GameLibrary
         private static void InitializeScenes(Configuration config)
         {
             var sceneManager = XGL.Components.Get<SceneManager>();
-            if (sceneManager == null)
-                return;
 
-            config.RegisterScenes();
-            if (config.ShowSplashScreen)
+            if (sceneManager != null)
             {
-                var splashScreen = new SplashScreen(config.Scenes);
-                sceneManager.Add(splashScreen);
-            }
-            else 
-            { 
-                sceneManager.Add(config.Scenes);
+                config.RegisterScenes();
+                if (config.ShowSplashScreen)
+                {
+                    SplashScreen splashScreen = new SplashScreen(config.Scenes);
+                    sceneManager.Add(splashScreen);
+                }
+                else
+                {
+                    sceneManager.Add(config.Scenes);
+                }
             }
         }
         #endregion Private Methods

@@ -155,9 +155,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="Rendering\Initialization\InterpolationMode.cs" />
-    <Compile Include="Rendering\ResolutionChangedEvent.cs" />
     <Compile Include="Rendering\Initialization\SmoothingMode.cs" />
+=======
+    <Compile Include="Rendering\ResolutionChangedEvent.cs" />
+>>>>>>> ec6ce3b6ac9e15cf864118c6a3171579e3fa4749
     <Compile Include="Rendering\Textures\TextureReader.cs" />
     <Compile Include="Entities\Data\EmptyDataContainer.cs" />
     <Compile Include="Entities\Data\EntityDataContainer.cs" />

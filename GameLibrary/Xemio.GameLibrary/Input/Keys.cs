@@ -1,5 +1,8 @@
-﻿namespace Xemio.GameLibrary.Input
+﻿using System;
+
+namespace Xemio.GameLibrary.Input
 {
+    [Flags]
     public enum Keys
     {
         KeyCode = 65535,
