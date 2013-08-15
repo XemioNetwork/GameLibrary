@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         public void Add(Scene scene)
         {
             scene.Parent = this;
-            scene.OnAttached();
+            scene.OnEnter();
 
             this._subScenes.Add(scene);
         }
@@ -43,6 +43,8 @@ namespace Xemio.GameLibrary.Game.Scenes
         public void Remove(Scene scene)
         {
             scene.Parent = null;
+            scene.OnLeave();
+
             this._subScenes.Remove(scene);
         }
         #endregion
