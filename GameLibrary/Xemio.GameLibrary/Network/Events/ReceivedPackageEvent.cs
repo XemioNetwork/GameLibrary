@@ -49,15 +49,5 @@ namespace Xemio.GameLibrary.Network.Events
             return this.Package as T;
         }
         #endregion
-
-        #region IEvent Member
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IEvent"/> is synced.
-        /// </summary>
-        public bool Synced
-        {
-            get { return false; }
-        }
-        #endregion
     }
 }
