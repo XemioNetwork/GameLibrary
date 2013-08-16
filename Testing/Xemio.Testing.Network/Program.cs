@@ -36,13 +36,12 @@ namespace Xemio.Testing.Network
         /// </summary>
         public void Run()
         {
-            var control = new Control();
             var config = XGL.Configure()
                 .DefaultComponents()
                 .DefaultInput()
                 .BuildConfiguration();
 
-            XGL.Run(control.Handle, config);
+            XGL.Run(config);
 
             Server server = ProtocolFactory.CreateServerFor<TcpServerProtocol>(8000);
             Client client = ProtocolFactory.CreateClientFor<TcpClientProtocol>("127.0.0.1", 8000);
