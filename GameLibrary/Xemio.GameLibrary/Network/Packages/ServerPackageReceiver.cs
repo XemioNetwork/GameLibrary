@@ -49,7 +49,7 @@ namespace Xemio.GameLibrary.Network.Packages
                         if (package != null)
                         {
                             this._threadInvoker.Invoke(() => this._server.OnReceivePackage(package, connection));
-                            this._eventManager.Publish(new ReceivedPackageEvent(package));
+                            this._eventManager.Publish(new ReceivedPackageEvent(package, connection));
                         }
                     }
                 }
