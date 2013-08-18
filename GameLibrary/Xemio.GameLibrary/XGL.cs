@@ -144,9 +144,11 @@ namespace Xemio.GameLibrary
                         "The selected graphics initializer is unavailable. Maybe your PC doesn't support the selected graphics engine.");
                 }
 
-                var graphicsDevice = new GraphicsDevice();
+                var graphicsDevice = new GraphicsDevice
+                                         {
+                                             DisplayMode = new DisplayMode(config.BackBufferSize)
+                                         };
 
-                graphicsDevice.DisplayMode = new DisplayMode(config.BackBufferSize);
                 graphicsDevice.Provider = config.GraphicsInitializer.CreateProvider(graphicsDevice);
 
                 XGL.Components.Add(graphicsDevice);

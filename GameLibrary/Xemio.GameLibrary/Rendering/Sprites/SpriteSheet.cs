@@ -9,12 +9,18 @@ using System.Drawing;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using System.Drawing.Imaging;
+using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Rendering.Sprites
 {
     public class SpriteSheet
     {
+        #region Fields
+        private readonly Dictionary<int, ITexture> _textureCache = new Dictionary<int, ITexture>();
+        private readonly Image _sourceImage;
+        #endregion 
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet" /> class.
@@ -23,8 +29,8 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <param name="frameWidth">Width of the frame.</param>
         /// <param name="frameHeight">Height of the frame.</param>
         public SpriteSheet(string fileName, int frameWidth, int frameHeight)
+            : this(XGL.Components.Get<IFileSystem>().Open(fileName), frameWidth, frameHeight)
         {
-            this.Initialize(File.OpenRead(fileName), frameWidth, frameHeight);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
@@ -33,8 +39,12 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <param name="frameWidth">Width of the frame.</param>
         /// <param name="frameHeight">Height of the frame.</param>
         public SpriteSheet(Stream stream, int frameWidth, int frameHeight)
+            : this(frameWidth, frameHeight)
         {
-            this.Initialize(stream, frameWidth, frameHeight);
+            this._sourceImage = Image.FromStream(stream);
+
+            this.Columns = this._sourceImage.Width / frameWidth;
+            this.Rows = this._sourceImage.Height / frameHeight;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
@@ -43,11 +53,25 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <param name="frameWidth">Width of the frame.</param>
         /// <param name="frameHeight">Height of the frame.</param>
         public SpriteSheet(ITexture texture, int frameWidth, int frameHeight)
+            : this(frameWidth, frameHeight)
         {
             byte[] data = texture.GetData();
             MemoryStream stream = new MemoryStream(data);
 
-            this.Initialize(stream, frameWidth, frameHeight);
+            this._sourceImage = Image.FromStream(stream);
+
+            this.Columns = this._sourceImage.Width / frameWidth;
+            this.Rows = this._sourceImage.Height / frameHeight;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
+        /// </summary>
+        /// <param name="frameWidth">Width of the frame.</param>
+        /// <param name="frameHeight">Height of the frame.</param>
+        private SpriteSheet(int frameWidth, int frameHeight)
+        {
+            this.FrameWidth = frameWidth;
+            this.FrameHeight = frameHeight;
         }
         #endregion
 
@@ -68,63 +92,38 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// Gets the rows.
         /// </summary>
         public int Rows { get; private set; }
-        /// <summary>
-        /// Gets or sets the textures.
-        /// </summary>
-        public ITexture[] Textures { get; private set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Initializes the sprite sheet.
+        /// Returns the texture at the specified index.
         /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="frameWidth">Width of the frame.</param>
-        /// <param name="frameHeight">Height of the frame.</param>
-        private void Initialize(Stream stream, int frameWidth, int frameHeight)
+        /// <param name="index">The index.</param>
+        public ITexture GetTexture(int index)
         {
-            Image image = Image.FromStream(stream);
-            ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
+            if (this._textureCache.ContainsKey(index))
+                return this._textureCache[index];
 
-            this.Columns = image.Width / frameWidth;
-            this.Rows = image.Height / frameHeight;
+            int x = index % this.Columns;
+            int y = index / this.Columns;
 
-            Bitmap[] sprites = new Bitmap[this.Columns * this.Rows];
-            for (int y = 0; y < this.Rows; y++)
+            Bitmap frame = new Bitmap(this.FrameWidth, this.FrameHeight);
+            using (Graphics frameGraphics = Graphics.FromImage(frame))
             {
-                for (int x = 0; x < this.Columns; x++)
-                {
-                    int currentIndex = y * this.Columns + x;
-                    Bitmap frame = new Bitmap(frameWidth, frameHeight);
+                frameGraphics.CompositingMode = CompositingMode.SourceOver;
+                frameGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+                frameGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
-                    using (Graphics frameGraphics = Graphics.FromImage(frame))
-                    {
-                        frameGraphics.CompositingMode = CompositingMode.SourceOver;
-                        frameGraphics.CompositingQuality = CompositingQuality.HighSpeed;
-                        frameGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-
-                        frameGraphics.DrawImage(image,
-                            new Rectangle(-x * frameWidth, -y * frameHeight, image.Width, image.Height));
-                    }
-
-                    sprites[currentIndex] = frame;
-                }
+                frameGraphics.DrawImage(this._sourceImage,
+                    new Rectangle(-x * this.FrameWidth, -y * this.FrameHeight, this._sourceImage.Width, this._sourceImage.Height));
             }
 
-            this.Textures = new ITexture[sprites.Length];
-            for (int i = 0; i < sprites.Length; i++)
-            {
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    sprites[i].Save(memory, ImageFormat.Png);
-                    memory.Seek(0, SeekOrigin.Begin);
+            ITextureFactory textureFactory = XGL.Components.Get<ITextureFactory>();
 
-                    this.Textures[i] = factory.CreateTexture(memory);
-                }
-            }
+            ITexture texture = textureFactory.CreateTexture(frame);
+            this._textureCache.Add(index, texture);
 
-            this.FrameWidth = frameWidth;
-            this.FrameHeight = frameHeight;
+            return texture;
         }
         #endregion
     }

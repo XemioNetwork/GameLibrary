@@ -42,7 +42,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// </summary>
         public ITexture Frame
         {
-            get { return this.Animation.Sheet.Textures[this.SpriteIndex]; }
+            get { return this.Animation.Sheet.GetTexture(this.SpriteIndex); }
         }
         #endregion
 
@@ -62,7 +62,9 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         public void Tick(float elapsed)
         {
             this._elapsed += elapsed;
-            while (this._elapsed >= this.Animation.FrameTime && this.Animation.FrameTime > 0)
+            while (this._elapsed >= this.Animation.FrameTime && 
+                   this.Animation.FrameTime > 0 &&
+                   this._frameIndex < this.Animation.Indices.Length)
             {
                 this._elapsed -= this.Animation.FrameTime;
                 this._frameIndex++;
