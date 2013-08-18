@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Sound.Loops
 {
-    public class LoopManager : IComponent, IGameHandler, IConstructable
+    public class LoopManager : IGameHandler, IConstructable
     {
         #region Constructors
         /// <summary>
