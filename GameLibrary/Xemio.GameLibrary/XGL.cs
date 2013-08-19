@@ -193,7 +193,7 @@ namespace Xemio.GameLibrary
         {
             var inputManager = XGL.Components.Get<InputManager>();
 
-            if (inputManager != null && config.DefaultPlayerInput)
+            if (inputManager != null && config.CreatePlayerInput)
             {
                 PlayerInput playerInput = inputManager.CreateInput();
                 inputManager.AddListener(new MouseListener(), playerInput.PlayerIndex);

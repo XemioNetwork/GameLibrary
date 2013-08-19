@@ -22,7 +22,6 @@ namespace Xemio.Testing.Input
             form.Controls.Add(button);
             
             XGL.Run(form, XGL.Configure()
-                .DefaultComponents()
                 .DefaultInput()
                 .DisableSplashScreen()
                 .BuildConfiguration());

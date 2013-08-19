@@ -52,7 +52,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public FluentConfigurator DefaultInput()
         {
-            this._configuration.DefaultPlayerInput = true;
+            this._configuration.CreatePlayerInput = true;
             return this;
         }
         /// <summary>

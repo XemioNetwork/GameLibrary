@@ -288,6 +288,7 @@
     <Folder Include="Content\FileSystem\Compressed\" />
     <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />
+    <Folder Include="UI\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
