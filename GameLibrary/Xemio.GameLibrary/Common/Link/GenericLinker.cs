@@ -60,7 +60,7 @@ namespace Xemio.GameLibrary.Common.Link
         #endregion
 
         #region Fields
-        private Dictionary<TKey, TValue> _linkedItems;
+        private readonly Dictionary<TKey, TValue> _linkedItems;
         #endregion
 
         #region Properties
@@ -74,14 +74,10 @@ namespace Xemio.GameLibrary.Common.Link
         /// <summary>
         /// Adds the specified value.
         /// </summary>
-        /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        public virtual void Add(TKey key, TValue value)
+        public virtual void Add(TValue value)
         {
-            if (!this._linkedItems.ContainsKey(key))
-            {
-                this._linkedItems.Add(key, value);
-            }
+            this._linkedItems.Add(value.Id, value);
         }
         /// <summary>
         /// Adds the specified values.
@@ -91,7 +87,7 @@ namespace Xemio.GameLibrary.Common.Link
         {
             foreach (TValue value in values)
             {
-                this.Add(value.Id, value);
+                this.Add(value);
             }
         }
         /// <summary>
@@ -104,13 +100,13 @@ namespace Xemio.GameLibrary.Common.Link
 
             foreach (Type type in types)
             {
-                if (typeof(TValue).IsAssignableFrom(type))
+                if (typeof (TValue).IsAssignableFrom(type) &&
+                    type.GetCustomAttributes(typeof(ManuallyLinkedAttribute), true).Length == 0 &&
+                    type.ContainsGenericParameters == false &&
+                    type.IsAbstract == false &&
+                    type.IsInterface == false)
                 {
-                    if (!type.ContainsGenericParameters && !type.IsAbstract)
-                    {
-                        TValue instance = (TValue)Activator.CreateInstance(type);
-                        this.Add(instance.Id, instance);
-                    }
+                    this.Add((TValue) Activator.CreateInstance(type));
                 }
             }
         }

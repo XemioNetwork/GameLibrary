@@ -54,12 +54,11 @@ namespace Xemio.GameLibrary.Common.Link
         /// <summary>
         /// Adds the specified key.
         /// </summary>
-        /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        public override void Add(TKey key, TValue value)
+        public override void Add(TValue value)
         {
-            this._hashMappings.Add(key.GetHashCode(), value);
-            base.Add(key, value);
+            this._hashMappings.Add(value.Id.GetHashCode(), value);
+            base.Add(value);
         }
         /// <summary>
         /// Resolves the specified hash code.
