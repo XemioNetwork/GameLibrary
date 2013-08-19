@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Serialization
@@ -10,22 +11,18 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// Reads a value out of the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
-        public override Vector2 Read(BinaryReader reader)
+        public override Vector2 Read(IFormatReader reader)
         {
-            return new Vector2(
-                reader.ReadSingle(),
-                reader.ReadSingle());
+            return reader.ReadVector2();
         }
         /// <summary>
         /// Writes the specified value.
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        public override void Write(BinaryWriter writer, Vector2 value)
+        public override void Write(IFormatWriter writer, Vector2 value)
         {
-            writer.Write(value.X);
-            writer.Write(value.Y);
+            writer.WriteVector2("Vector", value);
         }
         #endregion
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content
 {
@@ -23,7 +24,7 @@ namespace Xemio.GameLibrary.Content
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public abstract T Read(BinaryReader reader);
+        public abstract T Read(IFormatReader reader);
         #endregion
 
         #region IContentReader Member
@@ -38,8 +39,7 @@ namespace Xemio.GameLibrary.Content
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
-        object IContentReader.Read(BinaryReader reader)
+        object IContentReader.Read(IFormatReader reader)
         {
             return this.Read(reader);
         }

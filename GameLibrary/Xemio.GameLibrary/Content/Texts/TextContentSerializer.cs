@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Texts
 {
-    public abstract class TextSerializer<T> : ContentSerializer<T>
+    public abstract class TextContentSerializer<T> : ContentSerializer<T>
     {
         #region Properties
         /// <summary>
@@ -40,24 +41,24 @@ namespace Xemio.GameLibrary.Content.Texts
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public override T Read(BinaryReader reader)
+        public override T Read(IFormatReader reader)
         {
-            StreamReader streamReader = new StreamReader(reader.BaseStream, this.Encoding);
+            StreamReader streamReader = new StreamReader(reader.Stream, this.Encoding);
             string input = streamReader.ReadToEnd();
 
-            return this.Read(reader.BaseStream, input);
+            return this.Read(reader.Stream, input);
         }
         /// <summary>
         /// Writes the specified value.
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        public override void Write(BinaryWriter writer, T value)
+        public override void Write(IFormatWriter writer, T value)
         {
-            StreamWriter streamWriter = new StreamWriter(writer.BaseStream, this.Encoding);
+            StreamWriter streamWriter = new StreamWriter(writer.Stream, this.Encoding);
             StringBuilder builder = new StringBuilder();
 
-            this.Write(writer.BaseStream, builder, value);
+            this.Write(writer.Stream, builder, value);
 
             streamWriter.Write(builder.ToString());
         }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Texts
 {
-    public abstract class TextReader<T> : ContentReader<T>
+    public abstract class TextContentReader<T> : ContentReader<T>
     {
         #region Properties
         /// <summary>
@@ -22,10 +23,8 @@ namespace Xemio.GameLibrary.Content.Texts
         /// <summary>
         /// Reads the specified input.
         /// </summary>
-        /// <param name="stream">The stream.</param>
         /// <param name="input">The input.</param>
-        /// <returns></returns>
-        protected abstract T Read(Stream stream, string input);
+        protected abstract T Read(string input);
         #endregion
 
         #region Overrides of ContentReader<T>
@@ -33,12 +32,12 @@ namespace Xemio.GameLibrary.Content.Texts
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public override T Read(BinaryReader reader)
+        public override T Read(IFormatReader reader)
         {
-            StreamReader streamReader = new StreamReader(reader.BaseStream, this.Encoding);
+            StreamReader streamReader = new StreamReader(reader.Stream, this.Encoding);
             string input = streamReader.ReadToEnd();
 
-            return this.Read(reader.BaseStream, input);
+            return this.Read(input);
         }
         #endregion
     }

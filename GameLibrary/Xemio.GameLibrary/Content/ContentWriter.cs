@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content
 {
@@ -22,9 +23,9 @@ namespace Xemio.GameLibrary.Content
         /// <summary>
         /// Writes the specified value.
         /// </summary>
-        /// <param name="writer">The writer.</param>
+        /// <param name="writer">The format writer.</param>
         /// <param name="value">The value.</param>
-        public abstract void Write(BinaryWriter writer, T value);
+        public abstract void Write(IFormatWriter writer, T value);
         #endregion
 
         #region IContentWriter Member
@@ -38,9 +39,9 @@ namespace Xemio.GameLibrary.Content
         /// <summary>
         /// Writes the specified value.
         /// </summary>
-        /// <param name="writer"></param>
+        /// <param name="writer">The format writer</param>
         /// <param name="value">The value.</param>
-        void IContentWriter.Write(BinaryWriter writer, object value)
+        void IContentWriter.Write(IFormatWriter writer, object value)
         {
             this.Write(writer, (T)value);
         }

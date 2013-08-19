@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Serialization
 {
@@ -9,19 +10,18 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// Reads a value out of the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
-        public override char Read(BinaryReader reader)
+        public override char Read(IFormatReader reader)
         {
-            return reader.ReadChar();
+            return reader.ReadCharacter();
         }
         /// <summary>
         /// Writes the specified value.
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        public override void Write(BinaryWriter writer, char value)
+        public override void Write(IFormatWriter writer, char value)
         {
-            writer.Write(value);
+            writer.WriteCharacter("Character", value);
         }
         #endregion
     }

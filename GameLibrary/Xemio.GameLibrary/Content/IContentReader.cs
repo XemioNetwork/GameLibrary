@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content
 {
@@ -13,6 +14,6 @@ namespace Xemio.GameLibrary.Content
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        object Read(BinaryReader reader);
+        object Read(IFormatReader reader);
     }
 }

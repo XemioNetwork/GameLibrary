@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content
 {
@@ -30,13 +31,13 @@ namespace Xemio.GameLibrary.Content
         /// Reads a value out of the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public abstract T Read(BinaryReader reader);
+        public abstract T Read(IFormatReader reader);
         /// <summary>
         /// Writes the specified value.
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        public abstract void Write(BinaryWriter writer, T value);
+        public abstract void Write(IFormatWriter writer, T value);
         #endregion
 
         #region IContentReader Member
@@ -44,7 +45,7 @@ namespace Xemio.GameLibrary.Content
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        object IContentReader.Read(BinaryReader reader)
+        object IContentReader.Read(IFormatReader reader)
         {
             return this.Read(reader);
         }
@@ -56,7 +57,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        void IContentWriter.Write(BinaryWriter writer, object value)
+        void IContentWriter.Write(IFormatWriter writer, object value)
         {
             this.Write(writer, (T)value);
         }

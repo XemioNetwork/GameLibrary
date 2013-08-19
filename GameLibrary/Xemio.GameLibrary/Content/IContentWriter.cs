@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content
 {
@@ -14,6 +15,6 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        void Write(BinaryWriter writer, object value);
+        void Write(IFormatWriter writer, object value);
     }
 }
