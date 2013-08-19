@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.IO;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Properties;
@@ -34,7 +35,11 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public override void LoadContent()
         {
-            Stream stream = typeof(SplashScreen).Assembly.GetManifestResourceStream("Xemio.GameLibrary.Resources.intro.png");
+            MemoryStream stream = new MemoryStream();
+            Properties.Resources.intro.Save(stream, ImageFormat.Png);
+
+            stream.Seek(0, SeekOrigin.Begin);
+
             this._texture = this.Content.Load<ITexture>(stream);
         }
         /// <summary>
