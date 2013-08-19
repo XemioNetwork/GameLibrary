@@ -9,11 +9,15 @@ using System.Drawing;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using System.Drawing.Imaging;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Rendering.Sprites
 {
+    using Drawing = System.Drawing;
+    using Rectangle = Math.Rectangle;
+
     public class SpriteSheet
     {
         #region Fields
@@ -45,6 +49,8 @@ namespace Xemio.GameLibrary.Rendering.Sprites
 
             this.Columns = this._sourceImage.Width / frameWidth;
             this.Rows = this._sourceImage.Height / frameHeight;
+
+            this.Texture = XGL.Components.Get<ITextureFactory>().CreateTexture(stream);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
@@ -62,6 +68,8 @@ namespace Xemio.GameLibrary.Rendering.Sprites
 
             this.Columns = this._sourceImage.Width / frameWidth;
             this.Rows = this._sourceImage.Height / frameHeight;
+
+            this.Texture = texture;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
@@ -92,9 +100,24 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// Gets the rows.
         /// </summary>
         public int Rows { get; private set; }
+        /// <summary>
+        /// Gets the texture.
+        /// </summary>
+        internal ITexture Texture { get; private set; }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Gets the source rectagle for the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        public Rectangle GetSourceRectagle(int index)
+        {
+            int x = index % this.Columns;
+            int y = index / this.Columns;
+
+            return new Rectangle(x * this.FrameWidth, y * this.FrameHeight, this.FrameWidth, this.FrameHeight);
+        }
         /// <summary>
         /// Returns the texture at the specified index.
         /// </summary>
@@ -115,7 +138,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
                 frameGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
                 frameGraphics.DrawImage(this._sourceImage,
-                    new Rectangle(-x * this.FrameWidth, -y * this.FrameHeight, this._sourceImage.Width, this._sourceImage.Height));
+                    new Drawing.Rectangle(-x * this.FrameWidth, -y * this.FrameHeight, this._sourceImage.Width, this._sourceImage.Height));
             }
 
             ITextureFactory textureFactory = XGL.Components.Get<ITextureFactory>();
