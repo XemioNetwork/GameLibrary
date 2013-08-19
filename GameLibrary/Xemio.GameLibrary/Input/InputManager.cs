@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Timing;
@@ -10,6 +11,9 @@ using Xemio.GameLibrary.Input.Events;
 
 namespace Xemio.GameLibrary.Input
 {
+    [Require(typeof(GameLoop))]
+    [Require(typeof(EventManager))]
+
     public class InputManager : IConstructable, IGameHandler
     {
         #region Fields

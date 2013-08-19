@@ -44,6 +44,16 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             return default(T);
         }
         /// <summary>
+        /// Registers the specified value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="value">The value.</param>
+        public void Register<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
+        {
+            this._cache.Register<TKey, TValue>(value);
+        }
+        /// <summary>
         /// Resolves an instance for the specified key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>

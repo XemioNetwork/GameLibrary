@@ -28,14 +28,7 @@ namespace Xemio.Testing.Localization
                                                              }
                                                      }
                                     };
-
-            var serializer = new LanguageSerializer();
-
-            using (BinaryReader writer = new BinaryReader(File.OpenRead("testfile.dat")))
-            {
-                var anotherLanguage = serializer.Read(writer);
-            }
-
+            
             Console.ReadLine();
         }
     }

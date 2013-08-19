@@ -31,7 +31,35 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         private readonly Dictionary<Type, dynamic> _linkers;
         #endregion
 
+        #region Private Methods
+        /// <summary>
+        /// Initializes the linker for the specified key and value combination.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        private void InitializeLinker<TKey, TValue>() where TValue : ILinkable<TKey>
+        {
+            if (!this._linkers.ContainsKey(typeof(TValue)))
+            {
+                this._linkers.Add(typeof(TValue), new GenericLinker<TKey, TValue>());
+            }
+        }
+        #endregion
+
         #region Methods
+        /// <summary>
+        /// Registers the specified value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="value">The value.</param>
+        public void Register<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
+        {
+            this.InitializeLinker<TKey, TValue>();
+
+            GenericLinker<TKey, TValue> linker = this._linkers[typeof(TValue)];
+            linker.Add(value);
+        }
         /// <summary>
         /// Resolves the specified key.
         /// </summary>
@@ -94,10 +122,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="context">The context.</param>
         public void Cache<TKey, TValue>(IAssemblyContext context) where TValue : ILinkable<TKey>
         {
-            if (!this._linkers.ContainsKey(typeof(TValue)))
-            {
-                this._linkers.Add(typeof(TValue), new GenericLinker<TKey, TValue>());
-            }
+            this.InitializeLinker<TKey, TValue>();
             if (!this._cachedContexts.ContainsKey(context))
             {
                 this._cachedContexts.Add(context, new HashSet<Type>());

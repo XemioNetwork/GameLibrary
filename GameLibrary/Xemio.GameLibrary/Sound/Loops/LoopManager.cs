@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Sound.Loops
 {
+    [Require(typeof(GameLoop))]
+
     public class LoopManager : IGameHandler, IConstructable
     {
         #region Constructors

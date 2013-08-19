@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common.Extensions;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Entities.Data;
 
 namespace Xemio.GameLibrary.Entities
@@ -16,17 +17,17 @@ namespace Xemio.GameLibrary.Entities
         /// Reads an instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public override Entity Read(BinaryReader reader)
+        public override Entity Read(IFormatReader reader)
         {
             string typeName = reader.ReadString();
             Type type = Type.GetType(typeName);
 
             Entity entity = (Entity)Activator.CreateInstance(type);
 
-            entity.EntityId = reader.ReadInt32();
+            entity.EntityId = reader.ReadInteger();
             entity.Position = reader.ReadVector2();
 
-            int containerCount = reader.ReadInt32();
+            int containerCount = reader.ReadInteger();
             for (int i = 0; i < containerCount; i++)
             {
                 string containerTypeName = reader.ReadString();
@@ -43,24 +44,24 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        public override void Write(BinaryWriter writer, Entity value)
+        public override void Write(IFormatWriter writer, Entity value)
         {
             Type type = value.GetType();
             string typeName = type.AssemblyQualifiedName;
 
-            writer.Write(typeName);
+            writer.WriteString("EntityType", typeName);
 
-            writer.Write(value.EntityId);
-            writer.Write(value.Position);
-            writer.Write(value.Containers.Count);
+            writer.WriteInteger("EntityId", value.EntityId);
+            writer.WriteVector2("Position", value.Position);
+            writer.WriteInteger("ContainerCount", value.Containers.Count);
 
             foreach (EntityDataContainer container in value.Containers)
             {
                 Type containerType = container.GetType();
                 string containerTypeName = containerType.AssemblyQualifiedName;
 
-                writer.Write(containerTypeName);
-                writer.WriteInstance(container);
+                writer.WriteString("ContainerType", containerTypeName);
+                writer.WriteInstance("Container", container);
             }
         }
         #endregion

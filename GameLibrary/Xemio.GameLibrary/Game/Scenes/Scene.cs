@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Rendering.Textures;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Content;
@@ -49,13 +48,6 @@ namespace Xemio.GameLibrary.Game.Scenes
             get { return XGL.Components.Get<ContentManager>(); }
         }
         /// <summary>
-        /// Gets the texture factory.
-        /// </summary>
-        public ITextureFactory TextureFactory
-        {
-            get { return this.GraphicsDevice.TextureFactory; }
-        }
-        /// <summary>
         /// Gets the render manager.
         /// </summary>
         public IRenderManager RenderManager
@@ -63,11 +55,25 @@ namespace Xemio.GameLibrary.Game.Scenes
             get { return this.GraphicsDevice.RenderManager; }
         }
         /// <summary>
-        /// Gets the geometry.
+        /// Gets the render factory.
         /// </summary>
-        public IGeometryProvider Geometry
+        public IRenderFactory RenderFactory
         {
-            get { return this.GraphicsDevice.Geometry; }
+            get { return this.GraphicsDevice.RenderFactory; }
+        }
+        /// <summary>
+        /// Gets the geometry manager.
+        /// </summary>
+        public IGeometryManager GeometryManager
+        {
+            get { return this.GraphicsDevice.GeometryManager; }
+        }
+        /// <summary>
+        /// Gets the geometry factory.
+        /// </summary>
+        public IGeometryFactory GeometryFactory
+        {
+            get { return this.GraphicsDevice.GeometryFactory; }
         }
         /// <summary>
         /// Gets the mouse listener.

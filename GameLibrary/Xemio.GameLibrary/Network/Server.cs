@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Events;
@@ -21,7 +22,10 @@ using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
 {
-    public class Server : IServer, IGameHandler
+    [Require(typeof(EventManager))]
+    [Require(typeof(GameLoop))]
+
+    public class Server : IServer, IGameHandler, IConstructable
     {
         #region Constructors
         /// <summary>
@@ -42,11 +46,7 @@ namespace Xemio.GameLibrary.Network
             this.Protocol.Server = this;
 
             this.Subscribe(new TimeSyncServerLogic());
-
             this._connectionManager.StartAcceptingConnections();
-
-            GameLoop loop = XGL.Components.Get<GameLoop>();
-            loop.Subscribe(this);
         }
         #endregion
 
@@ -212,9 +212,7 @@ namespace Xemio.GameLibrary.Network
         public void Send(Package package, IConnection receiver)
         {
             this.OnBeginSendPackage(package, receiver);
-
             this._sender.Send(package, receiver);
-
             this.OnSentPackage(package, receiver);
         }
         /// <summary>
@@ -232,6 +230,17 @@ namespace Xemio.GameLibrary.Network
         public void Unsubscribe(IServerLogic subscriber)
         {
             this._subscribers.Remove(subscriber);
+        }
+        #endregion
+
+        #region Implementation of IConstructable
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            GameLoop loop = XGL.Components.Get<GameLoop>();
+            loop.Subscribe(this);
         }
         #endregion
     }

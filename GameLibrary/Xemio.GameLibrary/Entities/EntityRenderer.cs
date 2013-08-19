@@ -19,7 +19,6 @@ namespace Xemio.GameLibrary.Entities
         protected EntityRenderer(Entity entity)
         {
             this.Entity = entity;
-            this.RenderManager = XGL.Components.Get<IRenderManager>();
         }
         #endregion
 
@@ -29,15 +28,25 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public Entity Entity { get; private set; }
         /// <summary>
+        /// Gets the graphics device.
+        /// </summary>
+        public GraphicsDevice GraphicsDevice
+        {
+            get { return XGL.Components.Require<GraphicsDevice>(); }
+        }
+        /// <summary>
         /// Gets the render manager.
         /// </summary>
-        public IRenderManager RenderManager { get; private set; }
+        public IRenderManager RenderManager
+        {
+            get { return this.GraphicsDevice.RenderManager; }
+        }
         /// <summary>
         /// Gets the geometry.
         /// </summary>
-        public IGeometryProvider Geometry
+        public IGeometryManager GeometryManager
         {
-            get { return this.RenderManager.GraphicsDevice.Geometry; }
+            get { return this.GraphicsDevice.GeometryManager; }
         }
         #endregion
 

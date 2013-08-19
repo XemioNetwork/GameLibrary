@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Events;
@@ -11,6 +12,10 @@ using Xemio.GameLibrary.Events.Logging;
 
 namespace Xemio.GameLibrary.Localization
 {
+    [Require(typeof(EventManager))]
+    [Require(typeof(IFileSystem))]
+    [Require(typeof(ContentManager))]
+
     public class LocalizationManager : IConstructable
     {
         #region Constructors

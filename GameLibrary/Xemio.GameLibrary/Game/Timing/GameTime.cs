@@ -1,8 +1,11 @@
 ﻿using System;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Components.Attributes;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
+    [Require(typeof(GameLoop))]
+
     public class GameTime : IConstructable, IGameHandler
     {
         #region Constructors

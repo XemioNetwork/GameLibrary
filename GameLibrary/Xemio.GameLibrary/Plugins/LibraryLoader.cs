@@ -54,6 +54,7 @@ namespace Xemio.GameLibrary.Plugins
             foreach (Assembly assembly in failedAssemblies)
             {
                 IEnumerable<ILibraryInitializer> initializers;
+
                 //Ignore if they fail now
                 this.TryGetInitializerFromAssembly(assembly, out initializers);
 

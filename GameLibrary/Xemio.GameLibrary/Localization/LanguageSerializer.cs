@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Localization
 {
     public class LanguageSerializer : ContentSerializer<Language>
     {
-        public override Language Read(BinaryReader reader)
+        public override Language Read(IFormatReader reader)
         {
-            XDocument document = XDocument.Load(reader.BaseStream);
+            XDocument document = XDocument.Load(reader.Stream);
 
             Language language = new Language();
 
@@ -28,7 +29,7 @@ namespace Xemio.GameLibrary.Localization
             return language;
         }
 
-        public override void Write(BinaryWriter writer, Language value)
+        public override void Write(IFormatWriter writer, Language value)
         {
             var rootElement = new XElement("language", new XAttribute("name", value.CultureName));
 
@@ -41,7 +42,7 @@ namespace Xemio.GameLibrary.Localization
             }
 
             var document = new XDocument(rootElement);
-            document.Save(writer.BaseStream);
+            document.Save(writer.Stream);
         }
     }
 }

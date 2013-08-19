@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Network.Timing
             this._elapsed = 0;
 
             this._watches = new Dictionary<IConnection, Stopwatch>();
-            this.SyncDelay = 3000;
+            this.SyncDelay = 2000;
         }
         #endregion
 

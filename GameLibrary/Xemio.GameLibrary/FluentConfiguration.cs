@@ -2,7 +2,6 @@ using System;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary
@@ -20,7 +19,7 @@ namespace Xemio.GameLibrary
         #endregion
 
         #region Fields
-        private IGraphicsInitializer _graphicsInitializer;
+        private IGraphicsInitializer _graphicsProvider;
         private ISoundInitializer _soundInitializer;
         private IFileSystem _fileSystem;
         #endregion
@@ -47,7 +46,7 @@ namespace Xemio.GameLibrary
         /// <param name="initializer">The initializer.</param>
         public void Set(IGraphicsInitializer initializer)
         {
-            this._graphicsInitializer = initializer;
+            this._graphicsProvider = initializer;
         }
         /// <summary>
         /// Sets the sound initializer.
@@ -73,9 +72,9 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets or sets the graphics initializer.
         /// </summary>
-        public override IGraphicsInitializer GraphicsInitializer
+        public override IGraphicsInitializer GraphicsProvider
         {
-            get { return this._graphicsInitializer; }
+            get { return this._graphicsProvider; }
         }
         /// <summary>
         /// Gets or sets the sound initializer.

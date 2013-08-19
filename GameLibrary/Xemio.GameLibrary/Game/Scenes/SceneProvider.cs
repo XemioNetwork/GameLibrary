@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Common.Collections;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
+    [Require(typeof(GraphicsDevice))]
+
     public abstract class SceneProvider
     {
         #region Fields
-        internal readonly CachedList<Scene> _subScenes = new CachedList<Scene>();
+        protected readonly CachedList<Scene> _subScenes = new CachedList<Scene>();
         #endregion Fields
 
         #region Properties
@@ -96,7 +99,6 @@ namespace Xemio.GameLibrary.Game.Scenes
                         continue;
 
                     scene.TryLoadContent();
-
                     scene.Tick(elapsed);
                 }
             }
@@ -110,8 +112,7 @@ namespace Xemio.GameLibrary.Game.Scenes
             {
                 foreach (Scene scene in this.OrderedRenderScenes())
                 {
-                    if (!scene.Visible ||
-                        !scene.Loaded)
+                    if (!scene.Visible || !scene.Loaded)
                         continue;
 
                     if (this.GraphicsDevice != null)

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Properties;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Geometry;
-using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
@@ -34,7 +34,8 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public override void LoadContent()
         {
-            this._texture = this.TextureFactory.CreateTexture("intro", Resources.ResourceManager);
+            Stream stream = typeof(SplashScreen).Assembly.GetManifestResourceStream("Xemio.GameLibrary.Resources.intro.png");
+            this._texture = this.Content.Load<ITexture>(stream);
         }
         /// <summary>
         /// Handles a game tick.
@@ -68,9 +69,9 @@ namespace Xemio.GameLibrary.Game.Scenes
                                           displayMode.Center.Y - this._texture.Height * 0.5f));
 
             Color color = new Color(0, 0, 0, this._alpha);
-            IBrush brush = this.Geometry.Factory.CreateSolid(color);
+            IBrush brush = this.GraphicsDevice.GeometryFactory.CreateSolid(color);
 
-            this.Geometry.FillRectangle(
+            this.GeometryManager.FillRectangle(
                 brush,
                 new Rectangle(0, 0, displayMode.Width, displayMode.Height));
         }

@@ -136,9 +136,9 @@ namespace Xemio.GameLibrary
         /// <param name="config">The configuration.</param>
         private static void InitializeGraphics(Configuration config)
         {
-            if (config.GraphicsInitializer != null)
+            if (config.GraphicsProvider != null)
             {
-                if (!config.GraphicsInitializer.IsAvailable())
+                if (!config.GraphicsProvider.IsAvailable())
                 {
                     throw new InvalidOperationException(
                         "The selected graphics initializer is unavailable. Maybe your PC doesn't support the selected graphics engine.");
@@ -149,7 +149,8 @@ namespace Xemio.GameLibrary
                                              DisplayMode = new DisplayMode(config.BackBufferSize)
                                          };
 
-                graphicsDevice.Provider = config.GraphicsInitializer.CreateProvider(graphicsDevice);
+                IGraphicsInitializer provider = config.GraphicsProvider;
+                graphicsDevice.Initialize(provider);
 
                 XGL.Components.Add(graphicsDevice);
             }
