@@ -1,4 +1,4 @@
-﻿namespace Xemio.GameLibrary.Rendering.Textures
+﻿namespace Xemio.GameLibrary.Rendering
 {
     public interface ITexture
     {

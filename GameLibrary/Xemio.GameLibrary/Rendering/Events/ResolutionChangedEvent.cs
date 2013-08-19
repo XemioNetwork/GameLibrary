@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xemio.GameLibrary.Events;
+﻿using Xemio.GameLibrary.Events;
 
-namespace Xemio.GameLibrary.Rendering
+namespace Xemio.GameLibrary.Rendering.Events
 {
     public class ResolutionChangedEvent : IEvent
     {

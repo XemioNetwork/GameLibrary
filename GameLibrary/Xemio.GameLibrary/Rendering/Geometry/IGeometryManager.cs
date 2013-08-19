@@ -3,126 +3,93 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Math;
-using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Rendering.Geometry
 {
-    public class GeometryProvider : IGeometryProvider
+    [AbstractComponent]
+    public interface IGeometryManager
     {
-        #region Singleton
-        /// <summary>
-        /// Gets the empty geometry provider.
-        /// </summary>
-        public static IGeometryProvider Empty
-        {
-            get { return Singleton<GeometryProvider>.Value; }
-        }
-        #endregion
-        
-        #region IGeometryProvider Member
         /// <summary>
         /// Draws a rectangle.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="rectangle">The rectangle.</param>
-        public virtual void DrawRectangle(Color color, Rectangle rectangle)
-        {
-        }
+        void DrawRectangle(Color color, Rectangle rectangle);
         /// <summary>
         /// Draws a rectangle.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="rectangle">The rectangle.</param>
-        public virtual void DrawRectangle(IPen pen, Rectangle rectangle)
-        {
-        }
+        void DrawRectangle(IPen pen, Rectangle rectangle);
         /// <summary>
         /// Draws the rounded rectangle.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="rectangle">The rectangle.</param>
         /// <param name="radius">The radius.</param>
-        public virtual void DrawRoundedRectangle(Color color, Rectangle rectangle, float radius)
-        {
-        }
+        void DrawRoundedRectangle(Color color, Rectangle rectangle, float radius);
         /// <summary>
         /// Draws the rounded rectangle.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="rectangle">The rectangle.</param>
         /// <param name="radius">The radius.</param>
-        public virtual void DrawRoundedRectangle(IPen pen, Rectangle rectangle, float radius)
-        {
-        }
+        void DrawRoundedRectangle(IPen pen, Rectangle rectangle, float radius);
         /// <summary>
         /// Draws a line.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="start">The start.</param>
         /// <param name="end">The end.</param>
-        public virtual void DrawLine(Color color, Vector2 start, Vector2 end)
-        {
-        }
+        void DrawLine(Color color, Vector2 start, Vector2 end);
         /// <summary>
         /// Draws a line.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="start">The start.</param>
         /// <param name="end">The end.</param>
-        public virtual void DrawLine(IPen pen, Vector2 start, Vector2 end)
-        {
-        }
+        void DrawLine(IPen pen, Vector2 start, Vector2 end);
         /// <summary>
         /// Draws a polygon.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="points">The points.</param>
-        public virtual void DrawPolygon(Color color, Vector2[] points)
-        {
-        }
+        void DrawPolygon(Color color, Vector2[] points);
         /// <summary>
         /// Draws a polygon.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="points">The points.</param>
-        public virtual void DrawPolygon(IPen pen, Vector2[] points)
-        {
-        }
+        void DrawPolygon(IPen pen, Vector2[] points);
         /// <summary>
         /// Draws an ellipse.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="region">The region.</param>
-        public virtual void DrawEllipse(Color color, Rectangle region)
-        {
-        }
+        void DrawEllipse(Color color, Rectangle region);
         /// <summary>
         /// Draws an ellipse.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="region">The region.</param>
-        public virtual void DrawEllipse(IPen pen, Rectangle region)
-        {
-        }
+        void DrawEllipse(IPen pen, Rectangle region);
         /// <summary>
         /// Draws a circle.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="position">The position.</param>
         /// <param name="radius">The radius.</param>
-        public virtual void DrawCircle(Color color, Vector2 position, float radius)
-        {
-        }
+        void DrawCircle(Color color, Vector2 position, float radius);
         /// <summary>
         /// Draws a circle.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="position">The position.</param>
         /// <param name="radius">The radius.</param>
-        public virtual void DrawCircle(IPen pen, Vector2 position, float radius)
-        {
-        }
+        void DrawCircle(IPen pen, Vector2 position, float radius);
         /// <summary>
         /// Draws an arc.
         /// </summary>
@@ -130,9 +97,7 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
         /// <param name="sweepAngle">The sweep angle.</param>
-        public virtual void DrawArc(Color color, Rectangle region, float startAngle, float sweepAngle)
-        {
-        }
+        void DrawArc(Color color, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Draws an arc.
         /// </summary>
@@ -140,9 +105,7 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
         /// <param name="sweepAngle">The sweep angle.</param>
-        public virtual void DrawArc(IPen pen, Rectangle region, float startAngle, float sweepAngle)
-        {
-        }
+        void DrawArc(IPen pen, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Draws a pie.
         /// </summary>
@@ -150,9 +113,7 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
         /// <param name="sweepAngle">The sweet angle.</param>
-        public virtual void DrawPie(Color color, Rectangle region, float startAngle, float sweepAngle)
-        {
-        }
+        void DrawPie(Color color, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Draws a pie.
         /// </summary>
@@ -160,67 +121,51 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
         /// <param name="sweepAngle">The sweet angle.</param>
-        public virtual void DrawPie(IPen pen, Rectangle region, float startAngle, float sweepAngle)
-        {
-        }
+        void DrawPie(IPen pen, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Draws a curve.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <param name="points">The points.</param>
-        public virtual void DrawCurve(Color color, Vector2[] points)
-        {
-        }
+        void DrawCurve(Color color, Vector2[] points);
         /// <summary>
         /// Draws a curve.
         /// </summary>
         /// <param name="pen">The pen.</param>
         /// <param name="points">The points.</param>
-        public virtual void DrawCurve(IPen pen, Vector2[] points)
-        {
-        }
+        void DrawCurve(IPen pen, Vector2[] points);
         /// <summary>
         /// Fills a rectangle.
         /// </summary>
         /// <param name="brush">The brush.</param>
         /// <param name="rectangle">The rectangle.</param>
-        public virtual void FillRectangle(IBrush brush, Rectangle rectangle)
-        {
-        }
+        void FillRectangle(IBrush brush, Rectangle rectangle);
         /// <summary>
         /// Fills a rounded rectangle.
         /// </summary>
         /// <param name="brush">The brush.</param>
         /// <param name="rectangle">The rectangle.</param>
         /// <param name="radius">The radius.</param>
-        public virtual void FillRoundedRectangle(IBrush brush, Rectangle rectangle, float radius)
-        {
-        }
+        void FillRoundedRectangle(IBrush brush, Rectangle rectangle, float radius);
         /// <summary>
         /// Fills a polygon.
         /// </summary>
         /// <param name="brush">The brush.</param>
         /// <param name="points">The points.</param>
-        public virtual void FillPolygon(IBrush brush, Vector2[] points)
-        {
-        }
+        void FillPolygon(IBrush brush, Vector2[] points);
         /// <summary>
         /// Fills an ellipse.
         /// </summary>
         /// <param name="brush">The brush.</param>
         /// <param name="region">The region.</param>
-        public virtual void FillEllipse(IBrush brush, Rectangle region)
-        {
-        }
+        void FillEllipse(IBrush brush, Rectangle region);
         /// <summary>
         /// Fills a circle.
         /// </summary>
         /// <param name="brush">The brush.</param>
         /// <param name="position">The position.</param>
         /// <param name="radius">The radius.</param>
-        public virtual void FillCircle(IBrush brush, Vector2 position, float radius)
-        {
-        }
+        void FillCircle(IBrush brush, Vector2 position, float radius);
         /// <summary>
         /// Fills an arc.
         /// </summary>
@@ -228,9 +173,7 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
         /// <param name="sweepAngle">The sweep angle.</param>
-        public virtual void FillArc(IBrush brush, Rectangle region, float startAngle, float sweepAngle)
-        {
-        }
+        void FillArc(IBrush brush, Rectangle region, float startAngle, float sweepAngle);
         /// <summary>
         /// Fills a pie.
         /// </summary>
@@ -238,16 +181,6 @@ namespace Xemio.GameLibrary.Rendering.Geometry
         /// <param name="region">The region.</param>
         /// <param name="startAngle">The start angle.</param>
         /// <param name="sweepAngle">The sweet angle.</param>
-        public virtual void FillPie(IBrush brush, Rectangle region, float startAngle, float sweepAngle)
-        {
-        }
-        /// <summary>
-        /// Gets the geometry factory.
-        /// </summary>
-        public virtual IGeometryFactory Factory
-        {
-            get { return GeometryFactory.Empty; }
-        }
-        #endregion
+        void FillPie(IBrush brush, Rectangle region, float startAngle, float sweepAngle);
     }
 }

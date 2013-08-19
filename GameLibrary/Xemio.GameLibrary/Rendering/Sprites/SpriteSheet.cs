@@ -11,11 +11,13 @@ using Xemio.GameLibrary.Components;
 using System.Drawing.Imaging;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
-using Xemio.GameLibrary.Rendering.Textures;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Rendering.Sprites
 {
     using Drawing = System.Drawing;
+    using Drawing2D = System.Drawing.Drawing2D;
+
     using Rectangle = Math.Rectangle;
 
     public class SpriteSheet
@@ -50,7 +52,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             this.Columns = this._sourceImage.Width / frameWidth;
             this.Rows = this._sourceImage.Height / frameHeight;
 
-            this.Texture = XGL.Components.Get<ITextureFactory>().CreateTexture(stream);
+            this.Texture = XGL.Components.Get<ContentManager>().Load<ITexture>(stream);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
@@ -135,15 +137,20 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             {
                 frameGraphics.CompositingMode = CompositingMode.SourceOver;
                 frameGraphics.CompositingQuality = CompositingQuality.HighSpeed;
-                frameGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                frameGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
 
                 frameGraphics.DrawImage(this._sourceImage,
                     new Drawing.Rectangle(-x * this.FrameWidth, -y * this.FrameHeight, this._sourceImage.Width, this._sourceImage.Height));
             }
 
-            ITextureFactory textureFactory = XGL.Components.Get<ITextureFactory>();
+            MemoryStream frameStream = new MemoryStream();
 
-            ITexture texture = textureFactory.CreateTexture(frame);
+            frame.Save(frameStream, ImageFormat.Png);
+            frameStream.Seek(0, SeekOrigin.Begin);
+
+            ContentManager content = XGL.Components.Get<ContentManager>();
+            ITexture texture = content.Load<ITexture>(frameStream);
+
             this._textureCache.Add(index, texture);
 
             return texture;

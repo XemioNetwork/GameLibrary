@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Rendering.Textures;
 
 namespace Xemio.GameLibrary.Rendering
 {
     [AbstractComponent]
-    public interface IRenderManager : IComponent
+    public interface IRenderManager
     {
-        /// <summary>
-        /// Gets the graphics device.
-        /// </summary>
-        GraphicsDevice GraphicsDevice { get; }
         /// <summary>
         /// Clears the screen.
         /// </summary>
@@ -26,11 +22,6 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="translation">The translation.</param>
         void Translate(Vector2 translation);
-        /// <summary>
-        /// Sets the rotation to the specified angle in radians.
-        /// </summary>
-        /// <param name="rotation">The rotation.</param>
-        void Rotate(float rotation);
         /// <summary>
         /// Renders the specified texture.
         /// </summary>

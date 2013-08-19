@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Drawing.Text;
 using System.Drawing.Imaging;
-using Xemio.GameLibrary.Rendering.Textures;
+using Xemio.GameLibrary.Content;
 
 namespace Xemio.GameLibrary.Rendering.Fonts
 {
@@ -81,7 +81,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         public static SpriteFont Create(Bitmap[] bitmaps)
         {
             SpriteFont spriteFont = new SpriteFont();
-            ITextureFactory factory = XGL.Components.Get<ITextureFactory>();
+            ContentManager content = XGL.Components.Get<ContentManager>();
 
             for (int i = 0; i < bitmaps.Length; i++)
             {
@@ -94,7 +94,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                         bitmaps[i].Save(stream, ImageFormat.Png);
                         stream.Seek(0, SeekOrigin.Begin);
 
-                        spriteFont.Textures[i] = factory.CreateTexture(stream.ToArray());
+                        spriteFont.Textures[i] = content.Load<ITexture>(stream);
                         spriteFont.Bitmaps[i] = bitmaps[i];
                     }
                 }

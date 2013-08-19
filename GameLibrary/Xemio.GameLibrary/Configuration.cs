@@ -16,7 +16,6 @@ using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Sound.Loops;
 
@@ -48,7 +47,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets or sets the graphics initializer.
         /// </summary>
-        public abstract IGraphicsInitializer GraphicsInitializer { get; }
+        public abstract IGraphicsInitializer GraphicsProvider { get; }
         /// <summary>
         /// Gets or sets the sound initializer.
         /// </summary>

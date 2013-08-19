@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Rendering.Fonts
 {
@@ -13,20 +14,20 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// Reads a value out of the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public override SpriteFont Read(BinaryReader reader)
+        public override SpriteFont Read(IFormatReader reader)
         {
             SpriteFont font = new SpriteFont();
 
-            font.Kerning = reader.ReadInt32();
-            font.Spacing = reader.ReadInt32();
+            font.Kerning = reader.ReadInteger();
+            font.Spacing = reader.ReadInteger();
 
-            font.Bitmaps = new Bitmap[reader.ReadInt32()];
+            font.Bitmaps = new Bitmap[reader.ReadInteger()];
 
             for (int i = 0; i < font.Bitmaps.Length; i++)
             {
                 if (!reader.ReadBoolean())
                 {
-                    int length = (int)reader.ReadInt64();
+                    int length = (int)reader.ReadLong();
                     byte[] binaryData = reader.ReadBytes(length);
 
                     using (MemoryStream memory = new MemoryStream())
@@ -46,24 +47,24 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        public override void Write(BinaryWriter writer, SpriteFont value)
+        public override void Write(IFormatWriter writer, SpriteFont value)
         {
-            writer.Write(value.Kerning);
-            writer.Write(value.Spacing);
+            writer.WriteInteger("Kerning", value.Kerning);
+            writer.WriteInteger("Spacing", value.Spacing);
 
-            writer.Write(value.Bitmaps.Length);
+            writer.WriteLong("BitmapCount", value.Bitmaps.Length);
 
             foreach (Bitmap bitmap in value.Bitmaps)
             {
-                writer.Write(bitmap == null);
+                writer.WriteBoolean("IsBitmapNull", bitmap == null);
                 if (bitmap != null)
                 {
                     using (MemoryStream memory = new MemoryStream())
                     {
                         bitmap.Save(memory, ImageFormat.Png);
 
-                        writer.Write(memory.Length);
-                        writer.Write(memory.ToArray());
+                        writer.WriteLong("Length", memory.Length);
+                        writer.WriteBytes("Data", memory.ToArray());
                     }
                 }
             }

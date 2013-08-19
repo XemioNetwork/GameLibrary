@@ -5,14 +5,21 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Components.Attributes;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Plugins.Implementations;
+using Xemio.GameLibrary.Rendering.Events;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Math;
 using System.Windows.Forms;
-using Xemio.GameLibrary.Rendering.Textures;
+using Geometry = Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.Rendering
 {
+    [Require(typeof(EventManager))]
+    [Require(typeof(ImplementationManager))]
+
     public class GraphicsDevice : IConstructable
     {
         #region Constructors
@@ -32,9 +39,9 @@ namespace Xemio.GameLibrary.Rendering
 
         #region Properties
         /// <summary>
-        /// Gets or sets the provider.
+        /// Gets the display name.
         /// </summary>
-        public IGraphicsProvider Provider { get; set; }
+        public string DisplayName { get; private set; }
         /// <summary>
         /// Gets the scale.
         /// </summary>
@@ -55,34 +62,21 @@ namespace Xemio.GameLibrary.Rendering
             }
         }
         /// <summary>
-        /// Gets or sets the geometry.
+        /// Gets the geometry manager.
         /// </summary>
-        public IGeometryProvider Geometry
-        {
-            get
-            {
-                if (this.Provider.IsGeometrySupported)
-                {
-                    return this.Provider.Geometry;
-                }
-
-                return GeometryProvider.Empty;
-            }
-        }
+        public IGeometryManager GeometryManager { get; private set; }
         /// <summary>
-        /// Gets the texture factory.
+        /// Gets the geometry factory.
         /// </summary>
-        public ITextureFactory TextureFactory
-        {
-            get { return this.Provider.TextureFactory; }
-        }
+        public IGeometryFactory GeometryFactory { get; private set; }
         /// <summary>
         /// Gets the render manager.
         /// </summary>
-        public IRenderManager RenderManager
-        {
-            get { return this.Provider.RenderManager; }
-        }
+        public IRenderManager RenderManager { get; private set; }
+        /// <summary>
+        /// Gets the render factory.
+        /// </summary>
+        public IRenderFactory RenderFactory { get; private set; }
         /// <summary>
         /// Gets the display mode.
         /// </summary>
@@ -121,16 +115,38 @@ namespace Xemio.GameLibrary.Rendering
         }
         #endregion
 
-        #region Methods
+        #region Private Methods
         /// <summary>
         /// Creates the back buffer.
         /// </summary>
         /// <param name="displayMode">The display mode.</param>
         private void CreateBackBuffer(DisplayMode displayMode)
         {
-            this.BackBuffer = this.TextureFactory.CreateRenderTarget(
+            this.BackBuffer = this.RenderFactory.CreateTarget(
                 displayMode.Width,
                 displayMode.Height);
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Initializes the graphics device.
+        /// </summary>
+        /// <param name="initializer">The initializer.</param>
+        public void Initialize(IGraphicsInitializer initializer)
+        {
+            initializer.Initialize(this);
+
+            this.DisplayName = initializer.DisplayName;
+            
+            this.GeometryManager = initializer.CreateGeometryManager() ?? Geometry.GeometryManager.Empty;
+            this.GeometryFactory = initializer.CreateGeometryFactory() ?? Geometry.GeometryFactory.Empty;
+            this.RenderManager = initializer.CreateRenderManager();
+            this.RenderFactory = initializer.CreateRenderFactory();
+
+            var implementations = XGL.Components.Get<ImplementationManager>();
+            implementations.Register<Type, IContentReader>(initializer.CreateTextureReader());
+            implementations.Register<Type, IContentWriter>(initializer.CreateTextureWriter());
         }
         /// <summary>
         /// Clears the screen.
@@ -138,7 +154,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="color">The color.</param>
         public void Clear(Color color)
         {
-            this.Provider.RenderManager.Clear(color);
+            this.RenderManager.Clear(color);
         }
         /// <summary>
         /// Renders to the specified render target.
@@ -154,7 +170,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public void Present()
         {
-            this.Provider.RenderManager.Present();
+            this.RenderManager.Present();
         }
         #endregion
 
@@ -164,12 +180,6 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public void Construct()
         {
-            XGL.Components.Add(this.TextureFactory);
-            XGL.Components.Add(this.RenderManager);
-            XGL.Components.Add(this.Geometry);
-            XGL.Components.Add(this.Geometry.Factory);
-            XGL.Components.Add(this.Provider);
-
             this.CreateBackBuffer(this.DisplayMode);
         }
         #endregion
