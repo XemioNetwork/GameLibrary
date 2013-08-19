@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
+using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Components
@@ -36,8 +37,8 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         public bool IsConstructed { get; private set; }
         #endregion
-        
-        #region Methods
+
+        #region Private Methods
         /// <summary>
         /// Adds the specified value.
         /// </summary>
@@ -74,6 +75,22 @@ namespace Xemio.GameLibrary.Components
             return types.Distinct();
         }
         /// <summary>
+        /// Checks for required components for the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        private void CheckRequiredComponents(Type type)
+        {
+            object[] attributes = type.GetCustomAttributes(typeof(RequireAttribute), true);
+
+            foreach (RequireAttribute attribute in attributes)
+            {
+                if (!this._componentMappings.ContainsKey(attribute.ComponentType))
+                {
+                    throw new MissingComponentException(type, attribute.ComponentType);
+                }
+            }
+        }
+        /// <summary>
         /// Constructs the specified component if it's an IConstructable.
         /// </summary>
         /// <param name="component">The component.</param>
@@ -82,9 +99,13 @@ namespace Xemio.GameLibrary.Components
             IConstructable constructable = component as IConstructable;
             if (constructable != null)
             {
+                this.CheckRequiredComponents(constructable.GetType());
                 constructable.Construct();
             }
         }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Constructs all loaded components.
         /// </summary>
@@ -101,9 +122,6 @@ namespace Xemio.GameLibrary.Components
                 }
             }
         }
-        #endregion
-
-        #region IComponentProvider Member
         /// <summary>
         /// Adds the specified component.
         /// </summary>
@@ -139,7 +157,7 @@ namespace Xemio.GameLibrary.Components
         /// Gets a component by a specified type.
         /// </summary>
         /// <typeparam name="T">The type of the component.</typeparam>
-        public T Get<T>() where T : IComponent
+        public T Get<T>() where T : class, IComponent
         {
             if (this._componentMappings.ContainsKey(typeof(T)))
             {
@@ -147,6 +165,21 @@ namespace Xemio.GameLibrary.Components
             }
 
             return default(T);
+        }
+        /// <summary>
+        /// Requires the specified component.
+        /// </summary>
+        /// <typeparam name="T">The component type.</typeparam>
+        public T Require<T>() where T : class, IComponent
+        {
+            T component = this.Get<T>();
+
+            if (component == null)
+            {
+                throw new MissingComponentException(typeof(T));
+            }
+
+            return component;
         }
         #endregion
     }

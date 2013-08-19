@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Xemio.GameLibrary.Components
+namespace Xemio.GameLibrary.Components.Attributes
 {
     /// <summary>
     /// Used above interfaces that should be used as abstractions in the component manager.
