@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Content.Formats
         /// </summary>
         public string Id
         {
-            get { return "formatless"; }
+            get { return "Default"; }
         }
         #endregion
 
