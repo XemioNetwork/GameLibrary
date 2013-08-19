@@ -21,11 +21,12 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         public GraphicsDevice()
         {
-            this.Targets = new Stack<IRenderTarget>();
+            this._targets = new Stack<IRenderTarget>();
         }
         #endregion
 
         #region Fields
+        private readonly Stack<IRenderTarget> _targets;
         private DisplayMode _displayMode;
         #endregion
 
@@ -112,16 +113,12 @@ namespace Xemio.GameLibrary.Rendering
         {
             get
             {
-                if (this.Targets.Count > 0)
-                    return this.Targets.First();
+                if (this._targets.Count > 0)
+                    return this._targets.First();
 
                 return this.BackBuffer;
             }
         }
-        /// <summary>
-        /// Gets the render target stack.
-        /// </summary>
-        internal Stack<IRenderTarget> Targets { get; private set; }
         #endregion
 
         #region Methods
@@ -149,8 +146,8 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="target">The target.</param>
         public IDisposable RenderTo(IRenderTarget target)
         {
-            this.Targets.Push(target);
-            return new ActionDisposable(() => this.Targets.Pop());
+            this._targets.Push(target);
+            return new ActionDisposable(() => this._targets.Pop());
         }
         /// <summary>
         /// Presents all drawn data.

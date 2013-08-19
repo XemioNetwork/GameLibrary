@@ -78,14 +78,6 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public bool IsDestroyed { get; private set; }
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is synced.
-        /// </summary>
-        public bool IsSynced { get; protected set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is creation synced.
-        /// </summary>
-        public bool IsCreationSynced { get; protected set; }
-        /// <summary>
         /// Gets a value indicating whether this instance is dirty.
         /// </summary>
         public bool IsDirty { get; set; }
@@ -132,14 +124,6 @@ namespace Xemio.GameLibrary.Entities
         public T GetComponent<T>() where T : EntityComponent
         {
             return this.Components.FirstOrDefault(component => component is T) as T;
-        }
-        /// <summary>
-        /// Gets a container by the specified ID.
-        /// </summary>
-        /// <param name="id">The id.</param>
-        public EntityDataContainer GetContainer(int id)
-        {
-            return this.Containers.FirstOrDefault(container => container.Id == id);
         }
         /// <summary>
         /// Gets a specific container by a specified type.

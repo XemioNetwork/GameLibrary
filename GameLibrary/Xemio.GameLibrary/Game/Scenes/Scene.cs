@@ -136,15 +136,23 @@ namespace Xemio.GameLibrary.Game.Scenes
         {
             this.Parent.Remove(this);
         }
+        /// <summary>
+        /// Called when the scene was added to a parent.
+        /// </summary>
+        public virtual void OnEnter()
+        {
+            
+        }
+        /// <summary>
+        /// Called when the scene gets removed from it's parent.
+        /// </summary>
+        public virtual void OnLeave()
+        {
+            
+        }
         #endregion
 
         #region Virtual Methods
-        /// <summary>
-        /// Initializes the scene.
-        /// </summary>
-        public virtual void OnAttached()
-        {
-        }
         /// <summary>
         /// Loads the scene content.
         /// </summary>

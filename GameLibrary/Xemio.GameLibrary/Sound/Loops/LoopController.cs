@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Sound.Loops
 {
-    public class LoopController
+    internal class LoopController
     {
         #region Constructors
         /// <summary>

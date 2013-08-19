@@ -39,15 +39,5 @@ namespace Xemio.GameLibrary.Network.Events
         /// </summary>
         public IConnection Connection { get; private set; }
         #endregion
-
-        #region IEvent Member
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IEvent"/> is synced.
-        /// </summary>
-        public bool Synced
-        {
-            get { return false; }
-        }
-        #endregion
     }
 }

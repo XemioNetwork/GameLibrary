@@ -101,18 +101,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public double TargetFrameTime { get; set; }
         #endregion
-
-        #region Events
-        /// <summary>
-        /// Occurs when the game should be updated.
-        /// </summary>
-        public event GameEventHandler Tick;
-        /// <summary>
-        /// Occurs when the game should render all scenes.
-        /// </summary>
-        public event GameEventHandler Render;
-        #endregion
-
+        
         #region Event Methods
         /// <summary>
         /// Called when the game should be updated.
@@ -127,10 +116,6 @@ namespace Xemio.GameLibrary.Game.Timing
             //as frequent as tick
             this.FrameIndex++;
 
-            if (this.Tick != null)
-            {
-                this.Tick(elapsed);
-            }
             foreach (IGameHandler gameHandler in this._handlers)
             {
                 gameHandler.Tick(elapsed);
@@ -147,10 +132,6 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             Stopwatch renderWatch = Stopwatch.StartNew();
 
-            if (this.Render != null)
-            {
-                this.Render(elapsed);
-            }
             foreach (IGameHandler gameHandler in this._handlers)
             {
                 gameHandler.Render();
@@ -358,10 +339,4 @@ namespace Xemio.GameLibrary.Game.Timing
         }
         #endregion
     }
-
-    /// <summary>
-    /// Represents a game event handler.
-    /// </summary>
-    /// <param name="elapsed">The elapsed.</param>
-    public delegate void GameEventHandler(float elapsed);
 }
