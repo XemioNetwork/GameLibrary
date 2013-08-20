@@ -73,9 +73,10 @@ namespace Xemio.GameLibrary.Content
         public T Load<T>(string fileName)
         {
             IFileSystem fileSystem = XGL.Components.Get<IFileSystem>();
-            Stream stream = fileSystem.Open(fileName);
-
-            return this.Load<T>(stream, Path.GetExtension(fileName));
+            using (Stream stream = fileSystem.Open(fileName))
+            {
+                return this.Load<T>(stream, Path.GetExtension(fileName));
+            }
         }
         /// <summary>
         /// Loads the specified stream.
