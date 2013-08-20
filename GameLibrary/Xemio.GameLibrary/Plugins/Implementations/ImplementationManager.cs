@@ -30,11 +30,11 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         private readonly ImplementationCache _cache;
         #endregion
 
-        #region Methods
+        #region Private Methods
         /// <summary>
         /// Gets the default value for the specified type.
         /// </summary>
-        private T GetDefaultValue<T>()
+        private static T GetDefaultValue<T>()
         {
             if (typeof(T) == typeof(string))
             {
@@ -43,6 +43,33 @@ namespace Xemio.GameLibrary.Plugins.Implementations
 
             return default(T);
         }
+        /// <summary>
+        /// Resolves the specified key.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="key">The key.</param>
+        /// <param name="creationType">Type of the creation.</param>
+        /// <param name="useDefault">if set to <c>true</c> the default key will be resolved if the specified key does not exist.</param>
+        private TValue Resolve<TKey, TValue>(TKey key, CreationType creationType, bool useDefault) where TValue : class, ILinkable<TKey>
+        {
+            TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, creationType);
+            bool isDefaultKey = object.Equals(key, GetDefaultValue<TKey>());
+
+            if (value == default(TValue) && isDefaultKey)
+            {
+                throw new InvalidOperationException("The specified key does not exist, the ImplementationManager couldn't find any value for the default key instead.");
+            }
+            if (value == default(TValue) && useDefault)
+            {
+                return GetNew<TKey, TValue>(GetDefaultValue<TKey>());
+            }
+
+            return value;
+        }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Registers the specified value.
         /// </summary>
@@ -59,21 +86,10 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
-        public TValue GetNew<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
+        /// <param name="useDefault">if set to <c>true</c> the default key will be resolved if the specified key does not exist..</param>
+        public TValue GetNew<TKey, TValue>(TKey key, bool useDefault = true) where TValue : class, ILinkable<TKey>
         {
-            TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.CreateNew);
-            bool isDefaultKey = object.Equals(key, this.GetDefaultValue<TKey>());
-
-            if (value == default(TValue) && isDefaultKey)
-            {
-                throw new InvalidOperationException("No value was found for the default key.");
-            }
-            if (value == default(TValue))
-            {
-                return GetNew<TKey, TValue>(this.GetDefaultValue<TKey>());
-            }
-
-            return value;
+            return this.Resolve<TKey, TValue>(key, CreationType.CreateNew, useDefault);
         }
         /// <summary>
         /// Resolves the specified key.
@@ -81,21 +97,10 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
-        public TValue Get<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
+        /// <param name="useDefault">if set to <c>true</c> the default key will be resolved if the specified key does not exist..</param>
+        public TValue Get<TKey, TValue>(TKey key, bool useDefault = true) where TValue : class, ILinkable<TKey>
         {
-            TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, CreationType.Singleton);
-            bool isDefaultKey = object.Equals(key, this.GetDefaultValue<TKey>());
-            
-            if (value == default(TValue) && isDefaultKey)
-            {
-                throw new InvalidOperationException("No value was found for the default key.");
-            }
-            if (value == default(TValue))
-            {
-                return Get<TKey, TValue>(this.GetDefaultValue<TKey>());
-            }
-
-            return value;
+            return this.Resolve<TKey, TValue>(key, CreationType.Singleton, useDefault);
         }
         /// <summary>
         /// Resolves the type for the specified key.

@@ -6,7 +6,6 @@ using System.Text;
 using System.Windows.Forms;
 using Xemio.GameLibrary;
 using Xemio.GameLibrary.Common;
-using Xemio.GameLibrary.Common.Extensions;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Events.Logging;

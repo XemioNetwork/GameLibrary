@@ -6,7 +6,7 @@ using System.IO;
 using System.Reflection;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
-using Xemio.GameLibrary.Common.Extensions;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Network.Packages
@@ -22,9 +22,10 @@ namespace Xemio.GameLibrary.Network.Packages
         public void Serialize(Package package, Stream stream)
         {
             BinaryWriter writer = new BinaryWriter(stream);
+            ContentManager content = XGL.Components.Require<ContentManager>();
 
             writer.Write(package.Id);
-            writer.WriteInstance(package);
+            content.Save(package, stream);
         }
         /// <summary>
         /// Deserializes the specified reader.
@@ -33,13 +34,14 @@ namespace Xemio.GameLibrary.Network.Packages
         public Package Deserialize(Stream stream)
         {
             var reader = new BinaryReader(stream);
-            
-            var implementations = XGL.Components.Get<ImplementationManager>();
+
+            var content = XGL.Components.Require<ContentManager>();
+            var implementations = XGL.Components.Require<ImplementationManager>();
 
             int packageId = reader.ReadInt32();
             Type packageType = implementations.GetType<int, Package>(packageId);
 
-            return (Package)reader.ReadInstance(packageType);
+            return (Package)content.Load(packageType, stream);
         }
         #endregion
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Entities.Data;
 using Xemio.GameLibrary.Entities.Events;
 using Xemio.GameLibrary.Events;
@@ -10,7 +11,6 @@ using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Math.Collision;
 using Xemio.GameLibrary.Math.Collision.Sources;
-using Xemio.GameLibrary.Network.Synchronization;
 
 namespace Xemio.GameLibrary.Entities
 {
@@ -84,22 +84,22 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets the components.
         /// </summary>
-        [ExcludeSync]
+        [ExcludeSerialization]
         public List<EntityComponent> Components { get; private set; }
         /// <summary>
         /// Gets the data containers.
         /// </summary>
-        [ExcludeSync]
+        [ExcludeSerialization]
         public List<EntityDataContainer> Containers { get; private set; }
         /// <summary>
         /// Gets the renderer.
         /// </summary>
-        [ExcludeSync]
+        [ExcludeSerialization]
         public EntityRenderer Renderer { get; protected set; }
         /// <summary>
         /// Gets the environment.
         /// </summary>
-        [ExcludeSync]
+        [ExcludeSerialization]
         public EntityEnvironment Environment { get; internal set; }
         #endregion
 

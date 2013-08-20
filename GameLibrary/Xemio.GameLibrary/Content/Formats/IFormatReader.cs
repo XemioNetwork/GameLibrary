@@ -86,15 +86,5 @@ namespace Xemio.GameLibrary.Content.Formats
         /// Reads a rectangle value.
         /// </summary>
         Rectangle ReadRectangle();
-        /// <summary>
-        /// Reads an instance.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        object ReadInstance(Type type);
-        /// <summary>
-        /// Reads all properties for the specified instance.
-        /// </summary>
-        /// <param name="instance">The instance.</param>
-        object ReadProperties(object instance);
     }
 }

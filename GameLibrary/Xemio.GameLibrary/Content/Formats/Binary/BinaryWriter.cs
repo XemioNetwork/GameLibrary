@@ -5,118 +5,194 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.Content.Formats
+namespace Xemio.GameLibrary.Content.Formats.Binary
 {
-    public interface IFormatWriter
+    using IO = System.IO;
+
+    public class BinaryWriter : IFormatWriter
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryWriter"/> class.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        public BinaryWriter(Stream stream)
+        {
+            this._writer = new IO.BinaryWriter(stream);
+            this.Stream = stream;
+        }
+        #endregion
+
+        #region Fields
+        private readonly IO.BinaryWriter _writer;
+        #endregion
+        
+        #region Implementation of IFormatWriter
         /// <summary>
         /// Gets the stream.
         /// </summary>
-        Stream Stream { get; }
+        public Stream Stream { get; private set; }
         /// <summary>
         /// Begins a new section.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        void BeginSection(string tag);
+        public void BeginSection(string tag)
+        {
+        }
         /// <summary>
         /// Ends the current section.
         /// </summary>
-        void EndSection();
+        public void EndSection()
+        {
+        }
         /// <summary>
         /// Writes the specified unsigned integer value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteUnsignedInteger(string tag, uint value);
+        public void WriteUnsignedInteger(string tag, uint value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified unsigned short value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteUnsignedShort(string tag, ushort value);
+        public void WriteUnsignedShort(string tag, ushort value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified unsigned long value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteUnsignedLong(string tag, ulong value);
+        public void WriteUnsignedLong(string tag, ulong value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified integer value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteInteger(string tag, int value);
+        public void WriteInteger(string tag, int value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified short value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteShort(string tag, short value);
+        public void WriteShort(string tag, short value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified long value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteLong(string tag, long value);
+        public void WriteLong(string tag, long value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified float value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteFloat(string tag, float value);
+        public void WriteFloat(string tag, float value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified double value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteDouble(string tag, double value);
+        public void WriteDouble(string tag, double value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified decimal value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteDecimal(string tag, decimal value);
+        public void WriteDecimal(string tag, decimal value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified boolean value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteBoolean(string tag, bool value);
+        public void WriteBoolean(string tag, bool value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified byte value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteByte(string tag, byte value);
+        public void WriteByte(string tag, byte value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified byte array value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteBytes(string tag, byte[] value);
+        public void WriteBytes(string tag, byte[] value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified character value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteCharacter(string tag, char value);
+        public void WriteCharacter(string tag, char value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified string value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteString(string tag, string value);
+        public void WriteString(string tag, string value)
+        {
+            this._writer.Write(value);
+        }
         /// <summary>
         /// Writes the specified vector value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteVector2(string tag, Vector2 value);
+        public void WriteVector2(string tag, Vector2 value)
+        {
+            this._writer.Write(value.X);
+            this._writer.Write(value.Y);
+        }
         /// <summary>
         /// Writes the specified rectangle value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>
         /// <param name="value">The value.</param>
-        void WriteRectangle(string tag, Rectangle value);
+        public void WriteRectangle(string tag, Rectangle value)
+        {
+            this._writer.Write(value.X);
+            this._writer.Write(value.Y);
+            this._writer.Write(value.Width);
+            this._writer.Write(value.Height);
+        }
+        #endregion
     }
 }
