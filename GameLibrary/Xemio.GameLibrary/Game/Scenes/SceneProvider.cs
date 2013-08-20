@@ -9,8 +9,6 @@ using Xemio.GameLibrary.Rendering;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
-    [Require(typeof(GraphicsDevice))]
-
     public abstract class SceneProvider
     {
         #region Fields

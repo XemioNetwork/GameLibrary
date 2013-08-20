@@ -17,11 +17,8 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public ThreadInvoker()
         {
-            if (_invokerControl == null)
-            {
-                _invokerControl = new Control();
-                _invokerControl.CreateControl();
-            }
+            this._invokerControl = new Control();
+            this._invokerControl.CreateControl();
         }
         #endregion
 

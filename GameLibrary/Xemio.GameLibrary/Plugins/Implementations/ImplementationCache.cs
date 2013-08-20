@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,12 +16,14 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// </summary>
         public ImplementationCache()
         {
+            this._lock = new object();
             this._cachedContexts = new Dictionary<IAssemblyContext, HashSet<Type>>();
             this._linkers = new Dictionary<Type, dynamic>();
         }
         #endregion
 
         #region Fields
+        private readonly object _lock;
         /// <summary>
         /// Holding a reference from a IAssemblyContext to all Types that we're already loaded from that context.
         /// </summary>
@@ -39,9 +42,9 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TValue">The type of the value.</typeparam>
         private void InitializeLinker<TKey, TValue>() where TValue : ILinkable<TKey>
         {
-            if (!this._linkers.ContainsKey(typeof(TValue)))
+            if (!this._linkers.ContainsKey(typeof (TValue)))
             {
-                this._linkers.Add(typeof(TValue), new GenericLinker<TKey, TValue>());
+                this._linkers.Add(typeof (TValue), new GenericLinker<TKey, TValue>());
             }
         }
         #endregion
@@ -70,21 +73,24 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="creationType">Type of the creation.</param>
         public TValue Resolve<TKey, TValue>(IAssemblyContext context, TKey key, CreationType creationType) where TValue : ILinkable<TKey>
         {
-            if (!this.InCache<TValue>(context))
+            lock (this._lock)
             {
-                this.Cache<TKey, TValue>(context);
+                if (!this.InCache<TValue>(context))
+                {
+                    this.Cache<TKey, TValue>(context);
+                }
+
+                GenericLinker<TKey, TValue> linker = this._linkers[typeof (TValue)];
+
+                //Temporary set the creation type for the specified linker, to
+                //provide access to the instance creation feature of our GenericLinker class
+                linker.CreationType = creationType;
+
+                //Resolve the value.
+                TValue value = linker.Resolve(key);
+
+                return value;
             }
-
-            GenericLinker<TKey, TValue> linker = this._linkers[typeof(TValue)];
-
-            //Temporary set the creation type for the specified linker, to
-            //provide access to the instance creation feature of our GenericLinker class
-            linker.CreationType = creationType;
-
-            //Resolve the value.
-            TValue value = linker.Resolve(key);
-
-            return value;
         }
         /// <summary>
         /// Resolves all instances for the specified type.

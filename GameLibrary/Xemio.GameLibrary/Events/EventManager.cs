@@ -12,6 +12,8 @@ namespace Xemio.GameLibrary.Events
     public class EventManager : IComponent, IObservable<IEvent>
     {
         #region Fields
+        private readonly object _lock = new object();
+
         private readonly List<dynamic> _observers = new List<dynamic>();
         private readonly Dictionary<Type, List<dynamic>> _typeMappings = new Dictionary<Type, List<dynamic>>(); 
         #endregion
@@ -45,10 +47,12 @@ namespace Xemio.GameLibrary.Events
         {
             Type type = typeof(T);
 
-            if (!this._typeMappings.ContainsKey(type))
+            lock (this._lock)
             {
-                this._typeMappings.Add(type, new List<dynamic>(
-                    this._observers.Where(observer => this.IsObserver<T>(observer))));
+                if (!this._typeMappings.ContainsKey(type))
+                {
+                    this._typeMappings.Add(type, new List<dynamic>(this._observers.Where(observer => this.IsObserver<T>(observer))));
+                }
             }
 
             return this._typeMappings[type];
@@ -85,8 +89,11 @@ namespace Xemio.GameLibrary.Events
         /// <param name="observer">The observer.</param>
         public IDisposable Subscribe(IObserver<IEvent> observer)
         {
-            this._observers.Add(observer);
-            this._typeMappings.Clear();
+            lock (this._lock)
+            {
+                this._observers.Add(observer);
+                this._typeMappings.Clear();
+            }
 
             return new ActionDisposable(() => this.Remove(observer));
         }
