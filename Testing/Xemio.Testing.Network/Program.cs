@@ -34,13 +34,16 @@ namespace Xemio.Testing.Network
             for (int i = 0; i < 20; i++)
                 t.Invoke(() => Console.WriteLine("Invoked: {0}", i));
 
+            var form = new TestForm();
             var config = XGL.Configure()
                 .DefaultComponents()
                 .DefaultInput()
+                .Surface(form)
                 .DisableSplashScreen()
                 .BuildConfiguration();
             
-            XGL.Run(new TestForm(), config);
+            XGL.Run(config);
+            Application.Run(form);
         }
         #endregion
         
