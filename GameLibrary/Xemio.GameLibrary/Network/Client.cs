@@ -20,7 +20,7 @@ using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
 {
-    [Require(typeof(GameLoop))]
+    [Require(typeof(IGameLoop))]
 
     public class Client : IClient, IGameHandler, IConstructable
     {
@@ -172,7 +172,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.Components.Get<GameLoop>();
+            IGameLoop loop = XGL.Components.Get<IGameLoop>();
             loop.Subscribe(this);
         }
         #endregion

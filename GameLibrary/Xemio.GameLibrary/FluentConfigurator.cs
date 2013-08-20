@@ -4,11 +4,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Windows.Forms;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Game.Scenes;
+using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Surfaces;
 using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary
@@ -127,6 +130,40 @@ namespace Xemio.GameLibrary
         public FluentConfigurator FileSystem(IFileSystem fileSystem)
         {
             this._configuration.Set(fileSystem);
+            return this;
+        }
+        /// <summary>
+        /// Sets the game loop.
+        /// </summary>
+        /// <typeparam name="T">The game loop type.</typeparam>
+        public FluentConfigurator GameLoop<T>() where T : IGameLoop, new()
+        {
+            return this.GameLoop(new T());
+        }
+        /// <summary>
+        /// Sets the game loop.
+        /// </summary>
+        /// <param name="gameLoop">The game loop.</param>
+        public FluentConfigurator GameLoop(IGameLoop gameLoop)
+        {
+            this._configuration.Set(gameLoop);
+            return this;
+        }
+        /// <summary>
+        /// Sets the surface to a window surface.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        public FluentConfigurator Surface(Control control)
+        {
+            return this.Surface(new WindowSurface(control.Handle));
+        }
+        /// <summary>
+        /// Sets the surface.
+        /// </summary>
+        /// <param name="surface">The surface.</param>
+        public FluentConfigurator Surface(ISurface surface)
+        {
+            this._configuration.Set(surface);
             return this;
         }
         /// <summary>

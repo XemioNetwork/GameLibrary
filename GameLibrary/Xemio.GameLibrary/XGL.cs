@@ -58,69 +58,27 @@ namespace Xemio.GameLibrary
         }
         /// <summary>
         /// Starts the XGL with the specified configuration.
-        /// The XGL will render to the given form.
-        /// Also calls "Application.Run".
         /// </summary>
-        /// <typeparam name="T">The type of the configuration.</typeparam>
-        /// <param name="form">The form.</param>
-        public static void Run<T>(Form form) where T : Configuration, new()
-        {
-            XGL.Run(form, new T());
-        }
-        /// <summary>
-        /// Starts the XGL with the specified configuration.
-        /// </summary>
-        /// <typeparam name="T">The type of the configuration.</typeparam>
-        /// <param name="surface">The surface.</param>
-        public static void Run<T>(ISurface surface) where T : Configuration, new()
-        {
-            XGL.Run(surface, new T());
-        }
-        /// <summary>
-        /// Starts the XGL with the specified configuration.
-        /// The XGL will render to the given form.
-        /// Also calls "Application.Run".
-        /// </summary>
-        /// <param name="form">The form.</param>
-        /// <param name="config">The config.</param>
-        public static void Run(Form form, Configuration config)
-        {
-            XGL.Run(new WindowSurface(form.Handle), config);
-            Application.Run(form);
-        }
-        /// <summary>
-        /// Starts the XGL with the specified configuration.
-        /// </summary>
-        /// <param name="surface">The surface.</param>
-        /// <param name="config">The config.</param>
-        public static void Run(ISurface surface, Configuration config)
-        {
-            XGL.Components.Add(surface);
-            XGL.Run(config);
-        }
-        /// <summary>
-        /// Starts the XGL with the specified configuration.
-        /// </summary>
-        /// <param name="config">The configuration.</param>
-        public static void Run(Configuration config)
+        /// <param name="configuration">The configuration.</param>
+        public static void Run(Configuration configuration)
         {
             if (XGL.Initialized)
                 return;
             
-            config.RegisterComponents();
-            foreach (IComponent component in config.Components)
+            configuration.RegisterComponents();
+            foreach (IComponent component in configuration.Components)
             {
                 XGL.Components.Add(component);
             }
 
-            XGL.InitializeGraphics(config);
-            XGL.InitializeSound(config);
-            XGL.InitializeGameLoop(config);
-            XGL.InitializeInput(config);
+            XGL.InitializeGraphics(configuration);
+            XGL.InitializeSound(configuration);
+            XGL.InitializeGameLoop(configuration);
+            XGL.InitializeInput(configuration);
 
             XGL.Components.Construct();
 
-            XGL.InitializeScenes(config);
+            XGL.InitializeScenes(configuration);
             XGL.Initialized = true;
         }
         #endregion
@@ -174,7 +132,7 @@ namespace Xemio.GameLibrary
         /// <param name="config">The configuration.</param>
         private static void InitializeGameLoop(Configuration config)
         {
-            var gameLoop = XGL.Components.Get<GameLoop>();
+            var gameLoop = XGL.Components.Get<IGameLoop>();
 
             if (gameLoop != null)
             {

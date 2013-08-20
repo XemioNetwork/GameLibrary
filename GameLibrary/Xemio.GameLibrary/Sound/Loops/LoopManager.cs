@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Sound.Loops
 {
-    [Require(typeof(GameLoop))]
+    [Require(typeof(IGameLoop))]
 
     public class LoopManager : IGameHandler, IConstructable
     {
@@ -76,7 +76,7 @@ namespace Xemio.GameLibrary.Sound.Loops
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.Components.Get<GameLoop>();
+            IGameLoop loop = XGL.Components.Get<IGameLoop>();
             loop.Subscribe(this);
         }
         #endregion

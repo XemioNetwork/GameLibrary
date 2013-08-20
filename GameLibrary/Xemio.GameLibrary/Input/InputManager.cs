@@ -11,7 +11,7 @@ using Xemio.GameLibrary.Input.Events;
 
 namespace Xemio.GameLibrary.Input
 {
-    [Require(typeof(GameLoop))]
+    [Require(typeof(IGameLoop))]
     [Require(typeof(EventManager))]
 
     public class InputManager : IConstructable, IGameHandler
@@ -151,7 +151,7 @@ namespace Xemio.GameLibrary.Input
             eventManager.Subscribe<InputStateEvent>(this.HandleInputEvent);
             eventManager.Subscribe<MousePositionEvent>(this.HandleMousePositionEvent);
 
-            var gameLoop = XGL.Components.Get<GameLoop>();
+            var gameLoop = XGL.Components.Get<IGameLoop>();
             gameLoop.Subscribe(this);
         }
         #endregion

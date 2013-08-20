@@ -1,4 +1,6 @@
-﻿namespace Xemio.GameLibrary.Game.Scenes
+﻿using Xemio.GameLibrary.Game.Timing;
+
+namespace Xemio.GameLibrary.Game.Scenes
 {
     internal class SceneWrapper : Scene
     {

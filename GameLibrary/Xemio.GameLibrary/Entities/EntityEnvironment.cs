@@ -6,6 +6,7 @@ using System.IO;
 using System.Collections;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities
 {

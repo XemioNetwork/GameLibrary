@@ -4,7 +4,7 @@ using Xemio.GameLibrary.Components.Attributes;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
-    [Require(typeof(GameLoop))]
+    [Require(typeof(IGameLoop))]
 
     public class GameTime : IConstructable, IGameHandler
     {
@@ -40,7 +40,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.Components.Get<GameLoop>();
+            IGameLoop loop = XGL.Components.Get<IGameLoop>();
             loop.Subscribe(this);
         }
         #endregion

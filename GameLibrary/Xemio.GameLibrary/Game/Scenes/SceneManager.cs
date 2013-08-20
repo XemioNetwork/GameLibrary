@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.Components.Get<GameLoop>();
+            IGameLoop loop = XGL.Components.Get<IGameLoop>();
             loop.Subscribe(this);
 
             this.PresentChanges = true;

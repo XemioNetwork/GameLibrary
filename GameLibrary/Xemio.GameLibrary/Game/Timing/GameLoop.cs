@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
-    public class GameLoop : IComponent
+    public class GameLoop : IGameLoop
     {
         #region Constructors
         /// <summary>
@@ -107,7 +107,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// Called when the game should be updated.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
-        public virtual void OnTick(float elapsed)
+        protected virtual void OnTick(float elapsed)
         {
             Stopwatch tickWatch = Stopwatch.StartNew();
 
@@ -128,7 +128,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// Called when the game should be rendered.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
-        public virtual void OnRender(float elapsed)
+        protected virtual void OnRender(float elapsed)
         {
             Stopwatch renderWatch = Stopwatch.StartNew();
 

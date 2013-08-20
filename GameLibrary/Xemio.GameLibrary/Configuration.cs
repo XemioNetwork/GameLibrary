@@ -16,6 +16,7 @@ using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Surfaces;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Sound.Loops;
 
@@ -57,6 +58,14 @@ namespace Xemio.GameLibrary
         /// </summary>
         public abstract IFileSystem FileSystem { get; }
         /// <summary>
+        /// Gets the game loop.
+        /// </summary>
+        public abstract IGameLoop GameLoop { get; }
+        /// <summary>
+        /// Gets the surface.
+        /// </summary>
+        public abstract ISurface Surface { get; }
+        /// <summary>
         /// Gets a value indicating whether to create a default player input.
         /// </summary>
         public bool CreatePlayerInput { get; set; }
@@ -96,8 +105,9 @@ namespace Xemio.GameLibrary
         public virtual void RegisterComponents()
         {
             this.Components.Add(this.FileSystem);
+            this.Components.Add(this.GameLoop);
+            this.Components.Add(this.Surface);
 
-            this.Components.Add(new GameLoop());
             this.Components.Add(new EventManager());
             this.Components.Add(new SceneManager());
             this.Components.Add(new InputManager());

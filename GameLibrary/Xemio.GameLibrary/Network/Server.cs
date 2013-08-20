@@ -23,7 +23,7 @@ using Xemio.GameLibrary.Game;
 namespace Xemio.GameLibrary.Network
 {
     [Require(typeof(EventManager))]
-    [Require(typeof(GameLoop))]
+    [Require(typeof(IGameLoop))]
 
     public class Server : IServer, IGameHandler, IConstructable
     {
@@ -239,7 +239,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void Construct()
         {
-            GameLoop loop = XGL.Components.Get<GameLoop>();
+            IGameLoop loop = XGL.Components.Get<IGameLoop>();
             loop.Subscribe(this);
         }
         #endregion
