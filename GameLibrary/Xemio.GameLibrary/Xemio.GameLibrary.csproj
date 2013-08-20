@@ -169,6 +169,7 @@
     </Compile>
     <Compile Include="Rendering\InterpolationMode.cs" />
     <Compile Include="Rendering\Events\ResolutionChangedEvent.cs" />
+    <Compile Include="Rendering\Surfaces\ISurface.cs" />
     <Compile Include="Rendering\Serialization\TextureReader.cs" />
     <Compile Include="Rendering\Serialization\TextureWriter.cs" />
     <Compile Include="Rendering\SmoothingMode.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Rendering\ITexture.cs" />
     <Compile Include="Game\Scenes\Scene.cs" />
     <Compile Include="Game\Scenes\SceneManager.cs" />
+    <Compile Include="Rendering\Surfaces\WindowSurface.cs" />
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
     <Compile Include="Script\Events\ExecutedCommandEvent.cs" />

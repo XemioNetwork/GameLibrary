@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary.Input.Listeners
 {
@@ -94,22 +95,22 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         public void OnAttached()
         {
-            Control surface = Control.FromHandle(XGL.Handle);
+            var surface = XGL.Components.Require<WindowSurface>();
 
-            surface.MouseMove += this.SurfaceMouseMove;
-            surface.MouseDown += this.SurfaceMouseDown;
-            surface.MouseUp += this.SurfaceMouseUp;
+            surface.Control.MouseMove += this.SurfaceMouseMove;
+            surface.Control.MouseDown += this.SurfaceMouseDown;
+            surface.Control.MouseUp += this.SurfaceMouseUp;
         }
         /// <summary>
         /// Called when the input listener was detached from the player.
         /// </summary>
         public void OnDetached()
         {
-            Control surface = Control.FromHandle(XGL.Handle);
+            var surface = XGL.Components.Require<WindowSurface>();
 
-            surface.MouseMove -= this.SurfaceMouseMove;
-            surface.MouseDown -= this.SurfaceMouseDown;
-            surface.MouseUp -= this.SurfaceMouseUp;
+            surface.Control.MouseMove -= this.SurfaceMouseMove;
+            surface.Control.MouseDown -= this.SurfaceMouseDown;
+            surface.Control.MouseUp -= this.SurfaceMouseUp;
         }
         #endregion
     }

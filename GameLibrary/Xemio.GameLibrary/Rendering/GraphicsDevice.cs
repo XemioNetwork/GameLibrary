@@ -13,6 +13,7 @@ using Xemio.GameLibrary.Rendering.Events;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Math;
 using System.Windows.Forms;
+using Xemio.GameLibrary.Rendering.Surfaces;
 using Geometry = Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.Rendering
@@ -49,14 +50,10 @@ namespace Xemio.GameLibrary.Rendering
         {
             get
             {
-                Control control = Control.FromHandle(XGL.Handle);
-                if (control == null)
-                {
-                    return new Vector2(1, 1);
-                }
+                ISurface surface = XGL.Components.Require<ISurface>();
 
-                float x = control.ClientSize.Width / (float)this.DisplayMode.Width;
-                float y = control.ClientSize.Height / (float)this.DisplayMode.Height;
+                float x = surface.Width / (float)this.DisplayMode.Width;
+                float y = surface.Height / (float)this.DisplayMode.Height;
 
                 return new Vector2(x, y);
             }

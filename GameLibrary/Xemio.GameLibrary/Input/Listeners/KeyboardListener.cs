@@ -2,6 +2,7 @@
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary.Input.Listeners
 {
@@ -51,20 +52,20 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         public void OnAttached()
         {
-            var surface = Control.FromHandle(XGL.Handle);
+            var surface = XGL.Components.Require<WindowSurface>();
 
-            surface.KeyDown += this.SurfaceKeyDown;
-            surface.KeyUp += this.SurfaceKeyUp;
+            surface.Control.KeyDown += this.SurfaceKeyDown;
+            surface.Control.KeyUp += this.SurfaceKeyUp;
         }
         /// <summary>
         /// Called when the input listener was detached from the player.
         /// </summary>
         public void OnDetached()
         {
-            var surface = Control.FromHandle(XGL.Handle);
+            var surface = XGL.Components.Require<WindowSurface>();
 
-            surface.KeyDown -= this.SurfaceKeyDown;
-            surface.KeyUp -= this.SurfaceKeyUp;
+            surface.Control.KeyDown -= this.SurfaceKeyDown;
+            surface.Control.KeyUp -= this.SurfaceKeyUp;
         }
         #endregion
     }

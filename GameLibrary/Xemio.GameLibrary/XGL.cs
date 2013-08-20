@@ -15,6 +15,7 @@ using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Rendering.Surfaces;
 using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Sound.Loops;
 using Xemio.GameLibrary.Network;
@@ -26,10 +27,6 @@ namespace Xemio.GameLibrary
     public static class XGL
     {
         #region Properties
-        /// <summary>
-        /// Gets the handle.
-        /// </summary>
-        public static IntPtr Handle { get; private set; }
         /// <summary>
         /// Gets the component manager.
         /// </summary>
@@ -74,18 +71,10 @@ namespace Xemio.GameLibrary
         /// Starts the XGL with the specified configuration.
         /// </summary>
         /// <typeparam name="T">The type of the configuration.</typeparam>
-        public static void Run<T>(IntPtr handle) where T : Configuration, new()
+        /// <param name="surface">The surface.</param>
+        public static void Run<T>(ISurface surface) where T : Configuration, new()
         {
-            XGL.Run(handle, new T());
-        }
-        /// <summary>
-        /// Starts the XGL with the specified configuration.
-        /// </summary>
-        /// <param name="config">The config.</param>
-        public static void Run(Configuration config)
-        {
-            var control = new Control();
-            XGL.Run(control.Handle, config);
+            XGL.Run(surface, new T());
         }
         /// <summary>
         /// Starts the XGL with the specified configuration.
@@ -96,21 +85,28 @@ namespace Xemio.GameLibrary
         /// <param name="config">The config.</param>
         public static void Run(Form form, Configuration config)
         {
-            XGL.Run(form.Handle, config);
+            XGL.Run(new WindowSurface(form.Handle), config);
             Application.Run(form);
         }
         /// <summary>
         /// Starts the XGL with the specified configuration.
         /// </summary>
-        /// <param name="handle">The handle.</param>
+        /// <param name="surface">The surface.</param>
+        /// <param name="config">The config.</param>
+        public static void Run(ISurface surface, Configuration config)
+        {
+            XGL.Components.Add(surface);
+            XGL.Run(config);
+        }
+        /// <summary>
+        /// Starts the XGL with the specified configuration.
+        /// </summary>
         /// <param name="config">The configuration.</param>
-        public static void Run(IntPtr handle, Configuration config)
+        public static void Run(Configuration config)
         {
             if (XGL.Initialized)
                 return;
-
-            XGL.Handle = handle;
-
+            
             config.RegisterComponents();
             foreach (IComponent component in config.Components)
             {
