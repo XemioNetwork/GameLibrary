@@ -29,7 +29,8 @@ namespace Xemio.GameLibrary.Network.Packages
             bufferWriter.Write(package.Id);
             content.Save(package, buffer);
 
-            buffer.CopyTo(stream);
+            byte[] data = buffer.ToArray();
+            stream.Write(data, 0, data.Length);
         }
         /// <summary>
         /// Deserializes the specified reader.
