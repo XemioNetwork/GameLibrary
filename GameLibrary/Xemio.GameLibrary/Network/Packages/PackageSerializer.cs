@@ -21,11 +21,15 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <param name="stream">The stream.</param>
         public void Serialize(Package package, Stream stream)
         {
-            BinaryWriter writer = new BinaryWriter(stream);
+            MemoryStream buffer = new MemoryStream();
+            BinaryWriter bufferWriter = new BinaryWriter(buffer);
+
             ContentManager content = XGL.Components.Require<ContentManager>();
 
-            writer.Write(package.Id);
-            content.Save(package, stream);
+            bufferWriter.Write(package.Id);
+            content.Save(package, buffer);
+
+            buffer.CopyTo(stream);
         }
         /// <summary>
         /// Deserializes the specified reader.
