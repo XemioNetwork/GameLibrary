@@ -9,7 +9,7 @@ namespace Xemio.GameLibrary.Common
     public static class Singleton<T> where T : class, new()
     {
         #region Fields
-        private static readonly Lazy<T> _lazy = new Lazy<T>();
+        private static readonly T _instance = new T();
         #endregion
 
         #region Properties
@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public static T Value
         {
-            get { return _lazy.Value; }
+            get { return _instance; }
         }
         #endregion
     }
