@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
-    public class GameLoop : IGameLoop
+    public class GameLoop : IGameLoop, IConstructable
     {
         #region Constructors
         /// <summary>
@@ -16,7 +16,6 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public GameLoop()
         {
-            this._invoker = new ThreadInvoker();
             this._handlers = new List<IGameHandler>();
 
             this.Precision = PrecisionLevel.High;
@@ -28,7 +27,7 @@ namespace Xemio.GameLibrary.Game.Timing
         private Task _loopTask;
         private Stopwatch _gameTime;
 
-        private readonly ThreadInvoker _invoker;
+        private ThreadInvoker _invoker;
         private readonly List<IGameHandler> _handlers;
 
         private double _renderTime;
@@ -336,6 +335,16 @@ namespace Xemio.GameLibrary.Game.Timing
                     Thread.Sleep(timeTillNextFrame);
                     break;
             }
+        }
+        #endregion
+
+        #region Implementation of IConstructable
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            this._invoker = new ThreadInvoker();
         }
         #endregion
     }
