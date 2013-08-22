@@ -30,7 +30,7 @@ namespace Xemio.Testing.Network
         [STAThread]
         static void Main(string[] args)
         {
-            var t = new WindowInvoker();
+            var t = new ThreadInvoker();
 
             for (int i = 0; i < 20; i++)
                 t.Invoke(() => Console.WriteLine("Invoked: {0}", i));
