@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
@@ -24,10 +25,14 @@ namespace Xemio.GameLibrary.Game.Timing
         #endregion
 
         #region Fields
+        private IThreadInvoker _invoker;
+
+        private bool _isConstructed;
+        private bool _requestRun;
+
         private Task _loopTask;
         private Stopwatch _gameTime;
 
-        private ThreadInvoker _invoker;
         private readonly List<IGameHandler> _handlers;
 
         private double _renderTime;
@@ -147,6 +152,12 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public void Run()
         {
+            if (!this._isConstructed)
+            {
+                this._requestRun = true;
+                return;
+            }
+
             if (!this.Active)
             {
                 this.Active = true;
@@ -191,6 +202,10 @@ namespace Xemio.GameLibrary.Game.Timing
             this._fpsCount = 0;
             this._tickTime = 0;
             this._renderTime = 0;
+
+            this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
+            this._lastTick = this._gameTime.Elapsed.TotalMilliseconds;
+            this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
         }
         /// <summary>
         /// A function representing the internal game loop logic.
@@ -201,10 +216,6 @@ namespace Xemio.GameLibrary.Game.Timing
             this._requestRender = true;
 
             this.ResetFields();
-
-            this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
-            this._lastTick = this._gameTime.Elapsed.TotalMilliseconds;
-            this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
             
             while (this.Active)
             {
@@ -344,7 +355,13 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public void Construct()
         {
-            this._invoker = new ThreadInvoker();
+            this._invoker = XGL.Components.Get<IThreadInvoker>();
+            this._isConstructed = true;
+
+            if (this._requestRun)
+            {
+                this.Run();
+            }
         }
         #endregion
     }

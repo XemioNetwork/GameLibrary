@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Network.Packages;
+using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary.Network.Protocols.Local
 {
@@ -49,7 +50,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
         /// <param name="package">The package.</param>
         protected void Add(Package package)
         {
-            var invoker = XGL.Components.Get<ThreadInvoker>();
+            var invoker = XGL.Components.Get<IThreadInvoker>();
             var queuePackage = new QueuePackage(package, this.SimulatedLatency);
 
             invoker.Invoke(() => this._packageQueue.Add(queuePackage));
@@ -101,7 +102,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
                 Thread.Sleep(1);
             }
 
-            ThreadInvoker invoker = XGL.Components.Get<ThreadInvoker>();
+            IThreadInvoker invoker = XGL.Components.Get<IThreadInvoker>();
             QueuePackage queuePackage = null;
 
             invoker.Invoke(() =>

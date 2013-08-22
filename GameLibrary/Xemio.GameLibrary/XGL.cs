@@ -172,11 +172,11 @@ namespace Xemio.GameLibrary
                 {
                     SplashScreen splashScreen = new SplashScreen(config.Scenes);
                     sceneManager.Add(splashScreen);
+
+                    return;
                 }
-                else
-                {
-                    sceneManager.Add(config.Scenes);
-                }
+
+                sceneManager.Add(config.Scenes);
             }
         }
         #endregion Private Methods

@@ -121,6 +121,8 @@ namespace Xemio.GameLibrary.Components
                     this.Construct(component);
                 }
             }
+
+            this.IsConstructed = true;
         }
         /// <summary>
         /// Adds the specified component.

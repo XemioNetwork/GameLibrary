@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading;
 using System.Windows.Forms;
-using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Common
 {
-    public class ThreadInvoker : IComponent
+    public class ThreadInvoker : IThreadInvoker
     {
         #region Constructors
         /// <summary>
@@ -17,13 +11,11 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public ThreadInvoker()
         {
-            this._invokerControl = new Control();
-            this._invokerControl.CreateControl();
         }
         #endregion
 
         #region Fields
-        private readonly Control _invokerControl;
+        private Control _invokerControl;
         #endregion
 
         #region Methods
@@ -37,6 +29,12 @@ namespace Xemio.GameLibrary.Common
             // inside the main application thread. There is no
             // other solution doing that, even though the implementation
             // is not really good it has to stay like that.
+
+            if (this._invokerControl == null)
+            {
+                this._invokerControl = new Control();
+                this._invokerControl.CreateControl();
+            }
 
             if (_invokerControl.IsHandleCreated && !_invokerControl.IsDisposed)
             {

@@ -16,6 +16,7 @@ using Xemio.GameLibrary;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Network.Protocols.Tcp;
 using Xemio.GameLibrary.Network.Timing;
+using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.Testing.Network
 {
@@ -29,7 +30,7 @@ namespace Xemio.Testing.Network
         [STAThread]
         static void Main(string[] args)
         {
-            var t = new ThreadInvoker();
+            var t = new WindowInvoker();
 
             for (int i = 0; i < 20; i++)
                 t.Invoke(() => Console.WriteLine("Invoked: {0}", i));

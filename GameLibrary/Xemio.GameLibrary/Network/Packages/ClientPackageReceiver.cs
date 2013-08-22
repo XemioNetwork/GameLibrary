@@ -7,6 +7,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Network.Events;
+using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary.Network.Packages
 {
@@ -15,7 +16,7 @@ namespace Xemio.GameLibrary.Network.Packages
         #region Fields
         private readonly Client _client;
         private readonly EventManager _eventManager;
-        private readonly ThreadInvoker _threadInvoker;
+        private readonly IThreadInvoker _threadInvoker;
         #endregion Fields
 
         #region Constructors
@@ -27,7 +28,7 @@ namespace Xemio.GameLibrary.Network.Packages
         {
             this._client = client;
             this._eventManager = XGL.Components.Get<EventManager>();
-            this._threadInvoker = XGL.Components.Get<ThreadInvoker>();
+            this._threadInvoker = XGL.Components.Get<IThreadInvoker>();
         }
         #endregion Constructors
 
