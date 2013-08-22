@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary.Game.Timing
@@ -212,18 +214,29 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void InternalLoop()
         {
-            this._gameTime = Stopwatch.StartNew();
-            this._requestRender = true;
-
-            this.ResetFields();
-            
-            while (this.Active)
+            try
             {
-                this.HandleRenderRequest();
-                this.HandleUnprocessedTicks();
+                this._gameTime = Stopwatch.StartNew();
+                this._requestRender = true;
 
-                this.CheckRenderRequest();
-                this.UpdateFramesPerSecond();
+                this.ResetFields();
+
+                while (this.Active)
+                {
+                    this.HandleRenderRequest();
+                    this.HandleUnprocessedTicks();
+
+                    this.CheckRenderRequest();
+                    this.UpdateFramesPerSecond();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                EventManager eventManager = XGL.Components.Get<EventManager>();
+                eventManager.Publish(new ExceptionEvent(ex));
+
+                throw;
             }
         }
         /// <summary>
