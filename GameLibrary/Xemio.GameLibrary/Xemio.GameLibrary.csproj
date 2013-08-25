@@ -114,7 +114,7 @@
     <Compile Include="Common\Randomization\RandomProxy.cs" />
     <Compile Include="Common\Randomization\SeedableRandom.cs" />
     <Compile Include="Common\Singleton.cs" />
-    <Compile Include="Common\WindowInvoker.cs" />
+    <Compile Include="Common\ThreadInvoker.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\BooleanParser.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\CharParser.cs" />
     <Compile Include="Common\TypeParsers\BaseTypes\NumericParser.cs" />
