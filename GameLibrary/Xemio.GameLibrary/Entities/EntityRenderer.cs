@@ -35,28 +35,28 @@ namespace Xemio.GameLibrary.Entities
             get { return XGL.Components.Require<GraphicsDevice>(); }
         }
         /// <summary>
-        /// Gets the <see cref="RenderManager"/>.
+        /// Gets the <see cref="IRenderManager"/>.
         /// </summary>
         public IRenderManager RenderManager
         {
             get { return this.GraphicsDevice.RenderManager; }
         }
         /// <summary>
-        /// Gets the <see cref="RenderFactory"/>.
+        /// Gets the <see cref="IRenderFactory"/>.
         /// </summary>
         public IRenderFactory RenderFactory
         {
             get { return this.GraphicsDevice.RenderFactory; }
         }
         /// <summary>
-        /// Gets the <see cref="GeometryManager"/>.
+        /// Gets the <see cref="IGeometryManager"/>.
         /// </summary>
         public IGeometryManager GeometryManager
         {
             get { return this.GraphicsDevice.GeometryManager; }
         }
         /// <summary>
-        /// Gets the <see cref="GeometryFactory"/>.
+        /// Gets the <see cref="IGeometryFactory"/>.
         /// </summary>
         public IGeometryFactory GeometryFactory
         {
