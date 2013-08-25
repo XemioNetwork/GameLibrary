@@ -16,7 +16,6 @@ using Xemio.GameLibrary;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Network.Protocols.Tcp;
 using Xemio.GameLibrary.Network.Timing;
-using Xemio.GameLibrary.Rendering.GDIPlus;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.Testing.Network
@@ -36,7 +35,6 @@ namespace Xemio.Testing.Network
                 .DefaultComponents()
                 .DefaultInput()
                 .Surface(form)
-                .Graphics<GDIGraphicsInitializer>()
                 .DisableSplashScreen()
                 .BuildConfiguration();
             
