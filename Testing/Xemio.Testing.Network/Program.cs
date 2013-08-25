@@ -20,7 +20,7 @@ using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.Testing.Network
 {
-    class Program : IGameHandler
+    static class Program
     {
         #region Entrance
         /// <summary>
@@ -40,23 +40,6 @@ namespace Xemio.Testing.Network
             
             XGL.Run(config);
             Application.Run(form);
-        }
-        #endregion
-        
-        #region IGameHandler Member
-        /// <summary>
-        /// Handles game updates.
-        /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        public void Tick(float elapsed)
-        {
-        }
-        /// <summary>
-        /// Handles render calls.
-        /// </summary>
-        public void Render()
-        {
-
         }
         #endregion
     }

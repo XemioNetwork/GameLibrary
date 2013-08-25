@@ -256,7 +256,6 @@
     <Compile Include="Rendering\Color.cs" />
     <Compile Include="Rendering\DisplayMode.cs" />
     <Compile Include="Rendering\Fonts\SpriteFont.cs" />
-    <Compile Include="Rendering\Fonts\SpriteFontGenerator.cs" />
     <Compile Include="Rendering\Fonts\SpriteFontRenderer.cs" />
     <Compile Include="Rendering\Geometry\GeometryFactory.cs" />
     <Compile Include="Rendering\Geometry\GeometryManager.cs" />

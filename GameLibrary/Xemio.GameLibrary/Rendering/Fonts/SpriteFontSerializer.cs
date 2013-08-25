@@ -16,12 +16,12 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="reader">The reader.</param>
         public override SpriteFont Read(IFormatReader reader)
         {
-            SpriteFont font = new SpriteFont();
-
-            font.Kerning = reader.ReadInteger();
-            font.Spacing = reader.ReadInteger();
-
-            font.Bitmaps = new Bitmap[reader.ReadInteger()];
+            SpriteFont font = new SpriteFont
+                                  {
+                                      Kerning = reader.ReadInteger(),
+                                      Spacing = reader.ReadInteger(),
+                                      Bitmaps = new Bitmap[reader.ReadInteger()]
+                                  };
 
             for (int i = 0; i < font.Bitmaps.Length; i++)
             {

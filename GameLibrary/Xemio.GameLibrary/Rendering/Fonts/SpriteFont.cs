@@ -7,6 +7,8 @@ using System.Resources;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Drawing.Imaging;
+using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Components;
@@ -22,20 +24,63 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteFont"/> class.
         /// </summary>
-        internal SpriteFont() : this(0)
+        internal SpriteFont()
         {
+            this.Spacing = 15;
+
+            this.Textures = new ITexture[byte.MaxValue];
+            this.Bitmaps = new Bitmap[byte.MaxValue];
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteFont"/> class.
         /// </summary>
         /// <param name="kerning">The kerning.</param>
-        internal SpriteFont(int kerning)
+        internal SpriteFont(int kerning) : this()
         {
             this.Kerning = kerning;
-            this.Spacing = 15;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpriteFont"/> class.
+        /// </summary>
+        /// <param name="fontFamily">The font family.</param>
+        /// <param name="size">The size.</param>
+        public SpriteFont(string fontFamily, float size) : this(new Font(fontFamily, size))
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpriteFont"/> class.
+        /// </summary>
+        /// <param name="font">The font.</param>
+        public SpriteFont(Font font) : this()
+        {
+            Bitmap measureBitmap = new Bitmap(1, 1);
+            Graphics graphics = Graphics.FromImage(measureBitmap);
 
-            this.Textures = new ITexture[byte.MaxValue];
-            this.Bitmaps = new Bitmap[byte.MaxValue];
+            Brush brush = Brushes.White;
+            Bitmap[] bitmaps = new Bitmap[byte.MaxValue];
+
+            for (int i = 31; i < 253; i++)
+            {
+                char character = (char)i;
+                string current = character.ToString();
+
+                SizeF size = graphics.MeasureString(current, font);
+
+                Bitmap letterMap = new Bitmap(
+                    (int)size.Width,
+                    (int)size.Height,
+                    PixelFormat.Format32bppPArgb);
+
+                using (Graphics letterGraphics = Graphics.FromImage(letterMap))
+                {
+                    letterGraphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
+                    letterGraphics.DrawString(current, font, brush, PointF.Empty);
+
+                    bitmaps[i] = letterMap;
+                }
+            }
+
+            this.Initialize(bitmaps);
         }
         #endregion
 
@@ -58,6 +103,26 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         internal Bitmap[] Bitmaps { get; set; }
         #endregion
 
+        #region Private Methods
+        /// <summary>
+        /// Initializes the spritefont textures.
+        /// </summary>
+        /// <param name="bitmaps">The bitmaps.</param>
+        private void Initialize(Bitmap[] bitmaps)
+        {
+            ContentManager content = XGL.Components.Get<ContentManager>();
+
+            for (int i = 0; i < bitmaps.Length; i++)
+            {
+                if (bitmaps[i] != null)
+                {
+                    this.Textures[i] = content.Load<ITexture>(bitmaps[i].ToStream());
+                    this.Bitmaps[i] = bitmaps[i];
+                }
+            }
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Measures the specified string.
@@ -75,15 +140,22 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         {
             Vector2 result = Vector2.Zero;
 
-            foreach (string value in lines)
+            for (int yy = 0; yy < lines.Length; yy++)
             {
+                string line = lines[yy];
+
                 float x = 0;
                 float y = int.MinValue;
 
-                foreach (char character in value)
+                for (int xx = 0; xx < line.Length; xx++)
                 {
+                    char character = line[xx];
+
                     x += this.Textures[character].Width;
-                    x += this.Kerning;
+                    if (xx < line.Length - 1)
+                    {
+                        x += this.Kerning;
+                    }
 
                     if (character == ' ')
                     {
@@ -96,7 +168,11 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                     }
                 }
 
-                result += new Vector2(x, y + this.Kerning);
+                result += new Vector2(x, y);
+                if (yy < lines.Length - 1)
+                {
+                    result += new Vector2(0, this.Kerning);
+                }
             }
 
             return result;
