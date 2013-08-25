@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Properties;
 using Xemio.GameLibrary.Rendering;
@@ -35,12 +36,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public override void LoadContent()
         {
-            MemoryStream stream = new MemoryStream();
-            Properties.Resources.intro.Save(stream, ImageFormat.Png);
-
-            stream.Seek(0, SeekOrigin.Begin);
-
-            this._texture = this.Content.Load<ITexture>(stream);
+            this._texture = this.Content.Load<ITexture>(Resources.intro.ToStream());
         }
         /// <summary>
         /// Handles a game tick.

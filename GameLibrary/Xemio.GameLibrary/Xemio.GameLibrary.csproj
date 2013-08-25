@@ -169,6 +169,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Common\ImageExtensions.cs" />
     <Compile Include="Rendering\InterpolationMode.cs" />
     <Compile Include="Rendering\Events\ResolutionChangedEvent.cs" />
     <Compile Include="Rendering\Surfaces\ISurface.cs" />

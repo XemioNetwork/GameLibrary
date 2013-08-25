@@ -24,29 +24,43 @@ namespace Xemio.GameLibrary.Entities
 
         #region Properties
         /// <summary>
-        /// Gets the entity.
+        /// Gets the <see cref="Entity"/>.
         /// </summary>
         public Entity Entity { get; private set; }
         /// <summary>
-        /// Gets the graphics device.
+        /// Gets the <see cref="GraphicsDevice"/>.
         /// </summary>
         public GraphicsDevice GraphicsDevice
         {
             get { return XGL.Components.Require<GraphicsDevice>(); }
         }
         /// <summary>
-        /// Gets the render manager.
+        /// Gets the <see cref="RenderManager"/>.
         /// </summary>
         public IRenderManager RenderManager
         {
             get { return this.GraphicsDevice.RenderManager; }
         }
         /// <summary>
-        /// Gets the geometry.
+        /// Gets the <see cref="RenderFactory"/>.
+        /// </summary>
+        public IRenderFactory RenderFactory
+        {
+            get { return this.GraphicsDevice.RenderFactory; }
+        }
+        /// <summary>
+        /// Gets the <see cref="GeometryManager"/>.
         /// </summary>
         public IGeometryManager GeometryManager
         {
             get { return this.GraphicsDevice.GeometryManager; }
+        }
+        /// <summary>
+        /// Gets the <see cref="GeometryFactory"/>.
+        /// </summary>
+        public IGeometryFactory GeometryFactory
+        {
+            get { return this.GraphicsDevice.GeometryFactory; }
         }
         #endregion
 
