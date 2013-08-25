@@ -28,10 +28,7 @@ namespace Xemio.GameLibrary.Game.Timing
 
         #region Fields
         private IThreadInvoker _invoker;
-
-        private bool _isConstructed;
-        private bool _requestRun;
-
+        
         private Task _loopTask;
         private Stopwatch _gameTime;
 
@@ -154,12 +151,6 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public void Run()
         {
-            if (!this._isConstructed)
-            {
-                this._requestRun = true;
-                return;
-            }
-
             if (!this.Active)
             {
                 this.Active = true;
@@ -369,12 +360,6 @@ namespace Xemio.GameLibrary.Game.Timing
         public void Construct()
         {
             this._invoker = XGL.Components.Get<IThreadInvoker>();
-            this._isConstructed = true;
-
-            if (this._requestRun)
-            {
-                this.Run();
-            }
         }
         #endregion
     }

@@ -80,6 +80,8 @@ namespace Xemio.GameLibrary
 
             XGL.InitializeScenes(configuration);
             XGL.Initialized = true;
+
+            XGL.StartGameLoop();
         }
         #endregion
 
@@ -138,8 +140,6 @@ namespace Xemio.GameLibrary
             {
                 gameLoop.TargetFrameTime = 1000 / (double)config.FrameRate;
                 gameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
-
-                gameLoop.Run();
             }
         }
         /// <summary>
@@ -177,6 +177,18 @@ namespace Xemio.GameLibrary
                 }
 
                 sceneManager.Add(config.Scenes);
+            }
+        }
+        /// <summary>
+        /// Starts the game loop.
+        /// </summary>
+        private static void StartGameLoop()
+        {
+            var gameLoop = XGL.Components.Get<IGameLoop>();
+
+            if (gameLoop != null)
+            {
+                gameLoop.Run();
             }
         }
         #endregion Private Methods
