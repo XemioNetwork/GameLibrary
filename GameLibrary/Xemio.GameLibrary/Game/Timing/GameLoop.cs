@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Events.Logging;
@@ -19,7 +20,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         public GameLoop()
         {
-            this._handlers = new List<IGameHandler>();
+            this._handlers = new CachedList<IGameHandler>();
 
             this.Precision = PrecisionLevel.High;
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
@@ -35,7 +36,7 @@ namespace Xemio.GameLibrary.Game.Timing
         private Task _loopTask;
         private Stopwatch _gameTime;
 
-        private readonly List<IGameHandler> _handlers;
+        private readonly CachedList<IGameHandler> _handlers;
 
         private double _renderTime;
         private double _tickTime;
@@ -122,9 +123,12 @@ namespace Xemio.GameLibrary.Game.Timing
             //as frequent as tick
             this.FrameIndex++;
 
-            foreach (IGameHandler gameHandler in this._handlers)
+            using (this._handlers.StartCaching())
             {
-                gameHandler.Tick(elapsed);
+                foreach (IGameHandler gameHandler in this._handlers)
+                {
+                    gameHandler.Tick(elapsed);
+                }
             }
 
             tickWatch.Stop();
@@ -138,9 +142,12 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             Stopwatch renderWatch = Stopwatch.StartNew();
 
-            foreach (IGameHandler gameHandler in this._handlers)
+            using (this._handlers.StartCaching())
             {
-                gameHandler.Render();
+                foreach (IGameHandler gameHandler in this._handlers)
+                {
+                    gameHandler.Render();
+                }
             }
 
             renderWatch.Stop();

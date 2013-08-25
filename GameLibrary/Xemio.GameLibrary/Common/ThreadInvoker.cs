@@ -5,15 +5,6 @@ namespace Xemio.GameLibrary.Common
 {
     public class ThreadInvoker : IThreadInvoker
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes the <see cref="ThreadInvoker"/> class.
-        /// </summary>
-        public ThreadInvoker()
-        {
-        }
-        #endregion
-
         #region Fields
         private Control _invokerControl;
         #endregion
@@ -36,9 +27,9 @@ namespace Xemio.GameLibrary.Common
                 this._invokerControl.CreateControl();
             }
 
-            if (_invokerControl.IsHandleCreated && !_invokerControl.IsDisposed)
+            if (this._invokerControl.IsHandleCreated && !this._invokerControl.IsDisposed)
             {
-                _invokerControl.Invoke(action);
+                this._invokerControl.Invoke(action);
             }
         }
         #endregion
