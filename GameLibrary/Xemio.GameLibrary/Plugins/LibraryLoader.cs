@@ -81,7 +81,7 @@ namespace Xemio.GameLibrary.Plugins
 
                 return true;
             }
-            catch (ReflectionTypeLoadException)
+            catch
             {
                 result = new List<ILibraryInitializer>();
 
