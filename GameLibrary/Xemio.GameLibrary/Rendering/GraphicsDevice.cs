@@ -142,8 +142,8 @@ namespace Xemio.GameLibrary.Rendering
             this.RenderFactory = initializer.CreateRenderFactory();
 
             var implementations = XGL.Components.Get<ImplementationManager>();
-            implementations.Register<Type, IContentReader>(initializer.CreateTextureReader());
-            implementations.Register<Type, IContentWriter>(initializer.CreateTextureWriter());
+            implementations.Add<Type, IReader>(initializer.CreateTextureReader());
+            implementations.Add<Type, IWriter>(initializer.CreateTextureWriter());
         }
         /// <summary>
         /// Clears the screen.

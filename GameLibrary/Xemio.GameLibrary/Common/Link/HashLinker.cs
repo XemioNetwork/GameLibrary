@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Common.Link
 {
-    public class HashLinker<TKey, TValue> : GenericLinker<TKey, TValue> where TValue : ILinkable<TKey>
+    public class HashLinker<TKey, TValue> : Linker<TKey, TValue> where TValue : ILinkable<TKey>
     {
         #region Constructors
         /// <summary>

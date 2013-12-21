@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// </summary>
         public PerlinNoise()
         {
-            this._random = new RandomProxy();
+            this._random = new SystemRandom();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="PerlinNoise"/> class.
@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// <param name="seed">The seed.</param>
         public PerlinNoise(string seed)
         {
-            this._random = new RandomProxy(seed.GetHashCode());
+            this._random = new SystemRandom(seed.GetHashCode());
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="PerlinNoise"/> class.
@@ -30,7 +30,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// <param name="seed">The seed.</param>
         public PerlinNoise(int seed)
         {
-            this._random = new RandomProxy(seed);
+            this._random = new SystemRandom(seed);
         }
         #endregion
         

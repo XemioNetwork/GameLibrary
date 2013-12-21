@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.IO;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content.FileSystem;
@@ -12,7 +10,6 @@ using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Surfaces;
-using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary
 {
@@ -38,21 +35,21 @@ namespace Xemio.GameLibrary
         /// </summary>
         public FluentConfigurator DisableSplashScreen()
         {
-            this._configuration.ShowSplashScreen = false;
+            this._configuration.SplashScreenEnabled = false;
             return this;
         }
         /// <summary>
         /// Registers the default components to the component registry.
         /// </summary>
-        public FluentConfigurator DefaultComponents()
+        public FluentConfigurator EnableCoreComponents()
         {
-            this._configuration.RegisterDefaultComponents = true;
+            this._configuration.CoreComponentsEnabled = true;
             return this;
         }
         /// <summary>
         /// Creates a default player input.
         /// </summary>
-        public FluentConfigurator DefaultInput()
+        public FluentConfigurator EnablePlayerInput()
         {
             this._configuration.CreatePlayerInput = true;
             return this;
@@ -96,23 +93,6 @@ namespace Xemio.GameLibrary
             
             this._configuration.Set(initializer);
 
-            return this;
-        }
-        /// <summary>
-        /// Sets the sound system.
-        /// </summary>
-        /// <typeparam name="T">The sound initializer type.</typeparam>
-        public FluentConfigurator Sound<T>() where T : ISoundInitializer, new()
-        {
-            return this.Sound(new T());
-        }
-        /// <summary>
-        /// Sets the sound system.
-        /// </summary>
-        /// <param name="initializer">The initializer.</param>
-        public FluentConfigurator Sound(ISoundInitializer initializer)
-        {
-            this._configuration.Set(initializer);
             return this;
         }
         /// <summary>

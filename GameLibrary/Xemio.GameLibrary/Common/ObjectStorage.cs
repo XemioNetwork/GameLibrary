@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Xemio.GameLibrary.Common.TypeParsers;
+using Xemio.GameLibrary.Common.Conversion;
 
 namespace Xemio.GameLibrary.Common
 {
@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public ObjectStorage()
         {
-            this._typeParser = new TypeParserManager();
+            this._typeParser = new StringParser();
             this._values = new Dictionary<string, object>();
 
             this.AutoParseStrings = true;
@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Common
         #endregion
 
         #region Fields
-        private readonly TypeParserManager _typeParser;
+        private readonly StringParser _typeParser;
         private readonly Dictionary<string, object> _values;
         #endregion
 

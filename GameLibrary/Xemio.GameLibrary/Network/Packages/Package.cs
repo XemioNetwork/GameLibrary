@@ -6,6 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Attributes;
 
 namespace Xemio.GameLibrary.Network.Packages
 {

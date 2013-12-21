@@ -7,6 +7,7 @@ using System.Reflection;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Network.Packages
@@ -21,13 +22,13 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <param name="stream">The stream.</param>
         public void Serialize(Package package, Stream stream)
         {
-            MemoryStream buffer = new MemoryStream();
-            BinaryWriter bufferWriter = new BinaryWriter(buffer);
+            var buffer = new MemoryStream();
+            var bufferWriter = new BinaryWriter(buffer);
 
-            ContentManager content = XGL.Components.Require<ContentManager>();
+            var serializer = XGL.Components.Require<SerializationManager>();
 
             bufferWriter.Write(package.Id);
-            content.Save(package, buffer);
+            serializer.Save(package, buffer);
 
             byte[] data = buffer.ToArray();
             stream.Write(data, 0, data.Length);
@@ -40,13 +41,13 @@ namespace Xemio.GameLibrary.Network.Packages
         {
             var reader = new BinaryReader(stream);
 
-            var content = XGL.Components.Require<ContentManager>();
+            var serializer = XGL.Components.Require<SerializationManager>();
             var implementations = XGL.Components.Require<ImplementationManager>();
 
             int packageId = reader.ReadInt32();
             Type packageType = implementations.GetType<int, Package>(packageId);
 
-            return (Package)content.Load(packageType, stream);
+            return (Package)serializer.Load(packageType, stream);
         }
         #endregion
     }

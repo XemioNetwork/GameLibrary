@@ -6,13 +6,14 @@ using System.Reflection;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Content.Attributes;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Serialization
 {
     [ManuallyLinked]
-    public class AutomaticSerializer : ContentSerializer<object>
+    public class AutomaticSerializer : Serializer<object>
     {
         #region Constructors
         /// <summary>
@@ -21,13 +22,13 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="type">The type.</param>
         public AutomaticSerializer(Type type)
         {
-            this._content = XGL.Components.Require<ContentManager>();
+            this._serializer = XGL.Components.Require<SerializationManager>();
             this.Type = type;
         }
         #endregion
 
         #region Fields
-        private readonly ContentManager _content;
+        private readonly SerializationManager _serializer;
         #endregion
 
         #region Properties
@@ -50,10 +51,41 @@ namespace Xemio.GameLibrary.Content.Serialization
 
             for (int i = 0; i < length; i++)
             {
-                array[i] = this._content.Load(type.GetElementType(), reader);
+                array[i] = this._serializer.Load(type.GetElementType(), reader);
             }
 
             return array;
+        }
+        /// <summary>
+        /// Reads a type.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="defaultType">The default type.</param>
+        private Type ReadType(IFormatReader reader, Type defaultType)
+        {
+            bool isInherited = reader.ReadBoolean();
+            if (isInherited)
+            {
+                return Type.GetType(reader.ReadString());
+            }
+
+            return defaultType;
+        }
+        /// <summary>
+        /// Writes the type.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="defaultType">The default type.</param>
+        private void WriteType(IFormatWriter writer, Type type, Type defaultType)
+        {
+            bool isInherited = (defaultType != type);
+            writer.WriteBoolean("IsInherited", isInherited);
+
+            if (isInherited)
+            {
+                writer.WriteString("Type", type.AssemblyQualifiedName);
+            }
         }
         /// <summary>
         /// Determines whether the specified type is a generic dictionary.
@@ -98,11 +130,11 @@ namespace Xemio.GameLibrary.Content.Serialization
             Type listType = typeof(List<>).MakeGenericType(elementType);
 
             int count = reader.ReadInteger();
-            IList list = (IList)Activator.CreateInstance(listType);
+            var list = (IList)Activator.CreateInstance(listType);
 
             for (int i = 0; i < count; i++)
             {
-                list.Add(this._content.Load(elementType, reader));
+                list.Add(this._serializer.Load(this.ReadType(reader, elementType), reader));
             }
 
             return list;
@@ -122,13 +154,13 @@ namespace Xemio.GameLibrary.Content.Serialization
             Type dictionaryType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
 
             int count = reader.ReadInteger();
-            IDictionary dictionary = (IDictionary)Activator.CreateInstance(dictionaryType);
+            var dictionary = (IDictionary)Activator.CreateInstance(dictionaryType);
 
             for (int i = 0; i < count; i++)
             {
                 dictionary.Add(
-                    this._content.Load(keyType, reader),
-                    this._content.Load(valueType, reader));
+                    this._serializer.Load(this.ReadType(reader, keyType), reader),
+                    this._serializer.Load(this.ReadType(reader, valueType), reader));
             }
 
             return dictionary;
@@ -153,10 +185,19 @@ namespace Xemio.GameLibrary.Content.Serialization
             {
                 if (property.GetCustomAttributes(typeof(ExcludeSerializationAttribute), true).Length == 0)
                 {
-                    bool isNull = reader.ReadBoolean();
-                    var propertyValue = isNull ? null : this._content.Load(property.PropertyType, reader);
+                    bool isValueType = property.PropertyType.IsValueType;
 
-                    yield return new KeyValuePair<PropertyInfo, object>(property, propertyValue);
+                    bool isNull = (isValueType == false && reader.ReadBoolean());
+                    Type propertyType = isValueType ? property.PropertyType : this.ReadType(reader, property.PropertyType);
+
+                    if (isNull)
+                    {
+                        yield return new KeyValuePair<PropertyInfo, object>(property, null);
+                    }
+                    else
+                    {
+                        yield return new KeyValuePair<PropertyInfo, object>(property, this._serializer.Load(propertyType, reader));
+                    }
                 }
             }
         }
@@ -168,7 +209,6 @@ namespace Xemio.GameLibrary.Content.Serialization
         private object ReadInstance(IFormatReader reader, Type type)
         {
             object instance;
-            reader.BeginSection();
 
             if (type.IsArray)
             {
@@ -191,7 +231,6 @@ namespace Xemio.GameLibrary.Content.Serialization
                 instance = this.ReadKnownObject(reader, type);
             }
             
-            reader.EndSection();
             return instance;
         }
         /// <summary>
@@ -263,7 +302,7 @@ namespace Xemio.GameLibrary.Content.Serialization
             writer.WriteInteger("Length", array.Length);
             for (int i = 0; i < array.Length; i++)
             {
-                this._content.Save(array.GetValue(i), writer);
+                this._serializer.Save(array.GetValue(i), writer);
             }
         }
         /// <summary>
@@ -273,12 +312,14 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="value">The value.</param>
         private void WriteList(IFormatWriter writer, object value)
         {
-            IList list = (IList)value;
+            var list = (IList)value;
+            Type elementType = list.GetType().GetGenericArguments().Single();
 
             writer.WriteInteger("Count", list.Count);
             foreach (object instance in list)
             {
-                this._content.Save(instance, writer);
+                this.WriteType(writer, instance.GetType(), elementType);
+                this._serializer.Save(instance, writer);
             }
         }
         /// <summary>
@@ -288,13 +329,19 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="value">The value.</param>
         private void WriteDictionary(IFormatWriter writer, object value)
         {
-            IDictionary dictionary = (IDictionary)value;
+            var dictionary = (IDictionary)value;
+
+            Type keyType = dictionary.GetType().GetGenericArguments().First();
+            Type valueType = dictionary.GetType().GetGenericArguments().Last();
 
             writer.WriteInteger("Count", dictionary.Count);
             foreach (DictionaryEntry entry in dictionary)
             {
-                this._content.Save(entry.Key, writer);
-                this._content.Save(entry.Value, writer);
+                this.WriteType(writer, entry.Key.GetType(), keyType);
+                this._serializer.Save(entry.Key, writer);
+
+                this.WriteType(writer, entry.Value.GetType(), valueType);
+                this._serializer.Save(entry.Value, writer);
             }
         }
         /// <summary>
@@ -311,13 +358,20 @@ namespace Xemio.GameLibrary.Content.Serialization
                     .Any(attribute => attribute is ExcludeSerializationAttribute))
                 {
                     object propertyValue = property.GetValue(value, null);
+                    bool isNull = (propertyValue == null);
 
-                    writer.WriteBoolean("IsPropertyNull", propertyValue == null);
-                    if (propertyValue != null)
+                    if (property.PropertyType.IsValueType == false)
                     {
-                        writer.BeginSection(property.Name);
-                        this._content.Save(propertyValue, writer);
-                        writer.EndSection();
+                        writer.WriteBoolean("IsPropertyNull", isNull);
+                        if (isNull == false)
+                        {
+                            this.WriteType(writer, propertyValue.GetType(), property.PropertyType);
+                        }
+                    }
+
+                    if (isNull == false)
+                    {
+                        this._serializer.Save(propertyValue, writer);
                     }
                 }
             }
@@ -330,7 +384,6 @@ namespace Xemio.GameLibrary.Content.Serialization
         private void WriteInstance(IFormatWriter writer, object value)
         {
             Type type = value.GetType();
-            writer.BeginSection(type.Name);
 
             if (type.IsArray)
             {
@@ -352,12 +405,10 @@ namespace Xemio.GameLibrary.Content.Serialization
             {
                 this.WriteProperties(writer, value);
             }
-
-            writer.EndSection();
         }
         #endregion
         
-        #region Overrides of ContentSerializer<object>
+        #region Overrides of SerializationManager<object>
         /// <summary>
         /// Reads a value out of the specified reader.
         /// </summary>

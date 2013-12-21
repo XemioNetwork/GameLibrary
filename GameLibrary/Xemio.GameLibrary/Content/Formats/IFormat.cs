@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Common.Link;
 
 namespace Xemio.GameLibrary.Content.Formats
 {
-    public interface IFormat : ILinkable<string>
+    public interface IFormat
     {
         /// <summary>
         /// Creates a writer.

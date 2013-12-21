@@ -110,13 +110,13 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="bitmaps">The bitmaps.</param>
         private void Initialize(Bitmap[] bitmaps)
         {
-            ContentManager content = XGL.Components.Get<ContentManager>();
+            var serializer = XGL.Components.Get<SerializationManager>();
 
             for (int i = 0; i < bitmaps.Length; i++)
             {
                 if (bitmaps[i] != null)
                 {
-                    this.Textures[i] = content.Load<ITexture>(bitmaps[i].ToStream());
+                    this.Textures[i] = serializer.Load<ITexture>(bitmaps[i].ToStream());
                     this.Bitmaps[i] = bitmaps[i];
                 }
             }

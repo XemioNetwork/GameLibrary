@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Localization
 {
-    public class LanguageSerializer : ContentSerializer<Language>
+    public class LanguageSerializer : Serializer<Language>
     {
         public override Language Read(IFormatReader reader)
         {

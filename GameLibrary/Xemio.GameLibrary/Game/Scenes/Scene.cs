@@ -5,7 +5,6 @@ using System.Linq;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Sound;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Content;
 
@@ -44,9 +43,9 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Gets the content manager.
         /// </summary>
-        public ContentManager Content
+        public SerializationManager Content
         {
-            get { return XGL.Components.Get<ContentManager>(); }
+            get { return XGL.Components.Get<SerializationManager>(); }
         }
         /// <summary>
         /// Gets the render manager.
@@ -89,13 +88,6 @@ namespace Xemio.GameLibrary.Game.Scenes
         public SceneManager SceneManager
         {
             get { return XGL.Components.Get<SceneManager>(); }
-        }
-        /// <summary>
-        /// Gets the sound manager.
-        /// </summary>
-        public SoundManager SoundManager
-        {
-            get { return XGL.Components.Get<SoundManager>(); }
         }
         /// <summary>
         /// Gets a value indicating the index during a game tick.

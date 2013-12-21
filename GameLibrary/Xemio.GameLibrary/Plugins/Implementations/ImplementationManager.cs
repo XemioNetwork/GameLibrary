@@ -30,45 +30,6 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         private readonly ImplementationCache _cache;
         #endregion
 
-        #region Private Methods
-        /// <summary>
-        /// Gets the default value for the specified type.
-        /// </summary>
-        private static T GetDefaultValue<T>()
-        {
-            if (typeof(T) == typeof(string))
-            {
-                return (T)("Default" as object);
-            }
-
-            return default(T);
-        }
-        /// <summary>
-        /// Resolves the specified key.
-        /// </summary>
-        /// <typeparam name="TKey">The type of the key.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="key">The key.</param>
-        /// <param name="creationType">Type of the creation.</param>
-        /// <param name="useDefault">if set to <c>true</c> the default key will be resolved if the specified key does not exist.</param>
-        private TValue Resolve<TKey, TValue>(TKey key, CreationType creationType, bool useDefault) where TValue : class, ILinkable<TKey>
-        {
-            TValue value = this._cache.Resolve<TKey, TValue>(this._context, key, creationType);
-            bool isDefaultKey = object.Equals(key, GetDefaultValue<TKey>());
-
-            if (value == default(TValue) && isDefaultKey)
-            {
-                throw new InvalidOperationException("The specified key does not exist, the ImplementationManager couldn't find any value for the default key instead.");
-            }
-            if (value == default(TValue) && useDefault)
-            {
-                return GetNew<TKey, TValue>(GetDefaultValue<TKey>());
-            }
-
-            return value;
-        }
-        #endregion
-
         #region Methods
         /// <summary>
         /// Registers the specified value.
@@ -76,9 +37,9 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="value">The value.</param>
-        public void Register<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
+        public void Add<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
         {
-            this._cache.Register<TKey, TValue>(value);
+            this._cache.Add<TKey, TValue>(value);
         }
         /// <summary>
         /// Resolves an instance for the specified key.
@@ -86,10 +47,9 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
-        /// <param name="useDefault">if set to <c>true</c> the default key will be resolved if the specified key does not exist..</param>
-        public TValue GetNew<TKey, TValue>(TKey key, bool useDefault = true) where TValue : class, ILinkable<TKey>
+        public TValue GetNew<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
         {
-            return this.Resolve<TKey, TValue>(key, CreationType.CreateNew, useDefault);
+            return this._cache.Get<TKey, TValue>(this._context, key, CreationType.CreateNew);
         }
         /// <summary>
         /// Resolves the specified key.
@@ -97,10 +57,9 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
-        /// <param name="useDefault">if set to <c>true</c> the default key will be resolved if the specified key does not exist..</param>
-        public TValue Get<TKey, TValue>(TKey key, bool useDefault = true) where TValue : class, ILinkable<TKey>
+        public TValue Get<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
         {
-            return this.Resolve<TKey, TValue>(key, CreationType.Singleton, useDefault);
+            return this._cache.Get<TKey, TValue>(this._context, key, CreationType.Singleton);
         }
         /// <summary>
         /// Resolves the type for the specified key.
@@ -119,7 +78,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TValue">The type of the value.</typeparam>
         public IEnumerable<TValue> All<TKey, TValue>() where TValue : ILinkable<TKey>
         {
-            return this._cache.Resolve<TKey, TValue>(this._context);
+            return this._cache.All<TKey, TValue>(this._context);
         }
         #endregion
     }

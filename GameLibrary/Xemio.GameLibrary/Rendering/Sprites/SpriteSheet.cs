@@ -52,7 +52,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             this.Columns = this._sourceImage.Width / frameWidth;
             this.Rows = this._sourceImage.Height / frameHeight;
 
-            this.Texture = XGL.Components.Get<ContentManager>().Load<ITexture>(stream);
+            this.Texture = XGL.Components.Get<SerializationManager>().Load<ITexture>(stream);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
@@ -132,7 +132,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             int x = index % this.Columns;
             int y = index / this.Columns;
 
-            Bitmap frame = new Bitmap(this.FrameWidth, this.FrameHeight);
+            var frame = new Bitmap(this.FrameWidth, this.FrameHeight);
             using (Graphics frameGraphics = Graphics.FromImage(frame))
             {
                 frameGraphics.CompositingMode = CompositingMode.SourceOver;
@@ -143,13 +143,13 @@ namespace Xemio.GameLibrary.Rendering.Sprites
                     new Drawing.Rectangle(-x * this.FrameWidth, -y * this.FrameHeight, this._sourceImage.Width, this._sourceImage.Height));
             }
 
-            MemoryStream frameStream = new MemoryStream();
+            var frameStream = new MemoryStream();
 
             frame.Save(frameStream, ImageFormat.Png);
             frameStream.Seek(0, SeekOrigin.Begin);
 
-            ContentManager content = XGL.Components.Get<ContentManager>();
-            ITexture texture = content.Load<ITexture>(frameStream);
+            var serializer = XGL.Components.Get<SerializationManager>();
+            var texture = serializer.Load<ITexture>(frameStream);
 
             this._textureCache.Add(index, texture);
 

@@ -11,7 +11,6 @@ using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Network.Protocols;
-using Xemio.GameLibrary.Network.Protocols.Local;
 using Xemio.GameLibrary;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Network.Protocols.Tcp;
@@ -30,16 +29,13 @@ namespace Xemio.Testing.Network
         [STAThread]
         static void Main(string[] args)
         {
-            var form = new TestForm();
-            var config = XGL.Configure()
-                .DefaultComponents()
-                .DefaultInput()
-                .Surface(form)
-                .DisableSplashScreen()
-                .BuildConfiguration();
+            var server = new Server("tcp://8000");
+            var client = new Client("tcp://127.0.0.1:8000");
+
+            XGL.Components.Get<EventManager>()
+                .Subscribe<ReceivedPackageEvent>(p => Console.WriteLine(p.Package.GetType()));
             
-            XGL.Run(config);
-            Application.Run(form);
+            Console.ReadLine();
         }
         #endregion
     }

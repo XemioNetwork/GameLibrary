@@ -18,15 +18,13 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public EntityEnvironment()
         {
-            this._idMappings = new Dictionary<int, Entity>();
-
-            this.Factory = new EntityIdFactory();
+            this._guidMappings = new Dictionary<Guid, Entity>();
             this.Entities = new CachedList<Entity>();
         }
         #endregion
 
         #region Fields
-        private readonly Dictionary<int, Entity> _idMappings;
+        private readonly Dictionary<Guid, Entity> _guidMappings;
         #endregion
 
         #region Properties
@@ -42,10 +40,6 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         protected CachedList<Entity> Entities { get; private set; }
         /// <summary>
-        /// Gets or sets the factory.
-        /// </summary>
-        public EntityIdFactory Factory { get; set; }
-        /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Entities.Entity"/> at the specified index.
         /// </summary>
         public Entity this[int index]
@@ -58,12 +52,12 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets an entity by a specified ID.
         /// </summary>
-        /// <param name="id">The id.</param>
-        public Entity GetEntity(int id)
+        /// <param name="guid">The unique identifier.</param>
+        public Entity GetEntity(Guid guid)
         {
-            if (this._idMappings.ContainsKey(id))
+            if (this._guidMappings.ContainsKey(guid))
             {
-                return this._idMappings[id];
+                return this._guidMappings[guid];
             }
 
             return null;
@@ -74,15 +68,10 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         public virtual void Add(Entity entity)
         {
-            if (entity.EntityId < 0)
-            {
-                entity.EntityId = this.Factory.CreateId();
-            }
-
             entity.Environment = this;
             entity.Initialize(this);
 
-            this._idMappings.Add(entity.EntityId, entity);
+            this._guidMappings.Add(entity.Guid, entity);
             this.Entities.Add(entity);
         }
         /// <summary>
@@ -91,10 +80,9 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         public virtual void Remove(Entity entity)
         {
-            entity.EntityId = -1;
             entity.Environment = null;
 
-            this._idMappings.Remove(entity.EntityId);
+            this._guidMappings.Remove(entity.Guid);
             this.Entities.Remove(entity);
         }
         /// <summary>
@@ -113,7 +101,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Sorts the entities.
         /// </summary>
-        protected virtual IEnumerable<Entity> SortedEntityCollection()
+        protected virtual IEnumerable<Entity> AsSortedEntityCollection()
         {
             return this.Entities;
         }
@@ -143,16 +131,13 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public virtual void Render()
         {
-            var entities = this.SortedEntityCollection();
+            var entities = this.AsSortedEntityCollection();
 
             using (this.Entities.StartCaching())
             { 
                 foreach (Entity entity in entities)
                 {
-                    if (entity.Renderer != null)
-                    {
-                        entity.Renderer.Render();
-                    }
+                    entity.Render();
                 }
             }
         }
@@ -164,7 +149,7 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public IEnumerator<Entity> GetEnumerator()
         {
-            return this.SortedEntityCollection().GetEnumerator();
+            return this.AsSortedEntityCollection().GetEnumerator();
         }
         /// <summary>
         /// Gets the enumerator.

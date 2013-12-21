@@ -42,16 +42,16 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
         #region IConnection Member
         /// <summary>
-        /// Gets the IP.
-        /// </summary>
-        public IPAddress IP
-        {
-            get { return ((IPEndPoint)this._tcpClient.Client.LocalEndPoint).Address; }
-        }
-        /// <summary>
         /// Gets or sets the latency.
         /// </summary>
         public float Latency { get; set; }
+        /// <summary>
+        /// Gets the ip address.
+        /// </summary>
+        public IPAddress Address
+        {
+            get { return ((IPEndPoint)this._tcpClient.Client.LocalEndPoint).Address; }
+        }
         /// <summary>
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>

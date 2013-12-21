@@ -4,9 +4,9 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Serialization
 {
-    public class VectorSerializer : ContentSerializer<Vector2>
+    public class VectorSerializer : Serializer<Vector2>
     {
-        #region Overrides of ContentSerializer<Vector2>
+        #region Overrides of SerializationManager<Vector2>
         /// <summary>
         /// Reads a value out of the specified reader.
         /// </summary>

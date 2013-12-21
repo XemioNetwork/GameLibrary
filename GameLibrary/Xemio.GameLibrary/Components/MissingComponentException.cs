@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Components
         /// </summary>
         /// <param name="componentType">Type of the component.</param>
         public MissingComponentException(Type componentType)
-            : base(string.Format("Required component {0} doesn't exist inside the component registry."))
+            : base(string.Format("Required component {0} doesn't exist inside the component registry.", componentType))
         {
             this.ComponentType = componentType;
         }

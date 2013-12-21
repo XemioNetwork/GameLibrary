@@ -1,40 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Xemio.GameLibrary.Network.Protocols.Tcp;
+using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Network.Protocols
 {
-    public static class ProtocolFactory
+    public class ProtocolFactory
     {
-        #region Methods
+        #region Static Methods
         /// <summary>
-        /// Creates a new client for the specified protocol.
+        /// Generic creation method (internal).
         /// </summary>
-        /// <typeparam name="T">The protocol type.</typeparam>
-        /// <param name="ip">The ip.</param>
-        /// <param name="port">The port.</param>
-        public static Client CreateClientFor<T>(string ip, int port) where T : IClientProtocol, new()
+        /// <param name="protocolUrl">The protocol URL.</param>
+        /// <exception cref="System.InvalidOperationException">
+        /// Invalid protocol URL. Protocol could not be created for [protocolUrl]
+        /// or
+        /// Invalid protocol URL. Protocol [protocolName] does not exist.
+        /// </exception>
+        private static T CreateProtocol<T>(string protocolUrl) where T : class, IProtocol
         {
-            T protocol = new T();
-            protocol.Connect(ip, port);
+            string[] segments = protocolUrl.Split(new[] {"://"}, StringSplitOptions.RemoveEmptyEntries);
+            if (segments.Length != 2)
+            {
+                throw new InvalidOperationException("Invalid protocol URL. Protocol could not be created for [" + protocolUrl + "]");
+            }
 
-            return new Client(protocol);
+            string protocolName = segments[0];
+            string url = segments[1];
+
+            var implementations = XGL.Components.Get<ImplementationManager>();
+            T protocol = implementations.GetNew<string, T>(protocolName);
+
+            if (protocol == null)
+            {
+                throw new InvalidOperationException("Invalid protocol URL. Protocol [" + protocolName + "] does not exist.");
+            }
+
+            protocol.Open(url);
+            
+            return protocol;
         }
         /// <summary>
-        /// Creates a new server for the specified protocol.
+        /// Creates a new server protocol.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="port">The port.</param>
-        /// <returns></returns>
-        public static Server CreateServerFor<T>(int port) where T : IServerProtocol, new()
+        /// <param name="protocolUrl">The protocol URL.</param>
+        public static IServerProtocol CreateServerProtocol(string protocolUrl)
         {
-            T protocol = new T();
-            protocol.Host(port);
-
-            return new Server(protocol);
+            return ProtocolFactory.CreateProtocol<IServerProtocol>(protocolUrl);
+        }
+        /// <summary>
+        /// Creates a new client protocol.
+        /// </summary>
+        /// <param name="protocolUrl">The protocol URL.</param>
+        public static IClientProtocol CreateClientProtocol(string protocolUrl)
+        {
+            return ProtocolFactory.CreateProtocol<IClientProtocol>(protocolUrl);
         }
         #endregion
     }

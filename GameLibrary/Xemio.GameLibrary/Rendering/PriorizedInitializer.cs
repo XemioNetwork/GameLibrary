@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Rendering.Geometry;
 
@@ -18,7 +19,7 @@ namespace Xemio.GameLibrary.Rendering
         #endregion
 
         #region Fields
-        private IGraphicsInitializer _currentInitializer;
+        private IGraphicsInitializer _current;
         private readonly List<IGraphicsInitializer> _initializers; 
         #endregion
         
@@ -33,41 +34,41 @@ namespace Xemio.GameLibrary.Rendering
         }
         #endregion
 
-        #region IGraphicsProvider Factory Methods
+        #region IGraphicsProvider GuidFactory Methods
         /// <summary>
         /// Gets the texture writer.
         /// </summary>
-        public IContentWriter CreateTextureWriter()
+        public IWriter CreateTextureWriter()
         {
-            return this._currentInitializer.CreateTextureWriter();
+            return this._current.CreateTextureWriter();
         }
         /// <summary>
         /// Gets the texture reader.
         /// </summary>
-        public IContentReader CreateTextureReader()
+        public IReader CreateTextureReader()
         {
-            return this._currentInitializer.CreateTextureReader();
+            return this._current.CreateTextureReader();
         }
         /// <summary>
         /// Gets the render manager.
         /// </summary>
         public IRenderManager CreateRenderManager()
         {
-            return this._currentInitializer.CreateRenderManager();
+            return this._current.CreateRenderManager();
         }
         /// <summary>
         /// Gets the render factory.
         /// </summary>
         public IRenderFactory CreateRenderFactory()
         {
-            return this._currentInitializer.CreateRenderFactory();
+            return this._current.CreateRenderFactory();
         }
         /// <summary>
         /// Gets the geometry manager.
         /// </summary>
         public IGeometryManager CreateGeometryManager()
         {
-            return this._currentInitializer.CreateGeometryManager();
+            return this._current.CreateGeometryManager();
         }
         /// <summary>
         /// Gets the geometry factory.
@@ -75,7 +76,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <returns></returns>
         public IGeometryFactory CreateGeometryFactory()
         {
-            return this._currentInitializer.CreateGeometryFactory();
+            return this._current.CreateGeometryFactory();
         }
         #endregion
 
@@ -86,7 +87,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <returns></returns>
         public bool IsAvailable()
         {
-            return true;
+            return this._initializers.Any(i => i.IsAvailable());
         }
         /// <summary>
         /// Gets or sets the smoothing mode.
@@ -106,16 +107,16 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="graphicsDevice">The graphics device.</param>
         public void Initialize(GraphicsDevice graphicsDevice)
         {
-            foreach (IGraphicsInitializer provider in this._initializers)
+            foreach (IGraphicsInitializer initializer in this._initializers)
             {
-                if (provider.IsAvailable())
+                if (initializer.IsAvailable())
                 {
-                    this._currentInitializer = provider;
+                    this._current = initializer;
 
-                    this._currentInitializer.SmoothingMode = this.SmoothingMode;
-                    this._currentInitializer.InterpolationMode = this.InterpolationMode;
+                    this._current.SmoothingMode = this.SmoothingMode;
+                    this._current.InterpolationMode = this.InterpolationMode;
 
-                    this._currentInitializer.Initialize(graphicsDevice);
+                    this._current.Initialize(graphicsDevice);
                     break;
                 }
             }

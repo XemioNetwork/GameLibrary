@@ -161,6 +161,9 @@ namespace Xemio.GameLibrary.Components
         /// <typeparam name="T">The type of the component.</typeparam>
         public T Get<T>() where T : class, IComponent
         {
+            if (XGL.State == XGLState.None)
+                CoreConfigurator.Configure();
+
             if (this._componentMappings.ContainsKey(typeof(T)))
             {
                 return (T)this._componentMappings[typeof(T)];

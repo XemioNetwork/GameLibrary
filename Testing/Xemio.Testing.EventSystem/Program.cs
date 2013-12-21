@@ -22,7 +22,7 @@ namespace Xemio.Testing.EventSystem
         static void Main(string[] args)
         {
             var config = XGL.Configure()
-                .DefaultComponents()
+                .EnableCoreComponents()
                 .BuildConfiguration();
 
             XGL.Run(config);

@@ -1,12 +1,29 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Xemio.GameLibrary.Common
 {
     public class ThreadInvoker : IThreadInvoker
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThreadInvoker"/> class.
+        /// </summary>
+        public ThreadInvoker()
+        {
+            if (SynchronizationContext.Current == null)
+            {
+                SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+            }
+
+            this._factory = new TaskFactory(TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        #endregion
+
         #region Fields
-        private Control _invokerControl;
+        private readonly TaskFactory _factory;
         #endregion
 
         #region Methods
@@ -16,21 +33,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="action">The action.</param>
         public void Invoke(Action action)
         {
-            // Searching for a better method to invoke an action
-            // inside the main application thread. There is no
-            // other solution doing that, even though the implementation
-            // is not really good it has to stay like that.
-
-            if (this._invokerControl == null)
-            {
-                this._invokerControl = new Control();
-                this._invokerControl.CreateControl();
-            }
-
-            if (this._invokerControl.IsHandleCreated && !this._invokerControl.IsDisposed)
-            {
-                this._invokerControl.Invoke(action);
-            }
+            this._factory.StartNew(action).Wait();
         }
         #endregion
     }

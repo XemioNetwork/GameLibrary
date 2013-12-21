@@ -1,10 +1,7 @@
-using System;
 using Xemio.GameLibrary.Content.FileSystem;
-using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Surfaces;
-using Xemio.GameLibrary.Sound;
 
 namespace Xemio.GameLibrary
 {
@@ -24,7 +21,6 @@ namespace Xemio.GameLibrary
 
         #region Fields
         private IGraphicsInitializer _graphicsProvider;
-        private ISoundInitializer _soundInitializer;
 
         private IFileSystem _fileSystem;
         private IGameLoop _gameLoop;
@@ -35,7 +31,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets or sets a value indicating whether to register the default components.
         /// </summary>
-        public bool RegisterDefaultComponents { get; set; }
+        public bool CoreComponentsEnabled { get; set; }
         #endregion
 
         #region Methods
@@ -46,14 +42,6 @@ namespace Xemio.GameLibrary
         public void Set(IGraphicsInitializer initializer)
         {
             this._graphicsProvider = initializer;
-        }
-        /// <summary>
-        /// Sets the sound initializer.
-        /// </summary>
-        /// <param name="initializer">The initializer.</param>
-        public void Set(ISoundInitializer initializer)
-        {
-            this._soundInitializer = initializer;
         }
         /// <summary>
         /// Sets the specified file system.
@@ -84,7 +72,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public override void RegisterComponents()
         {
-            if (this.RegisterDefaultComponents)
+            if (this.CoreComponentsEnabled)
             {
                 base.RegisterComponents();
             }
@@ -98,13 +86,6 @@ namespace Xemio.GameLibrary
         public override IGraphicsInitializer GraphicsProvider
         {
             get { return this._graphicsProvider; }
-        }
-        /// <summary>
-        /// Gets or sets the sound initializer.
-        /// </summary>
-        public override ISoundInitializer SoundInitializer
-        {
-            get { return this._soundInitializer; }
         }
         /// <summary>
         /// Gets the file system.

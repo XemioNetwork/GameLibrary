@@ -3,7 +3,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Serialization
 {
-    public class DoubleSerializer : ContentSerializer<double>
+    public class DoubleSerializer : Serializer<double>
     {
         #region Overrides of ContentSerializer<double>
         /// <summary>

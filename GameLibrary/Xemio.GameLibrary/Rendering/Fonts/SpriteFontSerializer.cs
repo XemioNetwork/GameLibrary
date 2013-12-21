@@ -7,9 +7,9 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Rendering.Fonts
 {
-    public class SpriteFontSerializer : ContentSerializer<SpriteFont>
+    public class SpriteFontSerializer : Serializer<SpriteFont>
     {
-        #region Overrides of ContentSerializer<SpriteFont>
+        #region Overrides of SerializationManager<SpriteFont>
         /// <summary>
         /// Reads a value out of the specified reader.
         /// </summary>

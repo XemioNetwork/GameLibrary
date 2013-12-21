@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
-using Xemio.GameLibrary.Network.Logic;
+using Xemio.GameLibrary.Network.Handlers;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Protocols;
 
@@ -31,11 +31,15 @@ namespace Xemio.GameLibrary.Network
         /// Subscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        void Subscribe(IClientLogic subscriber);
+        void Subscribe(IClientHandler subscriber);
         /// <summary>
         /// Unsubscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        void Unsubscribe(IClientLogic subscriber);
+        void Unsubscribe(IClientHandler subscriber);
+        /// <summary>
+        /// Stops the client.
+        /// </summary>
+        void Close();
     }
 }

@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Network;
+using Xemio.GameLibrary.Network.Nested;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Protocols;
 using System.Net;
 
 namespace Xemio.GameLibrary.Network
 {
-    public interface IConnection : IPackageSender
+    public interface IConnection : ISender
     {
         /// <summary>
-        /// Gets the IP.
+        /// Gets the internet address.
         /// </summary>
-        IPAddress IP { get; }
+        IPAddress Address { get; }
         /// <summary>
         /// Gets or sets the latency.
         /// </summary>
@@ -29,10 +30,11 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         Package Receive();
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IClientProtocol"/> is connected.
+        /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>
         bool Connected { get; }
     }
+
     public static class ConnectionExtensions
     {
         #region Methods
@@ -46,7 +48,7 @@ namespace Xemio.GameLibrary.Network
             IConnection current = connection;
             while (current is INestedConnection && !(current is T))
             {
-                current = (current as INestedConnection).Connection;
+                current = ((INestedConnection)current).Connection;
             }
 
             return (T)current;

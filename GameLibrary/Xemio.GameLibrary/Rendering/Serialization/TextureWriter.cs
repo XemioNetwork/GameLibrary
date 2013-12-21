@@ -10,9 +10,9 @@ using Xemio.GameLibrary.Content.Formats;
 namespace Xemio.GameLibrary.Rendering.Serialization
 {
     [ManuallyLinked]
-    public abstract class TextureWriter : ContentWriter<ITexture>
+    public abstract class TextureWriter : Writer<ITexture>
     {
-        #region Overrides of ContentWriter<ITexture>
+        #region Overrides of Writer<ITexture>
         /// <summary>
         /// Writes the specified texture.
         /// </summary>

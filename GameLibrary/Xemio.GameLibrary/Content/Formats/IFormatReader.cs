@@ -14,14 +14,6 @@ namespace Xemio.GameLibrary.Content.Formats
         /// </summary>
         Stream Stream { get; }
         /// <summary>
-        /// Begins a new section.
-        /// </summary>
-        void BeginSection();
-        /// <summary>
-        /// Ends the current section.
-        /// </summary>
-        void EndSection();
-        /// <summary>
         /// Reads an unsigned integer value.
         /// </summary>
         uint ReadUnsignedInteger();

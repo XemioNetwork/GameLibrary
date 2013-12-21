@@ -3,9 +3,9 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Serialization
 {
-    public class StringSerializer : ContentSerializer<string>
+    public class StringSerializer : Serializer<string>
     {
-        #region Overrides of ContentSerializer<string>
+        #region Overrides of SerializationManager<string>
         /// <summary>
         /// Reads a value out of the specified reader.
         /// </summary>

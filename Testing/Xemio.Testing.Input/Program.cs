@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -8,6 +9,7 @@ using Xemio.GameLibrary;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Plugins.Implementations;
@@ -18,40 +20,48 @@ namespace Xemio.Testing.Input
     {
         static void Main(string[] args)
         {
-            Form form = new Form();
-            
-            XGL.Run(XGL.Configure()
-                .DefaultInput()
-                .Components(
-                    new ImplementationManager(),
-                    new ContentManager(),
-                    new EventManager())
-                .DisableSplashScreen()
-                .BuildConfiguration());
-
             var memoryStream = new MemoryStream();
-            var content = XGL.Components.Get<ContentManager>();
+            var serializer = XGL.Components.Get<SerializationManager>();
+            
+            var entity = new Entity();
 
-            content.Save(new Test() {A = 17, Sub = new SubClass(1337)}, memoryStream);
+            serializer.Save(entity, memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
 
-            Test t = content.Load<Test>(memoryStream);
+            var deserialized = serializer.Load<Entity>(memoryStream);
 
             string a = "3";
         }
     }
-    class Test
-    {
-        public int A { get; set; }
-        public SubClass Sub { get; set; }
-    }
-    class SubClass
-    {
-        public SubClass(int b)
-        {
-            this.B = b;
-        }
 
-        public int B { get; private set; }
+    interface ITest
+    {
+        string A { get; set; }
+    }
+
+    class Parent
+    {
+        public ITest Child { get; set; }
+        public ITest ChildB { get; set; }
+    }
+
+    class TestClass : ITest
+    {
+        #region Implementation of ITest
+
+        public string A { get; set; }
+        public int B { get; set; }
+
+        #endregion
+    }
+
+    class TestClassImpl2 : ITest
+    {
+        #region Implementation of ITest
+
+        public string A { get; set; }
+        public double G { get; set; }
+
+        #endregion
     }
 }

@@ -16,8 +16,6 @@ using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Rendering.Surfaces;
-using Xemio.GameLibrary.Sound;
-using Xemio.GameLibrary.Sound.Loops;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Content;
@@ -37,7 +35,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Configuration"/> is initialized.
         /// </summary>
-        public static bool Initialized { get; private set; }
+        public static XGLState State { get; internal set; }
         #endregion
 
         #region Methods
@@ -62,9 +60,11 @@ namespace Xemio.GameLibrary
         /// <param name="configuration">The configuration.</param>
         public static void Run(Configuration configuration)
         {
-            if (XGL.Initialized)
+            if (XGL.State == XGLState.Initialized)
                 return;
             
+            XGL.State = XGLState.Initializing;
+
             configuration.RegisterComponents();
             foreach (IComponent component in configuration.Components)
             {
@@ -72,16 +72,19 @@ namespace Xemio.GameLibrary
             }
 
             XGL.InitializeGraphics(configuration);
-            XGL.InitializeSound(configuration);
             XGL.InitializeGameLoop(configuration);
             XGL.InitializeInput(configuration);
 
             XGL.Components.Construct();
 
             XGL.InitializeScenes(configuration);
-            XGL.Initialized = true;
+            XGL.State = XGLState.Initialized;
 
-            XGL.StartGameLoop();
+            var gameLoop = XGL.Components.Get<IGameLoop>();
+            if (gameLoop != null)
+            {
+                gameLoop.Run();
+            }
         }
         #endregion
 
@@ -100,32 +103,11 @@ namespace Xemio.GameLibrary
                         "The selected graphics initializer is unavailable. Maybe your PC doesn't support the selected graphics engine.");
                 }
 
-                var graphicsDevice = new GraphicsDevice
-                                         {
-                                             DisplayMode = new DisplayMode(config.BackBufferSize)
-                                         };
-
-                IGraphicsInitializer provider = config.GraphicsProvider;
-                graphicsDevice.Initialize(provider);
+                var graphicsDevice = new GraphicsDevice();
+                graphicsDevice.DisplayMode = new DisplayMode(config.BackBufferSize);
+                graphicsDevice.Initialize(config.GraphicsProvider);
 
                 XGL.Components.Add(graphicsDevice);
-            }
-        }
-        /// <summary>
-        /// Initializes the sound.
-        /// </summary>
-        /// <param name="config">The configuration.</param>
-        private static void InitializeSound(Configuration config)
-        {
-            if (config.SoundInitializer != null)
-            {
-                var soundManager = new SoundManager
-                                       {
-                                           Provider = config.SoundInitializer.CreateProvider()
-                                       };
-
-                XGL.Components.Add(soundManager);
-                XGL.Components.Add(new LoopManager());
             }
         }
         /// <summary>
@@ -134,12 +116,10 @@ namespace Xemio.GameLibrary
         /// <param name="config">The configuration.</param>
         private static void InitializeGameLoop(Configuration config)
         {
-            var gameLoop = XGL.Components.Get<IGameLoop>();
-
-            if (gameLoop != null)
+            if (config.GameLoop != null)
             {
-                gameLoop.TargetFrameTime = 1000 / (double)config.FrameRate;
-                gameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
+                config.GameLoop.TargetFrameTime = 1000 / (double)config.FrameRate;
+                config.GameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
             }
         }
         /// <summary>
@@ -153,6 +133,7 @@ namespace Xemio.GameLibrary
             if (inputManager != null && config.CreatePlayerInput)
             {
                 PlayerInput playerInput = inputManager.CreateInput();
+
                 inputManager.AddListener(new MouseListener(), playerInput.PlayerIndex);
                 inputManager.AddListener(new KeyboardListener(), playerInput.PlayerIndex);
             }
@@ -168,9 +149,9 @@ namespace Xemio.GameLibrary
             if (sceneManager != null)
             {
                 config.RegisterScenes();
-                if (config.ShowSplashScreen)
+                if (config.SplashScreenEnabled)
                 {
-                    SplashScreen splashScreen = new SplashScreen(config.Scenes);
+                    var splashScreen = new SplashScreen(config.Scenes);
                     sceneManager.Add(splashScreen);
 
                     return;
@@ -179,18 +160,6 @@ namespace Xemio.GameLibrary
                 sceneManager.Add(config.Scenes);
             }
         }
-        /// <summary>
-        /// Starts the game loop.
-        /// </summary>
-        private static void StartGameLoop()
-        {
-            var gameLoop = XGL.Components.Get<IGameLoop>();
-
-            if (gameLoop != null)
-            {
-                gameLoop.Run();
-            }
-        }
-        #endregion Private Methods
+        #endregion
     }
 }

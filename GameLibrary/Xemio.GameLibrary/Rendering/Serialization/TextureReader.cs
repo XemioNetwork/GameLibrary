@@ -10,9 +10,9 @@ using Xemio.GameLibrary.Content.Formats;
 namespace Xemio.GameLibrary.Rendering.Serialization
 {
     [ManuallyLinked]
-    public abstract class TextureReader : ContentReader<ITexture>
+    public abstract class TextureReader : Reader<ITexture>
     {
-        #region Overrides of ContentReader<ITexture>
+        #region Overrides of Reader<ITexture>
         /// <summary>
         /// Reads an instance.
         /// </summary>

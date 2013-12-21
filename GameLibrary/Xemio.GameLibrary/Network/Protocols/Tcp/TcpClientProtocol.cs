@@ -16,8 +16,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpClientProtocol"/> class.
         /// </summary>
-        public TcpClientProtocol() 
-            : this(TcpDelay.None)
+        public TcpClientProtocol() : this(TcpDelay.None)
         {
         }
         /// <summary>
@@ -49,10 +48,23 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Connects to the specified ip.
         /// </summary>
-        /// <param name="ip">The ip.</param>
-        /// <param name="port">The port.</param>
-        public void Connect(string ip, int port)
+        /// <param name="url">The URL.</param>
+        public void Open(string url)
         {
+            string[] segments = url.Split(":".ToCharArray());
+            if (segments.Length != 2)
+            {
+                throw new ArgumentException("Invalid url [" + url + "]", "url");
+            }
+
+            string ip = segments[0];
+            int port;
+
+            if (!int.TryParse(segments[1], out port))
+            {
+                throw new ArgumentException("Invalid port for url [" + url + "]", "url");
+            }
+
             this._tcpClient = new TcpClient
                                   {
                                       NoDelay = (this._delay == TcpDelay.None)
@@ -60,15 +72,11 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
             this._tcpClient.Connect(IPAddress.Parse(ip), port);
             this.Stream = this._tcpClient.GetStream();
-
-            while (!this._tcpClient.Connected)
-            {
-            }
         }
         /// <summary>
         /// Disconnects the client.
         /// </summary>
-        public void Disconnect()
+        public void Close()
         {
             this._tcpClient.Close();
         }
@@ -100,6 +108,16 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         public bool Connected
         {
             get { return this._tcpClient != null && this._tcpClient.Connected; }
+        }
+        #endregion
+
+        #region Implementation of ILinkable<string>
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        public string Id
+        {
+            get { return "tcp"; }
         }
         #endregion
     }

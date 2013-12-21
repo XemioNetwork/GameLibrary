@@ -3,49 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Xemio.GameLibrary.Entities.Data;
+using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public abstract class EntityComponent
+    public abstract class EntityComponent : IGameHandler
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EntityComponent"/> class.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        protected EntityComponent(Entity entity)
-        {
-            this.Entity = entity;
-        }
-        #endregion
-
-        #region Fields
-        private EntityDataContainer _container;
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets the entity.
         /// </summary>
-        public Entity Entity { get; private set; }
-        /// <summary>
-        /// Gets the data container.
-        /// </summary>
-        protected EntityDataContainer Container
-        {
-            get { return this._container; }
-            set
-            {
-                if (this._container != null)
-                {
-                    this.Entity.Containers.Remove(this._container);
-                }
-
-                this._container = value;
-                this.Entity.Containers.Add(this._container);
-            }
-        }
+        public Entity Entity { get; internal set; }
         #endregion
 
         #region Methods
@@ -56,18 +24,20 @@ namespace Xemio.GameLibrary.Entities
         {
             return this.Entity as T;
         }
-        /// <summary>
-        /// Gets the container.
-        /// </summary>
-        protected T GetContainer<T>() where T : EntityDataContainer
-        {
-            return this.Container as T;
-        }
+        #endregion
+
+        #region Implementation of IGameHandler
         /// <summary>
         /// Handles a game tick.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
+        {
+        }
+        /// <summary>
+        /// Handles render calls.
+        /// </summary>
+        public virtual void Render()
         {
         }
         #endregion

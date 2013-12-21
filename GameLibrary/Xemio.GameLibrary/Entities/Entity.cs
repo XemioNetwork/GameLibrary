@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Content;
-using Xemio.GameLibrary.Entities.Data;
+using Xemio.GameLibrary.Content.Attributes;
 using Xemio.GameLibrary.Entities.Events;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Common;
-using Xemio.GameLibrary.Math.Collision;
-using Xemio.GameLibrary.Math.Collision.Sources;
 
 namespace Xemio.GameLibrary.Entities
 {
@@ -22,30 +20,26 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public Entity()
         {
-            this.EntityId = -1;
-
+            this.Guid = Guid.NewGuid();
             this.Components = new List<EntityComponent>();
-            this.Containers = new List<EntityDataContainer>();
 
             this.NotifyPositionChanged = true;
-
-            this._eventManager = XGL.Components.Get<EventManager>();
+            this.IsVisible = true;
         }
         #endregion
 
         #region Fields
-        private readonly EventManager _eventManager;
         private Vector2 _position;
 
         private bool _resetDirty;
-        private bool _handleComponentTick = true;
+        private bool _handleComponents = true;
         #endregion
         
         #region Properties
         /// <summary>
         /// Gets or sets the Id.
         /// </summary>
-        public int EntityId { get; set; }
+        public Guid Guid { get; set; }
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
@@ -56,15 +50,16 @@ namespace Xemio.GameLibrary.Entities
             {
                 if (value != this._position)
                 {
+                    Vector2 delta = value - this._position;
+
                     this._resetDirty = false;
                     this.IsDirty = true;
 
-                    Vector2 lastPosition = this._position;
                     this._position = value;
 
                     if (this.NotifyPositionChanged)
                     {
-                        this.OnPositionChanged(value - lastPosition);
+                        this.OnPositionChanged(delta);
                     }
                 }
             }
@@ -82,20 +77,13 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public bool IsDirty { get; set; }
         /// <summary>
+        /// Gets or sets a value indicating whether this entity is visible.
+        /// </summary>
+        public bool IsVisible { get; set; }
+        /// <summary>
         /// Gets the components.
         /// </summary>
-        [ExcludeSerialization]
-        public List<EntityComponent> Components { get; private set; }
-        /// <summary>
-        /// Gets the data containers.
-        /// </summary>
-        [ExcludeSerialization]
-        public List<EntityDataContainer> Containers { get; private set; }
-        /// <summary>
-        /// Gets the renderer.
-        /// </summary>
-        [ExcludeSerialization]
-        public EntityRenderer Renderer { get; protected set; }
+        public List<EntityComponent> Components { get; set; }
         /// <summary>
         /// Gets the environment.
         /// </summary>
@@ -109,14 +97,14 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public void EnableComponents()
         {
-            this._handleComponentTick = true;
+            this._handleComponents = true;
         }
         /// <summary>
         /// Disables the component tick.
         /// </summary>
         public void DisableComponents()
         {
-            this._handleComponentTick = false;
+            this._handleComponents = false;
         }
         /// <summary>
         /// Gets a specific component by a specified type.
@@ -124,13 +112,6 @@ namespace Xemio.GameLibrary.Entities
         public T GetComponent<T>() where T : EntityComponent
         {
             return this.Components.FirstOrDefault(component => component is T) as T;
-        }
-        /// <summary>
-        /// Gets a specific container by a specified type.
-        /// </summary>
-        public T GetContainer<T>() where T : EntityDataContainer
-        {
-            return this.Containers.FirstOrDefault(container => container is T) as T;
         }
         /// <summary>
         /// Destroys this entity.
@@ -145,7 +126,7 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="delta">The delta.</param>
         public virtual void OnPositionChanged(Vector2 delta)
         {
-            this._eventManager.Publish(new EntityPositionChangedEvent(this, delta));
+            XGL.Components.Get<EventManager>().Publish(new EntityPositionChangedEvent(this, delta));
         }
         /// <summary>
         /// Initializes this instance.
@@ -153,6 +134,19 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="environment">The environment.</param>
         public virtual void Initialize(EntityEnvironment environment)
         {
+        }
+        /// <summary>
+        /// Renders this entity.
+        /// </summary>
+        public virtual void Render()
+        {
+            if (this._handleComponents && this.IsVisible)
+            {
+                foreach (EntityComponent component in this.Components)
+                {
+                    component.Render();
+                }
+            }
         }
         /// <summary>
         /// Handles a game tick.
@@ -165,7 +159,7 @@ namespace Xemio.GameLibrary.Entities
                 this.IsDirty = false;
             }
 
-            if (this._handleComponentTick)
+            if (this._handleComponents)
             {
                 foreach (EntityComponent component in this.Components)
                 {
@@ -173,8 +167,7 @@ namespace Xemio.GameLibrary.Entities
                 }
             }
 
-            //Make the IsDirty property accessible after the
-            //entity tick. DO NOT REMOVE, RETARD!
+            //Make the IsDirty property accessible after the entity tick.
             this._resetDirty = true;
         }
         #endregion

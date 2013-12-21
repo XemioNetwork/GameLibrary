@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Events.Logging;
 
@@ -14,7 +16,7 @@ namespace Xemio.GameLibrary.Localization
 {
     [Require(typeof(EventManager))]
     [Require(typeof(IFileSystem))]
-    [Require(typeof(ContentManager))]
+    [Require(typeof(SerializationManager))]
 
     public class LocalizationManager : IConstructable
     {
@@ -98,7 +100,7 @@ namespace Xemio.GameLibrary.Localization
         /// <param name="localizationDirectory">The localization directory.</param>
         private void LoadLocalizations(string localizationDirectory)
         {
-            var content = XGL.Components.Get<ContentManager>();
+            var serializer = XGL.Components.Get<SerializationManager>();
             var fileSystem = XGL.Components.Get<IFileSystem>();
 
             if (!fileSystem.DirectoryExists(localizationDirectory))
@@ -107,7 +109,7 @@ namespace Xemio.GameLibrary.Localization
             string[] localizationFiles = fileSystem.GetFiles(localizationDirectory);
             foreach (string file in localizationFiles)
             {
-                Language language = content.Load<Language>(file);
+                var language = serializer.Load<Language>(file, Format.Binary);
 
                 if (this.Languages.Contains(language))
                 {

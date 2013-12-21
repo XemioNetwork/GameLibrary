@@ -14,7 +14,7 @@ namespace Xemio.Testing.Script
         static void Main(string[] args)
         {
             var config = XGL.Configure()
-                .DefaultComponents()
+                .EnableCoreComponents()
                 .BuildConfiguration();
 
             XGL.Run(config);

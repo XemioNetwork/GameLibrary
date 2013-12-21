@@ -18,8 +18,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpServerProtocol"/> class.
         /// </summary>
-        public TcpServerProtocol() 
-            : this(TcpDelay.None)
+        public TcpServerProtocol() : this(TcpDelay.None)
         {
         }
         /// <summary>
@@ -39,32 +38,34 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
         #region IServerProtocol Member
         /// <summary>
-        /// Hosts at the specified port.
+        /// Hosts at the specified url.
         /// </summary>
-        /// <param name="port">The port.</param>
-        public void Host(int port)
+        /// <param name="url">The url.</param>
+        public void Open(string url)
         {
-            if (this.Hosted)
-                return;
+            int port;
+            if (!int.TryParse(url, out port))
+            {
+                throw new ArgumentException("Invalid port [" + url + "].", "url");
+            }
 
             this._listener = new TcpListener(IPAddress.Any, port);
             this._listener.Start();
-
-            this.Hosted = true;
         }
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IServerProtocol"/> is hosted.
+        /// Stops the protocol.
         /// </summary>
-        public bool Hosted { get; private set; }
+        public void Close()
+        {
+            this._listener.Stop();
+        }
         /// <summary>
         /// Accepts a new connection.
         /// </summary>
         /// <returns></returns>
         public IConnection AcceptConnection()
         {
-            return new TcpConnection(
-                this._listener.AcceptTcpClient(),
-                this._delay);
+            return new TcpConnection(this._listener.AcceptTcpClient(), this._delay);
         }
         #endregion
 
@@ -73,6 +74,16 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// Gets ot sets the server.
         /// </summary>
         public Server Server { get; set; }
+        #endregion
+
+        #region Implementation of ILinkable<string>
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        public string Id
+        {
+            get { return "tcp"; }
+        }
         #endregion
     }
 }

@@ -14,15 +14,6 @@ namespace Xemio.GameLibrary.Content.Formats
         /// </summary>
         Stream Stream { get; }
         /// <summary>
-        /// Begins a new section.
-        /// </summary>
-        /// <param name="tag">The tag.</param>
-        void BeginSection(string tag);
-        /// <summary>
-        /// Ends the current section.
-        /// </summary>
-        void EndSection();
-        /// <summary>
         /// Writes the specified unsigned integer value.
         /// </summary>
         /// <param name="tag">The tag that is used for better readability in plain text formats.</param>

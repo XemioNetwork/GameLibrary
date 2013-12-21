@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
-using Xemio.GameLibrary.Network.Logic;
+using Xemio.GameLibrary.Network.Handlers;
+using Xemio.GameLibrary.Network.Internal;
 using Xemio.GameLibrary.Network.Protocols;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;
@@ -20,35 +21,35 @@ using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
 {
-    [Require(typeof(IGameLoop))]
-
-    public class Client : IClient, IGameHandler, IConstructable
+    public class Client : IClient, IComponent
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Client"/> class.
+        /// Initializes a new instance of the <see cref="Client" /> class.
         /// </summary>
-        public Client(IClientProtocol protocol)
+        /// <param name="url">The URL.</param>
+        public Client(string url)
         {
-            this._subscribers = new List<IClientLogic>();
-            this._sender = new PackageSender();
-            this._receiver = new ClientPackageReceiver(this);
+            this._subscribers = new List<IClientHandler>();
+            this._queue = new PackageQueue();
 
-            this.Protocol = protocol;
+            this.Protocol = ProtocolFactory.CreateClientProtocol(url);
             this.Protocol.Client = this;
 
-            this.Subscribe(new LatencyClientLogic());
-            this.Subscribe(new TimeSyncClientLogic());
+            this.Subscribe(new LatencyClientHandler());
+            this.Subscribe(new TimeSyncClientHandler());
 
             this.Active = true;
-            this._receiver.StartReceivingPackages();
+
+            this._processor = new ClientPackageProcessor(this);
+            this._processor.Start();
         }
         #endregion
 
         #region Fields
-        private readonly List<IClientLogic> _subscribers;
-        private readonly PackageSender _sender;
-        private readonly ClientPackageReceiver _receiver;
+        private readonly List<IClientHandler> _subscribers;
+        private readonly PackageQueue _queue;
+        private readonly ClientPackageProcessor _processor;
         #endregion
 
         #region Properties
@@ -63,7 +64,7 @@ namespace Xemio.GameLibrary.Network
         /// Gets the subscribers.
         /// </summary>
         /// <param name="package">The package.</param>
-        private IEnumerable<IClientLogic> GetSubscribers(Package package)
+        private IEnumerable<IClientHandler> GetSubscribers(Package package)
         {
             return this._subscribers
                 .Where(s => s.PackageType.IsInstanceOfType(package));
@@ -74,8 +75,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         protected internal virtual void OnReceivePackage(Package package)
         {
-            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
-            foreach (IClientLogic subscriber in subscribers)
+            IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
+            foreach (IClientHandler subscriber in subscribers)
             {
                 subscriber.OnReceive(this, package);
             }
@@ -86,8 +87,8 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         protected virtual void OnBeginSendPackage(Package package)
         {
-            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
-            foreach (IClientLogic subscriber in subscribers)
+            IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
+            foreach (IClientHandler subscriber in subscribers)
             {
                 subscriber.OnBeginSend(this, package);
             }
@@ -98,31 +99,11 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         protected virtual void OnSentPackage(Package package)
         {
-            IEnumerable<IClientLogic> subscribers = this.GetSubscribers(package);
-            foreach (IClientLogic subscriber in subscribers)
+            IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
+            foreach (IClientHandler subscriber in subscribers)
             {
                 subscriber.OnSent(this, package);
             }
-        }
-        #endregion
-
-        #region IGameHandler Member
-        /// <summary>
-        /// Handles game updates.
-        /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        public void Tick(float elapsed)
-        {
-            foreach (IClientLogic subscriber in this._subscribers)
-            {
-                subscriber.Tick(this, elapsed);
-            }
-        }
-        /// <summary>
-        /// Handles render calls.
-        /// </summary>
-        public void Render()
-        {
         }
         #endregion
 
@@ -145,35 +126,32 @@ namespace Xemio.GameLibrary.Network
                 throw new InvalidOperationException("You have to connect to a server first.");
 
             this.OnBeginSendPackage(package);
-            this._sender.Send(package, this.Protocol);
+            this._queue.Offer(package, this.Protocol);
             this.OnSentPackage(package);
         }
         /// <summary>
-        /// Subscribes the specified subscriber.
+        /// Subscribes the specified package handler.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Subscribe(IClientLogic subscriber)
+        public void Subscribe(IClientHandler subscriber)
         {
             this._subscribers.Add(subscriber);
         }
         /// <summary>
-        /// Unsubscribes the specified subscriber.
+        /// Unsubscribes the specified package handler.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
-        public void Unsubscribe(IClientLogic subscriber)
+        public void Unsubscribe(IClientHandler subscriber)
         {
             this._subscribers.Remove(subscriber);
         }
-        #endregion
-
-        #region Implementation of IConstructable
         /// <summary>
-        /// Constructs this instance.
+        /// Stops the client.
         /// </summary>
-        public void Construct()
+        public void Close()
         {
-            IGameLoop loop = XGL.Components.Get<IGameLoop>();
-            loop.Subscribe(this);
+            this._processor.Interrupt();
+            this.Protocol.Close();
         }
         #endregion
     }

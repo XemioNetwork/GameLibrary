@@ -24,11 +24,11 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Gets the texture writer.
         /// </summary>
-        IContentWriter CreateTextureWriter();
+        IWriter CreateTextureWriter();
         /// <summary>
         /// Gets the texture reader.
         /// </summary>
-        IContentReader CreateTextureReader();
+        IReader CreateTextureReader();
         /// <summary>
         /// Gets the render manager.
         /// </summary>

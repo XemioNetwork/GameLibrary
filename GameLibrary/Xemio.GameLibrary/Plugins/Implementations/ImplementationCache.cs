@@ -16,14 +16,12 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// </summary>
         public ImplementationCache()
         {
-            this._lock = new object();
             this._cachedContexts = new Dictionary<IAssemblyContext, HashSet<Type>>();
             this._linkers = new Dictionary<Type, dynamic>();
         }
         #endregion
 
         #region Fields
-        private readonly object _lock;
         /// <summary>
         /// Holding a reference from a IAssemblyContext to all Types that we're already loaded from that context.
         /// </summary>
@@ -42,25 +40,33 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TValue">The type of the value.</typeparam>
         private void InitializeLinker<TKey, TValue>() where TValue : ILinkable<TKey>
         {
-            if (!this._linkers.ContainsKey(typeof (TValue)))
+            if (!this._linkers.ContainsKey(typeof(TValue)))
             {
-                this._linkers.Add(typeof (TValue), new GenericLinker<TKey, TValue>());
+                this._linkers.Add(typeof(TValue), new Linker<TKey, TValue>());
             }
         }
         #endregion
 
         #region Methods
         /// <summary>
+        /// Clears the cache.
+        /// </summary>
+        public void Clear()
+        {
+            this._cachedContexts.Clear();
+            this._linkers.Clear();
+        }
+        /// <summary>
         /// Registers the specified value.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="value">The value.</param>
-        public void Register<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
+        public void Add<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
         {
             this.InitializeLinker<TKey, TValue>();
 
-            GenericLinker<TKey, TValue> linker = this._linkers[typeof(TValue)];
+            Linker<TKey, TValue> linker = this._linkers[typeof(TValue)];
             linker.Add(value);
         }
         /// <summary>
@@ -71,26 +77,14 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="context">The context.</param>
         /// <param name="key">The key.</param>
         /// <param name="creationType">Type of the creation.</param>
-        public TValue Resolve<TKey, TValue>(IAssemblyContext context, TKey key, CreationType creationType) where TValue : ILinkable<TKey>
+        public TValue Get<TKey, TValue>(IAssemblyContext context, TKey key, CreationType creationType) where TValue : ILinkable<TKey>
         {
-            lock (this._lock)
-            {
-                if (!this.InCache<TValue>(context))
-                {
-                    this.Cache<TKey, TValue>(context);
-                }
+            this.Cache<TKey, TValue>(context);
 
-                GenericLinker<TKey, TValue> linker = this._linkers[typeof (TValue)];
-
-                //Temporary set the creation type for the specified linker, to
-                //provide access to the instance creation feature of our GenericLinker class
-                linker.CreationType = creationType;
-
-                //Resolve the value.
-                TValue value = linker.Resolve(key);
-
-                return value;
-            }
+            Linker<TKey, TValue> linker = this._linkers[typeof(TValue)];
+            linker.CreationType = creationType;
+            
+            return linker.Resolve(key);
         }
         /// <summary>
         /// Resolves all instances for the specified type.
@@ -98,12 +92,9 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="context">The context.</param>
-        public IEnumerable<TValue> Resolve<TKey, TValue>(IAssemblyContext context) where TValue : ILinkable<TKey>
+        public IEnumerable<TValue> All<TKey, TValue>(IAssemblyContext context) where TValue : ILinkable<TKey>
         {
-            if (!this.InCache<TValue>(context))
-            {
-                this.Cache<TKey, TValue>(context);
-            }
+            this.Cache<TKey, TValue>(context);
 
             return this._linkers[typeof(TValue)];
         }
@@ -113,12 +104,12 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public bool InCache<TValue>(IAssemblyContext context)
+        public bool IsCached<TValue>(IAssemblyContext context)
         {
-            return
-                this._cachedContexts.ContainsKey(context) && 
-                this._cachedContexts[context].Contains(typeof(TValue)) &&
-                this._linkers.ContainsKey(typeof(TValue));
+            bool typeCached = this._cachedContexts.ContainsKey(context) && this._cachedContexts[context].Contains(typeof(TValue));
+            bool linkerCreated = this._linkers.ContainsKey(typeof(TValue));
+
+            return typeCached && linkerCreated;
         }
         /// <summary>
         /// Caches the specified context.
@@ -128,18 +119,22 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="context">The context.</param>
         public void Cache<TKey, TValue>(IAssemblyContext context) where TValue : ILinkable<TKey>
         {
-            this.InitializeLinker<TKey, TValue>();
-            if (!this._cachedContexts.ContainsKey(context))
+            if (!this.IsCached<TValue>(context))
             {
-                this._cachedContexts.Add(context, new HashSet<Type>());
-            }
+                this.InitializeLinker<TKey, TValue>();
 
-            this._cachedContexts[context].Add(typeof(TValue));
+                if (!this._cachedContexts.ContainsKey(context))
+                {
+                    this._cachedContexts.Add(context, new HashSet<Type>());
+                }
 
-            GenericLinker<TKey, TValue> linker = this._linkers[typeof(TValue)];
-            foreach (Assembly assembly in context.Assemblies)
-            {
-                linker.Load(assembly);
+                Linker<TKey, TValue> linker = this._linkers[typeof (TValue)];
+                foreach (Assembly assembly in context.Assemblies)
+                {
+                    linker.Load(assembly);
+                }
+
+                this._cachedContexts[context].Add(typeof(TValue));
             }
         }
         #endregion

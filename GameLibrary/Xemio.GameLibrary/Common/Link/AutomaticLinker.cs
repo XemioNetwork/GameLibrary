@@ -10,7 +10,7 @@ namespace Xemio.GameLibrary.Common.Link
     /// A generic linker, that automatically loads all objects.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AutomaticLinker<T> : GenericLinker<int, T> where T : ILinkable
+    public class AutomaticLinker<T> : Linker<int, T> where T : ILinkable
     {
         #region Constructors
         /// <summary>
@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Common.Link
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    public class AutomaticLinker<TKey, TValue> : GenericLinker<TKey, TValue> where TValue : ILinkable<TKey>
+    public class AutomaticLinker<TKey, TValue> : Linker<TKey, TValue> where TValue : ILinkable<TKey>
     {
         #region Constructors
         /// <summary>

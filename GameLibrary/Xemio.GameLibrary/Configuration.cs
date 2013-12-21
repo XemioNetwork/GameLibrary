@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content;
@@ -12,19 +9,15 @@ using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Localization;
 using Xemio.GameLibrary.Math;
-using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Surfaces;
-using Xemio.GameLibrary.Sound;
-using Xemio.GameLibrary.Sound.Loops;
 
 namespace Xemio.GameLibrary
 {
     /// <summary>
     /// Works as a configuration for the XGL.
-    /// Subclass it and configure everything.
     /// </summary>
     public abstract class Configuration
     {
@@ -46,13 +39,17 @@ namespace Xemio.GameLibrary
         /// </summary>
         public int FrameRate { get; set; }
         /// <summary>
+        /// Gets a value indicating whether to create a default player input.
+        /// </summary>
+        public bool CreatePlayerInput { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether to show splash screen.
+        /// </summary>
+        public bool SplashScreenEnabled { get; set; }
+        /// <summary>
         /// Gets or sets the graphics initializer.
         /// </summary>
         public abstract IGraphicsInitializer GraphicsProvider { get; }
-        /// <summary>
-        /// Gets or sets the sound initializer.
-        /// </summary>
-        public abstract ISoundInitializer SoundInitializer { get; }
         /// <summary>
         /// Gets the file system.
         /// </summary>
@@ -65,14 +62,6 @@ namespace Xemio.GameLibrary
         /// Gets the surface.
         /// </summary>
         public abstract ISurface Surface { get; }
-        /// <summary>
-        /// Gets a value indicating whether to create a default player input.
-        /// </summary>
-        public bool CreatePlayerInput { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether to show splash screen.
-        /// </summary>
-        public bool ShowSplashScreen { get; set; }
         #endregion
 
         #region Constructors
@@ -87,8 +76,7 @@ namespace Xemio.GameLibrary
             this.BackBufferSize = new Vector2(1280, 720);
             this.FrameRate = 60;
 
-            this.CreatePlayerInput = true;
-            this.ShowSplashScreen = true;
+            this.SplashScreenEnabled = true;
         }
         #endregion Constructors
 
@@ -111,12 +99,11 @@ namespace Xemio.GameLibrary
             this.Components.Add(new EventManager());
             this.Components.Add(new SceneManager());
             this.Components.Add(new InputManager());
-            this.Components.Add(new ContentManager());
+            this.Components.Add(new SerializationManager());
             this.Components.Add(new ImplementationManager());
             this.Components.Add(new ThreadInvoker());
             this.Components.Add(new LocalizationManager());
-            this.Components.Add(new GlobalExceptionHandler());
-            this.Components.Add(new GameTime());
+            this.Components.Add(new ApplicationExceptionHandler());
             this.Components.Add(new LibraryLoader());
         }
         #endregion Methods
