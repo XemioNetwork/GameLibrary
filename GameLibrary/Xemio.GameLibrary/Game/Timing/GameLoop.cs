@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -18,7 +19,14 @@ namespace Xemio.GameLibrary.Game.Timing
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
-        
+
+        #region Constants
+        /// <summary>
+        /// The tolerance to comprehend SpinWait lag.
+        /// </summary>
+        public const double SpinWaitTolerance = 0.9585;
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="GameLoop"/> class.
@@ -38,6 +46,7 @@ namespace Xemio.GameLibrary.Game.Timing
         private IThreadInvoker _invoker;
         
         private Task _loopTask;
+        private CancellationTokenSource _cancellationTokenSource;
         private Stopwatch _gameTime;
 
         private readonly CachedList<IGameHandler> _handlers;
@@ -48,13 +57,13 @@ namespace Xemio.GameLibrary.Game.Timing
         private bool _requestRender;
         private double _unprocessedTicks;
 
-        private double _elapsedTickTime;
+        private double _timeSinceLastTick;
         private double _elapsedRenderTime;
 
         private int _fpsCount;
         private double _lastFpsMeasure;
 
-        private double _lastTick;
+        private double _lastTryToTick;
         private double _lastRender;
         #endregion
 
@@ -103,10 +112,6 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             get { return this._renderTime; }
         }
-        /// <summary>
-        /// Gets the target tick time.
-        /// </summary>
-        public double TargetTickTime { get; set; }
         /// <summary>
         /// Gets the target frame time.
         /// </summary>
@@ -170,7 +175,9 @@ namespace Xemio.GameLibrary.Game.Timing
                 logger.Info("Starting game loop with {0}fps.", 1000.0 / this.TargetFrameTime);
 
                 this.Active = true;
-                this._loopTask = Task.Factory.StartNew(InternalLoop, TaskCreationOptions.LongRunning);
+
+                this._cancellationTokenSource = new CancellationTokenSource();
+                this._loopTask = Task.Factory.StartNew(this.InternalLoop, this._cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
             }
         }
         /// <summary>
@@ -183,6 +190,8 @@ namespace Xemio.GameLibrary.Game.Timing
                 logger.Info("Terminating game loop.");
 
                 this.Active = false;
+
+                this._cancellationTokenSource.Cancel(false);
                 this._loopTask.Wait();
             }
         }
@@ -211,13 +220,13 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             this._unprocessedTicks = 0;
             this._elapsedRenderTime = 0;
-            this._elapsedTickTime = 0;
+            this._timeSinceLastTick = 0;
             this._fpsCount = 0;
             this._tickTime = 0;
             this._renderTime = 0;
 
             this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
-            this._lastTick = this._gameTime.Elapsed.TotalMilliseconds;
+            this._lastTryToTick = this._gameTime.Elapsed.TotalMilliseconds;
             this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
         }
         /// <summary>
@@ -231,14 +240,19 @@ namespace Xemio.GameLibrary.Game.Timing
                 this._requestRender = true;
 
                 this.ResetFields();
-
-                while (this.Active)
+                
+                while (this._cancellationTokenSource.IsCancellationRequested == false)
                 {
-                    this.HandleRenderRequest();
-                    this.HandleUnprocessedTicks();
+                    //We use the SpinWait to wait for the next requested tick.
+                    //It's not totally correct, but we save a LOT of CPU power.
+                    //To compensate the incorrectness we introduced our SpinWaitTolerance constant.
+                    SpinWait.SpinUntil(this.IsTickRequested);
 
                     this.CheckRenderRequest();
                     this.UpdateFramesPerSecond();
+
+                    this.HandleRenderRequest();
+                    this.HandleUnprocessedTicks();
                 }
             }
             catch (Exception ex)
@@ -274,17 +288,26 @@ namespace Xemio.GameLibrary.Game.Timing
             }
         }
         /// <summary>
+        /// Handles the tick calculation.
+        /// </summary>
+        private bool IsTickRequested()
+        {
+            //Time since the last handled tick.
+            double elapsed = this._gameTime.Elapsed.TotalMilliseconds - this._lastTryToTick;
+
+            this._timeSinceLastTick += elapsed;
+            this._unprocessedTicks = this._timeSinceLastTick / (this.TargetFrameTime * GameLoop.SpinWaitTolerance);
+            this._lastTryToTick = this._gameTime.Elapsed.TotalMilliseconds;
+
+            bool shouldTick = this._unprocessedTicks >= 1.0;
+            
+            return shouldTick;
+        }
+        /// <summary>
         /// Handles all unprocessed ticks.
         /// </summary>
         private void HandleUnprocessedTicks()
         {
-            //Time since the last handled tick.
-            double elapsed = this._gameTime.Elapsed.TotalMilliseconds - this._lastTick;
-
-            this._elapsedTickTime += elapsed;
-            this._unprocessedTicks += elapsed / this.TargetTickTime;
-            this._lastTick = this._gameTime.Elapsed.TotalMilliseconds;
-
             //If there are unprocessed ticks, call OnTick.
             if (this._unprocessedTicks >= 1)
             {
@@ -294,19 +317,19 @@ namespace Xemio.GameLibrary.Game.Timing
                 //to keep digits for the next tick. (Example: unprocessedTicks = 3.11, => tickCount = 3)
                 this._unprocessedTicks -= tickCount;
 
-                logger.Trace("Game tick elapsed with {0}ms", this._elapsedTickTime);
+                logger.Trace("Game tick elapsed with {0}ms", this._timeSinceLastTick);
 
                 switch (this.LagCompensation)
                 {
                     case LagCompensation.None:
-                        this._invoker.Invoke(() => this.OnTick((float)this._elapsedTickTime));
+                        this._invoker.Invoke(() => this.OnTick((float)this._timeSinceLastTick));
                         break;
                     case LagCompensation.ExecuteMissedTicks:
                         //Handle unprocessed ticks by calling the OnTick method as often
                         //as needed for the elapsed tick time.
                         //Example: elapsedTickTime = 32ms, TargetFrameTime = 16ms => call OnTick twice.
 
-                        float tickElapsed = (float)(this._elapsedTickTime / tickCount);
+                        float tickElapsed = (float)(this._timeSinceLastTick / tickCount);
                         for (int i = 0; i < tickCount; i++)
                         {
                             this._invoker.Invoke(() => this.OnTick(tickElapsed));
@@ -314,7 +337,7 @@ namespace Xemio.GameLibrary.Game.Timing
                         break;
                 }
 
-                this._elapsedTickTime = 0;
+                this._timeSinceLastTick = 0;
                 this.ManagePrecisionLevel();
             }
         }
@@ -323,7 +346,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void CheckRenderRequest()
         {
-            if (this.IsElapsed(this._lastRender, this.TargetFrameTime))
+            if (this.IsElapsed(this._lastRender, this.TargetFrameTime * GameLoop.SpinWaitTolerance))
             {
                 this._requestRender = true;
             }
@@ -336,6 +359,8 @@ namespace Xemio.GameLibrary.Game.Timing
             if (this.IsElapsed(this._lastFpsMeasure, 1000.0))
             {
                 this.FramesPerSecond = this._fpsCount;
+
+                logger.Debug("GameLoop running with {0} fps", this.FramesPerSecond);
 
                 this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
                 this._fpsCount = 0;

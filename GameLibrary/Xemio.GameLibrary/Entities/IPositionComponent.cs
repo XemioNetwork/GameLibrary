@@ -12,6 +12,6 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets the position.
         /// </summary>
-        Vector2 Position { get; }
+        Vector2 Offset { get; }
     }
 }

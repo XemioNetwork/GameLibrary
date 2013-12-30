@@ -45,10 +45,6 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         double RenderTime { get; }
         /// <summary>
-        /// Gets the target tick time.
-        /// </summary>
-        double TargetTickTime { get; set; }
-        /// <summary>
         /// Gets the target frame time.
         /// </summary>
         double TargetFrameTime { get; set; }

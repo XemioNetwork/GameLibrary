@@ -155,7 +155,6 @@ namespace Xemio.GameLibrary
                 logger.Info("Initializing game loop with {0}fps", configuration.FrameRate);
 
                 configuration.GameLoop.TargetFrameTime = 1000 / (double)configuration.FrameRate;
-                configuration.GameLoop.TargetTickTime = 1000 / (double)configuration.FrameRate;
             }
         }
         /// <summary>

@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Entities.Components
         [ExcludeSerialization]
         public Vector2 Absolute
         {
-            get { return this.Entity.Components.OfType<IPositionComponent>().Aggregate(this.Value, (current, modifier) => current + modifier.Position); }
+            get { return this.Entity.Components.OfType<IPositionComponent>().Aggregate(this.Value, (current, modifier) => current + modifier.Offset); }
         }
         /// <summary>
         /// Gets a value indicating whether the position has changed.
