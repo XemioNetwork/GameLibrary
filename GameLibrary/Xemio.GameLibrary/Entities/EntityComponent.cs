@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Content.Attributes;
 using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities
@@ -13,6 +14,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets the entity.
         /// </summary>
+        [ExcludeSerialization]
         public Entity Entity { get; internal set; }
         #endregion
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLog;
+using Xemio.GameLibrary.Content.Attributes;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Entities.Components
@@ -40,13 +41,15 @@ namespace Xemio.GameLibrary.Entities.Components
         /// <summary>
         /// Gets the absolute position (Entity position + all position modifiers).
         /// </summary>
-        public Vector2 AbsolutePosition
+        [ExcludeSerialization]
+        public Vector2 Absolute
         {
             get { return this.Entity.Components.OfType<IPositionComponent>().Aggregate(this.Value, (current, modifier) => current + modifier.Position); }
         }
         /// <summary>
         /// Gets a value indicating whether the position has changed.
         /// </summary>
+        [ExcludeSerialization]
         public bool HasChanged { get; private set; }
         #endregion
 

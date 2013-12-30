@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary.Content
                 while (currentType != typeof(object))
                 {
                     types.Add(currentType);
-                    currentType = type.BaseType;
+                    currentType = currentType.BaseType;
                 }
             }
 
@@ -210,7 +210,7 @@ namespace Xemio.GameLibrary.Content
             }
             catch (Exception ex)
             {
-                logger.Info("Initializing the format writer for {0} failed. Fallback will take place.", format.GetType().Name);
+                logger.InfoException("Initializing the format writer for " + format.GetType().Name + " failed. Fallback will take place.", ex);
                 this.Save(value, new FallbackWriter(stream, ex));
             }
         }

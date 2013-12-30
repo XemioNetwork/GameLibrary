@@ -48,6 +48,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
+        [ExcludeSerialization]
         public PositionComponent Position
         {
             get { return this.Get<PositionComponent>(); }
@@ -55,7 +56,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets a value indicating whether this instance is destroyed.
         /// </summary>
-        public bool IsDestroyed { get; private set; }
+        public bool IsDestroyed { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether this entity is visible.
         /// </summary>
