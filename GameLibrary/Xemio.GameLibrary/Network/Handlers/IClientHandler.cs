@@ -13,7 +13,8 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <summary>
         /// Called when the client connection got disconnected.
         /// </summary>
-        void OnDisconnected();
+        /// <param name="client">The client.</param>
+        void OnDisconnected(IClient client);
         /// <summary>
         /// Called when a package arrives.
         /// </summary>

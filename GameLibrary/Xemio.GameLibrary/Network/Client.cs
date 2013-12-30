@@ -88,7 +88,7 @@ namespace Xemio.GameLibrary.Network
         {
             foreach (IClientHandler subscriber in this._subscribers)
             {
-                subscriber.OnDisconnected();
+                subscriber.OnDisconnected(this);
             }
         }
         /// <summary>

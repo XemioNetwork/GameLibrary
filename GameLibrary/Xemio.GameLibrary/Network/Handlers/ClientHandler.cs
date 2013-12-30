@@ -9,7 +9,8 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <summary>
         /// Called when the client connection got disconnected.
         /// </summary>
-        public virtual void OnDisconnected()
+        /// <param name="client">The client.</param>
+        public virtual void OnDisconnected(IClient client)
         {
         }
         /// <summary>
