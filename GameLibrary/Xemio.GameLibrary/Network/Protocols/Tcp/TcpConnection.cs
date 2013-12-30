@@ -5,13 +5,19 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using NLog;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Network.Exceptions;
 using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
     public class TcpConnection : IConnection
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TcpConnection"/> class.
@@ -24,7 +30,9 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             this._tcpClient.NoDelay = (delay == TcpDelay.None);
             
             this._serializer = new PackageSerializer();
+
             this.Stream = tcpClient.GetStream();
+            this.Address = ((IPEndPoint)this._tcpClient.Client.LocalEndPoint).Address;
         }
         #endregion
 
@@ -48,10 +56,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Gets the ip address.
         /// </summary>
-        public IPAddress Address
-        {
-            get { return ((IPEndPoint)this._tcpClient.Client.LocalEndPoint).Address; }
-        }
+        public IPAddress Address { get; private set; }
         /// <summary>
         /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
         /// </summary>
@@ -72,14 +77,35 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this._serializer.Serialize(package, this.Stream);
+            try
+            {
+                this._serializer.Serialize(package, this.Stream);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                throw new ConnectionClosedException(this);
+            }
+            catch (IOException ex)
+            {
+                throw new ConnectionClosedException(this);
+            }
         }
         /// <summary>
         /// Receives a package.
         /// </summary>
         public Package Receive()
         {
-            return this._serializer.Deserialize(this.Stream);
+            Package package;
+            try
+            {
+                package = this._serializer.Deserialize(this.Stream);
+            }
+            catch (IOException ex)
+            {
+                throw new ConnectionClosedException(this);
+            }
+
+            return package;
         }
         #endregion
     }

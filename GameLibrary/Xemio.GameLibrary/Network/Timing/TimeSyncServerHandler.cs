@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using NLog;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Network.Handlers;
 
@@ -11,6 +12,10 @@ namespace Xemio.GameLibrary.Network.Timing
 {
     public class TimeSyncServerHandler : ServerHandler<TimeSyncPackage>
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSyncServerHandler" /> class.
@@ -78,12 +83,8 @@ namespace Xemio.GameLibrary.Network.Timing
             float latency = this.GetLatency(sender);
             sender.Latency = latency;
 
-            var latencyPackage = new LatencyPackage
-                                                {
-                                                    Latency = latency
-                                                };
-
-            server.Send(latencyPackage, sender);
+            logger.Trace("Setting latency for {0} to {1}ms.", sender.Address, latency);
+            server.Send(new LatencyPackage { Latency = latency }, sender);
         }
         #endregion
     }

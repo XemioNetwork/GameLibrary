@@ -5,11 +5,13 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using NLog;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Handlers;
 using Xemio.GameLibrary.Network.Internal;
+using Xemio.GameLibrary.Network.Packages.Dispatchers;
 using Xemio.GameLibrary.Network.Protocols;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;
@@ -23,6 +25,10 @@ namespace Xemio.GameLibrary.Network
 {
     public class Client : IClient, IComponent
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Client" /> class.
@@ -30,33 +36,39 @@ namespace Xemio.GameLibrary.Network
         /// <param name="url">The URL.</param>
         public Client(string url)
         {
-            this._subscribers = new List<IClientHandler>();
-            this._queue = new PackageQueue();
+            logger.Info("Creating client for [{0}].", url);
 
             this.Protocol = ProtocolFactory.CreateClientProtocol(url);
             this.Protocol.Client = this;
 
+            this._subscribers = new List<IClientHandler>();
+
+            this._outputQueue = new OutputQueue(this.Protocol);
+            this._outputQueue.Start();
+
             this.Subscribe(new LatencyClientHandler());
             this.Subscribe(new TimeSyncClientHandler());
+            
+            this._dispatcher = new ClientPackageDispatcher(this);
+            this._dispatcher.Start();
 
-            this.Active = true;
-
-            this._processor = new ClientPackageProcessor(this);
-            this._processor.Start();
+            this._eventManager = XGL.Components.Require<EventManager>();
         }
         #endregion
 
         #region Fields
         private readonly List<IClientHandler> _subscribers;
-        private readonly PackageQueue _queue;
-        private readonly ClientPackageProcessor _processor;
+        private readonly OutputQueue _outputQueue;
+        private readonly ClientPackageDispatcher _dispatcher;
+
+        private readonly EventManager _eventManager;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Client"/> is active.
+        /// Gets or sets the protocol.
         /// </summary>
-        public bool Active { get; set; }
+        public IClientProtocol Protocol { get; private set; }
         #endregion
 
         #region Methods
@@ -73,19 +85,21 @@ namespace Xemio.GameLibrary.Network
         /// Calls the IClientLogics when the specified package was received.
         /// </summary>
         /// <param name="package">The package.</param>
-        protected internal virtual void OnReceivePackage(Package package)
+        public virtual void OnReceivePackage(Package package)
         {
             IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
             foreach (IClientHandler subscriber in subscribers)
             {
                 subscriber.OnReceive(this, package);
             }
+
+            this._eventManager.Publish(new ReceivedPackageEvent(package));
         }
         /// <summary>
         /// Calls the IClientLogics when the specified package is going to be send.
         /// </summary>
         /// <param name="package">The package.</param>
-        protected virtual void OnBeginSendPackage(Package package)
+        public void OnBeginSendPackage(Package package)
         {
             IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
             foreach (IClientHandler subscriber in subscribers)
@@ -97,13 +111,15 @@ namespace Xemio.GameLibrary.Network
         /// Calls the IClientLogics when the specified package is sent.
         /// </summary>
         /// <param name="package">The package.</param>
-        protected virtual void OnSentPackage(Package package)
+        public void OnSentPackage(Package package)
         {
             IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
             foreach (IClientHandler subscriber in subscribers)
             {
                 subscriber.OnSent(this, package);
             }
+
+            this._eventManager.Publish(new SentPackageEvent(package));
         }
         #endregion
 
@@ -113,20 +129,20 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public float Latency { get; set; }
         /// <summary>
-        /// Gets or sets the protocol.
+        /// Gets a value indicating whether the sender is connected.
         /// </summary>
-        public IClientProtocol Protocol { get; private set; }
+        public bool Connected
+        {
+            get { return this.Protocol.Connected; }
+        }
         /// <summary>
         /// Sends the specified package.
         /// </summary>
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            if (!this.Protocol.Connected)
-                throw new InvalidOperationException("You have to connect to a server first.");
-
             this.OnBeginSendPackage(package);
-            this._queue.Offer(package, this.Protocol);
+            this._outputQueue.Enqueue(package);
             this.OnSentPackage(package);
         }
         /// <summary>
@@ -150,7 +166,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void Close()
         {
-            this._processor.Interrupt();
+            this._dispatcher.Interrupt();
             this.Protocol.Close();
         }
         #endregion

@@ -10,62 +10,50 @@ namespace Xemio.GameLibrary.Rendering.Sprites
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Animation"/> class.
+        /// Initializes a new instance of the <see cref="Animation" /> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="texture">The texture.</param>
-        public Animation(string name, ITexture texture)
-        {
-            this.Name = name;
-            this.Indices = new[] {0};
-            this.Sheet = new SpriteSheet(texture, texture.Width, texture.Height);
-            this.FrameTime = 0;
-            this.IsLooped = false;
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Animation"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="sheet">The sheet.</param>
-        /// <param name="frameTime">The frame time.</param>
-        public Animation(string name, SpriteSheet sheet, float frameTime)
-            : this(name, sheet, frameTime, true)
+        public Animation(ITexture texture) : this(new SpriteSheet(texture, texture.Width, texture.Height), 0, new[] {0}, false)
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="Animation"/> class.
+        /// Initializes a new instance of the <see cref="Animation" /> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="sheet">The sheet.</param>
         /// <param name="frameTime">The frame time.</param>
+        /// <param name="indices">The indices.</param>
+        public Animation(SpriteSheet sheet, float frameTime, int[] indices) : this(sheet, frameTime, indices, true)
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Animation" /> class.
+        /// </summary>
+        /// <param name="sheet">The sheet.</param>
+        /// <param name="frameTime">The frame time.</param>
+        /// <param name="indices">The indices.</param>
         /// <param name="isLooped">if set to <c>true</c> the animation gets looped.</param>
-        public Animation(string name, SpriteSheet sheet, float frameTime, bool isLooped)
+        public Animation(SpriteSheet sheet, float frameTime, int[] indices, bool isLooped)
         {
-            this.Name = name;
             this.Sheet = sheet;
             this.FrameTime = frameTime;
-
             this.IsLooped = isLooped;
+            this.Indices = indices;
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the name.
-        /// </summary>
-        public string Name { get; private set; }
-        /// <summary>
-        /// Gets or sets the indices.
-        /// </summary>
-        public int[] Indices { get; set; }
-        /// <summary>
-        /// Gets the sheet.
+        /// Gets the sprite sheet.
         /// </summary>
         public SpriteSheet Sheet { get; private set; }
         /// <summary>
         /// Gets the frame time.
         /// </summary>
         public float FrameTime { get; private set; }
+        /// <summary>
+        /// Gets or sets the indices.
+        /// </summary>
+        public int[] Indices { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether this instance is looped.
         /// </summary>

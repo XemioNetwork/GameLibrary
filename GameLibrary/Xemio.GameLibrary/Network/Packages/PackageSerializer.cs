@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content;
@@ -14,6 +15,10 @@ namespace Xemio.GameLibrary.Network.Packages
 {
     public class PackageSerializer
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Methods
         /// <summary>
         /// Serializes the specified package.
@@ -32,6 +37,8 @@ namespace Xemio.GameLibrary.Network.Packages
 
             byte[] data = buffer.ToArray();
             stream.Write(data, 0, data.Length);
+
+            logger.Trace("Sending {0}", BitConverter.ToString(data));
         }
         /// <summary>
         /// Deserializes the specified reader.

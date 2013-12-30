@@ -6,6 +6,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Net;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Network.Exceptions;
 using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
@@ -86,14 +87,36 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this._serializer.Serialize(package, this.Stream);
+            try
+            {
+                this._serializer.Serialize(package, this.Stream);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                throw new ClientLostConnectionException();
+            }
+            catch (IOException ex)
+            {
+                throw new ClientLostConnectionException();
+            }
         }
         /// <summary>
         /// Receives a package.
         /// </summary>
         public Package Receive()
         {
-            return this._serializer.Deserialize(this.Stream);
+            try
+            {
+                return this._serializer.Deserialize(this.Stream);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                throw new ClientLostConnectionException();
+            }
+            catch (IOException ex)
+            {
+                throw new ClientLostConnectionException();
+            }
         }
         #endregion
 

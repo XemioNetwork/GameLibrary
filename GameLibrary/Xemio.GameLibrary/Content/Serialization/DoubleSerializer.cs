@@ -12,7 +12,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="reader">The reader.</param>
         public override double Read(IFormatReader reader)
         {
-            return reader.ReadDouble();
+            return reader.ReadDouble("Value");
         }
         /// <summary>
         /// Writes the specified value.
@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="value">The value.</param>
         public override void Write(IFormatWriter writer, double value)
         {
-            writer.WriteDouble("Double", value);
+            writer.WriteDouble("Value", value);
         }
         #endregion
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components.Attributes;
@@ -12,6 +13,10 @@ namespace Xemio.GameLibrary.Components
 {
     public class ComponentManager
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentManager"/> class.
@@ -114,10 +119,12 @@ namespace Xemio.GameLibrary.Components
             if (this.IsConstructed)
                 return;
 
+            logger.Info("Preparing to construct components...");
             using (this.Components.StartCaching())
             { 
                 foreach (IComponent component in this.Components)
                 {
+                    logger.Debug("Constructing: {0}.", component.GetType());
                     this.Construct(component);
                 }
             }
@@ -162,12 +169,14 @@ namespace Xemio.GameLibrary.Components
         public T Get<T>() where T : class, IComponent
         {
             if (XGL.State == XGLState.None)
-                CoreConfigurator.Configure();
+                BasicConfigurator.Configure();
 
             if (this._componentMappings.ContainsKey(typeof(T)))
             {
                 return (T)this._componentMappings[typeof(T)];
             }
+
+            logger.Warn("Component {0} does not exist inside the component registry.", typeof(T).Name);
 
             return default(T);
         }

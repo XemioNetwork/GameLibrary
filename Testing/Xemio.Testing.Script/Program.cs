@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Xemio.GameLibrary;
+using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Script;
 
 namespace Xemio.Testing.Script
@@ -13,47 +15,42 @@ namespace Xemio.Testing.Script
     {
         static void Main(string[] args)
         {
-            var config = XGL.Configure()
-                .EnableCoreComponents()
-                .BuildConfiguration();
-
-            XGL.Run(config);
-
-            ScriptCompiler compiler = new ScriptCompiler();
-
-            compiler.Assemblies.Add("XGL.dll");
-            compiler.Assemblies.Add("Xemio.Testing.Script.exe");
-            compiler.OutputAssembly = "test.dll";
-
-            CompilerResult result = compiler.Compile(@"
-                               using System;
-                               using System.Collections;
-                               using Xemio.GameLibrary.Script;
-                               using Xemio.Testing.Script;
-
-                               public class Test : IScript
-                               {
-                                    public IEnumerable Execute()
-                                    {
-                                        Test(3);
-                                        Test(15);
-                                        Test(1);
-                                        Test(234);
-                                        Test(2314);
-                                    }
-                               }");
-
-            if (!result.Succeed)
-            {
-                foreach(CompilerError a in result.Errors)
-                    Console.WriteLine(a.Message);
-            }
-
-            foreach (IScript script in result.Scripts)
-                foreach (ICommand command in script.Execute())
-                    command.Execute();
+            var scriptManager = new ScriptExecutor();
+            scriptManager.Send(new TriggerEvent(), "alabastia.npc1");
 
             Console.ReadLine();
         }
+    }
+
+    public class UselessEvent : IEvent
+    {
+    }
+
+    public class TriggerEvent : IEvent
+    {
+    }
+
+    public class TestScript : IScript, IHandler<TriggerEvent>
+    {
+        #region Implementation of ILinkable<string>
+        /// <summary>
+        /// Gets the identifier for the current instance.
+        /// </summary>
+        public string Id
+        {
+            get { return "alabastia.npc1"; }
+        }
+        #endregion
+
+        #region Implementation of IHandler<TriggerEvent>
+        /// <summary>
+        /// Handles the specified event.
+        /// </summary>
+        /// <param name="evt">The event.</param>
+        public void Execute(TriggerEvent evt)
+        {
+            Console.WriteLine("Triggered");
+        }
+        #endregion
     }
 }

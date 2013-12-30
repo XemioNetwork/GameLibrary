@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Events;
 
 namespace Xemio.GameLibrary.Script
 {
-    public interface IScript
+    public interface IScript : ILinkable<string>
     {
-        /// <summary>
-        /// Executes this script.
-        /// </summary>
-        IEnumerable Execute();
     }
 }

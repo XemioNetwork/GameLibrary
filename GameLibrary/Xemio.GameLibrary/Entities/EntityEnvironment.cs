@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Collections;
+using NLog;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Timing;
@@ -12,6 +13,10 @@ namespace Xemio.GameLibrary.Entities
 {
     public class EntityEnvironment : IEnumerable<Entity>, IGameHandler
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityEnvironment"/> class.
@@ -68,6 +73,8 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         public virtual void Add(Entity entity)
         {
+            logger.Trace("Added entity {0} to entity environment.", entity.GetType().Name);
+
             entity.Environment = this;
             entity.Initialize(this);
 
@@ -80,6 +87,8 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         public virtual void Remove(Entity entity)
         {
+            logger.Trace("Removed entity {0} from entity environment.", entity.GetType().Name);
+
             entity.Environment = null;
 
             this._guidMappings.Remove(entity.Guid);
@@ -90,6 +99,8 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public void Clear()
         {
+            logger.Debug("Clearing {0} entities from entity environment.", this.Entities.Count);
+
             using (this.Entities.StartCaching())
             { 
                 foreach (Entity entity in this.Entities)

@@ -19,9 +19,5 @@ namespace Xemio.GameLibrary.Network.Protocols
         /// Sets the client.
         /// </summary>
         Client Client { set; }
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IClientProtocol"/> is connected.
-        /// </summary>
-        bool Connected { get; }
     }
 }

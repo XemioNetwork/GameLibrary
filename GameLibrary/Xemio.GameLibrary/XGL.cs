@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
@@ -24,6 +25,10 @@ namespace Xemio.GameLibrary
 {
     public static class XGL
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the component manager.
@@ -61,9 +66,14 @@ namespace Xemio.GameLibrary
         public static void Run(Configuration configuration)
         {
             if (XGL.State == XGLState.Initialized)
+            {
+                logger.Warn("XGL has already been configured.");
                 return;
-            
+            }
+
             XGL.State = XGLState.Initializing;
+            
+            logger.Info("Preparing for configuration.");
 
             configuration.RegisterComponents();
             foreach (IComponent component in configuration.Components)
@@ -71,10 +81,7 @@ namespace Xemio.GameLibrary
                 XGL.Components.Add(component);
             }
 
-            XGL.InitializeGraphics(configuration);
-            XGL.InitializeGameLoop(configuration);
-            XGL.InitializeInput(configuration);
-
+            XGL.Initialize(configuration);
             XGL.Components.Construct();
 
             XGL.InitializeScenes(configuration);
@@ -85,27 +92,54 @@ namespace Xemio.GameLibrary
             {
                 gameLoop.Run();
             }
+
+            logger.Info("Done initializing.");
         }
         #endregion
 
         #region Private Methods
         /// <summary>
+        /// Initializes this instance.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        private static void Initialize(Configuration configuration)
+        {
+            XGL.InitializeContent(configuration);
+            XGL.InitializeGraphics(configuration);
+            XGL.InitializeGameLoop(configuration);
+            XGL.InitializeInput(configuration);
+        }
+        /// <summary>
+        /// Initializes the content.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        private static void InitializeContent(Configuration configuration)
+        {
+            var content = new ContentManager();
+            content.Format = configuration.ContentFormat;
+
+            XGL.Components.Add(content);
+        }
+        /// <summary>
         /// Initializes the graphics.
         /// </summary>
-        /// <param name="config">The configuration.</param>
-        private static void InitializeGraphics(Configuration config)
+        /// <param name="configuration">The configuration.</param>
+        private static void InitializeGraphics(Configuration configuration)
         {
-            if (config.GraphicsProvider != null)
+            if (configuration.GraphicsProvider != null)
             {
-                if (!config.GraphicsProvider.IsAvailable())
+                logger.Info("Initializing graphics with {0}.", configuration.GraphicsProvider.GetType().Name);
+
+                if (!configuration.GraphicsProvider.IsAvailable())
                 {
                     throw new InvalidOperationException(
                         "The selected graphics initializer is unavailable. Maybe your PC doesn't support the selected graphics engine.");
                 }
 
-                var graphicsDevice = new GraphicsDevice();
-                graphicsDevice.DisplayMode = new DisplayMode(config.BackBufferSize);
-                graphicsDevice.Initialize(config.GraphicsProvider);
+                logger.Info("Setting display mode to {0}x{1}.", (int)configuration.BackBufferSize.X, (int)configuration.BackBufferSize.Y);
+
+                var graphicsDevice = new GraphicsDevice {DisplayMode = new DisplayMode(configuration.BackBufferSize)};
+                graphicsDevice.Initialize(configuration.GraphicsProvider);
 
                 XGL.Components.Add(graphicsDevice);
             }
@@ -113,24 +147,26 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the game loop.
         /// </summary>
-        /// <param name="config">The configuration.</param>
-        private static void InitializeGameLoop(Configuration config)
+        /// <param name="configuration">The configuration.</param>
+        private static void InitializeGameLoop(Configuration configuration)
         {
-            if (config.GameLoop != null)
+            if (configuration.GameLoop != null)
             {
-                config.GameLoop.TargetFrameTime = 1000 / (double)config.FrameRate;
-                config.GameLoop.TargetTickTime = 1000 / (double)config.FrameRate;
+                logger.Info("Initializing game loop with {0}fps", configuration.FrameRate);
+
+                configuration.GameLoop.TargetFrameTime = 1000 / (double)configuration.FrameRate;
+                configuration.GameLoop.TargetTickTime = 1000 / (double)configuration.FrameRate;
             }
         }
         /// <summary>
         /// Initializes the input.
         /// </summary>
-        /// <param name="config">The configuration.</param>
-        private static void InitializeInput(Configuration config)
+        /// <param name="configuration">The configuration.</param>
+        private static void InitializeInput(Configuration configuration)
         {
             var inputManager = XGL.Components.Get<InputManager>();
 
-            if (inputManager != null && config.CreatePlayerInput)
+            if (inputManager != null && configuration.CreatePlayerInput)
             {
                 PlayerInput playerInput = inputManager.CreateInput();
 
@@ -141,23 +177,27 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Initializes the scenes.
         /// </summary>
-        /// <param name="config">The config.</param>
-        private static void InitializeScenes(Configuration config)
+        /// <param name="configuration">The configuration.</param>
+        private static void InitializeScenes(Configuration configuration)
         {
             var sceneManager = XGL.Components.Get<SceneManager>();
 
             if (sceneManager != null)
             {
-                config.RegisterScenes();
-                if (config.SplashScreenEnabled)
+                logger.Info("Initializing scenes. Count: ", configuration.Scenes.Count);
+
+                configuration.RegisterScenes();
+                if (configuration.SplashScreenEnabled)
                 {
-                    var splashScreen = new SplashScreen(config.Scenes);
+                    logger.Info("Splash screen is enabled. Creating splash screen.");
+
+                    var splashScreen = new SplashScreen(configuration.Scenes);
                     sceneManager.Add(splashScreen);
 
                     return;
                 }
 
-                sceneManager.Add(config.Scenes);
+                sceneManager.Add(configuration.Scenes);
             }
         }
         #endregion

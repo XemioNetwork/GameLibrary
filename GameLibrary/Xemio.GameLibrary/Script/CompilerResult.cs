@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.IO;
 
@@ -16,16 +17,15 @@ namespace Xemio.GameLibrary.Script
         public CompilerResult(IEnumerable<CompilerError> errors)
         {
             this.Errors = errors.ToList();
-            this.Scripts = new ScriptCollection();
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="CompilerResult"/> class.
+        /// Initializes a new instance of the <see cref="CompilerResult" /> class.
         /// </summary>
-        /// <param name="scripts">The scripts.</param>
-        public CompilerResult(IEnumerable<IScript> scripts)
+        /// <param name="assembly">The assembly.</param>
+        public CompilerResult(Assembly assembly)
         {
             this.Errors = new List<CompilerError>();
-            this.Scripts = new ScriptCollection(scripts);
+            this.Assembly = assembly;
         }
         #endregion
 
@@ -42,9 +42,9 @@ namespace Xemio.GameLibrary.Script
         /// </summary>
         public List<CompilerError> Errors { get; private set; }
         /// <summary>
-        /// Gets the scripts.
+        /// Gets the assembly.
         /// </summary>
-        public ScriptCollection Scripts { get; private set; }
+        public Assembly Assembly { get; private set; }
         #endregion
     }
 }

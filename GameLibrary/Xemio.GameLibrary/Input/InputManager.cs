@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events;
@@ -16,6 +17,10 @@ namespace Xemio.GameLibrary.Input
 
     public class InputManager : IConstructable, IGameHandler
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Fields
         private readonly IList<IInputListener> _listeners;
         #endregion
@@ -64,7 +69,9 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public PlayerInput CreateInput()
         {
-            PlayerInput playerInput = new PlayerInput(this.PlayerInputs.Count);
+            logger.Info("Creating player input with id {0}", this.PlayerInputs.Count);
+
+            var playerInput = new PlayerInput(this.PlayerInputs.Count);
             this.PlayerInputs.Add(playerInput);
 
             return playerInput;
@@ -76,6 +83,8 @@ namespace Xemio.GameLibrary.Input
         /// <param name="playerIndex">Index of the player.</param>
         public void AddListener(IInputListener listener, int playerIndex)
         {
+            logger.Debug("Adding {0} for player {1}.", listener.GetType().Name, playerIndex);
+
             listener.PlayerIndex = playerIndex;
             listener.OnAttached();
 
@@ -87,6 +96,8 @@ namespace Xemio.GameLibrary.Input
         /// <param name="listener">The listener.</param>
         public void RemoveListener(IInputListener listener)
         {
+            logger.Debug("Removing {0} for player {1}.", listener.GetType().Name, listener.PlayerIndex);
+
             listener.PlayerIndex = null;
             listener.OnDetached();
 
@@ -121,7 +132,10 @@ namespace Xemio.GameLibrary.Input
         private void HandleInputEvent(InputStateEvent stateEvent)
         {
             if (!this.IsPlayerIndexValid(stateEvent.PlayerIndex))
+            {
+                logger.Debug("Invalid input state event for player with id {0}.", stateEvent.PlayerIndex);
                 return;
+            }
 
             PlayerInput playerInput = this.PlayerInputs[stateEvent.PlayerIndex];
             playerInput.SetState(stateEvent.Key, stateEvent.State);
@@ -133,7 +147,10 @@ namespace Xemio.GameLibrary.Input
         private void HandleMousePositionEvent(MousePositionEvent mouseEvent)
         {
             if (!this.IsPlayerIndexValid(mouseEvent.PlayerIndex))
+            {
+                logger.Debug("Invalid mouse position event for player with id {0}.", mouseEvent.PlayerIndex);
                 return;
+            }
 
             PlayerInput playerInput = this.PlayerInputs[mouseEvent.PlayerIndex];
             playerInput.MousePosition = mouseEvent.Position;

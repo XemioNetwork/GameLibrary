@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NLog;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Math;
@@ -11,6 +12,10 @@ namespace Xemio.GameLibrary.Game.Scenes
 {
     public abstract class SceneProvider
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+        
         #region Fields
         protected readonly CachedList<Scene> _subScenes = new CachedList<Scene>();
         #endregion Fields
@@ -21,7 +26,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public GraphicsDevice GraphicsDevice
         {
-            get { return XGL.Components.Get<GraphicsDevice>(); }
+            get { return XGL.Components.Require<GraphicsDevice>(); }
         }
         #endregion Properties
         
@@ -32,6 +37,8 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="scene">The scene.</param>
         public void Add(Scene scene)
         {
+            logger.Debug("Adding scene {0}.", scene.GetType().Name);
+
             scene.Parent = this;
             scene.OnEnter();
 
@@ -43,6 +50,8 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="scene">The scene.</param>
         public void Remove(Scene scene)
         {
+            logger.Debug("Removing scene {0}.", scene.GetType().Name);
+
             scene.Parent = null;
             scene.OnLeave();
 

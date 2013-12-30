@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using NLog;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Plugins.Contexts;
 
 namespace Xemio.GameLibrary.Plugins.Implementations
 {
     public class ImplementationManager : IComponent
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ImplementationManager"/> class.
         /// </summary>
-        public ImplementationManager() : this(ContextFactory.CreateFileAssemblyContext("."))
+        public ImplementationManager() : this(new FileAssemblyContext("."))
         {
         }
         /// <summary>
@@ -20,17 +27,94 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="context">The context.</param>
         public ImplementationManager(IAssemblyContext context)
         {
+            this._cacheFlags = new Dictionary<Type, bool>();
+            this._linkers = new Dictionary<Type, dynamic>();
+
             this._context = context;
-            this._cache = new ImplementationCache();
         }
         #endregion
 
         #region Fields
-        private readonly IAssemblyContext _context;
-        private readonly ImplementationCache _cache;
+        private readonly object _linkerLoadLock = new object();
+
+        private readonly Dictionary<Type, bool> _cacheFlags;
+        private readonly Dictionary<Type, dynamic> _linkers;
+
+        private IAssemblyContext _context;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the context.
+        /// </summary>
+        public IAssemblyContext Context
+        {
+            get { return this._context; }
+            set
+            {
+                this._context = value;
+                this._cacheFlags.Clear();                
+            }
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Initializes the linker for the specified key and value combination.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        private Linker<TKey, TValue> GetLinker<TKey, TValue>() where TValue : ILinkable<TKey>
+        {
+            lock (this._linkers)
+            {
+                Linker<TKey, TValue> linker;
+
+                if (this._linkers.ContainsKey(typeof(TValue)))
+                {
+                    linker = this._linkers[typeof(TValue)];
+                }
+                else
+                {
+                    this._linkers.Add(typeof(TValue), (linker = new Linker<TKey, TValue>()
+                    {
+                        DuplicateBehavior = DuplicateBehavior.Override
+                    }));
+                }
+
+                return linker;
+            }
+        }
+        /// <summary>
+        /// Resolves the specified key.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="key">The key.</param>
+        /// <param name="creationType">Type of the creation.</param>
+        private TValue Get<TKey, TValue>(TKey key, CreationType creationType) where TValue : ILinkable<TKey>
+        {
+            if (!this.IsCached<TValue>())
+            {
+                this.Cache<TKey, TValue>();
+            }
+
+            Linker<TKey, TValue> linker = this.GetLinker<TKey, TValue>();
+            linker.CreationType = creationType;
+
+            return linker.Resolve(key);
+        }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Merges the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void Merge(IAssemblyContext context)
+        {
+            this.Context = new MergedAssemblyContext(this.Context, context);
+        }
         /// <summary>
         /// Registers the specified value.
         /// </summary>
@@ -39,35 +123,36 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="value">The value.</param>
         public void Add<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
         {
-            this._cache.Add<TKey, TValue>(value);
+            Linker<TKey, TValue> linker = this.GetLinker<TKey, TValue>();
+            linker.Add(value);
         }
         /// <summary>
-        /// Resolves an instance for the specified key.
+        /// Gets the singleton instance for the specified key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
-        public TValue GetNew<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
+        public TValue Get<TKey, TValue>(TKey key) where TValue : ILinkable<TKey>
         {
-            return this._cache.Get<TKey, TValue>(this._context, key, CreationType.CreateNew);
-        }
+            return this.Get<TKey, TValue>(key, CreationType.Singleton);
+        } 
         /// <summary>
-        /// Resolves the specified key.
+        /// Gets a new instance for the specified key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
-        public TValue Get<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
+        public TValue GetNew<TKey, TValue>(TKey key) where TValue : ILinkable<TKey>
         {
-            return this._cache.Get<TKey, TValue>(this._context, key, CreationType.Singleton);
+            return this.Get<TKey, TValue>(key, CreationType.New);
         }
         /// <summary>
-        /// Resolves the type for the specified key.
+        /// Gets the type for the specified key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="key">The key.</param>
-        public Type GetType<TKey, TValue>(TKey key) where TValue : class, ILinkable<TKey>
+        public Type GetType<TKey, TValue>(TKey key) where TValue : ILinkable<TKey>
         {
             return this.Get<TKey, TValue>(key).GetType();
         }
@@ -78,7 +163,40 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TValue">The type of the value.</typeparam>
         public IEnumerable<TValue> All<TKey, TValue>() where TValue : ILinkable<TKey>
         {
-            return this._cache.All<TKey, TValue>(this._context);
+            if (!this.IsCached<TValue>())
+            {
+                this.Cache<TKey, TValue>();
+            }
+
+            return this._linkers[typeof(TValue)];
+        }
+        /// <summary>
+        /// Returns a value that determines wether the specified context was already cached or not.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        public bool IsCached<TValue>()
+        {
+            return this._cacheFlags.ContainsKey(typeof(TValue));
+        }
+        /// <summary>
+        /// Caches the specified context.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        public void Cache<TKey, TValue>() where TValue : ILinkable<TKey>
+        {
+            logger.Trace("Caching {0} instances.", typeof(TValue).Name);
+            
+            lock (this._linkerLoadLock)
+            {
+                var linker = this.GetLinker<TKey, TValue>();
+                foreach (Assembly assembly in this._context.Assemblies)
+                {
+                    linker.Load(assembly);
+                }
+
+                this._cacheFlags.Add(typeof(TValue), true);
+            }
         }
         #endregion
     }

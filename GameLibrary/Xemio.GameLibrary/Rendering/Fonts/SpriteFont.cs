@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Resources;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Drawing.Imaging;
+using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Rendering;
@@ -20,6 +22,10 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
     public class SpriteFont
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteFont"/> class.
@@ -53,11 +59,13 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="font">The font.</param>
         public SpriteFont(Font font) : this()
         {
-            Bitmap measureBitmap = new Bitmap(1, 1);
+            logger.Debug("Generating sprite font for {0} {1}pt.", font.FontFamily, font.SizeInPoints);
+
+            var measureBitmap = new Bitmap(1, 1);
             Graphics graphics = Graphics.FromImage(measureBitmap);
 
             Brush brush = Brushes.White;
-            Bitmap[] bitmaps = new Bitmap[byte.MaxValue];
+            var bitmaps = new Bitmap[byte.MaxValue];
 
             for (int i = 31; i < 253; i++)
             {

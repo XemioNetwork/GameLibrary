@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="reader">The reader.</param>
         public override Vector2 Read(IFormatReader reader)
         {
-            return reader.ReadVector2();
+            return reader.ReadVector2("Value");
         }
         /// <summary>
         /// Writes the specified value.
@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="value">The value.</param>
         public override void Write(IFormatWriter writer, Vector2 value)
         {
-            writer.WriteVector2("Vector", value);
+            writer.WriteVector2("Value", value);
         }
         #endregion
     }

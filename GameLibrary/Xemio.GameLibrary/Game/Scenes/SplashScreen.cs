@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public override void LoadContent()
         {
-            this._texture = this.Content.Load<ITexture>(Resources.intro.ToStream());
+            this._texture = this.Serializer.Load<ITexture>(Resources.intro.ToStream());
         }
         /// <summary>
         /// Handles a game tick.

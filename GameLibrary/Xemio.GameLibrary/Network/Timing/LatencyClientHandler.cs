@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using NLog;
 using Xemio.GameLibrary.Network.Handlers;
 
 namespace Xemio.GameLibrary.Network.Timing
 {
     public class LatencyClientHandler : ClientHandler<LatencyPackage>
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Methods
         /// <summary>
         /// Called when the client receives a latency package.
@@ -17,6 +22,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// <param name="package">The package.</param>
         public override void OnReceive(IClient client, LatencyPackage package)
         {
+            logger.Trace("Received latency information: {0}ms", package.Latency);
             client.Latency = package.Latency;
         }
         #endregion

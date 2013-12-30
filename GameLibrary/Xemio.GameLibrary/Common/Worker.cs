@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Common
@@ -11,6 +12,17 @@ namespace Xemio.GameLibrary.Common
         #region Fields
         private bool _running;
         private Task _task;
+        private readonly CancellationTokenSource _source;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Worker"/> class.
+        /// </summary>
+        protected Worker()
+        {
+            this._source = new CancellationTokenSource();
+        }
         #endregion
 
         #region Methods
@@ -19,7 +31,7 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         public bool IsRunning()
         {
-            return this._running;
+            return this._running && this._source.IsCancellationRequested == false;
         }
         /// <summary>
         /// Starts this worker.
@@ -29,7 +41,7 @@ namespace Xemio.GameLibrary.Common
             if (!this.IsRunning())
             {
                 this._running = true;
-                this._task = Task.Factory.StartNew(this.Run, TaskCreationOptions.LongRunning);
+                this._task = Task.Factory.StartNew(this.Run, this._source.Token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
             }
         }
         /// <summary>
@@ -40,7 +52,7 @@ namespace Xemio.GameLibrary.Common
             if (this.IsRunning())
             {
                 this._running = false;
-                this._task.Wait();
+                this._source.Cancel(false);
             }
         }
         /// <summary>

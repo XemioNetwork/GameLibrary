@@ -3,14 +3,14 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Nested
 {
-    public abstract class NestedConnection<T> : INestedConnection where T : IConnection
+    public abstract class NestedConnection : INestedConnection
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="NestedConnection&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="NestedConnection" /> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        protected NestedConnection(T connection)
+        protected NestedConnection(IConnection connection)
         {
             this.Connection = connection;
         }
@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Network.Nested
         /// <summary>
         /// Gets the connection.
         /// </summary>
-        public T Connection { get; private set; }
+        public IConnection Connection { get; private set; }
         #endregion
         
         #region Implementation of IClientProtocl

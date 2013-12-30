@@ -1,6 +1,7 @@
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary

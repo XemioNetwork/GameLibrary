@@ -29,10 +29,6 @@ namespace Xemio.GameLibrary.Network
         /// Receives a package.
         /// </summary>
         Package Receive();
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
-        /// </summary>
-        bool Connected { get; }
     }
 
     public static class ConnectionExtensions

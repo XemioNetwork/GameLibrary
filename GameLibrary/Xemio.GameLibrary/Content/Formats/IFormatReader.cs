@@ -7,76 +7,96 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Formats
 {
-    public interface IFormatReader
+    public interface IFormatReader : IDisposable
     {
         /// <summary>
         /// Gets the stream.
         /// </summary>
         Stream Stream { get; }
         /// <summary>
+        /// Begins the specified section.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        IDisposable Section(string tag);
+        /// <summary>
         /// Reads an unsigned integer value.
         /// </summary>
-        uint ReadUnsignedInteger();
+        /// <param name="tag">The tag.</param>
+        uint ReadUnsignedInteger(string tag);
         /// <summary>
         /// Reads an unsigned short value.
         /// </summary>
-        ushort ReadUnsignedShort();
+        /// <param name="tag">The tag.</param>
+        ushort ReadUnsignedShort(string tag);
         /// <summary>
         /// Reads an unsigned long value.
         /// </summary>
-        ulong ReadUnsignedLong();
+        /// <param name="tag">The tag.</param>
+        ulong ReadUnsignedLong(string tag);
         /// <summary>
         /// Reads an integer value.
         /// </summary>
-        int ReadInteger();
+        /// <param name="tag">The tag.</param>
+        int ReadInteger(string tag);
         /// <summary>
         /// Reads a short value.
         /// </summary>
-        short ReadShort();
+        /// <param name="tag">The tag.</param>
+        short ReadShort(string tag);
         /// <summary>
         /// Reads a long value.
         /// </summary>
-        long ReadLong();
+        /// <param name="tag">The tag.</param>
+        long ReadLong(string tag);
         /// <summary>
         /// Reads a float value.
         /// </summary>
-        float ReadFloat();
+        /// <param name="tag">The tag.</param>
+        float ReadFloat(string tag);
         /// <summary>
         /// Reads a double value.
         /// </summary>
-        double ReadDouble();
+        /// <param name="tag">The tag.</param>
+        double ReadDouble(string tag);
         /// <summary>
         /// Reads a decimal value.
         /// </summary>
-        decimal ReadDecimal();
+        /// <param name="tag">The tag.</param>
+        decimal ReadDecimal(string tag);
         /// <summary>
         /// Reads a boolean value.
         /// </summary>
-        bool ReadBoolean();
+        /// <param name="tag">The tag.</param>
+        bool ReadBoolean(string tag);
         /// <summary>
         /// Reads a byte value.
         /// </summary>
-        byte ReadByte();
+        /// <param name="tag">The tag.</param>
+        byte ReadByte(string tag);
         /// <summary>
         /// Reads a byte array value.
         /// </summary>
-        /// <param name="length">The length.</param>
-        byte[] ReadBytes(int length);
+        /// <param name="tag">The tag.</param>
+        byte[] ReadBytes(string tag);
         /// <summary>
         /// Reads a character value.
         /// </summary>
-        char ReadCharacter();
+        /// <param name="tag">The tag.</param>
+        char ReadCharacter(string tag);
         /// <summary>
         /// Reads a string value.
         /// </summary>
-        string ReadString();
+        /// <param name="tag">The tag.</param>
+        string ReadString(string tag);
         /// <summary>
         /// Reads a vector2 value.
         /// </summary>
-        Vector2 ReadVector2();
+        /// <param name="tag">The tag.</param>
+        Vector2 ReadVector2(string tag);
         /// <summary>
         /// Reads a rectangle value.
         /// </summary>
-        Rectangle ReadRectangle();
+        /// <param name="tag">The tag.</param>
+        Rectangle ReadRectangle(string tag);
     }
 }

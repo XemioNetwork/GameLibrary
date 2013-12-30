@@ -10,6 +10,10 @@ namespace Xemio.GameLibrary.Content.Formats
     public interface IFormat
     {
         /// <summary>
+        /// Gets a value indicating whether the format supports tags.
+        /// </summary>
+        bool SupportsTags { get; }
+        /// <summary>
         /// Creates a writer.
         /// </summary>
         /// <param name="stream">The stream.</param>

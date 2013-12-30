@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using NLog;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Rendering;
@@ -8,6 +9,10 @@ namespace Xemio.GameLibrary.Input.Listeners
 {
     public class KeyboardListener : IInputListener
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Methods
         /// <summary>
         /// Publishes the event.
@@ -56,6 +61,8 @@ namespace Xemio.GameLibrary.Input.Listeners
 
             surface.Control.KeyDown += this.SurfaceKeyDown;
             surface.Control.KeyUp += this.SurfaceKeyUp;
+
+            logger.Debug("Attached keyboard listener {0}.", this.PlayerIndex.Value);
         }
         /// <summary>
         /// Called when the input listener was detached from the player.
@@ -66,6 +73,8 @@ namespace Xemio.GameLibrary.Input.Listeners
 
             surface.Control.KeyDown -= this.SurfaceKeyDown;
             surface.Control.KeyUp -= this.SurfaceKeyUp;
+
+            logger.Debug("Detached keyboard listener {0}.", this.PlayerIndex.Value);
         }
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using Xemio.GameLibrary.Events;
+﻿using NLog;
+using Xemio.GameLibrary.Events;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Math;
@@ -9,6 +10,10 @@ namespace Xemio.GameLibrary.Input.Listeners
 {
     public class MouseListener : IInputListener
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Methods
         /// <summary>
         /// Converts mouse buttons into our keys enum.
@@ -100,6 +105,8 @@ namespace Xemio.GameLibrary.Input.Listeners
             surface.Control.MouseMove += this.SurfaceMouseMove;
             surface.Control.MouseDown += this.SurfaceMouseDown;
             surface.Control.MouseUp += this.SurfaceMouseUp;
+
+            logger.Debug("Attached mouse listener {0}.", this.PlayerIndex.Value);
         }
         /// <summary>
         /// Called when the input listener was detached from the player.
@@ -111,6 +118,8 @@ namespace Xemio.GameLibrary.Input.Listeners
             surface.Control.MouseMove -= this.SurfaceMouseMove;
             surface.Control.MouseDown -= this.SurfaceMouseDown;
             surface.Control.MouseUp -= this.SurfaceMouseUp;
+
+            logger.Debug("Detached mouse listener {0}.", this.PlayerIndex.Value);
         }
         #endregion
     }

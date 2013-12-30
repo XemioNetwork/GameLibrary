@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.IO;
+using NLog;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.Attributes;
+using Xemio.GameLibrary.Entities.Components;
 using Xemio.GameLibrary.Entities.Events;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Math;
@@ -14,6 +17,10 @@ namespace Xemio.GameLibrary.Entities
 {
     public class Entity
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
@@ -21,17 +28,15 @@ namespace Xemio.GameLibrary.Entities
         public Entity()
         {
             this.Guid = Guid.NewGuid();
-            this.Components = new List<EntityComponent>();
 
-            this.NotifyPositionChanged = true;
+            this.Components = new List<EntityComponent>();
+            this.Add(new PositionComponent());
+
             this.IsVisible = true;
         }
         #endregion
 
         #region Fields
-        private Vector2 _position;
-
-        private bool _resetDirty;
         private bool _handleComponents = true;
         #endregion
         
@@ -43,39 +48,14 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
-        public Vector2 Position
+        public PositionComponent Position
         {
-            get { return this._position; }
-            set
-            {
-                if (value != this._position)
-                {
-                    Vector2 delta = value - this._position;
-
-                    this._resetDirty = false;
-                    this.IsDirty = true;
-
-                    this._position = value;
-
-                    if (this.NotifyPositionChanged)
-                    {
-                        this.OnPositionChanged(delta);
-                    }
-                }
-            }
+            get { return this.Get<PositionComponent>(); }
         }
-        /// <summary>
-        /// Gets or sets a value indicating whether to publish an event if the position changed.
-        /// </summary>
-        public bool NotifyPositionChanged { get; set; }
         /// <summary>
         /// Gets a value indicating whether this instance is destroyed.
         /// </summary>
         public bool IsDestroyed { get; private set; }
-        /// <summary>
-        /// Gets a value indicating whether this instance is dirty.
-        /// </summary>
-        public bool IsDirty { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether this entity is visible.
         /// </summary>
@@ -93,6 +73,24 @@ namespace Xemio.GameLibrary.Entities
 
         #region Methods
         /// <summary>
+        /// Adds the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        public void Add(EntityComponent component)
+        {
+            component.Attach(this);
+            this.Components.Add(component);
+        }
+        /// <summary>
+        /// Removes the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        public void Remove(EntityComponent component)
+        {
+            component.Detach();
+            this.Components.Remove(component);
+        }
+        /// <summary>
         /// Enables the component tick.
         /// </summary>
         public void EnableComponents()
@@ -109,7 +107,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets a specific component by a specified type.
         /// </summary>
-        public T GetComponent<T>() where T : EntityComponent
+        public T Get<T>() where T : EntityComponent
         {
             return this.Components.FirstOrDefault(component => component is T) as T;
         }
@@ -119,14 +117,6 @@ namespace Xemio.GameLibrary.Entities
         public virtual void Destroy()
         {
             this.IsDestroyed = true;
-        }
-        /// <summary>
-        /// Called when the position changed.
-        /// </summary>
-        /// <param name="delta">The delta.</param>
-        public virtual void OnPositionChanged(Vector2 delta)
-        {
-            XGL.Components.Get<EventManager>().Publish(new EntityPositionChangedEvent(this, delta));
         }
         /// <summary>
         /// Initializes this instance.
@@ -154,11 +144,6 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
         {
-            if (this._resetDirty)
-            {
-                this.IsDirty = false;
-            }
-
             if (this._handleComponents)
             {
                 foreach (EntityComponent component in this.Components)
@@ -166,9 +151,6 @@ namespace Xemio.GameLibrary.Entities
                     component.Tick(elapsed);
                 }
             }
-
-            //Make the IsDirty property accessible after the entity tick.
-            this._resetDirty = true;
         }
         #endregion
     }

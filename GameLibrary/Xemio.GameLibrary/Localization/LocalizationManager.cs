@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
@@ -16,10 +17,14 @@ namespace Xemio.GameLibrary.Localization
 {
     [Require(typeof(EventManager))]
     [Require(typeof(IFileSystem))]
-    [Require(typeof(SerializationManager))]
+    [Require(typeof(ContentManager))]
 
     public class LocalizationManager : IConstructable
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalizationManager"/> class.
@@ -59,14 +64,12 @@ namespace Xemio.GameLibrary.Localization
         public void ChangeLanguage(string language)
         {
             Language currentLanguage = this.Languages.FirstOrDefault(f => f.CultureName == language);
-            if (currentLanguage != null)
+            if (currentLanguage == null)
             {
-                this.CurrentLanguage = currentLanguage;
+                logger.Warn("Language {0} does not exist. Could not change language.", language);
             }
-            else
-            {
-                this.LogLanguageNotFound(language);   
-            }
+
+            this.CurrentLanguage = currentLanguage;
         }
         /// <summary>
         /// Gets the localized string.
@@ -100,7 +103,7 @@ namespace Xemio.GameLibrary.Localization
         /// <param name="localizationDirectory">The localization directory.</param>
         private void LoadLocalizations(string localizationDirectory)
         {
-            var serializer = XGL.Components.Get<SerializationManager>();
+            var content = XGL.Components.Get<ContentManager>();
             var fileSystem = XGL.Components.Get<IFileSystem>();
 
             if (!fileSystem.DirectoryExists(localizationDirectory))
@@ -109,7 +112,7 @@ namespace Xemio.GameLibrary.Localization
             string[] localizationFiles = fileSystem.GetFiles(localizationDirectory);
             foreach (string file in localizationFiles)
             {
-                var language = serializer.Load<Language>(file, Format.Binary);
+                var language = content.Get<Language>(file);
 
                 if (this.Languages.Contains(language))
                 {
@@ -139,15 +142,6 @@ namespace Xemio.GameLibrary.Localization
                     existentLanguage.Values.Add(value);
                 }
             }
-        }
-        /// <summary>
-        /// Logs that the given language was not found.
-        /// </summary>
-        /// <param name="language">The language.</param>
-        private void LogLanguageNotFound(string language)
-        {
-            var eventManager = XGL.Components.Get<EventManager>();
-            eventManager.Publish(new LanguageNotFoundLoggingEvent(language));
         }
         #endregion
     }

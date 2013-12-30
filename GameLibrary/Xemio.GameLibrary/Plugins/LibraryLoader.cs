@@ -5,12 +5,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
+using NLog;
 using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Plugins
 {
     public class LibraryLoader : IConstructable
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Methods
         /// <summary>
         /// Loads the libraries.
@@ -41,14 +46,18 @@ namespace Xemio.GameLibrary.Plugins
                 IEnumerable<ILibraryInitializer> initializers;
                 if (!this.TryGetInitializerFromAssembly(assembly, out initializers))
                 {
+                    logger.Debug("Failed to load assembly {0} for the first time.", assembly.FullName);
                     failedAssemblies.Add(assembly);
                 }
 
                 foreach (ILibraryInitializer initializer in initializers)
                 {
+                    logger.Trace("Found initializer {0}.", initializer.GetType().Name);
                     yield return initializer;
                 }
             }
+
+            logger.Debug("Trying to reload failed assemblies.");
 
             //Retry all failed assemblies
             foreach (Assembly assembly in failedAssemblies)
@@ -56,7 +65,10 @@ namespace Xemio.GameLibrary.Plugins
                 IEnumerable<ILibraryInitializer> initializers;
 
                 //Ignore if they fail now
-                this.TryGetInitializerFromAssembly(assembly, out initializers);
+                if (!this.TryGetInitializerFromAssembly(assembly, out initializers))
+                {
+                    logger.Debug("Loading {0} failed. Ignoring library initializers now.", assembly.FullName);
+                }
 
                 foreach (ILibraryInitializer initializer in initializers)
                 {

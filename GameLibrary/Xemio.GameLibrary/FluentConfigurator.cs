@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content.FileSystem;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary
 {
     public class FluentConfigurator
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FluentConfigurator"/> class.
@@ -35,6 +42,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public FluentConfigurator DisableSplashScreen()
         {
+            logger.Debug("SplashScreenEnabled={0}", false);
             this._configuration.SplashScreenEnabled = false;
             return this;
         }
@@ -43,6 +51,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public FluentConfigurator EnableCoreComponents()
         {
+            logger.Debug("CoreComponentsEnabled={0}", true);
             this._configuration.CoreComponentsEnabled = true;
             return this;
         }
@@ -51,6 +60,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public FluentConfigurator EnablePlayerInput()
         {
+            logger.Debug("CreatePlayerInput={0}", true);
             this._configuration.CreatePlayerInput = true;
             return this;
         }
@@ -88,6 +98,8 @@ namespace Xemio.GameLibrary
         /// <param name="interpolation">The interpolation mode.</param>
         public FluentConfigurator Graphics(IGraphicsInitializer initializer, SmoothingMode smoothing, InterpolationMode interpolation)
         {
+            logger.Debug("GraphicsInitializer={0}", initializer.Id);
+
             initializer.SmoothingMode = smoothing;
             initializer.InterpolationMode = interpolation;
             
@@ -109,6 +121,8 @@ namespace Xemio.GameLibrary
         /// <param name="fileSystem">The file system.</param>
         public FluentConfigurator FileSystem(IFileSystem fileSystem)
         {
+            logger.Debug("FileSystem={0}", fileSystem.GetType().Name);
+
             this._configuration.Set(fileSystem);
             return this;
         }
@@ -126,6 +140,8 @@ namespace Xemio.GameLibrary
         /// <param name="gameLoop">The game loop.</param>
         public FluentConfigurator GameLoop(IGameLoop gameLoop)
         {
+            logger.Debug("GameLoop={0}", gameLoop.GetType().Name);
+
             this._configuration.Set(gameLoop);
             return this;
         }
@@ -143,6 +159,8 @@ namespace Xemio.GameLibrary
         /// <param name="surface">The surface.</param>
         public FluentConfigurator Surface(ISurface surface)
         {
+            logger.Debug("Surface={0}", surface.GetType().Name);
+
             this._configuration.Set(surface);
             return this;
         }
@@ -152,7 +170,20 @@ namespace Xemio.GameLibrary
         /// <param name="frameRate">The frame rate.</param>
         public FluentConfigurator FrameRate(int frameRate)
         {
+            logger.Debug("FrameRate={0}", frameRate);
+
             this._configuration.FrameRate = frameRate;
+            return this;
+        }
+        /// <summary>
+        /// Sets the content format.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        public FluentConfigurator Content(IFormat format)
+        {
+            logger.Debug("ContentFormat={0}", format);
+
+            this._configuration.ContentFormat = format;
             return this;
         }
         /// <summary>
@@ -161,6 +192,8 @@ namespace Xemio.GameLibrary
         /// <param name="components">The components.</param>
         public FluentConfigurator Components(params IComponent[] components)
         {
+            logger.Debug("Added {0} components.", components.Length);
+
             foreach (IComponent component in components)
             {
                 this._configuration.Components.Add(component);
@@ -182,6 +215,8 @@ namespace Xemio.GameLibrary
         /// <param name="scenes">The scenes.</param>
         public FluentConfigurator Scenes(params Scene[] scenes)
         {
+            logger.Debug("Added {0} scenes.", scenes.Length);
+
             foreach (Scene scene in scenes)
             {
                 this._configuration.Scenes.Add(scene);
@@ -204,8 +239,7 @@ namespace Xemio.GameLibrary
         /// <param name="height">The height.</param>
         public FluentConfigurator BackBuffer(int width, int height)
         {
-            this._configuration.BackBufferSize = new Vector2(width, height);
-            return this;
+            return this.BackBuffer(new Vector2(width, height));
         }
         /// <summary>
         /// Sets the backbuffer size to the specified value.
@@ -213,8 +247,7 @@ namespace Xemio.GameLibrary
         /// <param name="size">The size.</param>
         public FluentConfigurator BackBuffer(Size size)
         {
-            this._configuration.BackBufferSize = new Vector2(size.Width, size.Height);
-            return this;
+            return this.BackBuffer(new Vector2(size.Width, size.Height));
         }
         /// <summary>
         /// Sets the backbuffer size to the specified value.
@@ -222,6 +255,8 @@ namespace Xemio.GameLibrary
         /// <param name="size">The size.</param>
         public FluentConfigurator BackBuffer(Vector2 size)
         {
+            logger.Debug("BackBufferSize={0}x{1}", (int)size.X, (int)size.Y);
+
             this._configuration.BackBufferSize = size;
             return this;
         }

@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xemio.GameLibrary</RootNamespace>
     <AssemblyName>XGL</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,8 +31,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -40,9 +46,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Link\DuplicateBehavior.cs" />
+    <Compile Include="Common\Properties.cs" />
+    <Compile Include="Common\Property.cs" />
+    <Compile Include="Common\ReflectionCache.cs" />
+    <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\Compression.cs" />
+    <Compile Include="Content\FileSystem\Compression\CompressedFileSystem.cs" />
+    <Compile Include="Content\Formats\Fallback\FallbackException.cs" />
+    <Compile Include="Content\Formats\Fallback\FallbackReader.cs" />
+    <Compile Include="Content\Formats\Fallback\FallbackWriter.cs" />
+    <Compile Include="Content\Formats\Xml\XmlFormat.cs" />
+    <Compile Include="Content\Formats\Xml\XmlReader.cs" />
+    <Compile Include="Content\Formats\Xml\XmlWriter.cs" />
     <Compile Include="Content\Serialization\GuidSerializer.cs" />
-    <Compile Include="CoreConfigurator.cs" />
+    <Compile Include="BasicConfigurator.cs" />
     <Compile Include="Common\ActionDisposable.cs" />
     <Compile Include="Common\Collections\CachedDictionary.cs" />
     <Compile Include="Common\Collections\DictionaryActions\AddAction.cs" />
@@ -80,19 +98,25 @@
     <Compile Include="Content\Streams\StreamedReader.cs" />
     <Compile Include="Content\Streams\StreamedSerializer.cs" />
     <Compile Include="Content\Streams\StreamedWriter.cs" />
+    <Compile Include="Entities\Components\PositionComponent.cs" />
+    <Compile Include="Entities\IPositionComponent.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
     <Compile Include="Game\Scenes\SceneProvider.cs" />
     <Compile Include="Game\Scenes\SplashScreen.cs" />
+    <Compile Include="Game\Timing\Frame.cs" />
+    <Compile Include="Game\Timing\FrameDelayAction.cs" />
     <Compile Include="Game\Timing\IGameLoop.cs" />
     <Compile Include="Game\Timing\LagCompensation.cs" />
     <Compile Include="Input\IInputListener.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
+    <Compile Include="Network\Exceptions\ConnectionClosedException.cs" />
+    <Compile Include="Network\Exceptions\ClientLostConnectionException.cs" />
     <Compile Include="Network\IClient.cs" />
-    <Compile Include="Network\Internal\ConnectionPackageProcessor.cs" />
-    <Compile Include="Network\Internal\PackageQueueItem.cs" />
+    <Compile Include="Network\Internal\ServerDisconnectHandler.cs" />
+    <Compile Include="Network\Packages\Dispatchers\ServerPackageDispatcher.cs" />
     <Compile Include="Network\Nested\INestedConnection.cs" />
     <Compile Include="Network\ISender.cs" />
     <Compile Include="Network\IServer.cs" />
@@ -100,8 +124,8 @@
     <Compile Include="Network\Handlers\Forwarding\ForwardingServerHandler.cs" />
     <Compile Include="Network\Handlers\Forwarding\IForwarded.cs" />
     <Compile Include="Network\Nested\NestedConnection.cs" />
-    <Compile Include="Network\Internal\ClientPackageProcessor.cs" />
-    <Compile Include="Network\Internal\PackageQueue.cs" />
+    <Compile Include="Network\Packages\Dispatchers\ClientPackageDispatcher.cs" />
+    <Compile Include="Network\Internal\OutputQueue.cs" />
     <Compile Include="Network\Internal\ServerConnectionManager.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
     <Compile Include="Common\Link\CreationType.cs" />
@@ -159,6 +183,7 @@
     <Compile Include="Network\Protocols\IProtocol.cs" />
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
     <Compile Include="Network\Timing\TimeSyncServerWorker.cs" />
+    <Compile Include="Plugins\Contexts\MergedAssemblyContext.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -167,6 +192,9 @@
     <Compile Include="Common\ImageExtensions.cs" />
     <Compile Include="Rendering\InterpolationMode.cs" />
     <Compile Include="Rendering\Events\ResolutionChangedEvent.cs" />
+    <Compile Include="Rendering\Initialization\NamedInitializer.cs" />
+    <Compile Include="Rendering\Serialization\AnimationSerializer.cs" />
+    <Compile Include="Rendering\Serialization\SpriteSheetSerializer.cs" />
     <Compile Include="Rendering\Surfaces\ISurface.cs" />
     <Compile Include="Rendering\Serialization\TextureReader.cs" />
     <Compile Include="Rendering\Serialization\TextureWriter.cs" />
@@ -194,7 +222,6 @@
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\Listeners\MouseListener.cs" />
     <Compile Include="Localization\Language.cs" />
-    <Compile Include="Localization\LanguageNotFoundLoggingEvent.cs" />
     <Compile Include="Localization\LanguageSerializer.cs" />
     <Compile Include="Localization\LocalizationManager.cs" />
     <Compile Include="Localization\LanguageValue.cs" />
@@ -229,16 +256,15 @@
     <Compile Include="Plugins\Contexts\FileAssemblyContext.cs" />
     <Compile Include="Plugins\IAssemblyContext.cs" />
     <Compile Include="Plugins\ILibraryInitializer.cs" />
-    <Compile Include="Plugins\Implementations\ImplementationCache.cs" />
     <Compile Include="Plugins\Implementations\ImplementationManager.cs" />
     <Compile Include="Plugins\LibraryLoader.cs" />
     <Compile Include="Plugins\Contexts\MultipleAssemblyContext.cs" />
     <Compile Include="Plugins\Contexts\SingleAssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Fonts\SpriteFontSerializer.cs" />
-    <Compile Include="Rendering\IGraphicsInitializer.cs" />
+    <Compile Include="Rendering\Initialization\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\IRenderTarget.cs" />
-    <Compile Include="Rendering\PriorizedInitializer.cs" />
+    <Compile Include="Rendering\Initialization\PriorizedInitializer.cs" />
     <Compile Include="Rendering\Sprites\Animation.cs" />
     <Compile Include="Rendering\Sprites\AnimationInstance.cs" />
     <Compile Include="Rendering\Sprites\SpriteSheet.cs" />
@@ -261,24 +287,16 @@
     <Compile Include="Rendering\Surfaces\WindowSurface.cs" />
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
-    <Compile Include="Script\Events\ExecutedCommandEvent.cs" />
-    <Compile Include="Script\Events\ExecutedScriptEvent.cs" />
-    <Compile Include="Script\Events\ExecutingCommandEvent.cs" />
-    <Compile Include="Script\Events\ExecutingScriptEvent.cs" />
-    <Compile Include="Script\Events\ICommandEvent.cs" />
-    <Compile Include="Script\Events\IScriptEvent.cs" />
-    <Compile Include="Script\ICommand.cs" />
+    <Compile Include="Script\IAsyncHandler.cs" />
+    <Compile Include="Script\IHandler.cs" />
     <Compile Include="Script\IScript.cs" />
-    <Compile Include="Script\ScriptCollection.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
-    <Compile Include="Script\ScriptInterpreter.cs" />
-    <Compile Include="Script\CommandEvaluator.cs" />
     <Compile Include="Common\IConverter.cs" />
+    <Compile Include="Script\ScriptExecutor.cs" />
     <Compile Include="XGL.cs" />
     <Compile Include="XGLState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\FileSystem\Compressed\" />
     <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />
   </ItemGroup>
@@ -289,7 +307,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\intro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

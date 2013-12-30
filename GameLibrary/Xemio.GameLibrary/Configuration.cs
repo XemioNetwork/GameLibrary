@@ -3,6 +3,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
@@ -12,7 +13,9 @@ using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
+using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Surfaces;
+using Xemio.GameLibrary.Script;
 
 namespace Xemio.GameLibrary
 {
@@ -47,6 +50,10 @@ namespace Xemio.GameLibrary
         /// </summary>
         public bool SplashScreenEnabled { get; set; }
         /// <summary>
+        /// Gets or sets the content format.
+        /// </summary>
+        public IFormat ContentFormat { get; set; }
+        /// <summary>
         /// Gets or sets the graphics initializer.
         /// </summary>
         public abstract IGraphicsInitializer GraphicsProvider { get; }
@@ -77,6 +84,7 @@ namespace Xemio.GameLibrary
             this.FrameRate = 60;
 
             this.SplashScreenEnabled = true;
+            this.ContentFormat = Format.Binary;
         }
         #endregion Constructors
 
@@ -105,6 +113,7 @@ namespace Xemio.GameLibrary
             this.Components.Add(new LocalizationManager());
             this.Components.Add(new ApplicationExceptionHandler());
             this.Components.Add(new LibraryLoader());
+            this.Components.Add(new ScriptExecutor());
         }
         #endregion Methods
     }

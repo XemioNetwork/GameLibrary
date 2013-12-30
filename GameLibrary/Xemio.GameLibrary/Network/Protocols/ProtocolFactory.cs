@@ -1,4 +1,5 @@
 ﻿using System;
+using NLog;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Plugins.Implementations;
 
@@ -6,6 +7,10 @@ namespace Xemio.GameLibrary.Network.Protocols
 {
     public class ProtocolFactory
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Static Methods
         /// <summary>
         /// Generic creation method (internal).
@@ -35,6 +40,7 @@ namespace Xemio.GameLibrary.Network.Protocols
                 throw new InvalidOperationException("Invalid protocol URL. Protocol [" + protocolName + "] does not exist.");
             }
 
+            logger.Debug("Created {0} for {1}", protocol.GetType().Name, protocolUrl);
             protocol.Open(url);
             
             return protocol;

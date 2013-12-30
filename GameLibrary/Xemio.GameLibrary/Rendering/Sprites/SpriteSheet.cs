@@ -22,38 +22,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
 
     public class SpriteSheet
     {
-        #region Fields
-        private readonly Dictionary<int, ITexture> _textureCache = new Dictionary<int, ITexture>();
-        private readonly Image _sourceImage;
-        #endregion 
-
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SpriteSheet" /> class.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="frameWidth">Width of the frame.</param>
-        /// <param name="frameHeight">Height of the frame.</param>
-        public SpriteSheet(string fileName, int frameWidth, int frameHeight)
-            : this(XGL.Components.Get<IFileSystem>().Open(fileName), frameWidth, frameHeight)
-        {
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="frameWidth">Width of the frame.</param>
-        /// <param name="frameHeight">Height of the frame.</param>
-        public SpriteSheet(Stream stream, int frameWidth, int frameHeight)
-            : this(frameWidth, frameHeight)
-        {
-            this._sourceImage = Image.FromStream(stream);
-
-            this.Columns = this._sourceImage.Width / frameWidth;
-            this.Rows = this._sourceImage.Height / frameHeight;
-
-            this.Texture = XGL.Components.Get<SerializationManager>().Load<ITexture>(stream);
-        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteSheet"/> class.
         /// </summary>
@@ -63,13 +32,8 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         public SpriteSheet(ITexture texture, int frameWidth, int frameHeight)
             : this(frameWidth, frameHeight)
         {
-            byte[] data = texture.GetData();
-            MemoryStream stream = new MemoryStream(data);
-
-            this._sourceImage = Image.FromStream(stream);
-
-            this.Columns = this._sourceImage.Width / frameWidth;
-            this.Rows = this._sourceImage.Height / frameHeight;
+            this.Columns = texture.Width / frameWidth;
+            this.Rows = texture.Height / frameHeight;
 
             this.Texture = texture;
         }
@@ -105,7 +69,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         /// <summary>
         /// Gets the texture.
         /// </summary>
-        internal ITexture Texture { get; private set; }
+        public ITexture Texture { get; private set; }
         #endregion
 
         #region Methods
@@ -119,41 +83,6 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             int y = index / this.Columns;
 
             return new Rectangle(x * this.FrameWidth, y * this.FrameHeight, this.FrameWidth, this.FrameHeight);
-        }
-        /// <summary>
-        /// Returns the texture at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        public ITexture GetTexture(int index)
-        {
-            if (this._textureCache.ContainsKey(index))
-                return this._textureCache[index];
-
-            int x = index % this.Columns;
-            int y = index / this.Columns;
-
-            var frame = new Bitmap(this.FrameWidth, this.FrameHeight);
-            using (Graphics frameGraphics = Graphics.FromImage(frame))
-            {
-                frameGraphics.CompositingMode = CompositingMode.SourceOver;
-                frameGraphics.CompositingQuality = CompositingQuality.HighSpeed;
-                frameGraphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-
-                frameGraphics.DrawImage(this._sourceImage,
-                    new Drawing.Rectangle(-x * this.FrameWidth, -y * this.FrameHeight, this._sourceImage.Width, this._sourceImage.Height));
-            }
-
-            var frameStream = new MemoryStream();
-
-            frame.Save(frameStream, ImageFormat.Png);
-            frameStream.Seek(0, SeekOrigin.Begin);
-
-            var serializer = XGL.Components.Get<SerializationManager>();
-            var texture = serializer.Load<ITexture>(frameStream);
-
-            this._textureCache.Add(index, texture);
-
-            return texture;
         }
         #endregion
     }

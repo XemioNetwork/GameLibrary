@@ -13,6 +13,7 @@ using Xemio.GameLibrary.Rendering.Events;
 using Xemio.GameLibrary.Rendering.Geometry;
 using Xemio.GameLibrary.Math;
 using System.Windows.Forms;
+using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Surfaces;
 using Geometry = Xemio.GameLibrary.Rendering.Geometry;
 

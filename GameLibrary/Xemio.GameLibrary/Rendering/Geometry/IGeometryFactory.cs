@@ -4,7 +4,6 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Rendering.Geometry
 {
-    [AbstractComponent]
     public interface IGeometryFactory
     {
         /// <summary>

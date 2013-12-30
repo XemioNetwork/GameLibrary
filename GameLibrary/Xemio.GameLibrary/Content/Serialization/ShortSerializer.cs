@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <returns></returns>
         public override short Read(IFormatReader reader)
         {
-            return reader.ReadShort();
+            return reader.ReadShort("Value");
         }
         /// <summary>
         /// Writes the specified value.
@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// <param name="value">The value.</param>
         public override void Write(IFormatWriter writer, short value)
         {
-            writer.WriteShort("Short", value);
+            writer.WriteShort("Value", value);
         }
         #endregion
     }

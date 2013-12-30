@@ -10,6 +10,13 @@ namespace Xemio.GameLibrary.Content.Formats.Binary
     {
         #region Implementation of IFormat
         /// <summary>
+        /// Gets a value indicating whether the format supports tags.
+        /// </summary>
+        public bool SupportsTags
+        {
+            get { return false; }
+        }
+        /// <summary>
         /// Creates a writer.
         /// </summary>
         /// <param name="stream">The stream.</param>

@@ -68,6 +68,10 @@ namespace Xemio.GameLibrary.Common.Link
         /// Gets or sets the type of the value creation.
         /// </summary>
         public CreationType CreationType { get; set; }
+        /// <summary>
+        /// Gets or sets the duplicate behavior.
+        /// </summary>
+        public DuplicateBehavior DuplicateBehavior { get; set; }
         #endregion
 
         #region Methods
@@ -77,7 +81,14 @@ namespace Xemio.GameLibrary.Common.Link
         /// <param name="value">The value.</param>
         public virtual void Add(TValue value)
         {
-            this._linkedItems.Add(value.Id, value);
+            if (!this._linkedItems.ContainsKey(value.Id))
+            {
+                this._linkedItems.Add(value.Id, value);
+            }
+            else if (this.DuplicateBehavior == DuplicateBehavior.Override)
+            {
+                this._linkedItems[value.Id] = value;
+            }
         }
         /// <summary>
         /// Adds the specified values.
@@ -176,7 +187,7 @@ namespace Xemio.GameLibrary.Common.Link
             {
                 value = this._linkedItems[identifier];
 
-                if (this.CreationType == CreationType.CreateNew)
+                if (this.CreationType == CreationType.New)
                 {
                     return (TValue)Activator.CreateInstance(value.GetType());
                 }

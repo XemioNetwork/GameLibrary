@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using Xemio.GameLibrary;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Input;
@@ -21,41 +24,59 @@ namespace Xemio.Testing.Input
         static void Main(string[] args)
         {
             var memoryStream = new MemoryStream();
+
             var serializer = XGL.Components.Get<SerializationManager>();
+
+            var entity = new Parent()
+            {
+                Child = new TestClass()
+                {
+                    A = ""
+                },
+                ChildB = new TestClassImpl2()
+                {
+                    A = "Welt",
+                    G = 0.077
+                }
+            };
             
-            var entity = new Entity();
+            serializer.Save(entity, memoryStream, Format.Xml);
+            memoryStream.Position = 0;
 
-            serializer.Save(entity, memoryStream);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-
-            var deserialized = serializer.Load<Entity>(memoryStream);
-
-            string a = "3";
+            string content = new StreamReader(memoryStream).ReadToEnd();
         }
     }
 
-    interface ITest
+    public interface ITest
     {
         string A { get; set; }
     }
 
-    class Parent
+    public class Parent
     {
         public ITest Child { get; set; }
         public ITest ChildB { get; set; }
     }
 
-    class TestClass : ITest
+    public class TestClass : ITest
     {
+        #region Constructors
+
+        public TestClass()
+        {
+            this.B = 7;
+        }
+        #endregion
+
         #region Implementation of ITest
 
         public string A { get; set; }
-        public int B { get; set; }
+        private int B { get; set; }
 
         #endregion
     }
 
-    class TestClassImpl2 : ITest
+    public class TestClassImpl2 : ITest
     {
         #region Implementation of ITest
 

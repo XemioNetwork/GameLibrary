@@ -16,26 +16,26 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="reader">The reader.</param>
         public override SpriteFont Read(IFormatReader reader)
         {
-            SpriteFont font = new SpriteFont
-                                  {
-                                      Kerning = reader.ReadInteger(),
-                                      Spacing = reader.ReadInteger(),
-                                      Bitmaps = new Bitmap[reader.ReadInteger()]
-                                  };
+            var font = new SpriteFont
+                            {
+                                Kerning = reader.ReadInteger("Kerning"),
+                                Spacing = reader.ReadInteger("Spacing"),
+                                Bitmaps = new Bitmap[reader.ReadInteger("BitmapCount")]
+                            };
 
-            for (int i = 0; i < font.Bitmaps.Length; i++)
+            using (reader.Section("Bitmaps"))
             {
-                if (!reader.ReadBoolean())
+                for (int i = 0; i < font.Bitmaps.Length; i++)
                 {
-                    int length = (int)reader.ReadLong();
-                    byte[] binaryData = reader.ReadBytes(length);
-
-                    using (MemoryStream memory = new MemoryStream())
+                    using (reader.Section("Bitmap"))
                     {
-                        memory.Write(binaryData, 0, binaryData.Length);
-                        memory.Seek(0, SeekOrigin.Begin);
-
-                        font.Bitmaps[i] = Image.FromStream(memory) as Bitmap;
+                        if (!reader.ReadBoolean("IsBitmapNull"))
+                        {
+                            using (var memory = new MemoryStream(reader.ReadBytes("Data")))
+                            {
+                                font.Bitmaps[i] = (Bitmap)Image.FromStream(memory);
+                            }
+                        }
                     }
                 }
             }
@@ -54,17 +54,21 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
             writer.WriteLong("BitmapCount", value.Bitmaps.Length);
 
-            foreach (Bitmap bitmap in value.Bitmaps)
+            using (writer.Section("Bitmaps"))
             {
-                writer.WriteBoolean("IsBitmapNull", bitmap == null);
-                if (bitmap != null)
+                foreach (Bitmap bitmap in value.Bitmaps)
                 {
-                    using (MemoryStream memory = new MemoryStream())
+                    using (writer.Section("Bitmap"))
                     {
-                        bitmap.Save(memory, ImageFormat.Png);
-
-                        writer.WriteLong("Length", memory.Length);
-                        writer.WriteBytes("Data", memory.ToArray());
+                        writer.WriteBoolean("IsBitmapNull", bitmap == null);
+                        if (bitmap != null)
+                        {
+                            using (var memory = new MemoryStream())
+                            {
+                                bitmap.Save(memory, ImageFormat.Png);
+                                writer.WriteBytes("Data", memory.ToArray());
+                            }
+                        }
                     }
                 }
             }

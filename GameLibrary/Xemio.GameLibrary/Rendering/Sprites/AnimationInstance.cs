@@ -36,13 +36,6 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         {
             get { return this.Animation.Indices[this._frameIndex]; }
         }
-        /// <summary>
-        /// Gets the current frame.
-        /// </summary>
-        public ITexture Frame
-        {
-            get { return this.Animation.Sheet.GetTexture(this.SpriteIndex); }
-        }
         #endregion
 
         #region Methods
@@ -71,13 +64,9 @@ namespace Xemio.GameLibrary.Rendering.Sprites
                 if (this._frameIndex >= this.Animation.Indices.Length)
                 {
                     if (this.Animation.IsLooped)
-                    {
                         this._frameIndex = 0;
-                    }
                     else
-                    {
                         this._frameIndex = this.Animation.Indices.Length - 1;
-                    }
                 }
             }
         }

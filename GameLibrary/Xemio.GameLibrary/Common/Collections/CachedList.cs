@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -115,7 +116,7 @@ namespace Xemio.GameLibrary.Common.Collections
                 return;
             }
 
-            this._list.Add(item);
+            lock (this._list) { this._list.Add(item); }
         }
         /// <summary>
         /// Removes all items from the list.
@@ -128,7 +129,7 @@ namespace Xemio.GameLibrary.Common.Collections
                 return;
             }
 
-            this._list.Clear();
+            lock (this._list) { this._list.Clear(); }
         }
         /// <summary>
         /// Determines wether the specified item is inside the list.
@@ -136,7 +137,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="item">The item.</param>
         public bool Contains(T item)
         {
-            return this._list.Contains(item);
+            lock (this._list) { return this._list.Contains(item); }
         }
         /// <summary>
         /// Copies all elements to an array.
@@ -145,7 +146,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="arrayIndex">The array index.</param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this._list.CopyTo(array, arrayIndex);
+            lock (this._list) { this._list.CopyTo(array, arrayIndex); }
         }
         /// <summary>
         /// Removes the specified item.
@@ -159,7 +160,7 @@ namespace Xemio.GameLibrary.Common.Collections
                 return true;
             }
 
-            return this._list.Remove(item);
+            lock (this._list) { return this._list.Remove(item); }
         }
         /// <summary>
         /// Gets the item count.
@@ -199,7 +200,7 @@ namespace Xemio.GameLibrary.Common.Collections
                 return;
             }
 
-            this._list.Insert(index, item);
+            lock (this._list) { this._list.Insert(index, item); }
         }
         /// <summary>
         /// Removes the item at the specified index.
@@ -213,7 +214,7 @@ namespace Xemio.GameLibrary.Common.Collections
                 return;
             }
 
-            this._list.RemoveAt(index);
+            lock(this._list) { this._list.RemoveAt(index); }
         }
         /// <summary>
         /// Gets or sets an item at the specified index.
@@ -230,7 +231,7 @@ namespace Xemio.GameLibrary.Common.Collections
                     return;
                 }
 
-                this._list[index] = value;
+                lock (this._list) { this._list[index] = value; }
             }
         }
         #endregion

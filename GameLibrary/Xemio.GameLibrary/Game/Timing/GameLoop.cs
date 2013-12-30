@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components;
@@ -14,6 +15,10 @@ namespace Xemio.GameLibrary.Game.Timing
 {
     public class GameLoop : IGameLoop, IConstructable
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+        
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="GameLoop"/> class.
@@ -24,6 +29,8 @@ namespace Xemio.GameLibrary.Game.Timing
 
             this.Precision = PrecisionLevel.High;
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
+
+            this.Subscribe(Frame.Instance);
         }
         #endregion
 
@@ -160,8 +167,10 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             if (!this.Active)
             {
+                logger.Info("Starting game loop with {0}fps.", 1000.0 / this.TargetFrameTime);
+
                 this.Active = true;
-                this._loopTask = Task.Factory.StartNew(InternalLoop);
+                this._loopTask = Task.Factory.StartNew(InternalLoop, TaskCreationOptions.LongRunning);
             }
         }
         /// <summary>
@@ -171,6 +180,8 @@ namespace Xemio.GameLibrary.Game.Timing
         {
             if (this.Active)
             {
+                logger.Info("Terminating game loop.");
+
                 this.Active = false;
                 this._loopTask.Wait();
             }
@@ -181,6 +192,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// <param name="handler">The handler.</param>
         public void Subscribe(IGameHandler handler)
         {
+            logger.Debug("Subscribed {0} to the game loop.", handler.GetType().Name);
             this._handlers.Add(handler);
         }
         /// <summary>
@@ -189,6 +201,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// <param name="handler">The handler.</param>
         public void Unsubscribe(IGameHandler handler)
         {
+            logger.Debug("Removed {0} from game loop.", handler.GetType().Name);
             this._handlers.Remove(handler);
         }
         /// <summary>
@@ -227,13 +240,10 @@ namespace Xemio.GameLibrary.Game.Timing
                     this.CheckRenderRequest();
                     this.UpdateFramesPerSecond();
                 }
-
             }
             catch (Exception ex)
             {
-                EventManager eventManager = XGL.Components.Get<EventManager>();
-                eventManager.Publish(new ExceptionEvent(ex));
-
+                logger.ErrorException("Unexpected exception in game loop: ", ex);
                 throw;
             }
         }
@@ -254,12 +264,13 @@ namespace Xemio.GameLibrary.Game.Timing
             if (this._requestRender)
             {
                 this._fpsCount++;
-
                 this._elapsedRenderTime = this._gameTime.Elapsed.TotalMilliseconds - this._lastRender;
                 this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
 
                 this._invoker.Invoke(() => this.OnRender((float)this._elapsedRenderTime));
                 this._requestRender = false;
+
+                logger.Trace("Handled render request with {0}ms frame time.", this._elapsedRenderTime);
             }
         }
         /// <summary>
@@ -282,6 +293,8 @@ namespace Xemio.GameLibrary.Game.Timing
                 //Subtract unprocessed ticks as an integer, since we want
                 //to keep digits for the next tick. (Example: unprocessedTicks = 3.11, => tickCount = 3)
                 this._unprocessedTicks -= tickCount;
+
+                logger.Trace("Game tick elapsed with {0}ms", this._elapsedTickTime);
 
                 switch (this.LagCompensation)
                 {

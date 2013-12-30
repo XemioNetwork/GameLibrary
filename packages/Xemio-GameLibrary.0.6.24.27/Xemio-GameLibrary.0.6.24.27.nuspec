@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Xemio-GameLibrary</id>
+    <version>0.6.24.27</version>
+    <title>Xemio GameLibrary</title>
+    <authors>XemioNetwork</authors>
+    <owners>XemioNetwork</owners>
+    <licenseUrl>https://raw.github.com/XemioNetwork/GameLibrary/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/XemioNetwork/GameLibrary</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Super awesome Indiegame library.</description>
+    <copyright>XemioNetwork</copyright>
+    <language>en-US</language>
+    <tags>xemio game library indie 2d xna gdi render rendering sound input xgl</tags>
+    <dependencies>
+      <dependency id="NLog" version="2.1.0" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+      <frameworkAssembly assemblyName="System" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

@@ -12,21 +12,12 @@ using Xemio.GameLibrary.Network.Protocols;
 namespace Xemio.GameLibrary.Network
 {
     [AbstractComponent]
-    public interface IClient : IComponent
+    public interface IClient : ISender, IComponent
     {
         /// <summary>
         /// Gets the latency.
         /// </summary>
         float Latency { get; set; }
-        /// <summary>
-        /// Gets the protocol.
-        /// </summary>
-        IClientProtocol Protocol { get; }
-        /// <summary>
-        /// Sends the specified package.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        void Send(Package package);
         /// <summary>
         /// Subscribes the specified subscriber.
         /// </summary>
@@ -41,5 +32,20 @@ namespace Xemio.GameLibrary.Network
         /// Stops the client.
         /// </summary>
         void Close();
+        /// <summary>
+        /// Calls the client handlers when the specified package was received.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        void OnReceivePackage(Package package);
+        /// <summary>
+        /// Calls the client handlers when the specified package is going to be send.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        void OnBeginSendPackage(Package package);
+        /// <summary>
+        /// Calls the client handlers when the specified package is sent.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        void OnSentPackage(Package package);
     }
 }

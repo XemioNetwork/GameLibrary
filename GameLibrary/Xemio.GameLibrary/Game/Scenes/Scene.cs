@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Rendering;
@@ -12,6 +13,10 @@ namespace Xemio.GameLibrary.Game.Scenes
 {
     public abstract class Scene : SceneProvider, IEnumerable<Scene>
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Scene"/> class.
@@ -41,11 +46,18 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public SceneProvider Parent { get; internal set; }
         /// <summary>
+        /// Gets the serializer.
+        /// </summary>
+        public SerializationManager Serializer
+        {
+            get { return XGL.Components.Require<SerializationManager>(); }
+        }
+        /// <summary>
         /// Gets the content manager.
         /// </summary>
-        public SerializationManager Content
+        public ContentManager Content
         {
-            get { return XGL.Components.Get<SerializationManager>(); }
+            get { return XGL.Components.Require<ContentManager>(); }
         }
         /// <summary>
         /// Gets the render manager.
@@ -124,6 +136,8 @@ namespace Xemio.GameLibrary.Game.Scenes
         {
             if (!this.Loaded)
             {
+                logger.Info("Loading content for {0}.", this.GetType().Name);
+
                 this.LoadContent();
                 this.Loaded = true;
             }

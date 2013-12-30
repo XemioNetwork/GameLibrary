@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Xemio-GameLibrary-GDI-Renderer</id>
+    <version>1.21.1</version>
+    <title>GDI+ Renderer</title>
+    <authors>XemioNetwork</authors>
+    <owners>XemioNetwork</owners>
+    <licenseUrl>https://raw.github.com/XemioNetwork/GameLibrary-Contrib/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/XemioNetwork/GameLibrary-Contrib</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>A simple GDI renderer for the XGL.</description>
+    <releaseNotes />
+    <copyright>XemioNetwork</copyright>
+    <language>es-US</language>
+    <tags>xemio game library xna gdi renderer</tags>
+    <dependencies>
+      <dependency id="Xemio-GameLibrary" version="0.5.75" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

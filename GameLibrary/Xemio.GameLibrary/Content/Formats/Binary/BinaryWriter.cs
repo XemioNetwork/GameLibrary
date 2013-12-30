@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Formats.Binary
@@ -18,8 +19,8 @@ namespace Xemio.GameLibrary.Content.Formats.Binary
         /// <param name="stream">The stream.</param>
         public BinaryWriter(Stream stream)
         {
-            this._writer = new IO.BinaryWriter(stream);
             this.Stream = stream;
+            this._writer = new IO.BinaryWriter(this.Stream);
         }
         #endregion
 
@@ -33,17 +34,12 @@ namespace Xemio.GameLibrary.Content.Formats.Binary
         /// </summary>
         public Stream Stream { get; private set; }
         /// <summary>
-        /// Begins a new section.
+        /// Begins the specified section.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        public void BeginSection(string tag)
+        public IDisposable Section(string tag)
         {
-        }
-        /// <summary>
-        /// Ends the current section.
-        /// </summary>
-        public void EndSection()
-        {
+            return new ActionDisposable(() => { });
         }
         /// <summary>
         /// Writes the specified unsigned integer value.
@@ -151,6 +147,7 @@ namespace Xemio.GameLibrary.Content.Formats.Binary
         /// <param name="value">The value.</param>
         public void WriteBytes(string tag, byte[] value)
         {
+            this._writer.Write(value.Length);
             this._writer.Write(value);
         }
         /// <summary>
@@ -192,6 +189,15 @@ namespace Xemio.GameLibrary.Content.Formats.Binary
             this._writer.Write(value.Y);
             this._writer.Write(value.Width);
             this._writer.Write(value.Height);
+        }
+        #endregion
+
+        #region Implementation of IDisposable
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
         }
         #endregion
     }

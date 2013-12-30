@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components.Attributes;
@@ -25,6 +27,10 @@ namespace Xemio.GameLibrary.Network
 {
     public class Server : IServer, IComponent
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Server" /> class.
@@ -32,38 +38,32 @@ namespace Xemio.GameLibrary.Network
         /// <param name="url">The URL.</param>
         public Server(string url)
         {
-            this._connections = new CachedList<IConnection>();
+            logger.Info("Creating server for [{0}].", url);
+
+            this.Connected = true;
 
             this._subscribers = new List<IServerHandler>();
-
-            this.Active = true;
-
+            
             this.Protocol = ProtocolFactory.CreateServerProtocol(url);
             this.Protocol.Server = this;
-
-            this.Subscribe(new TimeSyncServerHandler(this));
-
-            this._packageQueue = new PackageQueue();
-            this._packageQueue.Start();
-
+            
             this._connectionManager = new ServerConnectionManager(this);
             this._connectionManager.Start();
+
+            this.Subscribe(new TimeSyncServerHandler(this));
         }
         #endregion
 
         #region Fields
-        private readonly PackageQueue _packageQueue;
         private readonly ServerConnectionManager _connectionManager;
-
         private readonly List<IServerHandler> _subscribers;
-        private readonly CachedList<IConnection> _connections;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Server"/> is active.
+        /// Gets the protocol.
         /// </summary>
-        public bool Active { get; set; }
+        public IServerProtocol Protocol { get; private set; }
         /// <summary>
         /// Gets the event manager.
         /// </summary>
@@ -79,7 +79,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        protected internal virtual void OnReceivePackage(Package package, IConnection connection)
+        public virtual void OnReceivePackage(Package package, IConnection connection)
         {
             IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
             foreach (IServerHandler subscriber in subscribers)
@@ -94,7 +94,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        protected virtual void OnBeginSendPackage(Package package, IConnection connection)
+        public virtual void OnBeginSendPackage(Package package, IConnection connection)
         {
             IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
             foreach (IServerHandler subscriber in subscribers)
@@ -107,7 +107,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        protected virtual void OnSentPackage(Package package, IConnection connection)
+        public virtual void OnSentPackage(Package package, IConnection connection)
         {
             IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
             foreach (IServerHandler subscriber in subscribers)
@@ -121,8 +121,10 @@ namespace Xemio.GameLibrary.Network
         /// Called when a client joined the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        protected internal virtual void OnClientJoined(IConnection connection)
+        public virtual void OnClientJoined(IConnection connection)
         {
+            logger.Info("Client {0} joined.", connection.Address);
+
             foreach (IServerHandler subscriber in this._subscribers)
             {
                 subscriber.OnClientJoined(this, connection);
@@ -134,8 +136,10 @@ namespace Xemio.GameLibrary.Network
         /// Called when a client left the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        protected internal virtual void OnClientLeft(IConnection connection)
+        public virtual void OnClientLeft(IConnection connection)
         {
+            logger.Info("Client {0} disconnected.", connection.Address);
+
             foreach (IServerHandler subscriber in this._subscribers)
             {
                 subscriber.OnClientLeft(this, connection);
@@ -146,7 +150,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Accepts the connection.
         /// </summary>
-        protected internal virtual IConnection AcceptConnection()
+        public virtual IConnection AcceptConnection()
         {
             return this.Protocol.AcceptConnection();
         }
@@ -162,26 +166,28 @@ namespace Xemio.GameLibrary.Network
         
         #region Implementation of IServer
         /// <summary>
-        /// Gets the protocol.
-        /// </summary>
-        public IServerProtocol Protocol { get; private set; }
-        /// <summary>
         /// Gets the connections.
         /// </summary>
         public IList<IConnection> Connections
         {
-            get { return this._connections; }
+            get { return this._connectionManager.Connections; }
         }
+        /// <summary>
+        /// Gets a value indicating whether the server is alive.
+        /// </summary>
+        public bool Connected { get; private set; }
         /// <summary>
         /// Sends the specified package to all clients.
         /// </summary>
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            using (this._connections.StartCaching())
+            var cachedList = (CachedList<IConnection>)this.Connections;
+
+            using (cachedList.StartCaching())
             {
-                foreach (IConnection connection in this._connections)
-                { 
+                foreach (IConnection connection in this.Connections)
+                {
                     this.Send(package, connection);
                 }
             }
@@ -193,8 +199,10 @@ namespace Xemio.GameLibrary.Network
         /// <param name="receiver">The receiver.</param>
         public void Send(Package package, IConnection receiver)
         {
+            logger.Trace("Sending {0} to {1}.", package.GetType().Name, receiver.Address);
+
             this.OnBeginSendPackage(package, receiver);
-            this._packageQueue.Offer(package, receiver);
+            this._connectionManager.GetOutputQueue(receiver).Enqueue(package);
             this.OnSentPackage(package, receiver);
         }
         /// <summary>
@@ -219,9 +227,9 @@ namespace Xemio.GameLibrary.Network
         public void Close()
         {
             this._connectionManager.Interrupt();
-            this._packageQueue.Interrupt();
 
             this.Protocol.Close();
+            this.Connected = false;
         }
         #endregion
     }

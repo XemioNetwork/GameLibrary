@@ -53,7 +53,7 @@ namespace Xemio.GameLibrary.Input
         }
         #endregion
 
-        #region Methods
+        #region Private Methods
         /// <summary>
         /// Gets the current active state for the specified key.
         /// </summary>
@@ -66,10 +66,13 @@ namespace Xemio.GameLibrary.Input
         /// Gets the last active state for the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
-        private bool GetLastValue(Keys key)
+        private bool GetPreviousValue(Keys key)
         {
             return this._lastStates.ContainsKey(key) && this._lastStates[key].Active;
         }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Determines whether the specified key has a state.
         /// </summary>
@@ -100,7 +103,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="key">The key.</param>
         public bool IsKeyPressed(Keys key)
         {
-            return this.GetValue(key) && !this.GetLastValue(key);
+            return this.GetValue(key) && !this.GetPreviousValue(key);
         }
         /// <summary>
         /// Determines whether the specified key is first up inside the current frame.
@@ -108,28 +111,14 @@ namespace Xemio.GameLibrary.Input
         /// <param name="key">The key.</param>
         public bool IsKeyReleased(Keys key)
         {
-            return !this.GetValue(key) && this.GetLastValue(key);
-        }
-        /// <summary>
-        /// Sets the state of the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="state">The state.</param>
-        public void SetState(Keys key, InputState state)
-        {
-            if (!this._states.ContainsKey(key))
-            {
-                this._states.Add(key, state);
-            }
-
-            this._states[key] = state;
+            return !this.GetValue(key) && this.GetPreviousValue(key);
         }
         /// <summary>
         /// Gets the last state of the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public InputState GetLastState(Keys key)
+        public InputState GetPreviousState(Keys key)
         {
             if (!this._lastStates.ContainsKey(key))
             {
@@ -160,10 +149,27 @@ namespace Xemio.GameLibrary.Input
         {
             return this.GetKeys(this.IsKeyReleased);
         }
+        #endregion
+
+        #region Internal Methods
+        /// <summary>
+        /// Sets the state of the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="state">The state.</param>
+        internal void SetState(Keys key, InputState state)
+        {
+            if (!this._states.ContainsKey(key))
+            {
+                this._states.Add(key, state);
+            }
+
+            this._states[key] = state;
+        }
         /// <summary>
         /// Updates the changes from the current into the last state.
         /// </summary>
-        public void UpdateStates()
+        internal void UpdateStates()
         {
             this._lastStates.Clear();
             foreach (KeyValuePair<Keys, InputState> pair in this._states)

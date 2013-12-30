@@ -7,12 +7,17 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Formats
 {
-    public interface IFormatWriter
+    public interface IFormatWriter : IDisposable
     {
         /// <summary>
         /// Gets the stream.
         /// </summary>
         Stream Stream { get; }
+        /// <summary>
+        /// Begins the specified section.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        IDisposable Section(string tag);
         /// <summary>
         /// Writes the specified unsigned integer value.
         /// </summary>
