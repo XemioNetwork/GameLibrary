@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Content.Formats;
 
-namespace Xemio.GameLibrary.Content.Serialization.Automatic.Processors
+namespace Xemio.GameLibrary.Content.Serialization.Automatic
 {
-    public class EnumProcessor : IAutomaticProcessor
+    public class ArrayProcessor : IAutomaticProcessor
     {
+        #region Static Fields
+        private static readonly MethodInfo toArrayMethod = typeof(Enumerable).GetMethod("ToArray", BindingFlags.Public | BindingFlags.Static);
+        #endregion
+
         #region Implementation of IAutomaticProcessor
         /// <summary>
         /// Gets the priority.
@@ -23,7 +28,7 @@ namespace Xemio.GameLibrary.Content.Serialization.Automatic.Processors
         /// <param name="type">The type.</param>
         public bool CanProcess(Type type)
         {
-            return type.IsEnum;
+            return type.IsArray;
         }
         /// <summary>
         /// Reads an instance of the specified type.
@@ -32,7 +37,14 @@ namespace Xemio.GameLibrary.Content.Serialization.Automatic.Processors
         /// <param name="type">The type.</param>
         public object Read(IFormatReader reader, Type type)
         {
-            return Enum.ToObject(type, reader.ReadInteger("Value"));
+            Type elementType = ReflectionCache.GetElementType(type);
+
+            var processor = new ListProcessor();
+            var list = (IList)processor.Read(reader, typeof(IList<>).MakeGenericType(elementType));
+
+            return (Array)toArrayMethod
+                .MakeGenericMethod(elementType)
+                .Invoke(null, new object[] { list });
         }
         /// <summary>
         /// Writes the specified instance.
@@ -41,7 +53,16 @@ namespace Xemio.GameLibrary.Content.Serialization.Automatic.Processors
         /// <param name="instance">The instance.</param>
         public void Write(IFormatWriter writer, object instance)
         {
-            writer.WriteInteger("Value", (int)instance);
+            var array = (Array)instance;
+
+            writer.WriteInteger("Length", array.Length);
+            foreach (object item in array)
+            {
+                using (writer.Section("Entry"))
+                {
+                    TypeHelper.WriteTypedInstance(item, ReflectionCache.GetElementType(array.GetType()), writer);
+                }
+            }
         }
         #endregion
     }

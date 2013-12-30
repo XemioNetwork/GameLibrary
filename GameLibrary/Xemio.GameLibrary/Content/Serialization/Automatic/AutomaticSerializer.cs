@@ -7,7 +7,6 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content.Attributes;
 using Xemio.GameLibrary.Content.Formats;
-using Xemio.GameLibrary.Content.Serialization.Automatic.Processors;
 
 namespace Xemio.GameLibrary.Content.Serialization.Automatic
 {

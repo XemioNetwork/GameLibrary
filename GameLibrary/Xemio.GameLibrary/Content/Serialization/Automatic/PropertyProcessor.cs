@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Content.Attributes;
 using Xemio.GameLibrary.Content.Formats;
 
-namespace Xemio.GameLibrary.Content.Serialization.Automatic.Processors
+namespace Xemio.GameLibrary.Content.Serialization.Automatic
 {
     public class PropertyProcessor : IAutomaticProcessor
     {
