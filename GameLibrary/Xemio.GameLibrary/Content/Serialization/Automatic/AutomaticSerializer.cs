@@ -43,13 +43,6 @@ namespace Xemio.GameLibrary.Content.Serialization.Automatic
             new ListProcessor(),
             new PropertyProcessor()
         };
-        /// <summary>
-        /// Gets the serialization processors.
-        /// </summary>
-        public static List<IAutomaticProcessor> Processors
-        {
-            get { return processors; }
-        }
         #endregion
         
         #region Static Methods
@@ -59,7 +52,7 @@ namespace Xemio.GameLibrary.Content.Serialization.Automatic
         /// <param name="type">The type.</param>
         public static IAutomaticProcessor GetProcessor(Type type)
         {
-            IAutomaticProcessor processor = AutomaticSerializer.Processors
+            IAutomaticProcessor processor = processors
                 .OrderByDescending(p => p.Priority)
                 .FirstOrDefault(p => p.CanProcess(type));
 

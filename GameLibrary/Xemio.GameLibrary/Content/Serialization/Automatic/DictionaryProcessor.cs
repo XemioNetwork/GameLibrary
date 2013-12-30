@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Serialization.Automatic
 {
-    public class DictionaryProcessor : IAutomaticProcessor
+    internal class DictionaryProcessor : IAutomaticProcessor
     {
         #region Implementation of IAutomaticProcessor
         /// <summary>

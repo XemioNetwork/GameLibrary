@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Serialization.Automatic
 {
-    public class ArrayProcessor : IAutomaticProcessor
+    internal class ArrayProcessor : IAutomaticProcessor
     {
         #region Static Fields
         private static readonly MethodInfo toArrayMethod = typeof(Enumerable).GetMethod("ToArray", BindingFlags.Public | BindingFlags.Static);

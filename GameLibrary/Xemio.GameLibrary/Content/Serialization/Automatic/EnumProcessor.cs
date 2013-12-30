@@ -3,7 +3,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Serialization.Automatic
 {
-    public class EnumProcessor : IAutomaticProcessor
+    internal class EnumProcessor : IAutomaticProcessor
     {
         #region Implementation of IAutomaticProcessor
         /// <summary>
