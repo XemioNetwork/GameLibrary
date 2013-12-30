@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Entities.Components;
 
 namespace Xemio.GameLibrary.Entities
 {

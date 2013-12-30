@@ -99,8 +99,9 @@
     <Compile Include="Content\Streams\StreamedSerializer.cs" />
     <Compile Include="Content\Streams\StreamedWriter.cs" />
     <Compile Include="Entities\Components\PositionComponent.cs" />
+    <Compile Include="Entities\Components\PositionComponentSerializer.cs" />
     <Compile Include="Entities\EntitySerializer.cs" />
-    <Compile Include="Entities\IPositionComponent.cs" />
+    <Compile Include="Entities\Components\IPositionComponent.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
     <Compile Include="Game\Scenes\SceneProvider.cs" />
@@ -203,7 +204,7 @@
     <Compile Include="Rendering\IRenderFactory.cs" />
     <Compile Include="Rendering\Sprites\SpriteSheetRenderer.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\EntityComponent.cs" />
+    <Compile Include="Entities\Components\EntityComponent.cs" />
     <Compile Include="Entities\EntityEnvironment.cs" />
     <Compile Include="Events\ActionObserver.cs" />
     <Compile Include="Events\IEvent.cs" />

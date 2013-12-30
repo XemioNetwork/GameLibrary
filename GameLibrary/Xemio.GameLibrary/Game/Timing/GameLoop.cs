@@ -218,16 +218,12 @@ namespace Xemio.GameLibrary.Game.Timing
         /// </summary>
         private void ResetFields()
         {
-            this._unprocessedTicks = 0;
-            this._elapsedRenderTime = 0;
-            this._timeSinceLastTick = 0;
-            this._fpsCount = 0;
-            this._tickTime = 0;
-            this._renderTime = 0;
+            double totalMilliseconds = this._gameTime.Elapsed.TotalMilliseconds;
 
-            this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
-            this._lastTryToTick = this._gameTime.Elapsed.TotalMilliseconds;
-            this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
+            this._tickTime = this._renderTime = 0;
+            this._lastFpsMeasure = this._lastTryToTick = this._lastRender = totalMilliseconds;
+            this._unprocessedTicks = this._elapsedRenderTime = this._timeSinceLastTick = 0;
+            this._fpsCount = 0;
         }
         /// <summary>
         /// A function representing the internal game loop logic.

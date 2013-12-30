@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Xemio.GameLibrary.Content.Attributes;
+﻿using Xemio.GameLibrary.Content.Attributes;
 using Xemio.GameLibrary.Game.Timing;
 
-namespace Xemio.GameLibrary.Entities
+namespace Xemio.GameLibrary.Entities.Components
 {
     public abstract class EntityComponent : IGameHandler
     {
