@@ -45,7 +45,6 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <summary>
         /// Gets the geometry factory.
         /// </summary>
-        /// <returns></returns>
         IGeometryFactory CreateGeometryFactory();
         /// <summary>
         /// Creates the graphics provider.
