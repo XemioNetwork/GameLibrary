@@ -82,6 +82,16 @@ namespace Xemio.GameLibrary.Network
                 .Where(s => s.PackageType.IsInstanceOfType(package));
         }
         /// <summary>
+        /// Called when the client gets disconnected.
+        /// </summary>
+        public virtual void OnDisconnected()
+        {
+            foreach (IClientHandler subscriber in this._subscribers)
+            {
+                subscriber.OnDisconnected();
+            }
+        }
+        /// <summary>
         /// Calls the IClientLogics when the specified package was received.
         /// </summary>
         /// <param name="package">The package.</param>
@@ -99,7 +109,7 @@ namespace Xemio.GameLibrary.Network
         /// Calls the IClientLogics when the specified package is going to be send.
         /// </summary>
         /// <param name="package">The package.</param>
-        public void OnBeginSendPackage(Package package)
+        public virtual void OnBeginSendPackage(Package package)
         {
             IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
             foreach (IClientHandler subscriber in subscribers)
@@ -111,7 +121,7 @@ namespace Xemio.GameLibrary.Network
         /// Calls the IClientLogics when the specified package is sent.
         /// </summary>
         /// <param name="package">The package.</param>
-        public void OnSentPackage(Package package)
+        public virtual void OnSentPackage(Package package)
         {
             IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
             foreach (IClientHandler subscriber in subscribers)

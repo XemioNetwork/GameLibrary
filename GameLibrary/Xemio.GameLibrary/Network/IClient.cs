@@ -33,6 +33,10 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         void Close();
         /// <summary>
+        /// Called when the client gets disconnected.
+        /// </summary>
+        void OnDisconnected();
+        /// <summary>
         /// Calls the client handlers when the specified package was received.
         /// </summary>
         /// <param name="package">The package.</param>

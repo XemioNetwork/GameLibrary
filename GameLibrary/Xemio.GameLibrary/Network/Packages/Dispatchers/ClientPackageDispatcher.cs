@@ -60,6 +60,10 @@ namespace Xemio.GameLibrary.Network.Packages.Dispatchers
             {
                 logger.Error("Error while receiving package from server.", ex);
             }
+            finally
+            {
+                this._client.OnDisconnected();
+            }
         }
         #endregion
     }

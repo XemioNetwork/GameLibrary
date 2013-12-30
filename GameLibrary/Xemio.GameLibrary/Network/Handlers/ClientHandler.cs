@@ -7,6 +7,12 @@ namespace Xemio.GameLibrary.Network.Handlers
     {
         #region Methods
         /// <summary>
+        /// Called when the client connection got disconnected.
+        /// </summary>
+        public virtual void OnDisconnected()
+        {
+        }
+        /// <summary>
         /// Called when a package arrives.
         /// </summary>
         /// <param name="client">The client.</param>

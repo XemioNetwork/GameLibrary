@@ -11,6 +11,10 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         Type PackageType { get; }
         /// <summary>
+        /// Called when the client connection got disconnected.
+        /// </summary>
+        void OnDisconnected();
+        /// <summary>
         /// Called when a package arrives.
         /// </summary>
         /// <param name="client">The client.</param>
