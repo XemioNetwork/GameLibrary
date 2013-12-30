@@ -205,10 +205,7 @@ namespace Xemio.GameLibrary.Content.Serialization
             }
             else
             {
-                using (reader.Section(type.Name))
-                {
-                    instance = this.ReadProperties(reader, type);
-                }
+                instance = this.ReadProperties(reader, type);
             }
 
             return instance;
@@ -423,10 +420,7 @@ namespace Xemio.GameLibrary.Content.Serialization
             }
             else
             {
-                using (writer.Section(type.Name))
-                {
-                    this.WriteProperties(writer, value);
-                }
+                this.WriteProperties(writer, value);
             }
         }
         #endregion

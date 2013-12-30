@@ -50,6 +50,28 @@ namespace Xemio.GameLibrary.Content
         public IFormat Format { get; set; }
         #endregion
 
+        #region Private Methods
+        /// <summary>
+        /// Caches the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="fullPath">The full path.</param>
+        private void Cache(object value, string fullPath)
+        {
+            if (!this._cache.ContainsKey(fullPath))
+            {
+                this._cache.Add(fullPath, value);
+            }
+            if (!this._reverseMappings.ContainsKey(value))
+            {
+                this._reverseMappings.Add(value, fullPath);
+            }
+
+            this._cache[fullPath] = value;
+            this._reverseMappings[value] = fullPath;
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Determines whether the specified file is cached.
@@ -92,9 +114,8 @@ namespace Xemio.GameLibrary.Content
             {
                 serializer.Save(value, stream, this.Format);
             }
-
-            this._cache.Add(Path.GetFullPath(fileName), value);
-            this._reverseMappings.Add(value, Path.GetFullPath(fileName));
+            
+            this.Cache(value, Path.GetFullPath(fileName));
         }
         /// <summary>
         /// Gets the specified file.

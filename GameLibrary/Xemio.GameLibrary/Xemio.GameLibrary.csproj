@@ -99,6 +99,7 @@
     <Compile Include="Content\Streams\StreamedSerializer.cs" />
     <Compile Include="Content\Streams\StreamedWriter.cs" />
     <Compile Include="Entities\Components\PositionComponent.cs" />
+    <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="Entities\IPositionComponent.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />

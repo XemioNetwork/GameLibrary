@@ -31,8 +31,6 @@ namespace Xemio.GameLibrary.Entities.Components
             {
                 if (value != this._value)
                 {
-                    logger.Trace("Setting position for entity {0}-{1} to {2}", this.GetType().Name, this.Entity.Guid, this.Value);
-
                     this.HasChanged = true;
                     this._value = value;
                 }
