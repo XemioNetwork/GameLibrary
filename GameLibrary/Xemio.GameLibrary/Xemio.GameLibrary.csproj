@@ -296,7 +296,6 @@
     <Compile Include="Rendering\Surfaces\WindowSurface.cs" />
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
-    <Compile Include="Script\IAsyncHandler.cs" />
     <Compile Include="Script\IHandler.cs" />
     <Compile Include="Script\IScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />

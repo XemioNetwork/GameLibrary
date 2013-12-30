@@ -138,7 +138,11 @@ namespace Xemio.GameLibrary
 
                 logger.Info("Setting display mode to {0}x{1}.", (int)configuration.BackBufferSize.X, (int)configuration.BackBufferSize.Y);
 
-                var graphicsDevice = new GraphicsDevice {DisplayMode = new DisplayMode(configuration.BackBufferSize)};
+                var graphicsDevice = new GraphicsDevice
+                {
+                    DisplayMode = new DisplayMode(configuration.BackBufferSize)
+                };
+
                 graphicsDevice.Initialize(configuration.GraphicsProvider);
 
                 XGL.Components.Add(graphicsDevice);
