@@ -59,6 +59,13 @@
     <Compile Include="Content\Formats\Xml\XmlFormat.cs" />
     <Compile Include="Content\Formats\Xml\XmlReader.cs" />
     <Compile Include="Content\Formats\Xml\XmlWriter.cs" />
+    <Compile Include="Content\Serialization\Automatic\Processors\ArrayProcessor.cs" />
+    <Compile Include="Content\Serialization\Automatic\Processors\DictionaryProcessor.cs" />
+    <Compile Include="Content\Serialization\Automatic\Processors\EnumProcessor.cs" />
+    <Compile Include="Content\Serialization\Automatic\Processors\IAutomaticProcessor.cs" />
+    <Compile Include="Content\Serialization\Automatic\Processors\ListProcessor.cs" />
+    <Compile Include="Content\Serialization\Automatic\Processors\PropertyProcessor.cs" />
+    <Compile Include="Content\Serialization\Automatic\TypeHelper.cs" />
     <Compile Include="Content\Serialization\GuidSerializer.cs" />
     <Compile Include="BasicConfigurator.cs" />
     <Compile Include="Common\ActionDisposable.cs" />
@@ -94,7 +101,7 @@
     <Compile Include="Content\Formats\IFormat.cs" />
     <Compile Include="Content\Formats\IFormatReader.cs" />
     <Compile Include="Content\Formats\IFormatWriter.cs" />
-    <Compile Include="Content\Serialization\AutomaticSerializer.cs" />
+    <Compile Include="Content\Serialization\Automatic\AutomaticSerializer.cs" />
     <Compile Include="Content\Streams\StreamedReader.cs" />
     <Compile Include="Content\Streams\StreamedSerializer.cs" />
     <Compile Include="Content\Streams\StreamedWriter.cs" />

@@ -11,6 +11,7 @@ using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Formats.Binary;
 using Xemio.GameLibrary.Content.Formats.Fallback;
 using Xemio.GameLibrary.Content.Serialization;
+using Xemio.GameLibrary.Content.Serialization.Automatic;
 using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Content.FileSystem;
