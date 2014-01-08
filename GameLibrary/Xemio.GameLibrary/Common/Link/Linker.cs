@@ -17,6 +17,10 @@ namespace Xemio.GameLibrary.Common.Link
     /// <typeparam name="TValue">The type of the value.</typeparam>
     public class Linker<TKey, TValue> : IEnumerable<TValue> where TValue : ILinkable<TKey>
     {
+        #region Constants
+        private const BindingFlags ConstructorReflectionFlags = BindingFlags.NonPublic | BindingFlags.Public;
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Linker{TKey,TValue}"/> class.
@@ -117,7 +121,8 @@ namespace Xemio.GameLibrary.Common.Link
                     type.IsAbstract == false &&
                     type.IsInterface == false)
                 {
-                    this.Add((TValue) Activator.CreateInstance(type));
+
+                    this.Add((TValue)Activator.CreateInstance(type, ConstructorReflectionFlags, null, null, null));
                 }
             }
         }
