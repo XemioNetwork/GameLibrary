@@ -125,7 +125,7 @@
     <Compile Include="Network\Exceptions\ClientLostConnectionException.cs" />
     <Compile Include="Network\IClient.cs" />
     <Compile Include="Network\Internal\ServerDisconnectHandler.cs" />
-    <Compile Include="Network\Packages\Dispatchers\ServerPackageDispatcher.cs" />
+    <Compile Include="Network\Internal\Dispatchers\ServerPackageDispatcher.cs" />
     <Compile Include="Network\Nested\INestedConnection.cs" />
     <Compile Include="Network\ISender.cs" />
     <Compile Include="Network\IServer.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Network\Handlers\Forwarding\ForwardingServerHandler.cs" />
     <Compile Include="Network\Handlers\Forwarding\IForwarded.cs" />
     <Compile Include="Network\Nested\NestedConnection.cs" />
-    <Compile Include="Network\Packages\Dispatchers\ClientPackageDispatcher.cs" />
+    <Compile Include="Network\Internal\Dispatchers\ClientPackageDispatcher.cs" />
     <Compile Include="Network\Internal\OutputQueue.cs" />
     <Compile Include="Network\Internal\ServerConnectionManager.cs" />
     <Compile Include="Common\Link\AutomaticLinker.cs" />
@@ -249,7 +249,7 @@
     <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
     <Compile Include="Network\Handlers\ServerHandler.cs" />
     <Compile Include="Network\Packages\Package.cs" />
-    <Compile Include="Network\Packages\PackageSerializer.cs" />
+    <Compile Include="Network\Packages\PackageBuffer.cs" />
     <Compile Include="Network\Protocols\IClientProtocol.cs" />
     <Compile Include="Network\Protocols\IServerProtocol.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpClientProtocol.cs" />

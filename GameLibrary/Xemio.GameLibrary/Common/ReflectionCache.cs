@@ -21,13 +21,16 @@ namespace Xemio.GameLibrary.Common
         /// <param name="computation">The computation.</param>
         private static T Get<T>(object key, string name, Func<T> computation)
         {
-            if (!_cache.ContainsKey(key))
-                _cache.Add(key, new Dictionary<string, object>());
+            lock (_cache)
+            {
+                if (!_cache.ContainsKey(key))
+                    _cache.Add(key, new Dictionary<string, object>());
 
-            if (!_cache[key].ContainsKey(name))
-                _cache[key].Add(name, computation());
+                if (!_cache[key].ContainsKey(name))
+                    _cache[key].Add(name, computation());
 
-            return (T)_cache[key][name];
+                return (T) _cache[key][name];
+            }
         }
         /// <summary>
         /// Gets the interfaces for the specified type.

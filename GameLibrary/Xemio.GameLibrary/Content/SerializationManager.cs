@@ -48,8 +48,11 @@ namespace Xemio.GameLibrary.Content
         /// <param name="type">The type.</param>
         private IEnumerable<Type> GetBaseTypesAndInterfaces(Type type)
         {
-            if (this._typeCache.ContainsKey(type))
-                return this._typeCache[type];
+            lock (this._typeCache)
+            {
+                if (this._typeCache.ContainsKey(type))
+                    return this._typeCache[type];
+            }
 
             var types = new List<Type> {type};
 
@@ -73,7 +76,11 @@ namespace Xemio.GameLibrary.Content
                 types.Add(typeof(object));
             }
 
-            this._typeCache.Add(type, types);
+            lock (this._typeCache)
+            {
+                if (!this._typeCache.ContainsKey(type))
+                    this._typeCache.Add(type, types);
+            }
 
             return types;
         } 

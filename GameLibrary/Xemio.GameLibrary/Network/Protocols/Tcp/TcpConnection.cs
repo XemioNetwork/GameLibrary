@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             this._tcpClient = tcpClient;
             this._tcpClient.NoDelay = (delay == TcpDelay.None);
             
-            this._serializer = new PackageSerializer();
+            this._buffer = new PackageBuffer();
 
             this.Stream = tcpClient.GetStream();
             this.Address = ((IPEndPoint)this._tcpClient.Client.LocalEndPoint).Address;
@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
         #region Fields
         private readonly TcpClient _tcpClient;
-        private readonly PackageSerializer _serializer;
+        private readonly PackageBuffer _buffer;
         #endregion
 
         #region Properties
@@ -79,13 +79,16 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             try
             {
-                this._serializer.Serialize(package, this.Stream);
+                lock (this._buffer)
+                {
+                    this._buffer.Serialize(package, this.Stream);
+                }
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 throw new ConnectionClosedException(this);
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 throw new ConnectionClosedException(this);
             }
@@ -98,9 +101,9 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             Package package;
             try
             {
-                package = this._serializer.Deserialize(this.Stream);
+                package = this._buffer.Deserialize(this.Stream);
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 throw new ConnectionClosedException(this);
             }

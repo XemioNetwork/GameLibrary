@@ -5,6 +5,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Xemio.GameLibrary;
@@ -14,7 +16,10 @@ using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Network.Packages;
+using Xemio.GameLibrary.Network.Timing;
 using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.Testing.Input
@@ -23,7 +28,21 @@ namespace Xemio.Testing.Input
     {
         static void Main(string[] args)
         {
-            var memoryStream = new MemoryStream();
+            var im = new ImplementationManager();
+
+            for (int i = 0; i < 100; i++)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    while (true)
+                    {
+                        im.Get<int, Package>(new TimeSyncPackage().Id);
+                        Thread.Sleep(2);
+                    }
+                });
+            }
+
+            /*var memoryStream = new MemoryStream();
 
             var serializer = XGL.Components.Get<SerializationManager>();
 
@@ -43,7 +62,7 @@ namespace Xemio.Testing.Input
             serializer.Save(entity, memoryStream, Format.Xml);
             memoryStream.Position = 0;
 
-            string content = new StreamReader(memoryStream).ReadToEnd();
+            string content = new StreamReader(memoryStream).ReadToEnd();*/
         }
     }
 

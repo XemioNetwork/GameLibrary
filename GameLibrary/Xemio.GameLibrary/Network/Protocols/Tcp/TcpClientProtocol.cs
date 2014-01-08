@@ -26,13 +26,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="delay">The delay.</param>
         public TcpClientProtocol(TcpDelay delay)
         {
-            this._serializer = new PackageSerializer();
+            this._buffer = new PackageBuffer();
             this._delay = delay;
         }
         #endregion
 
         #region Fields
-        private readonly PackageSerializer _serializer;
+        private readonly PackageBuffer _buffer;
         private readonly TcpDelay _delay;
 
         private TcpClient _tcpClient;
@@ -89,13 +89,16 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             try
             {
-                this._serializer.Serialize(package, this.Stream);
+                lock (this._buffer)
+                {
+                    this._buffer.Serialize(package, this.Stream);
+                }
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 throw new ClientLostConnectionException();
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 throw new ClientLostConnectionException();
             }
@@ -107,13 +110,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             try
             {
-                return this._serializer.Deserialize(this.Stream);
+                return this._buffer.Deserialize(this.Stream);
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 throw new ClientLostConnectionException();
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 throw new ClientLostConnectionException();
             }

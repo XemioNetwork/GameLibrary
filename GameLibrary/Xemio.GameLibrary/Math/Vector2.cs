@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Math
 {
-    public struct Vector2
+    public struct Vector2 : IEquatable<Vector2>
     {
         #region Constructors
         /// <summary>
@@ -279,26 +279,49 @@ namespace Xemio.GameLibrary.Math
 
         #region Object Member
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        /// Indicates whether this instance and a specified object are equal.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <returns>
+        /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
+        /// </returns>
+        /// <param name="obj">Another object to compare to. </param>
         public override bool Equals(object obj)
         {
-            return this == (Vector2)obj;
+            if (ReferenceEquals(null, obj)) 
+                return false;
+
+            return obj is Vector2 && this.Equals((Vector2)obj);
         }
         /// <summary>
-        /// Returns a hash code for this instance.
+        /// Returns the hash code for this instance.
         /// </summary>
+        /// <returns>
+        /// A 32-bit signed integer that is the hash code for this instance.
+        /// </returns>
         public override int GetHashCode()
         {
-            return this.X.GetHashCode() + this.Y.GetHashCode();
+            unchecked
+            {
+                return (this._x.GetHashCode() * 397) ^ this._y.GetHashCode();
+            }
+        }
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Vector2 other)
+        {
+            return this._x.Equals(other._x) && this._y.Equals(other._y);
         }
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
         /// </summary>
         public override string ToString()
         {
-            return "{" + this.X.ToString() + "," + this.Y.ToString() + "}";
+            return "{" + this.X + "," + this.Y + "}";
         }
         #endregion
 

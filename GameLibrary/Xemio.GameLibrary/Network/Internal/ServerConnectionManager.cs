@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
-using Xemio.GameLibrary.Network.Packages.Dispatchers;
+using Xemio.GameLibrary.Network.Internal.Dispatchers;
 
 namespace Xemio.GameLibrary.Network.Internal
 {

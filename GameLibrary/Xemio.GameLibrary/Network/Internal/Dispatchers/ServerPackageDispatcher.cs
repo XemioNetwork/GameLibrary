@@ -1,11 +1,10 @@
 ﻿using System;
 using NLog;
 using Xemio.GameLibrary.Common;
-using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Network.Exceptions;
-using Xemio.GameLibrary.Network.Internal;
+using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Network.Packages.Dispatchers
+namespace Xemio.GameLibrary.Network.Internal.Dispatchers
 {
     internal class ServerPackageDispatcher : Worker
     {

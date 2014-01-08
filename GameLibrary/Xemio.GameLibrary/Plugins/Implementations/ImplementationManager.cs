@@ -35,8 +35,6 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         #endregion
 
         #region Fields
-        private readonly object _linkerLoadLock = new object();
-
         private readonly Dictionary<Type, bool> _cacheFlags;
         private readonly Dictionary<Type, dynamic> _linkers;
 
@@ -53,7 +51,9 @@ namespace Xemio.GameLibrary.Plugins.Implementations
             set
             {
                 this._context = value;
-                this._cacheFlags.Clear();                
+
+                lock (this._cacheFlags)
+                    this._cacheFlags.Clear();              
             }
         }
         #endregion
@@ -76,10 +76,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
                 }
                 else
                 {
-                    this._linkers.Add(typeof(TValue), (linker = new Linker<TKey, TValue>()
-                    {
-                        DuplicateBehavior = DuplicateBehavior.Override
-                    }));
+                    this._linkers.Add(typeof(TValue), (linker = new Linker<TKey, TValue>() { DuplicateBehavior = DuplicateBehavior.Override }));
                 }
 
                 return linker;
@@ -176,7 +173,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <typeparam name="TValue">The type of the value.</typeparam>
         public bool IsCached<TValue>()
         {
-            return this._cacheFlags.ContainsKey(typeof(TValue));
+            return this._cacheFlags.ContainsKey(typeof (TValue));
         }
         /// <summary>
         /// Caches the specified context.
@@ -187,15 +184,18 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         {
             logger.Trace("Caching {0} instances.", typeof(TValue).Name);
             
-            lock (this._linkerLoadLock)
+            lock (this._cacheFlags)
             {
-                var linker = this.GetLinker<TKey, TValue>();
-                foreach (Assembly assembly in this._context.Assemblies)
+                if (!this.IsCached<TValue>())
                 {
-                    linker.Load(assembly);
-                }
+                    var linker = this.GetLinker<TKey, TValue>();
+                    foreach (Assembly assembly in this._context.Assemblies)
+                    {
+                        linker.Load(assembly);
+                    }
 
-                this._cacheFlags.Add(typeof(TValue), true);
+                    this._cacheFlags.Add(typeof (TValue), true);
+                }
             }
         }
         #endregion

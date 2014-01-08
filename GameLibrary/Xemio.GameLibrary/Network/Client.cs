@@ -11,7 +11,7 @@ using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Handlers;
 using Xemio.GameLibrary.Network.Internal;
-using Xemio.GameLibrary.Network.Packages.Dispatchers;
+using Xemio.GameLibrary.Network.Internal.Dispatchers;
 using Xemio.GameLibrary.Network.Protocols;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;

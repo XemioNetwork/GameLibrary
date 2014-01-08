@@ -13,12 +13,30 @@ namespace Xemio.GameLibrary.Content.Serialization.Automatic
         /// <summary>
         /// Reads a typed instance from the specified reader.
         /// </summary>
+        /// <param name="reader">The reader.</param>
+        public static T ReadTypedInstance<T>(IFormatReader reader)
+        {
+            return (T)TypeHelper.ReadTypedInstance(typeof (T), reader);
+        }
+        /// <summary>
+        /// Reads a typed instance from the specified reader.
+        /// </summary>
         /// <param name="defaultType">The default type.</param>
         /// <param name="reader">The reader.</param>
         public static object ReadTypedInstance(Type defaultType, IFormatReader reader)
         {
             var serializer = XGL.Components.Require<SerializationManager>();
             return serializer.Load(TypeHelper.ReadType(defaultType, reader), reader);
+        }
+        /// <summary>
+        /// Writes the specified instance as typed object.
+        /// </summary>
+        /// <typeparam name="TDefault">The type of the default.</typeparam>
+        /// <param name="instance">The instance.</param>
+        /// <param name="writer">The writer.</param>
+        public static void WriteTypedInstance<TDefault>(object instance, IFormatWriter writer)
+        {
+            TypeHelper.WriteTypedInstance(instance, typeof(TDefault), writer);
         }
         /// <summary>
         /// Writes the specified instance as typed object.

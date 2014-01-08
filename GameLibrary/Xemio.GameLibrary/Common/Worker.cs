@@ -41,7 +41,7 @@ namespace Xemio.GameLibrary.Common
             if (!this.IsRunning())
             {
                 this._running = true;
-                this._task = Task.Factory.StartNew(this.Run, this._source.Token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+                this._task = Task.Factory.StartNew(this.Run, this._source.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
         }
         /// <summary>

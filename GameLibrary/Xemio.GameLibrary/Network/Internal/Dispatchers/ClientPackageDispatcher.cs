@@ -2,8 +2,9 @@
 using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Network.Exceptions;
+using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Network.Packages.Dispatchers
+namespace Xemio.GameLibrary.Network.Internal.Dispatchers
 {
     internal class ClientPackageDispatcher : Worker
     {
@@ -58,7 +59,7 @@ namespace Xemio.GameLibrary.Network.Packages.Dispatchers
             }
             catch (Exception ex)
             {
-                logger.Error("Error while receiving package from server.", ex);
+                logger.ErrorException("Error while receiving package from server.", ex);
             }
             finally
             {
