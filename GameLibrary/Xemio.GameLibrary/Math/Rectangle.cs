@@ -138,6 +138,20 @@ namespace Xemio.GameLibrary.Math
 
         #region Methods
         /// <summary>
+        /// Inflates the rectangle by pushing all 4 directions by the according axis-orientated x and y values.
+        /// </summary>
+        /// <param name="x">The x value.</param>
+        /// <param name="y">The y value.</param>
+        public Rectangle Inflate(float x, float y)
+        {
+            this._x -= x;
+            this._y -= y;
+            this._width += x * 2;
+            this._height += y * 2;
+
+            return this;
+        }
+        /// <summary>
         /// Determines whether this instance contains the specified rectangle.
         /// </summary>
         /// <param name="value">The value.</param>
