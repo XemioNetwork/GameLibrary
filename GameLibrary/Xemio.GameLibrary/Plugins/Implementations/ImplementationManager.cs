@@ -108,8 +108,10 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// Merges the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        public void Merge(IAssemblyContext context)
+        public void Add(IAssemblyContext context)
         {
+            logger.Debug("Adding {0}.", context.GetType().Name);
+
             this.Context = new MergedAssemblyContext(this.Context, context);
         }
         /// <summary>
@@ -120,6 +122,8 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <param name="value">The value.</param>
         public void Add<TKey, TValue>(TValue value) where TValue : ILinkable<TKey>
         {
+            logger.Trace("Adding implementation for {0} with id {1}.", typeof(TValue), value.Id);
+
             Linker<TKey, TValue> linker = this.GetLinker<TKey, TValue>();
             linker.Add(value);
         }
@@ -194,9 +198,21 @@ namespace Xemio.GameLibrary.Plugins.Implementations
                         linker.Load(assembly);
                     }
 
-                    this._cacheFlags.Add(typeof (TValue), true);
+                    this._cacheFlags.Add(typeof(TValue), true);
                 }
             }
+        }
+        /// <summary>
+        /// Removes the item with the specified identifier from the corresponding linker.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        public void Remove<TKey, TValue>(TKey id) where TValue : ILinkable<TKey>
+        {
+            logger.Trace("Removing implementation for {0} with id {1}.", typeof(TValue), id);
+
+            Linker<TKey, TValue> linker = this.GetLinker<TKey, TValue>();
+            linker.Remove(id);
         }
         #endregion
     }
