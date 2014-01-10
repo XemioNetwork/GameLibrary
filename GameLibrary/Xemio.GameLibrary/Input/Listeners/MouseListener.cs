@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// <param name="button">The button.</param>
         private Keys GetKeys(MouseButtons button)
         {
-            Keys keys = Keys.None;
+            var keys = Keys.None;
 
             if (button.HasFlag(MouseButtons.Left)) keys |= Keys.LeftMouse;
             if (button.HasFlag(MouseButtons.Right)) keys |= Keys.RightMouse;
@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="e">The event.</param>
-        protected virtual void PublishEvent<TEvent>(TEvent e) where TEvent : IEvent
+        protected virtual void PublishEvent<TEvent>(TEvent e) where TEvent : class, IEvent
         {
             var eventManager = XGL.Components.Get<EventManager>();
             eventManager.Publish(e);
