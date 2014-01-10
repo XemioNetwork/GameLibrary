@@ -72,7 +72,7 @@ namespace Xemio.GameLibrary.Input.Listeners
             if (key == Keys.None)
                 return;
 
-            this.PublishEvent(new InputStateEvent(key, new InputState(true, 1.0f), this.PlayerIndex.Value));
+            this.PublishEvent(new KeyStateEvent(key, new InputState(true, 1.0f), this.PlayerIndex.Value));
         }
         /// <summary>
         /// Handles the MouseUp event of the surface control.
@@ -86,7 +86,7 @@ namespace Xemio.GameLibrary.Input.Listeners
             if (key == Keys.None)
                 return;
 
-            this.PublishEvent(new InputStateEvent(key, new InputState(false, 0.0f), this.PlayerIndex.Value));
+            this.PublishEvent(new KeyStateEvent(key, new InputState(false, 0.0f), this.PlayerIndex.Value));
         }
         #endregion
         

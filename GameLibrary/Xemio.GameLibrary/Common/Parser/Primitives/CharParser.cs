@@ -1,28 +1,27 @@
 ﻿using System;
-using Xemio.GameLibrary.Common.Conversion;
 
-namespace Xemio.GameLibrary.Common.Conversion.Primitives
+namespace Xemio.GameLibrary.Common.Parser.Primitives
 {
-    public class NumericConverter : ITypeConverter
+    public class CharParser : ITypedParser
     {
         #region Implementation of ITypeConverter
         /// <summary>
         /// Parses the specified input.
         /// </summary>
         /// <param name="input">The input.</param>
-        public ConversionResult Convert(string input)
+        public ParserResult Parse(string input)
         {
-            double value;
-            bool succeed = double.TryParse(input, out value);
+            char value;
+            bool succeed = char.TryParse(input, out value);
 
-            return new ConversionResult(succeed, value);
+            return new ParserResult(succeed, value);
         }
         /// <summary>
         /// Gets the identifier for the current instance.
         /// </summary>
         public Type Id
         {
-            get { return typeof(double); }
+            get { return typeof(char); }
         }
         #endregion
     }

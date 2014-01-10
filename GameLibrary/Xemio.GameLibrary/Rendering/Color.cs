@@ -128,7 +128,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Random instance for color randomization.
         /// </summary>
-        private static IRandom _randomizer = new SystemRandom();
+        private static IRandom _randomizer = new SimpleRandom();
         /// <summary>
         /// Returns a random color.
         /// </summary>

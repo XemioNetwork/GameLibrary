@@ -3,11 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Content.FileSystem.Disk;
 
 namespace Xemio.GameLibrary.Content.FileSystem
 {
     public class DiskFileSystem : IFileSystem
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DiskFileSystem"/> class.
+        /// </summary>
+        public DiskFileSystem()
+        {
+            this._watchers = new List<DiskFileSystemWatcher>();
+        }
+        #endregion
+
+        #region Fields
+        private readonly IList<DiskFileSystemWatcher> _watchers; 
+        #endregion
+
         #region IFileSystem Member
         /// <summary>
         /// Opens the specified file.
@@ -83,6 +99,35 @@ namespace Xemio.GameLibrary.Content.FileSystem
         public string[] GetDirectories(string directory)
         {
             return Directory.GetDirectories(directory);
+        }
+
+        /// <summary>
+        /// Subscribes the specified file system watcher.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="listener">The listener.</param>
+        public void Subscribe(string path, IFileSystemListener listener)
+        {
+            this._watchers.Add(new DiskFileSystemWatcher(path, listener));
+        }
+        /// <summary>
+        /// Unsubscribes the specified watcher.
+        /// </summary>
+        /// <param name="listener">The listener.</param>
+        public void Unsubscribe(IFileSystemListener listener)
+        {
+            var watcher = this._watchers.FirstOrDefault(w => w.Listener == listener);
+            if (watcher != null)
+            {
+                this._watchers.Remove(watcher);
+            }
+        }
+        /// <summary>
+        /// Gets the pathing tool for the file system implementation.
+        /// </summary>
+        public IPath Path
+        {
+            get { return Singleton<DiskPath>.Value; }
         }
         #endregion
     }

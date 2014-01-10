@@ -11,35 +11,35 @@ namespace Xemio.GameLibrary.Events
         /// <summary>
         /// Gets the action that will be executed.
         /// </summary>
-        public Action<T> ExecuteAction { get; private set; }
+        public Action<T> Action { get; private set; }
         /// <summary>
         /// Gets the filters.
         /// </summary>
         public IList<Func<T, bool>> Filters { get; private set; }
-        #endregion Properties
+        #endregion
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EventFilter{T}"/> class.
         /// </summary>
-        /// <param name="executeAction">The execute action.</param>
-        private EventFilter(Action<T> executeAction)
+        /// <param name="action">The execute action.</param>
+        private EventFilter(Action<T> action)
         {
             this.Filters = new List<Func<T, bool>>();
-            this.ExecuteAction = executeAction;
+            this.Action = action;
         }
-        #endregion Constructors
+        #endregion
 
         #region Static Methods
         /// <summary>
         /// Creates a new EventFilter executing the given method.
         /// </summary>
-        /// <param name="executeAction">The execute action.</param>
-        public static EventFilter<T> ForMethod(Action<T> executeAction)
+        /// <param name="action">The execute action.</param>
+        public static EventFilter<T> For(Action<T> action)
         {
-            return new EventFilter<T>(executeAction);
+            return new EventFilter<T>(action);
         }
-        #endregion Static Methods
+        #endregion
 
         #region Methods
         /// <summary>
@@ -50,7 +50,6 @@ namespace Xemio.GameLibrary.Events
         public EventFilter<T> WithCondition(Func<T, bool> filter)
         {
             this.Filters.Add(filter);
-
             return this;
         }
         /// <summary>
@@ -70,10 +69,10 @@ namespace Xemio.GameLibrary.Events
                        {
                            if (this.Filters.All(filter => filter(parameter)))
                            {
-                               this.ExecuteAction(parameter);
+                               this.Action(parameter);
                            }
                        };
         }
-        #endregion Methods
+        #endregion
     }
 }

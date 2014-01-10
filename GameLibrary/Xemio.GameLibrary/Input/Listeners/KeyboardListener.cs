@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
         private void SurfaceKeyDown(object sender, KeyEventArgs e)
         {
-            this.PublishEvent(new InputStateEvent((Keys)e.KeyCode, new InputState(true, 1.0f), this.PlayerIndex.Value));
+            this.PublishEvent(new KeyStateEvent((Keys)e.KeyCode, new InputState(true, 1.0f), this.PlayerIndex.Value));
         }
         /// <summary>
         /// Handles the KeyUp event of the surface.
@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// <param name="e">The <see cref="System.Windows.Forms.KeyEventArgs"/> instance containing the event data.</param>
         private void SurfaceKeyUp(object sender, KeyEventArgs e)
         {
-            this.PublishEvent(new InputStateEvent((Keys)e.KeyCode, new InputState(false, 0.0f), this.PlayerIndex.Value));
+            this.PublishEvent(new KeyStateEvent((Keys)e.KeyCode, new InputState(false, 0.0f), this.PlayerIndex.Value));
         }
         #endregion
 

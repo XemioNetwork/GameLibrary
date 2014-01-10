@@ -2,16 +2,16 @@
 
 namespace Xemio.GameLibrary.Input.Events
 {
-    public class InputStateEvent : IEvent
+    public class KeyStateEvent : IEvent
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="InputStateEvent" /> class.
+        /// Initializes a new instance of the <see cref="KeyStateEvent" /> class.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="state">The new state.</param>
         /// <param name="playerIndex">The player index.</param>
-        public InputStateEvent(Keys key, InputState state, int playerIndex)
+        public KeyStateEvent(Keys key, InputState state, int playerIndex)
         {
             this.Key = key;
             this.State = state;

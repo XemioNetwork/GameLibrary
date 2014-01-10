@@ -11,7 +11,6 @@ using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Events.Logging;
 
 namespace Xemio.GameLibrary.Localization
 {

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-namespace Xemio.GameLibrary.Common.Conversion
+﻿namespace Xemio.GameLibrary.Common.Parser
 {
-    public struct ConversionResult
+    public struct ParserResult
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConversionResult"/> struct.
+        /// Initializes a new instance of the <see cref="ParserResult"/> struct.
         /// </summary>
         /// <param name="succeed">if set to <c>true</c> [succeed].</param>
         /// <param name="value">The value.</param>
-        public ConversionResult(bool succeed, object value)
+        public ParserResult(bool succeed, object value)
         {
             this._succeed = succeed;
             this._value = value;
@@ -28,7 +22,7 @@ namespace Xemio.GameLibrary.Common.Conversion
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ConversionResult"/> is succeed.
+        /// Gets or sets a value indicating whether this <see cref="ParserResult"/> is succeed.
         /// </summary>
         public bool Succeed
         {

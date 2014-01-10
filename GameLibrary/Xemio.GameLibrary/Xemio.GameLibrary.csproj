@@ -53,6 +53,10 @@
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\Compression.cs" />
     <Compile Include="Content\FileSystem\Compression\CompressedFileSystem.cs" />
+    <Compile Include="Content\FileSystem\Disk\DiskFileSystemWatcher.cs" />
+    <Compile Include="Content\FileSystem\Disk\DiskPath.cs" />
+    <Compile Include="Content\FileSystem\IFileSystemListener.cs" />
+    <Compile Include="Content\FileSystem\IPath.cs" />
     <Compile Include="Content\Formats\Fallback\FallbackException.cs" />
     <Compile Include="Content\Formats\Fallback\FallbackReader.cs" />
     <Compile Include="Content\Formats\Fallback\FallbackWriter.cs" />
@@ -153,20 +157,19 @@
     <Compile Include="Common\Link\ILinkable.cs" />
     <Compile Include="Common\ObjectStorage.cs" />
     <Compile Include="Common\Randomization\IRandom.cs" />
-    <Compile Include="Common\Randomization\ISeedable.cs" />
     <Compile Include="Common\Randomization\PerlinNoise.cs" />
-    <Compile Include="Common\Randomization\SystemRandom.cs" />
+    <Compile Include="Common\Randomization\SimpleRandom.cs" />
     <Compile Include="Common\Randomization\SeedableRandom.cs" />
     <Compile Include="Common\Singleton.cs" />
     <Compile Include="Common\ThreadInvoker.cs" />
-    <Compile Include="Common\Conversion\Primitives\BooleanConverter.cs" />
-    <Compile Include="Common\Conversion\Primitives\CharConverter.cs" />
-    <Compile Include="Common\Conversion\Primitives\NumericConverter.cs" />
-    <Compile Include="Common\Conversion\ITypeConverter.cs" />
-    <Compile Include="Common\Conversion\ConversionResult.cs" />
-    <Compile Include="Common\Conversion\StringParser.cs" />
-    <Compile Include="Common\Conversion\Primitives\RectangleConverter.cs" />
-    <Compile Include="Common\Conversion\Primitives\VectorConverter.cs" />
+    <Compile Include="Common\Parser\Primitives\BooleanParser.cs" />
+    <Compile Include="Common\Parser\Primitives\CharParser.cs" />
+    <Compile Include="Common\Parser\Primitives\NumericParser.cs" />
+    <Compile Include="Common\Parser\ITypedParser.cs" />
+    <Compile Include="Common\Parser\ParserResult.cs" />
+    <Compile Include="Common\Parser\StringParser.cs" />
+    <Compile Include="Common\Parser\Primitives\RectangleParser.cs" />
+    <Compile Include="Common\Parser\Primitives\VectorParser.cs" />
     <Compile Include="Components\ComponentManager.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\IConstructable.cs" />
@@ -174,13 +177,8 @@
     <Compile Include="Content\Reader.cs" />
     <Compile Include="Content\Serializer.cs" />
     <Compile Include="Content\Writer.cs" />
-    <Compile Include="Content\FileSystem\Virtualization\VirtualFileStream.cs" />
-    <Compile Include="Content\FileSystem\Virtualization\VirtualFileSystem.cs" />
-    <Compile Include="Content\FileSystem\DiskFileSystem.cs" />
+    <Compile Include="Content\FileSystem\Disk\DiskFileSystem.cs" />
     <Compile Include="Content\FileSystem\IFileSystem.cs" />
-    <Compile Include="Content\FileSystem\Virtualization\VirtualDirectory.cs" />
-    <Compile Include="Content\FileSystem\Virtualization\VirtualFile.cs" />
-    <Compile Include="Content\FileSystem\Virtualization\VirtualPath.cs" />
     <Compile Include="Content\IReader.cs" />
     <Compile Include="Content\ISerializer.cs" />
     <Compile Include="Content\IWriter.cs" />
@@ -226,16 +224,13 @@
     <Compile Include="Events\ActionObserver.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\Logging\ExceptionEvent.cs" />
-    <Compile Include="Events\Logging\LoggingEvent.cs" />
-    <Compile Include="Events\Logging\LoggingLevel.cs" />
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\Timing\GameTime.cs" />
     <Compile Include="Game\Timing\GameTimeMode.cs" />
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Game\PrecisionLevel.cs" />
     <Compile Include="Game\Scenes\SceneWrapper.cs" />
-    <Compile Include="Input\Events\InputStateEvent.cs" />
+    <Compile Include="Input\Events\KeyStateEvent.cs" />
     <Compile Include="Input\Events\MousePositionEvent.cs" />
     <Compile Include="Input\Listeners\KeyboardListener.cs" />
     <Compile Include="Input\Keys.cs" />
@@ -306,6 +301,7 @@
     <Compile Include="Rendering\Surfaces\WindowSurface.cs" />
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
+    <Compile Include="Script\DynamicScriptLoader.cs" />
     <Compile Include="Script\IHandler.cs" />
     <Compile Include="Script\IScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
@@ -315,7 +311,6 @@
     <Compile Include="XGLState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\FileSystem\Network\" />
     <Folder Include="Input\Bindings\" />
   </ItemGroup>
   <ItemGroup>

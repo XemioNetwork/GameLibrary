@@ -55,7 +55,7 @@ namespace Xemio.Testing.ReactiveExtensions
             //EventManager eventManager = new EventManager();
 
             //eventManager.Subscribe(EventFilter<LoggingEvent>
-            //                           .ForMethod(Method)
+            //                           .For(Method)
             //                           .WithCondition(f => f.Level > LoggingLevel.Information)
             //                           .Create());
 

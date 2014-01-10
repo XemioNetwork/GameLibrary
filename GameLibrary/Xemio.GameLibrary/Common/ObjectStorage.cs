@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Xemio.GameLibrary.Common.Conversion;
+using Xemio.GameLibrary.Common.Parser;
 
 namespace Xemio.GameLibrary.Common
 {
@@ -33,7 +33,7 @@ namespace Xemio.GameLibrary.Common
         /// Gets or sets a value indicating whether [auto parse strings].
         /// </summary>
         public bool AutoParseStrings { get; set; }
-        #endregion Properties
+        #endregion
 
         #region Methods
         /// <summary>
@@ -61,7 +61,7 @@ namespace Xemio.GameLibrary.Common
                 object value = this._values[key];
                 if (value is string && this.AutoParseStrings)
                 {
-                    value = this._typeParser.Parse(value as string);
+                    value = this._typeParser.Parse((string)value);
                 }
 
                 return value;

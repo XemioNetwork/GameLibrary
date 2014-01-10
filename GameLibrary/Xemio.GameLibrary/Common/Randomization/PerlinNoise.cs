@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// </summary>
         public PerlinNoise()
         {
-            this._random = new SystemRandom();
+            this._random = new SimpleRandom();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="PerlinNoise"/> class.
@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// <param name="seed">The seed.</param>
         public PerlinNoise(string seed)
         {
-            this._random = new SystemRandom(seed.GetHashCode());
+            this._random = new SimpleRandom(seed.GetHashCode());
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="PerlinNoise"/> class.
@@ -30,7 +30,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// <param name="seed">The seed.</param>
         public PerlinNoise(int seed)
         {
-            this._random = new SystemRandom(seed);
+            this._random = new SimpleRandom(seed);
         }
         #endregion
         
@@ -49,7 +49,7 @@ namespace Xemio.GameLibrary.Common.Randomization
             int width = baseNoise.GetLength(0);
             int height = baseNoise.GetLength(1);
 
-            float[,] smoothNoise = new float[width, height];
+            var smoothNoise = new float[width, height];
 
             int period = 1 << octave;
             float frequency = 1.0f / period;
@@ -101,14 +101,14 @@ namespace Xemio.GameLibrary.Common.Randomization
             int width = baseNoise.GetLength(0);
             int height = baseNoise.GetLength(1);
 
-            float[][,] smoothNoise = new float[initialOctave + octaveCount][,];
+            var smoothNoise = new float[initialOctave + octaveCount][,];
 
             for (int i = 0; i < octaveCount; i++)
             {
                 smoothNoise[initialOctave + i] = GenerateSmoothNoise(baseNoise, initialOctave + i);
             }
 
-            float[,] perlinNoise = new float[width, height];
+            var perlinNoise = new float[width, height];
 
             float amplitude = 1f;
             float totalAmplitude = 0.0f;
@@ -143,7 +143,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// <param name="multiplier">The multiplier.</param>
         public float[,] GenerateBaseNoise(int width, int height, float multiplier)
         {
-            float[,] noise = new float[width, height];
+            var noise = new float[width, height];
 
             for (int i = 0; i < width; i++)
             {

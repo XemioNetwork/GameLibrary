@@ -51,6 +51,8 @@ namespace Xemio.GameLibrary.Events
             {
                 this._typeMappings.Remove(typeof(TEvent));
             }
+
+            observer.OnCompleted();
         }
         /// <summary>
         /// Determines whether the specified observer is observing the specified type.
@@ -97,10 +99,17 @@ namespace Xemio.GameLibrary.Events
             var interceptable = e as IInterceptableEvent;
             foreach (IObserver<TEvent> observer in this.GetObservers<TEvent>())
             {
-                observer.OnNext(e);
-                if (interceptable != null && interceptable.IsCanceled)
+                try
                 {
-                    break;
+                    observer.OnNext(e);
+                    if (interceptable != null && interceptable.IsCanceled)
+                    {
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    observer.OnError(ex);
                 }
             }
         }

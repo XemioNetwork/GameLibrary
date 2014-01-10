@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using NLog;
+using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components.Attributes;
@@ -12,7 +13,6 @@ using Xemio.GameLibrary.Content.Formats.Binary;
 using Xemio.GameLibrary.Content.Formats.Fallback;
 using Xemio.GameLibrary.Content.Serialization;
 using Xemio.GameLibrary.Content.Serialization.Automatic;
-using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Plugins.Implementations;
@@ -26,34 +26,34 @@ namespace Xemio.GameLibrary.Content
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
-        
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SerializationManager"/> class.
-        /// </summary>
-        public SerializationManager()
-        {
-        }
-        #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Gets a reader or writer for the specified type.
+        /// </summary>
+        /// <typeparam name="T">The reader or writer type.</typeparam>
+        /// <param name="type">The type.</param>
+        private T Get<T>(Type type) where T : class, ILinkable<Type>
+        {
+            foreach (Type baseType in ReflectionCache.GetBaseTypesAndInterfaces(type))
+            {
+                T instance = XGL.Components
+                    .Get<ImplementationManager>()
+                    .Get<Type, T>(baseType);
+
+                if (instance != null)
+                    return instance;
+            }
+
+            return new AutomaticSerializer(type) as T;
+        }
         /// <summary>
         /// Gets the content reader for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         private IReader GetReader(Type type)
         {
-            foreach (Type baseType in ReflectionCache.GetBaseTypesAndInterfaces(type))
-            {
-                IReader reader = XGL.Components
-                    .Get<ImplementationManager>()
-                    .Get<Type, IReader>(baseType);
-
-                if (reader != null)
-                    return reader;
-            }
-
-            return new AutomaticSerializer(type);
+            return this.Get<IReader>(type);
         }
         /// <summary>
         /// Gets the content writer for the specified type.
@@ -61,17 +61,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="type">The type.</param>
         private IWriter GetWriter(Type type)
         {
-            foreach (Type baseType in ReflectionCache.GetBaseTypesAndInterfaces(type))
-            {
-                IWriter writer = XGL.Components
-                    .Get<ImplementationManager>()
-                    .Get<Type, IWriter>(baseType);
-
-                if (writer != null)
-                    return writer;
-            }
-
-            return new AutomaticSerializer(type);
+            return this.Get<IWriter>(type);
         }
         #endregion
         

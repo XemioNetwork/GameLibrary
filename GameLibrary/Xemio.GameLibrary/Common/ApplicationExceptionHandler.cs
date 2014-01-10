@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Events.Logging;
 
 namespace Xemio.GameLibrary.Common
 {
     public class ApplicationExceptionHandler : IConstructable
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Fields
         /// <summary>
         /// The last exception that was thrown.
         /// Needed because for some reason the UnhandledException event will be called twice.
         /// </summary>
         private Exception _lastException;
-        #endregion Fields
+        #endregion
 
         #region IConstructable Member
         /// <summary>
@@ -26,7 +30,7 @@ namespace Xemio.GameLibrary.Common
         {
             AppDomain.CurrentDomain.UnhandledException += HandleException;
         }
-        #endregion IConstructable Member
+        #endregion
 
         #region Private Methods
         /// <summary>
@@ -36,16 +40,14 @@ namespace Xemio.GameLibrary.Common
         /// <param name="e">The <see cref="UnhandledExceptionEventArgs"/> instance containing the event data.</param>
         private void HandleException(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception exception = e.ExceptionObject as Exception;
+            var exception = e.ExceptionObject as Exception;
 
             if (exception != this._lastException)
             { 
-                EventManager eventManager = XGL.Components.Get<EventManager>();
-                eventManager.Publish(new ExceptionEvent(exception));
-
+                logger.Error(exception);
                 this._lastException = exception;
             }
         }
-        #endregion Private Methods
+        #endregion
     }
 }

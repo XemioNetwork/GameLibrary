@@ -6,27 +6,27 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Common.Randomization
 {
-    public class SystemRandom : IRandom
+    public class SimpleRandom : IRandom
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemRandom"/> class.
+        /// Initializes a new instance of the <see cref="SimpleRandom"/> class.
         /// </summary>
-        public SystemRandom() : this((int)DateTime.Now.Ticks)
+        public SimpleRandom() : this((int)DateTime.Now.Ticks)
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemRandom"/> class.
+        /// Initializes a new instance of the <see cref="SimpleRandom"/> class.
         /// </summary>
         /// <param name="seed">The seed.</param>
-        public SystemRandom(string seed) : this(seed.GetHashCode())
+        public SimpleRandom(string seed) : this(seed.GetHashCode())
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemRandom"/> class.
+        /// Initializes a new instance of the <see cref="SimpleRandom"/> class.
         /// </summary>
         /// <param name="seed">The seed.</param>
-        public SystemRandom(int seed)
+        public SimpleRandom(int seed)
         {
             this._random = new System.Random(seed);
         }
@@ -104,7 +104,7 @@ namespace Xemio.GameLibrary.Common.Randomization
         /// <returns></returns>
         public byte[] NextBytes(int count)
         {
-            byte[] buffer = new byte[count];
+            var buffer = new byte[count];
             this._random.NextBytes(buffer);
 
             return buffer;

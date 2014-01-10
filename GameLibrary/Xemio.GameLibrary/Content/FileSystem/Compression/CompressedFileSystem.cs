@@ -144,6 +144,31 @@ namespace Xemio.GameLibrary.Content.FileSystem.Compression
         {
             return this.FileSystem.GetDirectories(directory);
         }
+
+        /// <summary>
+        /// Subscribes the specified file system watcher.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="watcher">The watcher.</param>
+        public void Subscribe(string path, IFileSystemListener watcher)
+        {
+            this.FileSystem.Subscribe(path, watcher);
+        }
+        /// <summary>
+        /// Unsubscribes the specified watcher.
+        /// </summary>
+        /// <param name="watcher">The watcher.</param>
+        public void Unsubscribe(IFileSystemListener watcher)
+        {
+            this.FileSystem.Unsubscribe(watcher);
+        }
+        /// <summary>
+        /// Gets the pathing tool for the file system implementation.
+        /// </summary>
+        public IPath Path
+        {
+            get { return this.FileSystem.Path; }
+        }
         #endregion
     }
 }

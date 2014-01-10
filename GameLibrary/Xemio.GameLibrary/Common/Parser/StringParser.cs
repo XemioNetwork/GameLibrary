@@ -1,7 +1,7 @@
 ﻿using System;
 using Xemio.GameLibrary.Plugins.Implementations;
 
-namespace Xemio.GameLibrary.Common.Conversion
+namespace Xemio.GameLibrary.Common.Parser
 {
     public class StringParser
     {
@@ -27,9 +27,9 @@ namespace Xemio.GameLibrary.Common.Conversion
         /// <returns></returns>
         public object Parse(string value)
         {
-            foreach (ITypeConverter converter in this._implementations.All<Type, ITypeConverter>())
+            foreach (ITypedParser parser in this._implementations.All<Type, ITypedParser>())
             {
-                ConversionResult result = converter.Convert(value);
+                ParserResult result = parser.Parse(value);
                 if (result.Succeed)
                 {
                     return result.Value;

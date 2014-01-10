@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using NLog;
 using Xemio.GameLibrary.Components.Attributes;
-using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Events.Client;
 using Xemio.GameLibrary.Network.Events.Server;

@@ -11,7 +11,6 @@ namespace Xemio.GameLibrary.Input
         /// Gets or sets the index of the player.
         /// </summary>
         int? PlayerIndex { get; set; }
-
         /// <summary>
         /// Called when the input listener was attached to the player.
         /// </summary>

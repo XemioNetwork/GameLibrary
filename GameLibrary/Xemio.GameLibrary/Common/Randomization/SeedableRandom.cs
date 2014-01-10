@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Common.Randomization
 {
-    public class SeedableRandom : SystemRandom, ISeedable
+    public class SeedableRandom : SimpleRandom
     {
         #region Fields
         private int _seed;

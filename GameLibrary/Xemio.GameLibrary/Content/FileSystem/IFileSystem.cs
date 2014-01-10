@@ -16,14 +16,12 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// containing directory doesn't exist.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
         Stream Open(string fileName);
         /// <summary>
         /// Creates the specified file. Throws an exception if the
         /// containing directory doesn't exist.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
         Stream Create(string fileName);
         /// <summary>
         /// Deletes the specified file. Throws an exception if the file
@@ -64,5 +62,20 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// </summary>
         /// <param name="directory">The directory.</param>
         string[] GetDirectories(string directory);
+        /// <summary>
+        /// Subscribes the specified file system watcher.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="listener">The listener.</param>
+        void Subscribe(string path, IFileSystemListener listener);
+        /// <summary>
+        /// Unsubscribes the specified watcher.
+        /// </summary>
+        /// <param name="listener">The listener.</param>
+        void Unsubscribe(IFileSystemListener listener);
+        /// <summary>
+        /// Gets the pathing tool for the file system implementation.
+        /// </summary>
+        IPath Path { get; }
     }
 }

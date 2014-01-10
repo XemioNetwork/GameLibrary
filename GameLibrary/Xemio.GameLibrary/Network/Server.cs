@@ -11,7 +11,6 @@ using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components.Attributes;
-using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Events;

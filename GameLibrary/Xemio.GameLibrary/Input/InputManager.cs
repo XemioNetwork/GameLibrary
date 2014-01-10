@@ -129,7 +129,7 @@ namespace Xemio.GameLibrary.Input
         /// Handles the input event.
         /// </summary>
         /// <param name="stateEvent">The key event.</param>
-        private void HandleInputEvent(InputStateEvent stateEvent)
+        private void HandleInputEvent(KeyStateEvent stateEvent)
         {
             if (!this.IsPlayerIndexValid(stateEvent.PlayerIndex))
             {
@@ -165,7 +165,7 @@ namespace Xemio.GameLibrary.Input
         {
             var eventManager = XGL.Components.Get<EventManager>();
 
-            eventManager.Subscribe<InputStateEvent>(this.HandleInputEvent);
+            eventManager.Subscribe<KeyStateEvent>(this.HandleInputEvent);
             eventManager.Subscribe<MousePositionEvent>(this.HandleMousePositionEvent);
 
             var gameLoop = XGL.Components.Get<IGameLoop>();

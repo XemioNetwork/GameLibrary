@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.IO;
+using NLog;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Events.Logging;
 
 namespace Xemio.GameLibrary.Plugins.Contexts
 {
     internal class FileAssemblyContext : IAssemblyContext
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Fields
         private readonly HashSet<Assembly> _assemblies;
         #endregion Fields
@@ -45,7 +49,7 @@ namespace Xemio.GameLibrary.Plugins.Contexts
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(exception);
+                    logger.Error(exception);
                 }
             }
 
