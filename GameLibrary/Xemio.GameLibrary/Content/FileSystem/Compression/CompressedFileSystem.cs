@@ -52,25 +52,18 @@ namespace Xemio.GameLibrary.Content.FileSystem.Compression
         /// <param name="fileName">Name of the file.</param>
         public Stream Open(string fileName)
         {
-            var stream = new MemoryStream();
-            var fileStream = this.FileSystem.Open(fileName);
-
             try
             {
-                using (var gzip = new GZipStream(fileStream, CompressionMode.Decompress))
+                using (Stream fileStream = this.FileSystem.Open(fileName))
                 {
-                    gzip.CopyTo(stream);
+                    return Compressor.Compress(fileStream);
                 }
-
-                stream.Position = 0;
             }
             catch (InvalidDataException ex)
             {
                 logger.Warn("Could not decompress {0}. Trying to read plain data from file.", fileName);
                 return this.FileSystem.Open(fileName);
             }
-
-            return stream;
         }
         /// <summary>
         /// Creates the specified file. Throws an exception if the
@@ -79,10 +72,10 @@ namespace Xemio.GameLibrary.Content.FileSystem.Compression
         /// <param name="fileName">Name of the file.</param>
         public Stream Create(string fileName)
         {
-            var fileStream = this.FileSystem.Create(fileName);
-            var gzip = new GZipStream(fileStream, CompressionMode.Compress, false);
-
-            return gzip;
+            using (Stream fileStream = this.FileSystem.Create(fileName))
+            {
+                return Compressor.Compress(fileStream);
+            }
         }
         /// <summary>
         /// Deletes the specified file. Throws an exception if the file

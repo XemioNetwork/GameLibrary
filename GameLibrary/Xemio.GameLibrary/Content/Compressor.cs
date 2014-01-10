@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content
 {
-    public static class Compression
+    public static class Compressor
     {
         #region Methods
         /// <summary>
@@ -67,7 +67,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="format">The format.</param>
         public static T LoadCompressed<T>(this SerializationManager serializer, Stream stream, IFormat format)
         {
-            using (Stream decompressed = Compression.Decompress(stream))
+            using (Stream decompressed = Compressor.Decompress(stream))
             {
                 return serializer.Load<T>(decompressed, format);
             }

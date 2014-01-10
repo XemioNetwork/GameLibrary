@@ -51,7 +51,7 @@
     <Compile Include="Common\Property.cs" />
     <Compile Include="Common\ReflectionCache.cs" />
     <Compile Include="Content\ContentManager.cs" />
-    <Compile Include="Content\Compression.cs" />
+    <Compile Include="Content\Compressor.cs" />
     <Compile Include="Content\FileSystem\Compression\CompressedFileSystem.cs" />
     <Compile Include="Content\FileSystem\Disk\DiskFileSystemWatcher.cs" />
     <Compile Include="Content\FileSystem\Disk\DiskPath.cs" />
