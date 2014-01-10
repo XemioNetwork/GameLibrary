@@ -88,7 +88,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The key.</param>
         public static ConstructorInfo[] GetConstructors(Type type)
         {
-            return ReflectionCache.Get(type, "Constructors", type.GetConstructors);
+            return ReflectionCache.Get(type, "Constructors", () => type.GetConstructors(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance));
         }
         /// <summary>
         /// Gets the generic arguments.
