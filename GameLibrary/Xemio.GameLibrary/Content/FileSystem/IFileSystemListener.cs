@@ -26,13 +26,5 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// <param name="fullPath">The full path.</param>
         /// <param name="name">The name.</param>
         void OnDeleted(string fullPath, string name);
-        /// <summary>
-        /// Called when a file system entry was renamed.
-        /// </summary>
-        /// <param name="fullPath">The full path.</param>
-        /// <param name="oldPath">The old path.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="oldName">The old name.</param>
-        void OnRenamed(string fullPath, string oldPath, string name, string oldName);
     }
 }

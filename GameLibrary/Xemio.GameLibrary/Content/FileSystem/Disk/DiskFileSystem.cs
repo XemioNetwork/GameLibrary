@@ -108,7 +108,7 @@ namespace Xemio.GameLibrary.Content.FileSystem
         /// <param name="listener">The listener.</param>
         public void Subscribe(string path, IFileSystemListener listener)
         {
-            this._watchers.Add(new DiskFileSystemWatcher(path, listener));
+            this._watchers.Add(new DiskFileSystemWatcher(this, path, listener));
         }
         /// <summary>
         /// Unsubscribes the specified watcher.
