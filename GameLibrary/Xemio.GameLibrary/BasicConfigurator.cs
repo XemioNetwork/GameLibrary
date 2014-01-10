@@ -14,15 +14,15 @@ namespace Xemio.GameLibrary
         /// </summary>
         public static void Configure()
         {
-            XGL.Components.Add(new EventManager());
-            XGL.Components.Add(new ImplementationManager());
-            XGL.Components.Add(new ThreadInvoker());
-            XGL.Components.Add(new SerializationManager());
-            XGL.Components.Add(new ContentManager());
-            XGL.Components.Add(new DiskFileSystem());
-            XGL.Components.Construct();
+            var config = XGL.Configure()
+                .DisableGameLoop()
+                .DisableInput()
+                .DisableSplashScreen()
+                .FileSystem<DiskFileSystem>()
+                .EnableCoreComponents()
+                .BuildConfiguration();
 
-            XGL.State = XGLState.Initialized;
+            XGL.Run(config);
         }
         #endregion
     }
