@@ -12,7 +12,7 @@ namespace Xemio.GameLibrary.Network.Exceptions
         /// Initializes a new instance of the <see cref="ConnectionClosedException"/> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public ConnectionClosedException(IConnection connection) : base(string.Format("{0} disconnected.", connection.Address))
+        public ConnectionClosedException(IServerConnection connection) : base(string.Format("{0} disconnected.", connection.Address))
         {
             this.Connection = connection;
         }
@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Network.Exceptions
         /// <summary>
         /// Gets the connection.
         /// </summary>
-        public IConnection Connection { get; private set; }
+        public IServerConnection Connection { get; private set; }
         #endregion
     }
 }

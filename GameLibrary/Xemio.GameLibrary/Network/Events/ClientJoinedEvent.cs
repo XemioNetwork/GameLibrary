@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Network.Events
         /// Initializes a new instance of the <see cref="ClientJoinedEvent"/> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public ClientJoinedEvent(IConnection connection)
+        public ClientJoinedEvent(IServerConnection connection)
         {
             this.Connection = connection;
         }
@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Network.Events
         /// <summary>
         /// Gets the connection.
         /// </summary>
-        public IConnection Connection { get; private set; }
+        public IServerConnection Connection { get; private set; }
         #endregion
     }
 }

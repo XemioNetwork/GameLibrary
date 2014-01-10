@@ -79,7 +79,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        public virtual void OnReceivePackage(Package package, IConnection connection)
+        public virtual void OnReceivePackage(Package package, IServerConnection connection)
         {
             IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
             foreach (IServerHandler subscriber in subscribers)
@@ -94,7 +94,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        public virtual void OnBeginSendPackage(Package package, IConnection connection)
+        public virtual void OnBeginSendPackage(Package package, IServerConnection connection)
         {
             IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
             foreach (IServerHandler subscriber in subscribers)
@@ -107,7 +107,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        public virtual void OnSentPackage(Package package, IConnection connection)
+        public virtual void OnSentPackage(Package package, IServerConnection connection)
         {
             IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
             foreach (IServerHandler subscriber in subscribers)
@@ -121,7 +121,7 @@ namespace Xemio.GameLibrary.Network
         /// Called when a client joined the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public virtual void OnClientJoined(IConnection connection)
+        public virtual void OnClientJoined(IServerConnection connection)
         {
             logger.Info("Client {0} joined.", connection.Address);
 
@@ -136,7 +136,7 @@ namespace Xemio.GameLibrary.Network
         /// Called when a client left the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public virtual void OnClientLeft(IConnection connection)
+        public virtual void OnClientLeft(IServerConnection connection)
         {
             logger.Info("Client {0} disconnected.", connection.Address);
 
@@ -150,7 +150,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Accepts the connection.
         /// </summary>
-        public virtual IConnection AcceptConnection()
+        public virtual IServerConnection AcceptConnection()
         {
             return this.Protocol.AcceptConnection();
         }
@@ -168,7 +168,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the connections.
         /// </summary>
-        public IList<IConnection> Connections
+        public IList<IServerConnection> Connections
         {
             get { return this._connectionManager.Connections; }
         }
@@ -182,11 +182,11 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            var cachedList = (CachedList<IConnection>)this.Connections;
+            var cachedList = (CachedList<IServerConnection>)this.Connections;
 
             using (cachedList.StartCaching())
             {
-                foreach (IConnection connection in this.Connections)
+                foreach (IServerConnection connection in this.Connections)
                 {
                     this.Send(package, connection);
                 }
@@ -197,7 +197,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public void Send(Package package, IConnection receiver)
+        public void Send(Package package, IServerConnection receiver)
         {
             logger.Trace("Sending {0} to {1}.", package.GetType().Name, receiver.Address);
 

@@ -63,7 +63,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// Accepts a new connection.
         /// </summary>
         /// <returns></returns>
-        public IConnection AcceptConnection()
+        public IServerConnection AcceptConnection()
         {
             return new TcpConnection(this._listener.AcceptTcpClient(), this._delay);
         }

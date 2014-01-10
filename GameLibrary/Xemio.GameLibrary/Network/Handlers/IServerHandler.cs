@@ -16,32 +16,32 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        void OnReceive(IServer server, Package package, IConnection sender);
+        void OnReceive(IServer server, Package package, IServerConnection sender);
         /// <summary>
         /// Called when the server is sending a package.
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void OnBeginSend(IServer server, Package package, IConnection receiver);
+        void OnBeginSend(IServer server, Package package, IServerConnection receiver);
         /// <summary>
         /// Called when the server sent a package.
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void OnSent(IServer server, Package package, IConnection receiver);
+        void OnSent(IServer server, Package package, IServerConnection receiver);
         /// <summary>
         /// Called when a client joined the server.
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="connection">The connection.</param>
-        void OnClientJoined(IServer server, IConnection connection);
+        void OnClientJoined(IServer server, IServerConnection connection);
         /// <summary>
         /// Called when a client left the server.
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="connection">The connection.</param>
-        void OnClientLeft(IServer server, IConnection connection);
+        void OnClientLeft(IServer server, IServerConnection connection);
     }
 }

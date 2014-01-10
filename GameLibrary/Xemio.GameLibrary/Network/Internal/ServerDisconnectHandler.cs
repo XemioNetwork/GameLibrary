@@ -30,7 +30,7 @@ namespace Xemio.GameLibrary.Network.Internal
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="connection">The connection.</param>
-        public override void OnClientLeft(IServer server, IConnection connection)
+        public override void OnClientLeft(IServer server, IServerConnection connection)
         {
             this._connectionManager.Remove(connection);
         }

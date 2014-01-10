@@ -23,7 +23,7 @@ namespace Xemio.GameLibrary.Network.Events
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        public SentPackageEvent(Package package, IConnection connection) : this(package)
+        public SentPackageEvent(Package package, IServerConnection connection) : this(package)
         {
             this.Connection = connection;
         }
@@ -37,7 +37,7 @@ namespace Xemio.GameLibrary.Network.Events
         /// <summary>
         /// Gets the connection.
         /// </summary>
-        public IConnection Connection { get; private set; }
+        public IServerConnection Connection { get; private set; }
         #endregion
     }
 }

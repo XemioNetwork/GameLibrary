@@ -126,13 +126,13 @@
     <Compile Include="Network\IClient.cs" />
     <Compile Include="Network\Internal\ServerDisconnectHandler.cs" />
     <Compile Include="Network\Internal\Dispatchers\ServerPackageDispatcher.cs" />
-    <Compile Include="Network\Nested\INestedConnection.cs" />
+    <Compile Include="Network\Nested\INestedServerConnection.cs" />
     <Compile Include="Network\ISender.cs" />
     <Compile Include="Network\IServer.cs" />
     <Compile Include="Network\Handlers\Forwarding\ForwardingOptions.cs" />
     <Compile Include="Network\Handlers\Forwarding\ForwardingServerHandler.cs" />
     <Compile Include="Network\Handlers\Forwarding\IForwarded.cs" />
-    <Compile Include="Network\Nested\NestedConnection.cs" />
+    <Compile Include="Network\Nested\NestedServerConnection.cs" />
     <Compile Include="Network\Internal\Dispatchers\ClientPackageDispatcher.cs" />
     <Compile Include="Network\Internal\OutputQueue.cs" />
     <Compile Include="Network\Internal\ServerConnectionManager.cs" />
@@ -242,7 +242,7 @@
     <Compile Include="Network\Events\ClientLeftEvent.cs" />
     <Compile Include="Network\Events\ReceivedPackageEvent.cs" />
     <Compile Include="Network\Events\SentPackageEvent.cs" />
-    <Compile Include="Network\IConnection.cs" />
+    <Compile Include="Network\IServerConnection.cs" />
     <Compile Include="Network\Handlers\IClientHandler.cs" />
     <Compile Include="Network\Handlers\IServerHandler.cs" />
     <Compile Include="Network\Handlers\ClientHandler.cs" />

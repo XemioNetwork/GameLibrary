@@ -3,14 +3,14 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Nested
 {
-    public abstract class NestedConnection : INestedConnection
+    public abstract class NestedServerConnection : INestedServerConnection
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="NestedConnection" /> class.
+        /// Initializes a new instance of the <see cref="NestedServerConnection" /> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        protected NestedConnection(IConnection connection)
+        protected NestedServerConnection(IServerConnection connection)
         {
             this.Connection = connection;
         }
@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Network.Nested
         /// <summary>
         /// Gets the connection.
         /// </summary>
-        public IConnection Connection { get; private set; }
+        public IServerConnection Connection { get; private set; }
         #endregion
         
         #region Implementation of IClientProtocl
@@ -47,7 +47,7 @@ namespace Xemio.GameLibrary.Network.Nested
             return this.Connection.Receive();
         }
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
+        /// Gets a value indicating whether this <see cref="IServerConnection"/> is connected.
         /// </summary>
         public virtual bool Connected
         {
@@ -74,7 +74,7 @@ namespace Xemio.GameLibrary.Network.Nested
         /// <summary>
         /// Gets the connection.
         /// </summary>
-        IConnection INestedConnection.Connection
+        IServerConnection INestedServerConnection.Connection
         {
             get { return this.Connection; }
         }

@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.Network.Internal.Dispatchers
         private readonly IServer _server;
         private readonly ServerConnectionManager _connectionManager;
 
-        private readonly IConnection _connection;
+        private readonly IServerConnection _connection;
         private readonly IThreadInvoker _threadInvoker;
         #endregion
 
@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Network.Internal.Dispatchers
         /// <param name="server">The server.</param>
         /// <param name="connectionManager">The connection manager.</param>
         /// <param name="connection">The connection.</param>
-        public ServerPackageDispatcher(ServerConnectionManager connectionManager, IConnection connection)
+        public ServerPackageDispatcher(ServerConnectionManager connectionManager, IServerConnection connection)
         {
             this._connectionManager = connectionManager;
             this._server = connectionManager.Server;

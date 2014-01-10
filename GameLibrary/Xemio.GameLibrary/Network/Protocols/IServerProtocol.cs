@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Network.Protocols
         /// <summary>
         /// Accepts a new connection.
         /// </summary>
-        IConnection AcceptConnection();
+        IServerConnection AcceptConnection();
         /// <summary>
         /// Sets the server.
         /// </summary>

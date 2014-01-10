@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Network.Handlers.Forwarding
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        public override void OnReceive(IServer server, Package package, IConnection sender)
+        public override void OnReceive(IServer server, Package package, IServerConnection sender)
         {
             if (package is IForwarded == false)
                 return;
@@ -35,10 +35,10 @@ namespace Xemio.GameLibrary.Network.Handlers.Forwarding
                     server.Send(package);
                     break;
                 case ForwardingOptions.AllOther:
-                    IList<IConnection> connections = server.Connections.Where(f => f != sender).ToList();
+                    IList<IServerConnection> connections = server.Connections.Where(f => f != sender).ToList();
                     logger.Trace("Forwarding {0} from {1} to {2} clients.", package.GetType().Name, sender.Address, connections.Count);
 
-                    foreach (IConnection connection in connections)
+                    foreach (IServerConnection connection in connections)
                     {
                         server.Send(package, connection);
                     }

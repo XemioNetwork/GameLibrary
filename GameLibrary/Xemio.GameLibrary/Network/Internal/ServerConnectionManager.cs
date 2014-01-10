@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Network.Internal
         /// <summary>
         /// Gets the connections.
         /// </summary>
-        public IList<IConnection> Connections { get; private set; }
+        public IList<IServerConnection> Connections { get; private set; }
         #endregion
 
         #region Constructors
@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Network.Internal
             this.Server = server;
             this.Server.Subscribe(new ServerDisconnectHandler(this));
 
-            this.Connections = new CachedList<IConnection>();
+            this.Connections = new CachedList<IServerConnection>();
         }
         #endregion
 
@@ -52,7 +52,7 @@ namespace Xemio.GameLibrary.Network.Internal
         /// Creates a new output queue for the specified connection.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        private void CreateOutputQueue(IConnection connection)
+        private void CreateOutputQueue(IServerConnection connection)
         {
             if (!this._queueMappings.ContainsKey(connection))
             {
@@ -68,7 +68,7 @@ namespace Xemio.GameLibrary.Network.Internal
         /// Creates a new connection dispatcher to handle incoming packages from a client.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        private void CreateDispatcher(IConnection connection)
+        private void CreateDispatcher(IServerConnection connection)
         {
             if (!this._dispatcherMappings.ContainsKey(connection))
             {
@@ -87,12 +87,15 @@ namespace Xemio.GameLibrary.Network.Internal
         /// Adds the specified connection.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public void Add(IConnection connection)
+        public void Add(IServerConnection connection)
         {
-            this.CreateDispatcher(connection);
-            this.CreateOutputQueue(connection);
+            lock (this.Connections)
+            {
+                this.CreateDispatcher(connection);
+                this.CreateOutputQueue(connection);
 
-            this.Connections.Add(connection);
+                this.Connections.Add(connection);
+            }
 
             logger.Debug("Added {0} to connection list.", connection.Address);
         }
@@ -100,12 +103,15 @@ namespace Xemio.GameLibrary.Network.Internal
         /// Removes the specified connection.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public void Remove(IConnection connection)
+        public void Remove(IServerConnection connection)
         {
-            this._dispatcherMappings.Remove(connection);
-            this._queueMappings.Remove(connection);
+            lock (this.Connections)
+            {
+                this._dispatcherMappings.Remove(connection);
+                this._queueMappings.Remove(connection);
 
-            this.Connections.Remove(connection);
+                this.Connections.Remove(connection);
+            }
 
             logger.Debug("Removed {0} from connection list.", connection.Address);
         }
@@ -113,7 +119,7 @@ namespace Xemio.GameLibrary.Network.Internal
         /// Gets the output queue for the specified connection.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public OutputQueue GetOutputQueue(IConnection connection)
+        public OutputQueue GetOutputQueue(IServerConnection connection)
         {
             return this._queueMappings[connection];
         }
@@ -127,7 +133,7 @@ namespace Xemio.GameLibrary.Network.Internal
         {
             while (this.IsRunning() && this.Server.Connected)
             {
-                IConnection connection = this.Server.AcceptConnection();
+                IServerConnection connection = this.Server.AcceptConnection();
 
                 this.Add(connection);
                 this.Server.OnClientJoined(connection);

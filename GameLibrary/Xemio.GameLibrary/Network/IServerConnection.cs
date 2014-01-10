@@ -11,7 +11,7 @@ using System.Net;
 
 namespace Xemio.GameLibrary.Network
 {
-    public interface IConnection : ISender
+    public interface IServerConnection : ISender
     {
         /// <summary>
         /// Gets the internet address.
@@ -39,12 +39,12 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <typeparam name="T">The connection type</typeparam>
         /// <param name="connection">The connection.</param>
-        public static T Resolve<T>(this IConnection connection)
+        public static T Resolve<T>(this IServerConnection connection)
         {
-            IConnection current = connection;
-            while (current is INestedConnection && !(current is T))
+            IServerConnection current = connection;
+            while (current is INestedServerConnection && !(current is T))
             {
-                current = ((INestedConnection)current).Connection;
+                current = ((INestedServerConnection)current).Connection;
             }
 
             return (T)current;

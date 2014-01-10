@@ -12,7 +12,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
-    public class TcpConnection : IConnection
+    public class TcpConnection : IServerConnection
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// </summary>
         public IPAddress Address { get; private set; }
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IConnection"/> is connected.
+        /// Gets a value indicating whether this <see cref="IServerConnection"/> is connected.
         /// </summary>
         public bool Connected
         {

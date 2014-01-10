@@ -17,17 +17,17 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the connections.
         /// </summary>
-        IList<IConnection> Connections { get; }
+        IList<IServerConnection> Connections { get; }
         /// <summary>
         /// Accepts a connection.
         /// </summary>
-        IConnection AcceptConnection();
+        IServerConnection AcceptConnection();
         /// <summary>
         /// Sends the specified package to the receiver.
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void Send(Package package, IConnection receiver);
+        void Send(Package package, IServerConnection receiver);
         /// <summary>
         /// Subscribes the specified subscriber.
         /// </summary>
@@ -47,28 +47,28 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        void OnReceivePackage(Package package, IConnection connection);
+        void OnReceivePackage(Package package, IServerConnection connection);
         /// <summary>
         /// Called when server is sending a package.
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        void OnBeginSendPackage(Package package, IConnection connection);
+        void OnBeginSendPackage(Package package, IServerConnection connection);
         /// <summary>
         /// Called when server sent a package.
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        void OnSentPackage(Package package, IConnection connection);
+        void OnSentPackage(Package package, IServerConnection connection);
         /// <summary>
         /// Called when a client joined the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        void OnClientJoined(IConnection connection);
+        void OnClientJoined(IServerConnection connection);
         /// <summary>
         /// Called when a client left the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        void OnClientLeft(IConnection connection);
+        void OnClientLeft(IServerConnection connection);
     }
 }

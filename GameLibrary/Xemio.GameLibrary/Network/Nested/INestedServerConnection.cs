@@ -1,10 +1,10 @@
 ﻿namespace Xemio.GameLibrary.Network.Nested
 {
-    public interface INestedConnection : IConnection
+    public interface INestedServerConnection : IServerConnection
     {
         /// <summary>
         /// Gets the connection.
         /// </summary>
-        IConnection Connection { get; }
+        IServerConnection Connection { get; }
     }
 }
