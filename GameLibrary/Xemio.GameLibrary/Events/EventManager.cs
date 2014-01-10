@@ -12,21 +12,45 @@ namespace Xemio.GameLibrary.Events
     public class EventManager : IComponent, IObservable<IEvent>
     {
         #region Fields
-        private readonly object _lock = new object();
-
         private readonly List<dynamic> _observers = new List<dynamic>();
         private readonly Dictionary<Type, List<dynamic>> _typeMappings = new Dictionary<Type, List<dynamic>>(); 
         #endregion
 
         #region Private Methods
         /// <summary>
+        /// Creates the type mapping.
+        /// </summary>
+        /// <typeparam name="T">The event type.</typeparam>
+        /// <param name="observer">The observer.</param>
+        private void CreateTypeMapping<T>(IObserver<T> observer) where T : class, IEvent
+        {
+            lock (this._typeMappings)
+            {
+                foreach (Type type in ReflectionCache.GetBaseTypesAndInterfaces(typeof(T)))
+                {
+                    if (!this._typeMappings.ContainsKey(type))
+                    {
+                        this._typeMappings.Add(type, new List<dynamic>());
+                    }
+
+                    this._typeMappings[type].Add(observer);
+                }
+            }
+        }
+        /// <summary>
         /// Removes the specified observer.
         /// </summary>
         /// <param name="observer">The observer.</param>
         private void Remove<TEvent>(IObserver<TEvent> observer)
         {
-            this._observers.Remove(observer);
-            this._typeMappings.Remove(typeof(TEvent));
+            lock (this._observers)
+            {
+                this._observers.Remove(observer);
+            }
+            lock (this._typeMappings)
+            {
+                this._typeMappings.Remove(typeof(TEvent));
+            }
         }
         /// <summary>
         /// Determines whether the specified observer is observing the specified type.
@@ -36,26 +60,29 @@ namespace Xemio.GameLibrary.Events
         {
             Type type = observer.GetType();
             Type targetType = typeof(TEvent);
-            Type genericType = type.GetGenericArguments().First();
+            Type genericType = ReflectionCache.GetGenericArguments(type).First();
 
             return genericType.IsAssignableFrom(targetType);
         }
         /// <summary>
         /// Gets the observers.
         /// </summary>
-        private IEnumerable<dynamic> GetObservers<T>() where T : IEvent
+        private IEnumerable<dynamic> GetObservers<T>() where T : class, IEvent
         {
             Type type = typeof(T);
 
-            lock (this._lock)
+            lock (this._typeMappings)
             {
                 if (!this._typeMappings.ContainsKey(type))
                 {
-                    this._typeMappings.Add(type, new List<dynamic>(this._observers.Where(observer => this.IsObserver<T>(observer))));
+                    lock (this._observers)
+                    {
+                        this._typeMappings.Add(type, new List<dynamic>(this._observers.Where(o => this.IsObserver<T>(o))));
+                    }
                 }
-            }
 
-            return this._typeMappings[type];
+                return this._typeMappings[type];
+            }
         }
         #endregion Private Methods
 
@@ -65,11 +92,16 @@ namespace Xemio.GameLibrary.Events
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="e">The event.</param>
-        public void Publish<TEvent>(TEvent e) where TEvent : IEvent
+        public void Publish<TEvent>(TEvent e) where TEvent : class, IEvent
         {
+            var interceptable = e as IInterceptableEvent;
             foreach (IObserver<TEvent> observer in this.GetObservers<TEvent>())
             {
                 observer.OnNext(e);
+                if (interceptable != null && interceptable.IsCanceled)
+                {
+                    break;
+                }
             }
         }
         /// <summary>
@@ -80,19 +112,37 @@ namespace Xemio.GameLibrary.Events
         {
             return this.Subscribe(new ActionObserver<T>(action));
         }
+        /// <summary>
+        /// Subscribes the specified observer.
+        /// </summary>
+        /// <typeparam name="T">The event type.</typeparam>
+        /// <param name="observer">The observer.</param>
+        public IDisposable Subscribe<T>(IObserver<T> observer) where T : class, IEvent
+        {
+            lock (this._observers)
+            {
+                this._observers.Add(observer);
+                this.CreateTypeMapping(observer);
+            }
+
+            return new ActionDisposable(() => this.Remove(observer));
+        }
         #endregion
 
-        #region IObservable<IEvent> Member
+        #region Implementation of IObservable<IEvent>
         /// <summary>
         /// Subscribes the specified observer.
         /// </summary>
         /// <param name="observer">The observer.</param>
-        public IDisposable Subscribe(IObserver<IEvent> observer)
+        IDisposable IObservable<IEvent>.Subscribe(IObserver<IEvent> observer)
         {
-            lock (this._lock)
+            lock (this._observers)
             {
                 this._observers.Add(observer);
-                this._typeMappings.Clear();
+                lock (this._typeMappings)
+                {
+                    this._typeMappings.Clear();
+                }
             }
 
             return new ActionDisposable(() => this.Remove(observer));
