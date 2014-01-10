@@ -130,6 +130,36 @@ namespace Xemio.GameLibrary.Common
         {
             return ReflectionCache.Get(propertyInfo, "GetMethod", propertyInfo.GetGetMethod);
         }
+
+        public static IList<Type> GetBaseTypesAndInterfaces(Type type)
+        {
+            return ReflectionCache.Get(type, "BaseTypesAndInterfaces", () =>
+            {
+                var types = new List<Type> { type };
+
+                if (!type.IsInterface && !type.IsValueType && !type.IsArray)
+                {
+                    Type currentType = type;
+                    while (currentType != typeof(object))
+                    {
+                        types.Add(currentType);
+                        currentType = currentType.BaseType;
+                    }
+                }
+
+                //Add interfaces
+                types.AddRange(type.GetInterfaces());
+
+                //If the specified type isn't an interface or value type,
+                //add object as the base type for all reference types.
+                if (!type.IsInterface && !type.IsValueType)
+                {
+                    types.Add(typeof(object));
+                }
+
+                return types;
+            });
+        } 
         #endregion
     }
 }

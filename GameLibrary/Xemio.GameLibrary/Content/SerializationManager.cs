@@ -26,71 +26,24 @@ namespace Xemio.GameLibrary.Content
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
-
-        #region Fields
-        private readonly Dictionary<Type, List<Type>> _typeCache;
-        #endregion
-
+        
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationManager"/> class.
         /// </summary>
         public SerializationManager()
         {
-            this._typeCache = new Dictionary<Type, List<Type>>();
         }
         #endregion
 
         #region Private Methods
-        /// <summary>
-        /// Gets the base types and interfaces.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        private IEnumerable<Type> GetBaseTypesAndInterfaces(Type type)
-        {
-            lock (this._typeCache)
-            {
-                if (this._typeCache.ContainsKey(type))
-                    return this._typeCache[type];
-            }
-
-            var types = new List<Type> {type};
-
-            if (!type.IsInterface && !type.IsValueType && !type.IsArray)
-            {
-                Type currentType = type;
-                while (currentType != typeof(object))
-                {
-                    types.Add(currentType);
-                    currentType = currentType.BaseType;
-                }
-            }
-
-            //Add interfaces
-            types.AddRange(type.GetInterfaces());
-
-            //If the specified type isn't an interface or value type,
-            //add object as the base type for all reference types.
-            if (!type.IsInterface && !type.IsValueType)
-            {
-                types.Add(typeof(object));
-            }
-
-            lock (this._typeCache)
-            {
-                if (!this._typeCache.ContainsKey(type))
-                    this._typeCache.Add(type, types);
-            }
-
-            return types;
-        } 
         /// <summary>
         /// Gets the content reader for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         private IReader GetReader(Type type)
         {
-            foreach (Type baseType in this.GetBaseTypesAndInterfaces(type))
+            foreach (Type baseType in ReflectionCache.GetBaseTypesAndInterfaces(type))
             {
                 IReader reader = XGL.Components
                     .Get<ImplementationManager>()
@@ -108,7 +61,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="type">The type.</param>
         private IWriter GetWriter(Type type)
         {
-            foreach (Type baseType in this.GetBaseTypesAndInterfaces(type))
+            foreach (Type baseType in ReflectionCache.GetBaseTypesAndInterfaces(type))
             {
                 IWriter writer = XGL.Components
                     .Get<ImplementationManager>()
@@ -149,7 +102,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="reader">The reader.</param>
         public T Load<T>(IFormatReader reader)
         {
-            return (T)this.Load(typeof (T),reader);
+            return (T)this.Load(typeof(T),reader);
         }
         /// <summary>
         /// Loads the specified stream.
