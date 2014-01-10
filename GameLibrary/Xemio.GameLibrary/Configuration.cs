@@ -154,6 +154,7 @@ namespace Xemio.GameLibrary
         protected virtual void EnableScriptSystem()
         {
             this.Components.Add(new ScriptExecutor());
+            this.Components.Add(new DynamicScriptLoader());
         }
         /// <summary>
         /// Enables the game loop.
