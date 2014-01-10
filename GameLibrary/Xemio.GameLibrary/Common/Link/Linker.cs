@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Common.Link
     public class Linker<TKey, TValue> : IEnumerable<TValue> where TValue : ILinkable<TKey>
     {
         #region Constants
-        private const BindingFlags ConstructorReflectionFlags = BindingFlags.NonPublic | BindingFlags.Public;
+        private const BindingFlags ConstructorReflectionFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance;
         #endregion
 
         #region Constructors
@@ -121,7 +121,6 @@ namespace Xemio.GameLibrary.Common.Link
                     type.IsAbstract == false &&
                     type.IsInterface == false)
                 {
-
                     this.Add((TValue)Activator.CreateInstance(type, ConstructorReflectionFlags, null, null, null));
                 }
             }
