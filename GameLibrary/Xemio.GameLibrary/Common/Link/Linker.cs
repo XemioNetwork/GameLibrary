@@ -106,6 +106,14 @@ namespace Xemio.GameLibrary.Common.Link
             }
         }
         /// <summary>
+        /// Removes the item with the specified id.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public bool Remove(TKey id)
+        {
+            return this._linkedItems.Remove(id);
+        }
+        /// <summary>
         /// Loads all objects, that implement the ILinkable interface out of an assembly.
         /// </summary>
         /// <param name="assembly">The assembly, that is used to load.</param>
