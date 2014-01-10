@@ -1,8 +1,17 @@
+using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
+using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
+using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Localization;
+using Xemio.GameLibrary.Plugins;
+using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Surfaces;
+using Xemio.GameLibrary.Script;
 
 namespace Xemio.GameLibrary
 {
@@ -14,8 +23,8 @@ namespace Xemio.GameLibrary
         /// </summary>
         public FluentConfiguration()
         {
-            this._fileSystem = new DiskFileSystem();
             this._gameLoop = new GameLoop();
+            this._fileSystem = new DiskFileSystem();
             this._surface = new NullSurface();
         }
         #endregion
@@ -33,6 +42,14 @@ namespace Xemio.GameLibrary
         /// Gets or sets a value indicating whether to register the default components.
         /// </summary>
         public bool CoreComponentsEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether the input system is enabled.
+        /// </summary>
+        public bool InputEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether the game loop and scene manager are enabled.
+        /// </summary>
+        public bool GameLoopEnabled { get; set; }
         #endregion
 
         #region Methods
@@ -68,16 +85,6 @@ namespace Xemio.GameLibrary
         {
             this._surface = surface;
         }
-        /// <summary>
-        /// Registers the default components.
-        /// </summary>
-        public override void RegisterComponents()
-        {
-            if (this.CoreComponentsEnabled)
-            {
-                base.RegisterComponents();
-            }
-        }
         #endregion
 
         #region Overrides of Configuration
@@ -108,6 +115,36 @@ namespace Xemio.GameLibrary
         public override ISurface Surface
         {
             get { return this._surface; }
+        }
+        /// <summary>
+        /// Registers the default components.
+        /// </summary>
+        public override void RegisterComponents()
+        {
+            if (this.CoreComponentsEnabled)
+            {
+                this.EnableCoreComponents();
+            }
+        }
+        /// <summary>
+        /// Enables the game loop.
+        /// </summary>
+        protected override void EnableGameLoop()
+        {
+            if (this.GameLoopEnabled)
+            {
+                base.EnableGameLoop();
+            }
+        }
+        /// <summary>
+        /// Enables the input system.
+        /// </summary>
+        protected override void EnableInputSystem()
+        {
+            if (this.InputEnabled)
+            {
+                base.EnableInputSystem();
+            }
         }
         #endregion
     }

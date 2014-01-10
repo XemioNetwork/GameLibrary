@@ -38,12 +38,30 @@ namespace Xemio.GameLibrary
         
         #region Methods
         /// <summary>
+        /// Disables the input.
+        /// </summary>
+        public FluentConfigurator DisableInput()
+        {
+            logger.Debug("InputEnabled={0}", false);
+            this._configuration.InputEnabled = false;
+            return this;
+        }
+        /// <summary>
         /// Disables the splashscreen.
         /// </summary>
         public FluentConfigurator DisableSplashScreen()
         {
             logger.Debug("SplashScreenEnabled={0}", false);
             this._configuration.SplashScreenEnabled = false;
+            return this;
+        }
+        /// <summary>
+        /// Disables the game loop.
+        /// </summary>
+        public FluentConfigurator DisableGameLoop()
+        {
+            logger.Debug("GameLoopEnabled={0}", false);
+            this._configuration.GameLoopEnabled = false;
             return this;
         }
         /// <summary>
@@ -58,7 +76,7 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Creates a default player input.
         /// </summary>
-        public FluentConfigurator EnablePlayerInput()
+        public FluentConfigurator CreatePlayerInput()
         {
             logger.Debug("CreatePlayerInput={0}", true);
             this._configuration.CreatePlayerInput = true;

@@ -90,6 +90,92 @@ namespace Xemio.GameLibrary
 
         #region Methods
         /// <summary>
+        /// Enables the core components.
+        /// </summary>
+        protected void EnableCoreComponents()
+        {
+            this.EnableCommons();
+            this.EnableContentSystem();
+            this.EnablePluginSystem();
+            this.EnableInputSystem();
+            this.EnableLocalizationSystem();
+            this.EnableScriptSystem();
+            this.EnableGameLoop();
+            this.EnableSurface();
+        }
+        /// <summary>
+        /// Enables the commons.
+        /// </summary>
+        protected virtual void EnableCommons()
+        {
+            this.Components.Add(new EventManager());
+            this.Components.Add(new ThreadInvoker());
+            this.Components.Add(new ApplicationExceptionHandler());
+        }
+        /// <summary>
+        /// Enables the content system.
+        /// </summary>
+        protected virtual void EnableContentSystem()
+        {
+            if (this.FileSystem != null)
+            {
+                this.Components.Add(this.FileSystem);
+            }
+
+            this.Components.Add(new SerializationManager());
+            this.Components.Add(new ContentManager());
+        }
+        /// <summary>
+        /// Enables the plugin system.
+        /// </summary>
+        protected virtual void EnablePluginSystem()
+        {
+            this.Components.Add(new ImplementationManager());
+            this.Components.Add(new LibraryLoader());
+        }
+        /// <summary>
+        /// Enables the input system.
+        /// </summary>
+        protected virtual void EnableInputSystem()
+        {
+            this.Components.Add(new InputManager());
+        }
+        /// <summary>
+        /// Enables the localization system.
+        /// </summary>
+        protected virtual void EnableLocalizationSystem()
+        {
+            this.Components.Add(new LocalizationManager());
+        }
+        /// <summary>
+        /// Enables the script system.
+        /// </summary>
+        protected virtual void EnableScriptSystem()
+        {
+            this.Components.Add(new ScriptExecutor());
+        }
+        /// <summary>
+        /// Enables the game loop.
+        /// </summary>
+        protected virtual void EnableGameLoop()
+        {
+            if (this.GameLoop != null)
+            {
+                this.Components.Add(this.GameLoop);
+                this.Components.Add(new SceneManager());
+            }
+        }
+        /// <summary>
+        /// Enables the surface.
+        /// </summary>
+        protected virtual void EnableSurface()
+        {
+            if (this.Surface != null)
+            {
+                this.Components.Add(this.Surface);
+            }
+        }
+        /// <summary>
         /// Registers the start scenes.
         /// </summary>
         public virtual void RegisterScenes()
@@ -100,20 +186,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         public virtual void RegisterComponents()
         {
-            this.Components.Add(this.FileSystem);
-            this.Components.Add(this.GameLoop);
-            this.Components.Add(this.Surface);
-
-            this.Components.Add(new EventManager());
-            this.Components.Add(new SceneManager());
-            this.Components.Add(new InputManager());
-            this.Components.Add(new SerializationManager());
-            this.Components.Add(new ImplementationManager());
-            this.Components.Add(new ThreadInvoker());
-            this.Components.Add(new LocalizationManager());
-            this.Components.Add(new ApplicationExceptionHandler());
-            this.Components.Add(new LibraryLoader());
-            this.Components.Add(new ScriptExecutor());
+            this.EnableCoreComponents();
         }
         #endregion Methods
     }
