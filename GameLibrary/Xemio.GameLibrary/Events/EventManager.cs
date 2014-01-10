@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common;
@@ -18,26 +19,6 @@ namespace Xemio.GameLibrary.Events
 
         #region Private Methods
         /// <summary>
-        /// Creates the type mapping.
-        /// </summary>
-        /// <typeparam name="T">The event type.</typeparam>
-        /// <param name="observer">The observer.</param>
-        private void CreateTypeMapping<T>(IObserver<T> observer) where T : class, IEvent
-        {
-            lock (this._typeMappings)
-            {
-                foreach (Type type in ReflectionCache.GetBaseTypesAndInterfaces(typeof(T)))
-                {
-                    if (!this._typeMappings.ContainsKey(type))
-                    {
-                        this._typeMappings.Add(type, new List<dynamic>());
-                    }
-
-                    this._typeMappings[type].Add(observer);
-                }
-            }
-        }
-        /// <summary>
         /// Removes the specified observer.
         /// </summary>
         /// <param name="observer">The observer.</param>
@@ -49,7 +30,14 @@ namespace Xemio.GameLibrary.Events
             }
             lock (this._typeMappings)
             {
-                this._typeMappings.Remove(typeof(TEvent));
+                foreach (Type type in ReflectionCache.GetInheritedTypes(typeof(TEvent)))
+                {
+                    if (this._typeMappings.ContainsKey(type))
+                    {
+                        this._typeMappings[type].Remove(observer);
+                    }
+
+                }
             }
 
             observer.OnCompleted();
@@ -131,7 +119,6 @@ namespace Xemio.GameLibrary.Events
             lock (this._observers)
             {
                 this._observers.Add(observer);
-                this.CreateTypeMapping(observer);
             }
 
             return new ActionDisposable(() => this.Remove(observer));
@@ -145,13 +132,19 @@ namespace Xemio.GameLibrary.Events
         /// <param name="observer">The observer.</param>
         IDisposable IObservable<IEvent>.Subscribe(IObserver<IEvent> observer)
         {
-            lock (this._observers)
+            var interfaces = ReflectionCache.GetInterfaces(observer.GetType())
+                .Where(i => typeof(IObservable<>).IsAssignableFrom(i) && i.IsGenericType);
+
+            foreach (Type interfaceType in interfaces)
             {
-                this._observers.Add(observer);
-                lock (this._typeMappings)
-                {
-                    this._typeMappings.Clear();
-                }
+                Type genericType = ReflectionCache.GetGenericArguments(interfaceType).First();
+
+                MethodInfo subscribeMethod = ReflectionCache
+                    .GetMethods(this.GetType())
+                    .Where(method => method.Name == "Subscribe" && method.IsGenericMethod)
+                    .Single(method => ReflectionCache.GetParameters(method).First().Name == "observer");
+
+                subscribeMethod.MakeGenericMethod(genericType).Invoke(this, new[] {observer});
             }
 
             return new ActionDisposable(() => this.Remove(observer));

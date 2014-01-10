@@ -35,7 +35,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="type">The type.</param>
         private T Get<T>(Type type) where T : class, ILinkable<Type>
         {
-            foreach (Type baseType in ReflectionCache.GetBaseTypesAndInterfaces(type))
+            foreach (Type baseType in ReflectionCache.GetInheritedTypes(type))
             {
                 T instance = XGL.Components
                     .Get<ImplementationManager>()

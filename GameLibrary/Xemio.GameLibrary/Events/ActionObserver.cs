@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Xemio.GameLibrary.Events
 {
-    internal class ActionObserver<T> : IObserver<IEvent> where T : class
+    internal class ActionObserver<T> : IObserver<T> where T : class, IEvent
     {
         #region Constructors
         /// <summary>
@@ -41,9 +41,9 @@ namespace Xemio.GameLibrary.Events
         /// Called when an event instance arrives.
         /// </summary>
         /// <param name="value">The value.</param>
-        public void OnNext(IEvent value)
+        public void OnNext(T value)
         {
-            this._action(value as T);
+            this._action(value);
         }
         #endregion
     }

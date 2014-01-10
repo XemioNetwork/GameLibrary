@@ -130,10 +130,29 @@ namespace Xemio.GameLibrary.Common
         {
             return ReflectionCache.Get(propertyInfo, "GetMethod", propertyInfo.GetGetMethod);
         }
-
-        public static IList<Type> GetBaseTypesAndInterfaces(Type type)
+        /// <summary>
+        /// Gets the methods.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        public static MethodInfo[] GetMethods(Type type)
         {
-            return ReflectionCache.Get(type, "BaseTypesAndInterfaces", () =>
+            return ReflectionCache.Get(type, "Methods", type.GetMethods);
+        }
+        /// <summary>
+        /// Gets the parameters for the specified method.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        public static ParameterInfo[] GetParameters(MethodInfo method)
+        {
+            return ReflectionCache.Get(method, "Methods", method.GetParameters);
+        }
+        /// <summary>
+        /// Gets the inherited types.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        public static IList<Type> GetInheritedTypes(Type type)
+        {
+            return ReflectionCache.Get(type, "GetInheritedTypes", () =>
             {
                 var types = new List<Type> { type };
 
