@@ -115,10 +115,11 @@ namespace Xemio.GameLibrary
         /// <param name="configuration">The configuration.</param>
         private static void InitializeContent(Configuration configuration)
         {
-            var content = new ContentManager();
-            content.Format = configuration.ContentFormat;
-
-            XGL.Components.Add(content);
+            var content = XGL.Components.Get<ContentManager>();
+            if (content != null)
+            {
+                content.Format = configuration.ContentFormat;
+            }
         }
         /// <summary>
         /// Initializes the graphics.
@@ -157,7 +158,6 @@ namespace Xemio.GameLibrary
             if (configuration.GameLoop != null)
             {
                 logger.Info("Initializing game loop with {0}fps", configuration.FrameRate);
-
                 configuration.GameLoop.TargetFrameTime = 1000 / (double)configuration.FrameRate;
             }
         }
