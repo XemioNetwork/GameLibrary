@@ -61,6 +61,8 @@ namespace Xemio.GameLibrary.Script
             parameters.ReferencedAssemblies.Add("System.dll");
             parameters.ReferencedAssemblies.Add("System.Linq.dll");
             parameters.ReferencedAssemblies.Add("System.Core.dll");
+            parameters.ReferencedAssemblies.Add("XGL.dll");
+
             parameters.ReferencedAssemblies.AddRange(this.Assemblies.ToArray());
 
             return parameters;
@@ -94,12 +96,6 @@ namespace Xemio.GameLibrary.Script
                 }
 
                 return new CompilerResult(errors);
-            }
-
-            var implementations = XGL.Components.Get<ImplementationManager>();
-            if (implementations != null)
-            {
-                implementations.Merge(new SingleAssemblyContext(result.CompiledAssembly));
             }
 
             return new CompilerResult(result.CompiledAssembly);

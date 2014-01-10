@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
+using Xemio.GameLibrary.Common.Link;
 
 namespace Xemio.GameLibrary.Script
 {
@@ -25,6 +26,8 @@ namespace Xemio.GameLibrary.Script
         public CompilerResult(Assembly assembly)
         {
             this.Errors = new List<CompilerError>();
+            this.Scripts = new Linker<string, IScript>(assembly).ToList();
+
             this.Assembly = assembly;
         }
         #endregion
@@ -40,7 +43,11 @@ namespace Xemio.GameLibrary.Script
         /// <summary>
         /// Gets the errors.
         /// </summary>
-        public List<CompilerError> Errors { get; private set; }
+        public IList<CompilerError> Errors { get; private set; }
+        /// <summary>
+        /// Gets the scripts.
+        /// </summary>
+        public IList<IScript> Scripts { get; private set; }
         /// <summary>
         /// Gets the assembly.
         /// </summary>
