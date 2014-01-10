@@ -1,4 +1,5 @@
 ﻿using Xemio.GameLibrary.Content.Attributes;
+using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities.Components

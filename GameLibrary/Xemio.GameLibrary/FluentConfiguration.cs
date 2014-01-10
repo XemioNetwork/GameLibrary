@@ -2,6 +2,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;

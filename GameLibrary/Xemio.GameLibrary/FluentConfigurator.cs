@@ -7,6 +7,7 @@ using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Math;
