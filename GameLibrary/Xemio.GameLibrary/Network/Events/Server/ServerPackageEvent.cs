@@ -1,35 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Xemio.GameLibrary.Events;
+﻿using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Network.Events
+namespace Xemio.GameLibrary.Network.Events.Server
 {
-    public class ReceivedPackageEvent : IEvent
+    public abstract class ServerPackageEvent : IEvent
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReceivedPackageEvent"/> class.
+        /// Initializes a new instance of the <see cref="ServerReceivedPackageEvent" /> class.
         /// </summary>
-        public ReceivedPackageEvent(Package package)
-        {
-            this.Package = package;
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReceivedPackageEvent"/> class.
-        /// </summary>
+        /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        public ReceivedPackageEvent(Package package, IServerConnection connection) : this(package)
+        protected ServerPackageEvent(IServer server, Package package, IServerConnection connection)
         {
+            this.Server = server;
+            this.Package = package;
             this.Connection = connection;
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the server.
+        /// </summary>
+        public IServer Server { get; private set; }
         /// <summary>
         /// Gets the package.
         /// </summary>

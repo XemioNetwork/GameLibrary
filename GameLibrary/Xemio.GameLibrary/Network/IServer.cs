@@ -6,6 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Network.Handlers;
+using Xemio.GameLibrary.Network.Intercetors;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Protocols;
 
@@ -34,10 +35,20 @@ namespace Xemio.GameLibrary.Network
         /// <param name="subscriber">The subscriber.</param>
         void Subscribe(IServerHandler subscriber);
         /// <summary>
+        /// Subscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        void Subscribe(IServerInterceptor subscriber);
+        /// <summary>
         /// Unsubscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
         void Unsubscribe(IServerHandler subscriber);
+        /// <summary>
+        /// Unsubscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        void Unsubscribe(IServerInterceptor subscriber);
         /// <summary>
         /// Stops the server.
         /// </summary>
@@ -53,7 +64,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        void OnBeginSendPackage(Package package, IServerConnection connection);
+        bool OnBeginSendPackage(Package package, IServerConnection connection);
         /// <summary>
         /// Called when server sent a package.
         /// </summary>
@@ -64,7 +75,7 @@ namespace Xemio.GameLibrary.Network
         /// Called when a client joined the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        void OnClientJoined(IServerConnection connection);
+        bool OnClientJoined(IServerConnection connection);
         /// <summary>
         /// Called when a client left the server.
         /// </summary>

@@ -6,6 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Network.Handlers;
+using Xemio.GameLibrary.Network.Intercetors;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Protocols;
 
@@ -24,10 +25,20 @@ namespace Xemio.GameLibrary.Network
         /// <param name="subscriber">The subscriber.</param>
         void Subscribe(IClientHandler subscriber);
         /// <summary>
+        /// Subscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        void Subscribe(IClientInterceptor subscriber);
+        /// <summary>
         /// Unsubscribes the specified subscriber.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
         void Unsubscribe(IClientHandler subscriber);
+        /// <summary>
+        /// Unsubscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        void Unsubscribe(IClientInterceptor subscriber);
         /// <summary>
         /// Stops the client.
         /// </summary>
@@ -45,7 +56,7 @@ namespace Xemio.GameLibrary.Network
         /// Calls the client handlers when the specified package is going to be send.
         /// </summary>
         /// <param name="package">The package.</param>
-        void OnBeginSendPackage(Package package);
+        bool OnBeginSendPackage(Package package);
         /// <summary>
         /// Calls the client handlers when the specified package is sent.
         /// </summary>

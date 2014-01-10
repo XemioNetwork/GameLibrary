@@ -9,7 +9,10 @@ using NLog;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game.Timing;
+using Xemio.GameLibrary.Network.Events.Client;
+using Xemio.GameLibrary.Network.Events.Server;
 using Xemio.GameLibrary.Network.Handlers;
+using Xemio.GameLibrary.Network.Intercetors;
 using Xemio.GameLibrary.Network.Internal;
 using Xemio.GameLibrary.Network.Internal.Dispatchers;
 using Xemio.GameLibrary.Network.Protocols;
@@ -41,7 +44,8 @@ namespace Xemio.GameLibrary.Network
             this.Protocol = ProtocolFactory.CreateClientProtocol(url);
             this.Protocol.Client = this;
 
-            this._subscribers = new List<IClientHandler>();
+            this._handlers = new List<IClientHandler>();
+            this._interceptors = new List<IClientInterceptor>();
 
             this._outputQueue = new OutputQueue(this.Protocol);
             this._outputQueue.Start();
@@ -57,7 +61,9 @@ namespace Xemio.GameLibrary.Network
         #endregion
 
         #region Fields
-        private readonly List<IClientHandler> _subscribers;
+        private readonly List<IClientHandler> _handlers;
+        private readonly List<IClientInterceptor> _interceptors;
+ 
         private readonly OutputQueue _outputQueue;
         private readonly ClientPackageDispatcher _dispatcher;
 
@@ -78,15 +84,14 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         private IEnumerable<IClientHandler> GetSubscribers(Package package)
         {
-            return this._subscribers
-                .Where(s => s.PackageType.IsInstanceOfType(package));
+            return this._handlers.Where(s => s.PackageType.IsInstanceOfType(package));
         }
         /// <summary>
         /// Called when the client gets disconnected.
         /// </summary>
         public virtual void OnDisconnected()
         {
-            foreach (IClientHandler subscriber in this._subscribers)
+            foreach (IClientHandler subscriber in this._handlers)
             {
                 subscriber.OnDisconnected(this);
             }
@@ -97,25 +102,47 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public virtual void OnReceivePackage(Package package)
         {
-            IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
-            foreach (IClientHandler subscriber in subscribers)
+            var evt = new ClientReceivedPackageEvent(this, package);
+            foreach (IClientInterceptor interceptor in this._interceptors)
             {
-                subscriber.OnReceive(this, package);
+                interceptor.InterceptReceived(evt);
             }
 
-            this._eventManager.Publish(new ReceivedPackageEvent(package));
+            if (!evt.IsCanceled)
+            {
+                IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
+                foreach (IClientHandler subscriber in subscribers)
+                {
+                    subscriber.OnReceive(this, package);
+                }
+
+                this._eventManager.Publish(evt);
+            }
         }
         /// <summary>
         /// Calls the IClientLogics when the specified package is going to be send.
         /// </summary>
         /// <param name="package">The package.</param>
-        public virtual void OnBeginSendPackage(Package package)
+        public virtual bool OnBeginSendPackage(Package package)
         {
-            IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
-            foreach (IClientHandler subscriber in subscribers)
+            var evt = new ClientSendingPackageEvent(this, package);
+            foreach (IClientInterceptor interceptor in this._interceptors)
             {
-                subscriber.OnBeginSend(this, package);
+                interceptor.InterceptBeginSend(evt);
             }
+
+            if (!evt.IsCanceled)
+            {
+                IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
+                foreach (IClientHandler subscriber in subscribers)
+                {
+                    subscriber.OnBeginSend(this, package);
+                }
+
+                this._eventManager.Publish(evt);
+            }
+
+            return !evt.IsCanceled;
         }
         /// <summary>
         /// Calls the IClientLogics when the specified package is sent.
@@ -126,10 +153,10 @@ namespace Xemio.GameLibrary.Network
             IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
             foreach (IClientHandler subscriber in subscribers)
             {
-                subscriber.OnSent(this, package);
+                subscriber.OnReceive(this, package);
             }
 
-            this._eventManager.Publish(new SentPackageEvent(package));
+            this._eventManager.Publish(new ClientSentPackageEvent(this, package));
         }
         #endregion
 
@@ -151,9 +178,11 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            this.OnBeginSendPackage(package);
-            this._outputQueue.Enqueue(package);
-            this.OnSentPackage(package);
+            if (this.OnBeginSendPackage(package))
+            {
+                this._outputQueue.Enqueue(package);
+                this.OnSentPackage(package);
+            }
         }
         /// <summary>
         /// Subscribes the specified package handler.
@@ -161,7 +190,15 @@ namespace Xemio.GameLibrary.Network
         /// <param name="subscriber">The subscriber.</param>
         public void Subscribe(IClientHandler subscriber)
         {
-            this._subscribers.Add(subscriber);
+            this._handlers.Add(subscriber);
+        }
+        /// <summary>
+        /// Subscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        public void Subscribe(IClientInterceptor subscriber)
+        {
+            this._interceptors.Add(subscriber);
         }
         /// <summary>
         /// Unsubscribes the specified package handler.
@@ -169,7 +206,15 @@ namespace Xemio.GameLibrary.Network
         /// <param name="subscriber">The subscriber.</param>
         public void Unsubscribe(IClientHandler subscriber)
         {
-            this._subscribers.Remove(subscriber);
+            this._handlers.Remove(subscriber);
+        }
+        /// <summary>
+        /// Unsubscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        public void Unsubscribe(IClientInterceptor subscriber)
+        {
+            this._interceptors.Add(subscriber);
         }
         /// <summary>
         /// Stops the client.

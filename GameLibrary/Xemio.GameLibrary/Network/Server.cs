@@ -16,7 +16,9 @@ using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Network.Events.Server;
 using Xemio.GameLibrary.Network.Handlers;
+using Xemio.GameLibrary.Network.Intercetors;
 using Xemio.GameLibrary.Network.Internal;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
@@ -43,6 +45,7 @@ namespace Xemio.GameLibrary.Network
             this.Connected = true;
 
             this._subscribers = new List<IServerHandler>();
+            this._interceptors = new List<IServerInterceptor>();
             
             this.Protocol = ProtocolFactory.CreateServerProtocol(url);
             this.Protocol.Server = this;
@@ -56,7 +59,9 @@ namespace Xemio.GameLibrary.Network
 
         #region Fields
         private readonly ServerConnectionManager _connectionManager;
+
         private readonly List<IServerHandler> _subscribers;
+        private readonly List<IServerInterceptor> _interceptors; 
         #endregion
 
         #region Properties
@@ -87,20 +92,31 @@ namespace Xemio.GameLibrary.Network
                 subscriber.OnReceive(this, package, connection);
             }
 
-            this.EventManager.Publish(new ReceivedPackageEvent(package, connection));
+            this.EventManager.Publish(new ServerReceivedPackageEvent(this, package, connection));
         }
         /// <summary>
         /// Called when server is sending a package.
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        public virtual void OnBeginSendPackage(Package package, IServerConnection connection)
+        public virtual bool OnBeginSendPackage(Package package, IServerConnection connection)
         {
-            IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
-            foreach (IServerHandler subscriber in subscribers)
+            var evt = new ServerSendingPackageEvent(this, package, connection);
+            foreach (IServerInterceptor interceptor in this._interceptors)
             {
-                subscriber.OnBeginSend(this, package, connection);
+                interceptor.InterceptBeginSend(evt);
             }
+
+            if (!evt.IsCanceled)
+            {
+                IEnumerable<IServerHandler> subscribers = this.GetSubscribers(package);
+                foreach (IServerHandler subscriber in subscribers)
+                {
+                    subscriber.OnBeginSend(this, package, connection);
+                }
+            }
+
+            return !evt.IsCanceled;
         }
         /// <summary>
         /// Called when server sent a package.
@@ -115,22 +131,33 @@ namespace Xemio.GameLibrary.Network
                 subscriber.OnSent(this, package, connection);
             }
 
-            this.EventManager.Publish(new SentPackageEvent(package, connection));
+            this.EventManager.Publish(new ServerSentPackageEvent(this, package, connection));
         }
         /// <summary>
         /// Called when a client joined the server.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public virtual void OnClientJoined(IServerConnection connection)
+        public virtual bool OnClientJoined(IServerConnection connection)
         {
             logger.Info("Client {0} joined.", connection.Address);
 
-            foreach (IServerHandler subscriber in this._subscribers)
+            var evt = new ClientJoinedEvent(this,  connection);
+            foreach (IServerInterceptor interceptor in this._interceptors)
             {
-                subscriber.OnClientJoined(this, connection);
+                interceptor.InterceptClientJoined(evt);
             }
 
-            this.EventManager.Publish(new ClientJoinedEvent(connection));
+            if (!evt.IsCanceled)
+            {
+                foreach (IServerHandler subscriber in this._subscribers)
+                {
+                    subscriber.OnClientJoined(this, connection);
+                }
+
+                this.EventManager.Publish(new ClientJoinedEvent(this, connection));
+            }
+
+            return !evt.IsCanceled;
         }
         /// <summary>
         /// Called when a client left the server.
@@ -145,7 +172,7 @@ namespace Xemio.GameLibrary.Network
                 subscriber.OnClientLeft(this, connection);
             }
 
-            this.EventManager.Publish(new ClientLeftEvent(connection));
+            this.EventManager.Publish(new ClientLeftEvent(this, connection));
         }
         /// <summary>
         /// Accepts the connection.
@@ -201,9 +228,11 @@ namespace Xemio.GameLibrary.Network
         {
             logger.Trace("Sending {0} to {1}.", package.GetType().Name, receiver.Address);
 
-            this.OnBeginSendPackage(package, receiver);
-            this._connectionManager.GetOutputQueue(receiver).Enqueue(package);
-            this.OnSentPackage(package, receiver);
+            if (this.OnBeginSendPackage(package, receiver))
+            {
+                this._connectionManager.GetOutputQueue(receiver).Enqueue(package);
+                this.OnSentPackage(package, receiver);
+            }
         }
         /// <summary>
         /// Subscribes the specified package handler.
@@ -214,12 +243,28 @@ namespace Xemio.GameLibrary.Network
             this._subscribers.Add(subscriber);
         }
         /// <summary>
+        /// Subscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        public void Subscribe(IServerInterceptor subscriber)
+        {
+            this._interceptors.Add(subscriber);
+        }
+        /// <summary>
         /// Unsubscribes the specified package handler.
         /// </summary>
         /// <param name="subscriber">The subscriber.</param>
         public void Unsubscribe(IServerHandler subscriber)
         {
             this._subscribers.Remove(subscriber);
+        }
+        /// <summary>
+        /// Unsubscribes the specified subscriber.
+        /// </summary>
+        /// <param name="subscriber">The subscriber.</param>
+        public void Unsubscribe(IServerInterceptor subscriber)
+        {
+            this._interceptors.Add(subscriber);
         }
         /// <summary>
         /// Stops the server.
