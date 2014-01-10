@@ -1,4 +1,4 @@
-﻿namespace Xemio.GameLibrary.Game.Timing
+﻿namespace Xemio.GameLibrary.Game
 {
     public enum PrecisionLevel
     {

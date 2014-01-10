@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// <summary>
         /// Gets the singleton instance.
         /// </summary>
-        public static Frame Instance
+        internal static Frame Instance
         {
             get { return Singleton<Frame>.Value; }
         }
@@ -81,7 +81,7 @@ namespace Xemio.GameLibrary.Game.Timing
         /// Delays the specified action for one frame.
         /// </summary>
         /// <param name="action">The action.</param>
-        public static void DelayOnce(Action action)
+        public static void Delay(Action action)
         {
             Frame.Delay(1, action);
         }

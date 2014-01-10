@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Events.Logging;
-using Xemio.GameLibrary.Rendering.Surfaces;
+using Xemio.GameLibrary.Game.Timing;
 
-namespace Xemio.GameLibrary.Game.Timing
+namespace Xemio.GameLibrary.Game
 {
     public class GameLoop : IGameLoop, IConstructable
     {
