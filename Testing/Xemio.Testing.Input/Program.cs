@@ -21,6 +21,7 @@ using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
 using Xemio.GameLibrary.Plugins.Implementations;
+using Xemio.GameLibrary.Script;
 
 namespace Xemio.Testing.Input
 {
@@ -28,18 +29,12 @@ namespace Xemio.Testing.Input
     {
         static void Main(string[] args)
         {
-            var im = new ImplementationManager();
+            var im = XGL.Components.Get<ImplementationManager>();
 
-            for (int i = 0; i < 100; i++)
+            while (true)
             {
-                Task.Factory.StartNew(() =>
-                {
-                    while (true)
-                    {
-                        im.Get<int, Package>(new TimeSyncPackage().Id);
-                        Thread.Sleep(2);
-                    }
-                });
+                Console.ReadLine();
+                XGL.Components.Get<ScriptExecutor>().Send(new TestEvent(), "asdf");
             }
 
             /*var memoryStream = new MemoryStream();
@@ -64,6 +59,19 @@ namespace Xemio.Testing.Input
 
             string content = new StreamReader(memoryStream).ReadToEnd();*/
         }
+    }
+
+    public class TestEvent : IEvent
+    {
+        #region Overrides of Object
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        public override string ToString()
+        {
+            return "Hallo Welt";
+        }
+        #endregion
     }
 
     public interface ITest
