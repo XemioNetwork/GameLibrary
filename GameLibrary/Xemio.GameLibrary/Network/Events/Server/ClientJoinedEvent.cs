@@ -39,7 +39,6 @@ namespace Xemio.GameLibrary.Network.Events.Server
         public void Cancel()
         {
             this.IsCanceled = true;
-            this.Connection.Disconnect();
         }
         #endregion
     }

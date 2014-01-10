@@ -78,6 +78,32 @@ namespace Xemio.GameLibrary.Network
 
         #region Methods
         /// <summary>
+        /// Handles an event.
+        /// </summary>
+        /// <param name="evt">The event.</param>
+        /// <param name="handlers">The handlers.</param>
+        /// <param name="interceptorAction">The interceptor action.</param>
+        /// <param name="handlerAction">The handler action.</param>
+        private bool HandleEvent(IInterceptableEvent evt, IEnumerable<IClientHandler> handlers, Action<IClientInterceptor> interceptorAction, Action<IClientHandler> handlerAction)
+        {
+            foreach (IClientInterceptor interceptor in this._interceptors)
+            {
+                interceptorAction(interceptor);
+            }
+
+            if (!evt.IsCanceled)
+            {
+                foreach (IClientHandler subscriber in handlers)
+                {
+                    handlerAction(subscriber);
+                }
+
+                this._eventManager.Publish(evt);
+            }
+
+            return !evt.IsCanceled;
+        }
+        /// <summary>
         /// Gets the subscribers.
         /// </summary>
         /// <param name="package">The package.</param>
@@ -90,10 +116,12 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public virtual void OnDisconnected()
         {
-            foreach (IClientHandler subscriber in this._handlers)
-            {
-                subscriber.OnDisconnected(this);
-            }
+            var evt = new ClientDisconnectedEvent(this);
+
+            this.HandleEvent(
+                evt, this._handlers,
+                interceptor => interceptor.InterceptDisconnect(evt),
+                subscriber => subscriber.OnDisconnected(this));
         }
         /// <summary>
         /// Calls the IClientLogics when the specified package was received.
@@ -102,21 +130,11 @@ namespace Xemio.GameLibrary.Network
         public virtual void OnReceivePackage(Package package)
         {
             var evt = new ClientReceivedPackageEvent(this, package);
-            foreach (IClientInterceptor interceptor in this._interceptors)
-            {
-                interceptor.InterceptReceived(evt);
-            }
 
-            if (!evt.IsCanceled)
-            {
-                IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
-                foreach (IClientHandler subscriber in subscribers)
-                {
-                    subscriber.OnReceive(this, package);
-                }
-
-                this._eventManager.Publish(evt);
-            }
+            this.HandleEvent(
+                evt, this.GetSubscribers(package),
+                interceptor => interceptor.InterceptReceived(evt),
+                subscriber => subscriber.OnReceive(this, package));
         }
         /// <summary>
         /// Calls the IClientLogics when the specified package is going to be send.
@@ -125,23 +143,11 @@ namespace Xemio.GameLibrary.Network
         public virtual bool OnBeginSendPackage(Package package)
         {
             var evt = new ClientSendingPackageEvent(this, package);
-            foreach (IClientInterceptor interceptor in this._interceptors)
-            {
-                interceptor.InterceptBeginSend(evt);
-            }
 
-            if (!evt.IsCanceled)
-            {
-                IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
-                foreach (IClientHandler subscriber in subscribers)
-                {
-                    subscriber.OnBeginSend(this, package);
-                }
-
-                this._eventManager.Publish(evt);
-            }
-
-            return !evt.IsCanceled;
+            return this.HandleEvent(
+                evt, this.GetSubscribers(package),
+                interceptor => interceptor.InterceptBeginSend(evt),
+                subscriber => subscriber.OnBeginSend(this, package));
         }
         /// <summary>
         /// Calls the IClientLogics when the specified package is sent.
@@ -149,13 +155,12 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public virtual void OnSentPackage(Package package)
         {
-            IEnumerable<IClientHandler> subscribers = this.GetSubscribers(package);
-            foreach (IClientHandler subscriber in subscribers)
-            {
-                subscriber.OnReceive(this, package);
-            }
+            var evt = new ClientSentPackageEvent(this, package);
 
-            this._eventManager.Publish(new ClientSentPackageEvent(this, package));
+            this.HandleEvent(
+                evt, this.GetSubscribers(package),
+                interceptor => interceptor.InterceptSent(evt),
+                subscriber => subscriber.OnSent(this, package));
         }
         #endregion
 

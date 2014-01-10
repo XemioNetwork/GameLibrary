@@ -10,6 +10,7 @@ namespace Xemio.GameLibrary.Network.Intercetors
     public interface IServerInterceptor
     {
         void InterceptClientJoined(ClientJoinedEvent evt);
+        void InterceptClientLeft(ClientLeftEvent evt);
 
         void InterceptReceived(ServerReceivedPackageEvent evt);
         void InterceptBeginSend(ServerSendingPackageEvent evt);

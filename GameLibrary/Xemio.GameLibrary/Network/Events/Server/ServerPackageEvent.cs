@@ -3,7 +3,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Events.Server
 {
-    public abstract class ServerPackageEvent : IEvent
+    public abstract class ServerPackageEvent : IInterceptableEvent
     {
         #region Constructors
         /// <summary>
@@ -33,6 +33,20 @@ namespace Xemio.GameLibrary.Network.Events.Server
         /// Gets the connection.
         /// </summary>
         public IServerConnection Connection { get; private set; }
+        #endregion
+
+        #region Implementation of IInterceptableEvent
+        /// <summary>
+        /// Gets a value indicating whether the event propagation was canceled.
+        /// </summary>
+        public bool IsCanceled { get; private set; }
+        /// <summary>
+        /// Cancels the event propagation.
+        /// </summary>
+        public void Cancel()
+        {
+            this.IsCanceled = true;
+        }
         #endregion
 
         #region Methods

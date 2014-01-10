@@ -136,7 +136,10 @@ namespace Xemio.GameLibrary.Network.Internal
                 IServerConnection connection = this.Server.AcceptConnection();
 
                 this.Add(connection);
-                this.Server.OnClientJoined(connection);
+                if (!this.Server.OnClientJoined(connection))
+                {
+                    connection.Disconnect();
+                }
             }
         }
         #endregion

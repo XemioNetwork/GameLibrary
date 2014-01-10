@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Events.Client
 {
-    public class ClientSendingPackageEvent : ClientPackageEvent, IInterceptableEvent
+    public class ClientSendingPackageEvent : ClientPackageEvent
     {
         #region Constructors
         /// <summary>
@@ -18,20 +18,6 @@ namespace Xemio.GameLibrary.Network.Events.Client
         /// <param name="package">The package.</param>
         public ClientSendingPackageEvent(IClient client, Package package) : base(client, package)
         {
-        }
-        #endregion
-
-        #region Implementation of IInterceptableEvent
-        /// <summary>
-        /// Gets a value indicating whether the event propagation was canceled.
-        /// </summary>
-        public bool IsCanceled { get; private set; }
-        /// <summary>
-        /// Cancels the event propagation.
-        /// </summary>
-        public void Cancel()
-        {
-            this.IsCanceled = true;
         }
         #endregion
     }
