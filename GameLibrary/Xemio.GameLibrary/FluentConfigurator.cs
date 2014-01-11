@@ -206,6 +206,28 @@ namespace Xemio.GameLibrary
             return this;
         }
         /// <summary>
+        /// Sets the script directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        public FluentConfigurator Scripts(string directory)
+        {
+            logger.Debug("ScriptDirectory={0}", directory);
+
+            this._configuration.ScriptDirectory = directory;
+            return this;
+        }
+        /// <summary>
+        /// Sets the language directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        public FluentConfigurator Languages(string directory)
+        {
+            logger.Debug("LanguageDirectory={0}", directory);
+
+            this._configuration.LanguageDirectory = directory;
+            return this;
+        }
+        /// <summary>
         /// Adds the specified components to the component registry.
         /// </summary>
         /// <param name="components">The components.</param>

@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Script
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicScriptLoader"/> class.
         /// </summary>
-        public DynamicScriptLoader() : this("scripts/")
+        public DynamicScriptLoader() : this(".")
         {
         }
         /// <summary>

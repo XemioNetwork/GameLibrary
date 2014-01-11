@@ -128,7 +128,6 @@ namespace Xemio.GameLibrary.Events
 
             lock (this._typeInheritanceMappings)
             {
-                //If we already have a inheritance hierarchy for the event type
                 if (this._typeInheritanceMappings.ContainsKey(typeof (T)) == false)
                 {
                     this.LoadEventsFrom(ContextFactory.CreateSingleAssemblyContext(typeof(T).Assembly));

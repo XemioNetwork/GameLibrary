@@ -26,11 +26,13 @@ namespace Xemio.GameLibrary.Localization
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocalizationManager"/> class.
+        /// Initializes a new instance of the <see cref="LocalizationManager" /> class.
         /// </summary>
-        public LocalizationManager()
+        /// <param name="directory">The directory.</param>
+        public LocalizationManager(string directory)
         {
             this.Languages = new List<Language>();
+            this.RootDirectory = directory;
         }
         #endregion
 
@@ -43,6 +45,10 @@ namespace Xemio.GameLibrary.Localization
         /// Gets the languages.
         /// </summary>
         public List<Language> Languages { get; private set; }
+        /// <summary>
+        /// Gets the root directory.
+        /// </summary>
+        public string RootDirectory { get; private set; }
         #endregion
 
         #region IConstructable Member
@@ -51,7 +57,7 @@ namespace Xemio.GameLibrary.Localization
         /// </summary>
         public void Construct()
         {
-            this.LoadLanguagesFrom("/Languages/");
+            this.LoadLanguages(this.RootDirectory);
         }
         #endregion
         
@@ -86,29 +92,18 @@ namespace Xemio.GameLibrary.Localization
         /// Adds the directory to the root directories and loads all languages inside it.
         /// </summary>
         /// <param name="directory">The directory.</param>
-        public void LoadLanguagesFrom(string directory)
+        public void LoadLanguages(string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
                 return;
 
-            this.LoadLocalizations(directory);
-        }
-        #endregion
-        
-        #region Private Methods
-        /// <summary>
-        /// Loads the localizations in the given directory.
-        /// </summary>
-        /// <param name="localizationDirectory">The localization directory.</param>
-        private void LoadLocalizations(string localizationDirectory)
-        {
             var content = XGL.Components.Get<ContentManager>();
             var fileSystem = XGL.Components.Get<IFileSystem>();
 
-            if (!fileSystem.DirectoryExists(localizationDirectory))
+            if (!fileSystem.DirectoryExists(directory))
                 return;
 
-            string[] localizationFiles = fileSystem.GetFiles(localizationDirectory);
+            string[] localizationFiles = fileSystem.GetFiles(directory);
             foreach (string file in localizationFiles)
             {
                 var language = content.Get<Language>(file);
@@ -122,6 +117,9 @@ namespace Xemio.GameLibrary.Localization
                 this.Languages.Add(language);
             }
         }
+        #endregion
+        
+        #region Private Methods
         /// <summary>
         /// Merges the given language with the already loaded.
         /// </summary>

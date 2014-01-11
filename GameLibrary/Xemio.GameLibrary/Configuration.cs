@@ -55,6 +55,14 @@ namespace Xemio.GameLibrary
         /// </summary>
         public IFormat ContentFormat { get; set; }
         /// <summary>
+        /// Gets or sets the script directory.
+        /// </summary>
+        public string ScriptDirectory { get; set; }
+        /// <summary>
+        /// Gets or sets the language directory.
+        /// </summary>
+        public string LanguageDirectory { get; set; }
+        /// <summary>
         /// Gets or sets the graphics initializer.
         /// </summary>
         public abstract IGraphicsInitializer GraphicsProvider { get; }
@@ -146,7 +154,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         protected virtual void EnableLocalizationSystem()
         {
-            this.Components.Add(new LocalizationManager());
+            this.Components.Add(new LocalizationManager(this.LanguageDirectory));
         }
         /// <summary>
         /// Enables the script system.
@@ -154,7 +162,7 @@ namespace Xemio.GameLibrary
         protected virtual void EnableScriptSystem()
         {
             this.Components.Add(new ScriptExecutor());
-            this.Components.Add(new DynamicScriptLoader());
+            this.Components.Add(new DynamicScriptLoader(this.ScriptDirectory));
         }
         /// <summary>
         /// Enables the game loop.
