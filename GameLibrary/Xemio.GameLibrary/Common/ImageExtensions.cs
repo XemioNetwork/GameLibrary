@@ -12,7 +12,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="image">The image.</param>
         public static MemoryStream ToStream(this Image image)
         {
-            MemoryStream stream = new MemoryStream();
+            var stream = new MemoryStream();
 
             image.Save(stream, ImageFormat.Png);
             stream.Seek(0, SeekOrigin.Begin);

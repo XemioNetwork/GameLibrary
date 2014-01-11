@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
+using Xemio.GameLibrary.Common.Threads;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game.Timing;
 

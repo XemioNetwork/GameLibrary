@@ -150,7 +150,10 @@ namespace Xemio.GameLibrary.Script
             var fileSystem = XGL.Components.Require<IFileSystem>();
 
             if (fileSystem.DirectoryExists(this._directory) == false)
-                fileSystem.CreateDirectory(this._directory);
+            {
+                logger.Warn("Script directory {0} does not exist.", this._directory);
+                return;
+            }
 
             fileSystem.Subscribe(this._directory, this);
 

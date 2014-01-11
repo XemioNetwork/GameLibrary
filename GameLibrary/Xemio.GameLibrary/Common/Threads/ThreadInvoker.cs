@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace Xemio.GameLibrary.Common
+namespace Xemio.GameLibrary.Common.Threads
 {
     public class ThreadInvoker : IThreadInvoker
     {

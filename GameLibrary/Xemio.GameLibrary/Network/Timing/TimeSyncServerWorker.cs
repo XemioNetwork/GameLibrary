@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Common.Threads;
 
 namespace Xemio.GameLibrary.Network.Timing
 {

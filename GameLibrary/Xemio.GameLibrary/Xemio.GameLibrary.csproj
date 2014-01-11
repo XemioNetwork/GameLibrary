@@ -88,9 +88,9 @@
     <Compile Include="Common\Collections\ListActions\RemoveAtAction.cs" />
     <Compile Include="Common\Collections\CachedList.cs" />
     <Compile Include="Common\Collections\ListActions\IListAction.cs" />
-    <Compile Include="Common\IThreadInvoker.cs" />
+    <Compile Include="Common\Threads\IThreadInvoker.cs" />
     <Compile Include="Common\Link\ManuallyLinkedAttribute.cs" />
-    <Compile Include="Common\Worker.cs" />
+    <Compile Include="Common\Threads\Worker.cs" />
     <Compile Include="Components\Attributes\AbstractComponentAttribute.cs" />
     <Compile Include="Components\MissingComponentException.cs" />
     <Compile Include="Components\Attributes\RequireAttribute.cs" />
@@ -162,7 +162,7 @@
     <Compile Include="Common\Randomization\SimpleRandom.cs" />
     <Compile Include="Common\Randomization\SeedableRandom.cs" />
     <Compile Include="Common\Singleton.cs" />
-    <Compile Include="Common\ThreadInvoker.cs" />
+    <Compile Include="Common\Threads\ThreadInvoker.cs" />
     <Compile Include="Common\Parser\Primitives\BooleanParser.cs" />
     <Compile Include="Common\Parser\Primitives\CharParser.cs" />
     <Compile Include="Common\Parser\Primitives\NumericParser.cs" />
@@ -303,10 +303,10 @@
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
     <Compile Include="Script\DynamicScriptLoader.cs" />
+    <Compile Include="Script\IAsyncHandler.cs" />
     <Compile Include="Script\IHandler.cs" />
     <Compile Include="Script\IScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
-    <Compile Include="Common\IConverter.cs" />
     <Compile Include="Script\ScriptExecutor.cs" />
     <Compile Include="XGL.cs" />
     <Compile Include="XGLState.cs" />

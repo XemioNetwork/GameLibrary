@@ -95,13 +95,21 @@ namespace Xemio.GameLibrary.Localization
         public void LoadLanguages(string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
+            {
+                logger.Warn("Language directory is not defined.");
                 return;
+            }
 
             var content = XGL.Components.Get<ContentManager>();
             var fileSystem = XGL.Components.Get<IFileSystem>();
 
             if (!fileSystem.DirectoryExists(directory))
+            {
+                logger.Warn("Language directory {0} does not exist.", directory);
                 return;
+            }
+
+            logger.Info("Loading languages from {0}.", directory);
 
             string[] localizationFiles = fileSystem.GetFiles(directory);
             foreach (string file in localizationFiles)

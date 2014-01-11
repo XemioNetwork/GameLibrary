@@ -169,6 +169,10 @@ namespace Xemio.GameLibrary.Events
 
         #region Implementation of IObservable<IEvent>
         /// <summary>
+        /// The subcribe method.
+        /// </summary>
+        private static MethodInfo subscribeMethod;
+        /// <summary>
         /// Subscribes the specified observer.
         /// </summary>
         /// <param name="observer">The observer.</param>
@@ -181,10 +185,13 @@ namespace Xemio.GameLibrary.Events
             {
                 Type genericType = ReflectionCache.GetGenericArguments(interfaceType).First();
 
-                MethodInfo subscribeMethod = ReflectionCache
-                    .GetMethods(this.GetType())
-                    .Where(method => method.Name == "Subscribe" && method.IsGenericMethod)
-                    .Single(method => ReflectionCache.GetParameters(method).First().Name == "observer");
+                if (subscribeMethod == null)
+                {
+                    subscribeMethod = ReflectionCache
+                        .GetMethods(this.GetType())
+                        .Where(method => method.Name == "Subscribe" && method.IsGenericMethod)
+                        .Single(method => ReflectionCache.GetParameters(method).First().Name == "observer");
+                }
 
                 subscribeMethod.MakeGenericMethod(genericType).Invoke(this, new[] {observer});
             }
