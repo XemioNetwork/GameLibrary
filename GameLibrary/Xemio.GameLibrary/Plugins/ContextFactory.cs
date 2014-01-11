@@ -43,6 +43,13 @@ namespace Xemio.GameLibrary.Plugins
         {
             return new FileAssemblyContext(directory);
         }
+        /// <summary>
+        /// Creates an IAssemblyContext for all assemblies of the current application.
+        /// </summary>
+        public static IAssemblyContext CreateApplicationAssemblyContext()
+        {
+            return new FileAssemblyContext(".");
+        }
         #endregion
     }
 }

@@ -20,22 +20,61 @@ using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
+using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Script;
 
 namespace Xemio.Testing.Input
 {
+    public class BaseEvent : IEvent
+    {
+        
+    }
+
+    public class MidEvent : BaseEvent
+    {
+        
+    }
+
+    public class SuperEvent : MidEvent
+    {
+        
+    }
+
+    public class SuperSuperEvent : SuperEvent
+    {
+        
+    }
+
+    public class MyEvent : SuperSuperEvent
+    {
+        
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            var im = XGL.Components.Get<ImplementationManager>();
+            var eventManager = XGL.Components.Get<EventManager>();
+            
+            Stopwatch watch = Stopwatch.StartNew();
 
-            while (true)
-            {
-                Console.ReadLine();
-                XGL.Components.Get<ScriptExecutor>().Send(new TestEvent(), "asdf");
+            for (int i = 0; i < 2000; i++)
+            { 
+                eventManager.Subscribe<BaseEvent>(e => { });
             }
+
+            for (int i = 0; i < 10000; i++)
+            {
+                eventManager.Publish(new SuperEvent());
+            }
+
+            watch.Stop();
+
+            Console.WriteLine("{0} ms.", watch.Elapsed.TotalMilliseconds);
+
+            Console.ReadLine();
+
 
             /*var memoryStream = new MemoryStream();
 

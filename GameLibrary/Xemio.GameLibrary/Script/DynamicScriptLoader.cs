@@ -148,6 +148,10 @@ namespace Xemio.GameLibrary.Script
         public void Construct()
         {
             var fileSystem = XGL.Components.Require<IFileSystem>();
+
+            if (fileSystem.DirectoryExists(this._directory) == false)
+                fileSystem.CreateDirectory(this._directory);
+
             fileSystem.Subscribe(this._directory, this);
 
             this.Initialize(this._directory);

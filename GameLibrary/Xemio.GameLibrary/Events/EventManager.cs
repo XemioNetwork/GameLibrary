@@ -7,16 +7,22 @@ using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Events
 {
-    public class EventManager : IComponent, IObservable<IEvent>
+    public class EventManager : IConstructable, IObservable<IEvent>
     {
         #region Fields
         private readonly List<dynamic> _observers = new List<dynamic>();
-        private readonly Dictionary<Type, List<dynamic>> _typeMappings = new Dictionary<Type, List<dynamic>>(); 
+        private readonly Dictionary<Type, List<dynamic>> _observerMappings = new Dictionary<Type, List<dynamic>>();
+        /// <summary>
+        /// A mapping from a base type to it's super types.
+        /// We use this dictionary for faster subscribe times, since we already know what type-mappings we need.
+        /// </summary>
+        private readonly Dictionary<Type, HashSet<Type>> _typeInheritanceMappings = new Dictionary<Type, HashSet<Type>>(); 
         #endregion
-
+        
         #region Private Methods
         /// <summary>
         /// Removes the specified observer.
@@ -28,13 +34,13 @@ namespace Xemio.GameLibrary.Events
             {
                 this._observers.Remove(observer);
             }
-            lock (this._typeMappings)
+            lock (this._observerMappings)
             {
                 foreach (Type type in ReflectionCache.GetInheritedTypes(typeof(TEvent)))
                 {
-                    if (this._typeMappings.ContainsKey(type))
+                    if (this._observerMappings.ContainsKey(type))
                     {
-                        this._typeMappings[type].Remove(observer);
+                        this._observerMappings[type].Remove(observer);
                     }
 
                 }
@@ -43,35 +49,35 @@ namespace Xemio.GameLibrary.Events
             observer.OnCompleted();
         }
         /// <summary>
-        /// Determines whether the specified observer is observing the specified type.
+        /// Adds the <paramref name="superType"/> to the super types of <paramref name="baseType"/>.
         /// </summary>
-        /// <param name="observer">The observer.</param>
-        private bool IsObserver<TEvent>(dynamic observer)
+        /// <param name="baseType">The base type..</param>
+        /// <param name="superType">The super type.</param>
+        private void AddSuperType(Type baseType, Type superType)
         {
-            Type type = observer.GetType();
-            Type targetType = typeof(TEvent);
-            Type genericType = ReflectionCache.GetGenericArguments(type).First();
+            if (this._typeInheritanceMappings.ContainsKey(baseType) == false)
+                this._typeInheritanceMappings.Add(baseType, new HashSet<Type>());
 
-            return genericType.IsAssignableFrom(targetType);
+            HashSet<Type> superTypes = this._typeInheritanceMappings[baseType];
+            superTypes.Add(superType);
         }
         /// <summary>
-        /// Gets the observers.
+        /// Adds the specified observer for it's event super types.
         /// </summary>
-        private IEnumerable<dynamic> GetObservers<T>() where T : class, IEvent
+        /// <typeparam name="T">The event type.</typeparam>
+        /// <param name="observer">The observer.</param>
+        private void AddObserverForSuperTypes<T>(IObserver<T> observer) where T : class, IEvent
         {
-            Type type = typeof(T);
-
-            lock (this._typeMappings)
+            HashSet<Type> superTypes = this._typeInheritanceMappings[typeof(T)];
+            foreach (Type superType in superTypes)
             {
-                if (!this._typeMappings.ContainsKey(type))
+                lock (this._observerMappings)
                 {
-                    lock (this._observers)
+                    if (this._observerMappings.ContainsKey(superType))
                     {
-                        this._typeMappings.Add(type, new List<dynamic>(this._observers.Where(o => this.IsObserver<T>(o))));
+                        this._observerMappings[superType].Add(observer);
                     }
                 }
-
-                return this._typeMappings[type];
             }
         }
         #endregion Private Methods
@@ -85,15 +91,14 @@ namespace Xemio.GameLibrary.Events
         public void Publish<TEvent>(TEvent e) where TEvent : class, IEvent
         {
             var interceptable = e as IInterceptableEvent;
-            foreach (IObserver<TEvent> observer in this.GetObservers<TEvent>())
+            foreach (IObserver<TEvent> observer in this._observerMappings[typeof(TEvent)])
             {
                 try
                 {
                     observer.OnNext(e);
+
                     if (interceptable != null && interceptable.IsCanceled)
-                    {
                         break;
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -121,7 +126,45 @@ namespace Xemio.GameLibrary.Events
                 this._observers.Add(observer);
             }
 
+            lock (this._typeInheritanceMappings)
+            {
+                //If we already have a inheritance hierarchy for the event type
+                if (this._typeInheritanceMappings.ContainsKey(typeof (T)) == false)
+                {
+                    this.LoadEventsFrom(ContextFactory.CreateSingleAssemblyContext(typeof(T).Assembly));
+                }
+
+                this.AddObserverForSuperTypes(observer);
+            }
+
             return new ActionDisposable(() => this.Remove(observer));
+        }
+        /// <summary>
+        /// Loads the IEvent implementations from the specified <paramref name="context"/>.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void LoadEventsFrom(IAssemblyContext context)
+        {
+            foreach (var assembly in context.Assemblies)
+            {
+                var eventTypes = from type in assembly.GetTypes()
+                                 where type.IsGenericType == false && typeof (IEvent).IsAssignableFrom(type)
+                                 select type;
+
+                lock (this._observerMappings)
+                { 
+                    foreach (Type baseType in eventTypes)
+                    {
+                        if (this._observerMappings.ContainsKey(baseType) == false)
+                            this._observerMappings.Add(baseType, new List<dynamic>());
+
+                        foreach (Type knownSuperType in this._observerMappings.Keys.Where(baseType.IsAssignableFrom))
+                        {
+                            this.AddSuperType(baseType, knownSuperType);
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
@@ -148,6 +191,16 @@ namespace Xemio.GameLibrary.Events
             }
 
             return new ActionDisposable(() => this.Remove(observer));
+        }
+        #endregion
+
+        #region Implementation of IConstructable
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            this.LoadEventsFrom(ContextFactory.CreateApplicationAssemblyContext());
         }
         #endregion
     }
