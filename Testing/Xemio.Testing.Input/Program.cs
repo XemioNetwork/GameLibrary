@@ -14,6 +14,7 @@ using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Content.Layouts;
 using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game.Timing;
@@ -28,12 +29,12 @@ namespace Xemio.Testing.Input
 {
     public class BaseEvent : IEvent
     {
-        
+        public bool Test { get; set; }
     }
 
     public class MidEvent : BaseEvent
     {
-        
+        public BaseEvent BaseEvent { get; set; }
     }
 
     public class SuperEvent : MidEvent
@@ -55,27 +56,27 @@ namespace Xemio.Testing.Input
     {
         static void Main(string[] args)
         {
-            var eventManager = XGL.Components.Get<EventManager>();
+            var layout = new PersistenceLayout<MidEvent>()
+                .Section(midEvent => midEvent.BaseEvent, be => be
+                    .Boolean(f => f.Test));
             
-            Stopwatch watch = Stopwatch.StartNew();
-
-            for (int i = 0; i < 2000; i++)
-            { 
-                eventManager.Subscribe<BaseEvent>(e => { });
-            }
-
-            for (int i = 0; i < 10000; i++)
+            var memory = new MemoryStream();
+            using (IFormatWriter writer = Format.Xml.CreateWriter(memory))
             {
-                eventManager.Publish(new SuperEvent());
+                layout.Write(writer, new MidEvent() {BaseEvent = new BaseEvent() {Test = true}});
             }
 
-            watch.Stop();
+            memory.Position = 0;
 
-            Console.WriteLine("{0} ms.", watch.Elapsed.TotalMilliseconds);
+            MidEvent m = new MidEvent();
+            using (IFormatReader reader = Format.Xml.CreateReader(memory))
+            {
+                layout.Read(reader, m);
+            }
+            
 
-            Console.ReadLine();
 
-
+            string a = "3";
             /*var memoryStream = new MemoryStream();
 
             var serializer = XGL.Components.Get<SerializationManager>();

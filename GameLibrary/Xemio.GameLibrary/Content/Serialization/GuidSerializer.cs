@@ -13,8 +13,6 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// Reads the specified guid.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override Guid Read(IFormatReader reader)
         {
             return Guid.Parse(reader.ReadString("Value"));
@@ -24,10 +22,9 @@ namespace Xemio.GameLibrary.Content.Serialization
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override void Write(IFormatWriter writer, Guid value)
         {
-            writer.WriteString("Value", value.ToString("N"));
+            writer.WriteString("Value", value.ToString());
         }
         #endregion
     }
