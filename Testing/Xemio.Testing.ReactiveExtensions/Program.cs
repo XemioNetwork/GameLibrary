@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Timing;
 
