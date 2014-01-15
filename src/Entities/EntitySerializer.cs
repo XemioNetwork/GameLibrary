@@ -28,6 +28,11 @@ namespace Xemio.GameLibrary.Entities
                 entity.Guid = serializer.Load<Guid>(reader);
             }
 
+            if (reader.ReadBoolean("IsNamed"))
+            {
+                entity.Name = reader.ReadString("Name");
+            }
+
             entity.IsDestroyed = reader.ReadBoolean("IsDestroyed");
             entity.IsVisible = reader.ReadBoolean("IsVisible");
 
@@ -58,6 +63,12 @@ namespace Xemio.GameLibrary.Entities
             using (writer.Section("Guid"))
             {
                 serializer.Save(entity.Guid, writer);
+            }
+
+            writer.WriteBoolean("IsNamed", entity.IsNamed);
+            if (entity.IsNamed)
+            {
+                writer.WriteString("Name", entity.Name);
             }
 
             writer.WriteBoolean("IsDestroyed", entity.IsDestroyed);

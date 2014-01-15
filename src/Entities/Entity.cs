@@ -37,10 +37,28 @@ namespace Xemio.GameLibrary.Entities
         #endregion
 
         #region Fields
+        private string _name = string.Empty;
         private bool _handleComponents = true;
         #endregion
         
         #region Properties
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this._name))
+                    return this.Guid.ToString("D");
+
+                return this._name;
+            }
+            set
+            {
+                this._name = value;
+            }
+        }
         /// <summary>
         /// Gets or sets the Id.
         /// </summary>
@@ -61,6 +79,13 @@ namespace Xemio.GameLibrary.Entities
         /// Gets or sets a value indicating whether this entity is visible.
         /// </summary>
         public bool IsVisible { get; set; }
+        /// <summary>
+        /// Gets a value indicating whether the entity has a name.
+        /// </summary>
+        public bool IsNamed
+        {
+            get { return !string.IsNullOrEmpty(this._name); }
+        }
         /// <summary>
         /// Gets the components.
         /// </summary>
