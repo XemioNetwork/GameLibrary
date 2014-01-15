@@ -59,6 +59,7 @@
     <Compile Include="Content\FileSystem\Disk\DiskPath.cs" />
     <Compile Include="Content\FileSystem\IFileSystemListener.cs" />
     <Compile Include="Content\FileSystem\IPath.cs" />
+    <Compile Include="Content\FileSystem\Modular\ModularFileSystem.cs" />
     <Compile Include="Content\Formats\Corrupted\CorruptedException.cs" />
     <Compile Include="Content\Formats\Corrupted\CorruptedReader.cs" />
     <Compile Include="Content\Formats\Corrupted\CorruptedWriter.cs" />
