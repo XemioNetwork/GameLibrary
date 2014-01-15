@@ -12,7 +12,7 @@ using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Script
 {
-    [Require(typeof(ImplementationManager))]
+    [Require(typeof(IImplementationManager))]
 
     public class ScriptExecutor : IComponent
     {
@@ -55,7 +55,7 @@ namespace Xemio.GameLibrary.Script
         /// <param name="id">The script identifier.</param>
         public void Send(IEvent evt, string id)
         {
-            var implementations = XGL.Components.Require<ImplementationManager>();
+            var implementations = XGL.Components.Require<IImplementationManager>();
             var script = implementations.GetNew<string, IScript>(id);
 
             if (script == null)

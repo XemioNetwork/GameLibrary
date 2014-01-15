@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Formats.Binary;
-using Xemio.GameLibrary.Content.Formats.Fallback;
+using Xemio.GameLibrary.Content.Formats.Corrupted;
 using Xemio.GameLibrary.Content.Serialization;
 using Xemio.GameLibrary.Content.Serialization.Automatic;
 using Xemio.GameLibrary.Events;
@@ -19,7 +19,7 @@ using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Content
 {
-    [Require(typeof(ImplementationManager))]
+    [Require(typeof(IImplementationManager))]
 
     public class SerializationManager : IComponent
     {
@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Content
             foreach (Type baseType in ReflectionCache.GetInheritedTypes(type))
             {
                 T instance = XGL.Components
-                    .Get<ImplementationManager>()
+                    .Get<IImplementationManager>()
                     .Get<Type, T>(baseType);
 
                 if (instance != null)
@@ -121,8 +121,8 @@ namespace Xemio.GameLibrary.Content
             }
             catch (Exception ex)
             {
-                logger.Info("Initializing the format reader for {0} failed. Fallback will take place.", format.GetType().Name);
-                return this.Load(type, new FallbackReader(stream, ex));
+                logger.Info("Initializing the format reader for {0} failed: Format corrupted.", format.GetType().Name);
+                return this.Load(type, new CorruptedReader(stream, ex));
             }
         }
         /// <summary>
@@ -161,8 +161,8 @@ namespace Xemio.GameLibrary.Content
             }
             catch (Exception ex)
             {
-                logger.InfoException("Initializing the format writer for " + format.GetType().Name + " failed. Fallback will take place.", ex);
-                this.Save(value, new FallbackWriter(stream, ex));
+                logger.InfoException("Initializing the format writer for " + format.GetType().Name + " failed: Format corrupted.", ex);
+                this.Save(value, new CorruptedWriter(stream, ex));
             }
         }
         /// <summary>

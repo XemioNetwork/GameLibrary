@@ -19,7 +19,6 @@ namespace Xemio.GameLibrary
                 .DisableInput()
                 .DisableSplashScreen()
                 .FileSystem<DiskFileSystem>()
-                .EnableCoreComponents()
                 .BuildConfiguration();
 
             XGL.Run(config);

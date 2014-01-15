@@ -26,13 +26,13 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="delay">The delay.</param>
         public TcpClientProtocol(TcpDelay delay)
         {
-            this._buffer = new PackageBuffer();
+            this._buffer = new TcpPackageBuffer();
             this._delay = delay;
         }
         #endregion
 
         #region Fields
-        private readonly PackageBuffer _buffer;
+        private readonly TcpPackageBuffer _buffer;
         private readonly TcpDelay _delay;
 
         private TcpClient _tcpClient;

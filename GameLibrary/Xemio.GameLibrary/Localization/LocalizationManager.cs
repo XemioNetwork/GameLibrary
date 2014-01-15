@@ -14,7 +14,7 @@ using Xemio.GameLibrary.Events;
 
 namespace Xemio.GameLibrary.Localization
 {
-    [Require(typeof(EventManager))]
+    [Require(typeof(IEventManager))]
     [Require(typeof(IFileSystem))]
     [Require(typeof(ContentManager))]
 

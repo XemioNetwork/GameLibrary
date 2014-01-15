@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Content.Streams;
 
 namespace Xemio.GameLibrary.Content
 {
@@ -18,13 +19,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="stream">The stream.</param>
         public static Stream Compress(Stream stream)
         {
-            var memory = new MemoryStream();
-            using (var gzip = new GZipStream(memory, CompressionMode.Compress, true))
-            {
-                stream.CopyTo(gzip);
-            }
-
-            return memory;
+            return new GZipStream(stream, CompressionMode.Compress);
         }
         /// <summary>
         /// Decompresses the specified stream.
@@ -33,10 +28,12 @@ namespace Xemio.GameLibrary.Content
         public static Stream Decompress(Stream stream)
         {
             var memory = new MemoryStream();
-            using (var gzip = new GZipStream(memory, CompressionMode.Decompress, true))
+            using (var gzip = new GZipStream(stream, CompressionMode.Decompress))
             {
-                stream.CopyTo(gzip);
+                gzip.CopyTo(memory);
             }
+
+            memory.Position = 0;
 
             return memory;
         }

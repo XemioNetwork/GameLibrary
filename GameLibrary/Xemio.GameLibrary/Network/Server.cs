@@ -71,9 +71,9 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the event manager.
         /// </summary>
-        protected EventManager EventManager
+        protected IEventManager EventManager
         {
-            get { return XGL.Components.Get<EventManager>(); }
+            get { return XGL.Components.Get<IEventManager>(); }
         }
         #endregion
 

@@ -6,16 +6,35 @@ using System.Reflection;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Plugins;
+using Xemio.GameLibrary.Plugins.Contexts;
 
 namespace Xemio.GameLibrary.Events
 {
-    public class EventManager : IConstructable, IObservable<IEvent>
+    public class EventManager : IEventManager, IConstructable
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventManager"/> class.
+        /// </summary>
+        public EventManager()
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventManager"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public EventManager(IAssemblyContext context)
+        {
+            this.LoadEventsFrom(context);
+        }
+        #endregion
+
         #region Fields
         private readonly List<dynamic> _observers = new List<dynamic>();
-        private readonly Dictionary<Type, List<dynamic>> _observerMappings = new Dictionary<Type, List<dynamic>>();
+        private readonly Dictionary<Type, CachedList<dynamic>> _observerMappings = new Dictionary<Type, CachedList<dynamic>>();
         /// <summary>
         /// A mapping from a base type to it's super types.
         /// We use this dictionary for faster subscribe times, since we already know what type-mappings we need.
@@ -82,7 +101,7 @@ namespace Xemio.GameLibrary.Events
         }
         #endregion Private Methods
 
-        #region Methods
+        #region Implementation of IEventManager
         /// <summary>
         /// Publishes the specified event.
         /// </summary>
@@ -90,19 +109,36 @@ namespace Xemio.GameLibrary.Events
         /// <param name="e">The event.</param>
         public void Publish<TEvent>(TEvent e) where TEvent : class, IEvent
         {
-            var interceptable = e as IInterceptableEvent;
-            foreach (IObserver<TEvent> observer in this._observerMappings[typeof(TEvent)])
+            lock (this._observerMappings)
             {
-                try
+                if (!this._observerMappings.ContainsKey(typeof (TEvent)))
                 {
-                    observer.OnNext(e);
+                    this.LoadEventsFromAssemblyOf<TEvent>();
+                    this.LoadEventsFromAssemblyOf(e.GetType());
 
-                    if (interceptable != null && interceptable.IsCanceled)
-                        break;
+                    if (!this._observerMappings.ContainsKey(typeof (TEvent)))
+                    {
+                        throw new InvalidOperationException("Could not resolve event inheritance tree for " + typeof (TEvent) + ".");
+                    }
                 }
-                catch (Exception ex)
+
+                using (this._observerMappings[typeof (TEvent)].StartCaching())
                 {
-                    observer.OnError(ex);
+                    var interceptable = e as IInterceptableEvent;
+                    foreach (IObserver<TEvent> observer in this._observerMappings[typeof (TEvent)])
+                    {
+                        try
+                        {
+                            observer.OnNext(e);
+
+                            if (interceptable != null && interceptable.IsCanceled)
+                                break;
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }
                 }
             }
         }
@@ -155,7 +191,7 @@ namespace Xemio.GameLibrary.Events
                     foreach (Type baseType in eventTypes)
                     {
                         if (this._observerMappings.ContainsKey(baseType) == false)
-                            this._observerMappings.Add(baseType, new List<dynamic>());
+                            this._observerMappings.Add(baseType, new CachedList<dynamic>());
 
                         foreach (Type knownSuperType in this._observerMappings.Keys.Where(baseType.IsAssignableFrom))
                         {
@@ -164,6 +200,21 @@ namespace Xemio.GameLibrary.Events
                     }
                 }
             }
+        }
+        /// <summary>
+        /// Loads the IEvent implementations from the assembly of the specified type.
+        /// </summary>
+        public void LoadEventsFromAssemblyOf(Type type)
+        {
+            this.LoadEventsFrom(new SingleAssemblyContext(type.Assembly));
+        }
+        /// <summary>
+        /// Loads the IEvent implementations from the assembly of the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type.</typeparam>
+        public void LoadEventsFromAssemblyOf<T>()
+        {
+            this.LoadEventsFromAssemblyOf(typeof(T));
         }
         #endregion
 

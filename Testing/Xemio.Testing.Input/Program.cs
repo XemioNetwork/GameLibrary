@@ -57,8 +57,8 @@ namespace Xemio.Testing.Input
         static void Main(string[] args)
         {
             var layout = new PersistenceLayout<MidEvent>()
-                .Section(midEvent => midEvent.BaseEvent, be => be
-                    .Boolean(f => f.Test));
+                .Section(midEvent => midEvent.BaseEvent)
+                    .Property(f => f.Test);
             
             var memory = new MemoryStream();
             using (IFormatWriter writer = Format.Xml.CreateWriter(memory))

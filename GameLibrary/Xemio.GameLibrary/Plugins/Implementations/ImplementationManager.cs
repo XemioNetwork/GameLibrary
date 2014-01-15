@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Plugins.Contexts;
 
 namespace Xemio.GameLibrary.Plugins.Implementations
 {
-    public class ImplementationManager : IComponent
+    public class ImplementationManager : IImplementationManager
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <summary>
         /// Initializes a new instance of the <see cref="ImplementationManager"/> class.
         /// </summary>
-        public ImplementationManager() : this(new FileAssemblyContext("."))
+        public ImplementationManager() : this(ContextFactory.CreateApplicationAssemblyContext())
         {
         }
         /// <summary>

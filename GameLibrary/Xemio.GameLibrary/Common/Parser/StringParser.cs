@@ -11,12 +11,12 @@ namespace Xemio.GameLibrary.Common.Parser
         /// </summary>
         public StringParser()
         {
-            this._implementations = XGL.Components.Get<ImplementationManager>();
+            this._implementations = XGL.Components.Get<IImplementationManager>();
         }
         #endregion
 
         #region Fields
-        private readonly ImplementationManager _implementations;
+        private readonly IImplementationManager _implementations;
         #endregion
 
         #region Methods

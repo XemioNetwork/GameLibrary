@@ -55,7 +55,7 @@ namespace Xemio.GameLibrary.Network
             this._dispatcher = new ClientPackageDispatcher(this);
             this._dispatcher.Start();
 
-            this._eventManager = XGL.Components.Require<EventManager>();
+            this._eventManager = XGL.Components.Require<IEventManager>();
         }
         #endregion
 
@@ -66,7 +66,7 @@ namespace Xemio.GameLibrary.Network
         private readonly OutputQueue _outputQueue;
         private readonly ClientPackageDispatcher _dispatcher;
 
-        private readonly EventManager _eventManager;
+        private readonly IEventManager _eventManager;
         #endregion
 
         #region Properties

@@ -36,17 +36,17 @@ namespace Xemio.GameLibrary.Content.Layouts
         
         #region Implementation of ILayoutElement
         /// <summary>
-        /// Writes property for the specified value.
+        /// Writes property for the specified container.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        /// <param name="value">The value.</param>
-        public abstract void Write(IFormatWriter writer, object value);
+        /// <param name="container">The container.</param>
+        public abstract void Write(IFormatWriter writer, object container);
         /// <summary>
-        /// Reads the property for the specified value.
+        /// Reads the property for the specified container.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <param name="value">The value.</param>
-        public abstract void Read(IFormatReader reader, object value);
+        /// <param name="container">The container.</param>
+        public abstract void Read(IFormatReader reader, object container);
         #endregion
     }
 }

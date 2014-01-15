@@ -66,12 +66,12 @@ namespace Xemio.GameLibrary
             return this;
         }
         /// <summary>
-        /// Registers the default components to the component registry.
+        /// Disables all core components.
         /// </summary>
-        public FluentConfigurator EnableCoreComponents()
+        public FluentConfigurator DisableCoreComponents()
         {
-            logger.Debug("CoreComponentsEnabled={0}", true);
-            this._configuration.CoreComponentsEnabled = true;
+            logger.Debug("CoreComponentsEnabled={0}", false);
+            this._configuration.CoreComponentsEnabled = false;
             return this;
         }
         /// <summary>

@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// <param name="e">The event.</param>
         protected virtual void PublishEvent<TEvent>(TEvent e) where TEvent : class, IEvent
         {
-            var eventManager = XGL.Components.Get<EventManager>();
+            var eventManager = XGL.Components.Get<IEventManager>();
             eventManager.Publish(e);
         }
         #endregion

@@ -35,53 +35,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
             this._initializers.Add(provider);
         }
         #endregion
-
-        #region IGraphicsProvider Factory Methods
-        /// <summary>
-        /// Gets the texture writer.
-        /// </summary>
-        public IWriter CreateTextureWriter()
-        {
-            return this._current.CreateTextureWriter();
-        }
-        /// <summary>
-        /// Gets the texture reader.
-        /// </summary>
-        public IReader CreateTextureReader()
-        {
-            return this._current.CreateTextureReader();
-        }
-        /// <summary>
-        /// Gets the render manager.
-        /// </summary>
-        public IRenderManager CreateRenderManager()
-        {
-            return this._current.CreateRenderManager();
-        }
-        /// <summary>
-        /// Gets the render factory.
-        /// </summary>
-        public IRenderFactory CreateRenderFactory()
-        {
-            return this._current.CreateRenderFactory();
-        }
-        /// <summary>
-        /// Gets the geometry manager.
-        /// </summary>
-        public IGeometryManager CreateGeometryManager()
-        {
-            return this._current.CreateGeometryManager();
-        }
-        /// <summary>
-        /// Gets the geometry factory.
-        /// </summary>
-        /// <returns></returns>
-        public IGeometryFactory CreateGeometryFactory()
-        {
-            return this._current.CreateGeometryFactory();
-        }
-        #endregion
-
+        
         #region IGraphicsProvider Member
         /// <summary>
         /// Determines whether this instance is available.
@@ -103,6 +57,13 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// Gets the display name.
         /// </summary>
         public string DisplayName { get; private set; }
+        /// <summary>
+        /// Gets the factory.
+        /// </summary>
+        public IGraphicsFactory Factory
+        {
+            get { return this._current.Factory; }
+        }
         /// <summary>
         /// Creates the graphics provider.
         /// </summary>

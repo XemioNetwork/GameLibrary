@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
@@ -19,11 +20,15 @@ using Geometry = Xemio.GameLibrary.Rendering.Geometry;
 
 namespace Xemio.GameLibrary.Rendering
 {
-    [Require(typeof(EventManager))]
-    [Require(typeof(ImplementationManager))]
+    [Require(typeof(IEventManager))]
+    [Require(typeof(IImplementationManager))]
 
     public class GraphicsDevice : IConstructable
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicsDevice"/> class.
@@ -51,7 +56,12 @@ namespace Xemio.GameLibrary.Rendering
         {
             get
             {
-                ISurface surface = XGL.Components.Require<ISurface>();
+                var surface = XGL.Components.Require<ISurface>();
+
+                if (surface == null)
+                {
+                    return Vector2.Zero;
+                }
 
                 float x = surface.Width / (float)this.DisplayMode.Width;
                 float y = surface.Height / (float)this.DisplayMode.Height;
@@ -83,6 +93,8 @@ namespace Xemio.GameLibrary.Rendering
             get { return this._displayMode; }
             set
             {
+                logger.Trace("Changing display mode to " + this._displayMode.Width + "x" + this._displayMode.Height);
+
                 if (this._displayMode != null)
                 {
                     this.CreateBackBuffer(value);
@@ -90,7 +102,7 @@ namespace Xemio.GameLibrary.Rendering
 
                 this._displayMode = value;
 
-                var eventManager = XGL.Components.Get<EventManager>();
+                var eventManager = XGL.Components.Require<IEventManager>();
                 eventManager.Publish(new ResolutionChangedEvent(this._displayMode));
             }
         }
@@ -120,6 +132,8 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="displayMode">The display mode.</param>
         private void CreateBackBuffer(DisplayMode displayMode)
         {
+            logger.Trace("Creating back buffer.");
+
             this.BackBuffer = this.RenderFactory.CreateTarget(
                 displayMode.Width,
                 displayMode.Height);
@@ -133,18 +147,30 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="initializer">The initializer.</param>
         public void Initialize(IGraphicsInitializer initializer)
         {
+            if (initializer == null)
+            {
+                throw new ArgumentNullException("initializer", @"No graphics initializer defined.");
+            }
+
             initializer.Initialize(this);
 
             this.DisplayName = initializer.DisplayName;
-            
-            this.GeometryManager = initializer.CreateGeometryManager() ?? Geometry.GeometryManager.Empty;
-            this.GeometryFactory = initializer.CreateGeometryFactory() ?? Geometry.GeometryFactory.Empty;
-            this.RenderManager = initializer.CreateRenderManager();
-            this.RenderFactory = initializer.CreateRenderFactory();
 
-            var implementations = XGL.Components.Get<ImplementationManager>();
-            implementations.Add<Type, IReader>(initializer.CreateTextureReader());
-            implementations.Add<Type, IWriter>(initializer.CreateTextureWriter());
+            if (initializer.Factory == null)
+            {
+                throw new InvalidOperationException("Graphics initializer '" + initializer.Id + "' does not provide a graphics factory.");
+            }
+
+            this.GeometryManager = initializer.Factory.CreateGeometryManager() ?? Geometry.GeometryManager.Empty;
+            this.GeometryFactory = initializer.Factory.CreateGeometryFactory() ?? Geometry.GeometryFactory.Empty;
+            this.RenderManager = initializer.Factory.CreateRenderManager();
+            this.RenderFactory = initializer.Factory.CreateRenderFactory();
+
+            var implementations = XGL.Components.Require<IImplementationManager>();
+            implementations.Add<Type, IReader>(initializer.Factory.CreateTextureReader());
+            implementations.Add<Type, IWriter>(initializer.Factory.CreateTextureWriter());
+
+            logger.Info("Initialized graphics device with initializer {0}", initializer.Id);
         }
         /// <summary>
         /// Clears the screen.

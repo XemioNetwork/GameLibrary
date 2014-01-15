@@ -28,7 +28,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         {
             get
             {
-                var implementations = XGL.Components.Require<ImplementationManager>();
+                var implementations = XGL.Components.Require<IImplementationManager>();
                 var initializer = implementations.Get<string, IGraphicsInitializer>(this.Id);
 
                 if (initializer == null)
@@ -72,47 +72,11 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// </summary>
         public InterpolationMode InterpolationMode { get; set; }
         /// <summary>
-        /// Gets the texture writer.
+        /// Gets the factory.
         /// </summary>
-        public IWriter CreateTextureWriter()
+        public IGraphicsFactory Factory
         {
-            return this.Initializer.CreateTextureWriter();
-        }
-        /// <summary>
-        /// Gets the texture reader.
-        /// </summary>
-        public IReader CreateTextureReader()
-        {
-            return this.Initializer.CreateTextureReader();
-        }
-        /// <summary>
-        /// Gets the render manager.
-        /// </summary>
-        public IRenderManager CreateRenderManager()
-        {
-            return this.Initializer.CreateRenderManager();
-        }
-        /// <summary>
-        /// Gets the render factory.
-        /// </summary>
-        public IRenderFactory CreateRenderFactory()
-        {
-            return this.Initializer.CreateRenderFactory();
-        }
-        /// <summary>
-        /// Gets the geometry manager.
-        /// </summary>
-        public IGeometryManager CreateGeometryManager()
-        {
-            return this.Initializer.CreateGeometryManager();
-        }
-        /// <summary>
-        /// Gets the geometry factory.
-        /// </summary>
-        /// <returns></returns>
-        public IGeometryFactory CreateGeometryFactory()
-        {
-            return this.Initializer.CreateGeometryFactory();
+            get { return this.Initializer.Factory; }
         }
         /// <summary>
         /// Creates the graphics provider.

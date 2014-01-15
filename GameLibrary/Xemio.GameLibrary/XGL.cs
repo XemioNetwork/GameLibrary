@@ -23,20 +23,27 @@ using Xemio.GameLibrary.Content;
 
 namespace Xemio.GameLibrary
 {
-    public static class XGL
+    public class XGL
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes the <see cref="XGL"/> class.
+        /// </summary>
+        static XGL()
+        {
+            XGL.Components = new ComponentManager();
+        }
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the component manager.
         /// </summary>
-        public static ComponentManager Components
-        {
-            get { return Singleton<ComponentManager>.Value; }
-        }
+        public static IComponentManager Components { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Configuration"/> is initialized.
         /// </summary>
@@ -82,10 +89,6 @@ namespace Xemio.GameLibrary
             }
 
             XGL.Initialize(configuration);
-            XGL.Components.Construct();
-
-            XGL.InitializeScenes(configuration);
-            XGL.State = XGLState.Initialized;
 
             var gameLoop = XGL.Components.Get<IGameLoop>();
             if (gameLoop != null)
@@ -93,7 +96,7 @@ namespace Xemio.GameLibrary
                 gameLoop.Run();
             }
 
-            logger.Info("Done initializing.");
+            logger.Info("Done loading configuration.");
         }
         #endregion
 
@@ -104,10 +107,27 @@ namespace Xemio.GameLibrary
         /// <param name="configuration">The configuration.</param>
         private static void Initialize(Configuration configuration)
         {
+            XGL.InitializeEventSystem(configuration);
             XGL.InitializeContent(configuration);
             XGL.InitializeGraphics(configuration);
             XGL.InitializeGameLoop(configuration);
             XGL.InitializeInput(configuration);
+            XGL.Components.Construct();
+
+            XGL.InitializeScenes(configuration);
+            XGL.State = XGLState.Initialized;
+        }
+        /// <summary>
+        /// Initializes the event system.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        private static void InitializeEventSystem(Configuration configuration)
+        {
+            var eventManager = XGL.Components.Get<IEventManager>();
+            if (eventManager != null)
+            {
+                eventManager.LoadEventsFromAssemblyOf<XGL>();
+            }
         }
         /// <summary>
         /// Initializes the content.

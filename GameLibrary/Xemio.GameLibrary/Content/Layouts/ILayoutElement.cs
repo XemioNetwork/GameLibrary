@@ -9,7 +9,7 @@ namespace Xemio.GameLibrary.Content.Layouts
 {
     public interface ILayoutElement
     {
-        void Write(IFormatWriter writer, object value);
-        void Read(IFormatReader reader, object value);
+        void Write(IFormatWriter writer, object container);
+        void Read(IFormatReader reader, object container);
     }
 }

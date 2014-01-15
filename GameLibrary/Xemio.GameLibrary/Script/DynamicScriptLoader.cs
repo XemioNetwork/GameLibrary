@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Script
                         this._fileMappings.Remove(fileName);
                         this._fileMappings.Add(fileName, result.Scripts);
 
-                        var implementations = XGL.Components.Require<ImplementationManager>();
+                        var implementations = XGL.Components.Require<IImplementationManager>();
                         foreach (IScript script in result.Scripts)
                         {
                             implementations.Add<string, IScript>(script);
@@ -130,7 +130,7 @@ namespace Xemio.GameLibrary.Script
             {
                 logger.Debug("Removing compiled script for {0}.", name);
 
-                var implementations = XGL.Components.Require<ImplementationManager>();
+                var implementations = XGL.Components.Require<IImplementationManager>();
                 foreach (IScript script in this._fileMappings[fullPath])
                 {
                     implementations.Remove<string, IScript>(script.Id);

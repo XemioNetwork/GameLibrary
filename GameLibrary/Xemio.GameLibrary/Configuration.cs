@@ -79,6 +79,14 @@ namespace Xemio.GameLibrary
         /// Gets the surface.
         /// </summary>
         public abstract ISurface Surface { get; }
+        /// <summary>
+        /// Gets the event manager.
+        /// </summary>
+        public abstract IEventManager EventManager { get; }
+        /// <summary>
+        /// Gets the implementation manager.
+        /// </summary>
+        public abstract IImplementationManager ImplementationManager { get; }
         #endregion
 
         #region Constructors
@@ -118,7 +126,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         protected virtual void EnableCommons()
         {
-            this.Components.Add(new EventManager());
+            this.EnableEventSystem();
             this.Components.Add(new ThreadInvoker());
             this.Components.Add(new ApplicationExceptionHandler());
         }
@@ -140,7 +148,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         protected virtual void EnablePluginSystem()
         {
-            this.Components.Add(new ImplementationManager());
+            this.EnableImplementationSystem();
             this.Components.Add(new LibraryLoader());
         }
         /// <summary>
@@ -184,6 +192,26 @@ namespace Xemio.GameLibrary
             if (this.Surface != null)
             {
                 this.Components.Add(this.Surface);
+            }
+        }
+        /// <summary>
+        /// Enables the event system.
+        /// </summary>
+        protected virtual void EnableEventSystem()
+        {
+            if (this.EventManager != null)
+            {
+                this.Components.Add(this.EventManager);
+            }
+        }
+        /// <summary>
+        /// Enables the implementation system.
+        /// </summary>
+        protected virtual void EnableImplementationSystem()
+        {
+            if (this.ImplementationManager != null)
+            {
+                this.Components.Add(this.ImplementationManager);
             }
         }
         /// <summary>

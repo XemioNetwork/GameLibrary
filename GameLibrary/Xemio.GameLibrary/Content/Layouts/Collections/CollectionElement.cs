@@ -4,24 +4,26 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Content.Formats;
 
-namespace Xemio.GameLibrary.Content.Layouts
+namespace Xemio.GameLibrary.Content.Layouts.Collections
 {
-    public class SectionElement<T> : ILayoutElement
+    public class CollectionElement<TItem> : ILayoutElement
     {
-
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SectionElement{T}"/> class.
+        /// Initializes a new instance of the <see cref="CollectionElement{TItem}" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
+        /// <param name="property">The property.</param>
         /// <param name="layout">The layout.</param>
-        public SectionElement(string tag, PersistenceLayout<T> layout)
+        public CollectionElement(string tag, PropertyInfo property, PersistenceLayout<TItem> layout)
         {
             this.Tag = tag;
+            this.Property = property;
             this.Layout = layout;
-        }
+        } 
         #endregion
 
         #region Properties
@@ -30,14 +32,18 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// </summary>
         public string Tag { get; private set; }
         /// <summary>
+        /// Gets the property.
+        /// </summary>
+        public PropertyInfo Property { get; private set; }
+        /// <summary>
         /// Gets the layout.
         /// </summary>
-        public PersistenceLayout<T> Layout { get; private set; }
+        public PersistenceLayout<TItem> Layout { get; private set; }
         #endregion
 
         #region Implementation of ILayoutElement
         /// <summary>
-        /// Writes the specified writer.
+        /// Writes the specified container.
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="container">The container.</param>
@@ -45,11 +51,17 @@ namespace Xemio.GameLibrary.Content.Layouts
         {
             using (writer.Section(this.Tag))
             {
-                this.Layout.Write(writer, container);
+                var collection = (ICollection<TItem>)this.Property.GetValue(container);
+
+                writer.WriteInteger("Length", collection.Count);
+                foreach (TItem item in collection)
+                {
+                    this.Layout.Write(writer, item);
+                }
             }
         }
         /// <summary>
-        /// Reads the specified reader.
+        /// Reads a property for the specified container.
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="container">The container.</param>
@@ -57,7 +69,14 @@ namespace Xemio.GameLibrary.Content.Layouts
         {
             using (reader.Section(this.Tag))
             {
-                this.Layout.Read(reader, container);
+                int length = reader.ReadInteger("Length");
+                Type type = typeof(List<TItem>);
+                
+                var collection = (ICollection<TItem>)Activator.CreateInstance(type, true);
+                for (int i = 0; i < length; i++)
+                {
+
+                }
             }
         }
         #endregion

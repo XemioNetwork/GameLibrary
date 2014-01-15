@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Reflection;
 using NLog;
-using Xemio.GameLibrary.Common;
-using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content;
-using Xemio.GameLibrary.Content.Formats;
-using Xemio.GameLibrary.Content.Formats.Binary;
-using Xemio.GameLibrary.Content.Formats.Xml;
-using Xemio.GameLibrary.Content.Serialization.Automatic;
+using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Plugins.Implementations;
 using BinaryReader = System.IO.BinaryReader;
 using BinaryWriter = System.IO.BinaryWriter;
 
-namespace Xemio.GameLibrary.Network.Packages
+namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
-    public class PackageBuffer
+    internal class TcpPackageBuffer
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -51,7 +42,7 @@ namespace Xemio.GameLibrary.Network.Packages
         public Package Deserialize(Stream stream)
         {
             var binaryReader = new BinaryReader(stream);
-            var implementations = XGL.Components.Require<ImplementationManager>();
+            var implementations = XGL.Components.Require<IImplementationManager>();
             var serializer = XGL.Components.Require<SerializationManager>();
 
             int packageId = binaryReader.ReadInt32();

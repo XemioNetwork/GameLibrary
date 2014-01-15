@@ -56,7 +56,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Compression
             {
                 using (Stream fileStream = this.FileSystem.Open(fileName))
                 {
-                    return Compressor.Compress(fileStream);
+                    return Compressor.Decompress(fileStream);
                 }
             }
             catch (InvalidDataException ex)
@@ -72,10 +72,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Compression
         /// <param name="fileName">Name of the file.</param>
         public Stream Create(string fileName)
         {
-            using (Stream fileStream = this.FileSystem.Create(fileName))
-            {
-                return Compressor.Compress(fileStream);
-            }
+            return Compressor.Compress(this.FileSystem.Create(fileName));
         }
         /// <summary>
         /// Deletes the specified file. Throws an exception if the file

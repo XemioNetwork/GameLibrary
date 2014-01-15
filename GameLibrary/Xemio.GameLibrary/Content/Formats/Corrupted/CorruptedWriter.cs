@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.Content.Formats.Fallback
+namespace Xemio.GameLibrary.Content.Formats.Corrupted
 {
-    public class FallbackWriter : IFormatWriter
+    public class CorruptedWriter : IFormatWriter
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="FallbackWriter" /> class.
+        /// Initializes a new instance of the <see cref="CorruptedWriter" /> class.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="exception">The exception.</param>
-        public FallbackWriter(Stream stream, Exception exception)
+        public CorruptedWriter(Stream stream, Exception exception)
         {
             this.Stream = stream;
             this.Exception = exception;
@@ -49,7 +46,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public IDisposable Section(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified unsigned integer value.
@@ -58,7 +55,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteUnsignedInteger(string tag, uint value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified unsigned short value.
@@ -67,7 +64,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteUnsignedShort(string tag, ushort value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified unsigned long value.
@@ -76,7 +73,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteUnsignedLong(string tag, ulong value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified integer value.
@@ -85,7 +82,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteInteger(string tag, int value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified short value.
@@ -94,7 +91,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteShort(string tag, short value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified long value.
@@ -103,7 +100,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteLong(string tag, long value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified float value.
@@ -112,7 +109,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteFloat(string tag, float value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified double value.
@@ -121,7 +118,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteDouble(string tag, double value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified decimal value.
@@ -130,7 +127,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteDecimal(string tag, decimal value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified boolean value.
@@ -139,7 +136,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteBoolean(string tag, bool value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified byte value.
@@ -148,7 +145,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteByte(string tag, byte value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified byte array value.
@@ -157,7 +154,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteBytes(string tag, byte[] value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified character value.
@@ -166,7 +163,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteCharacter(string tag, char value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified string value.
@@ -175,7 +172,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteString(string tag, string value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified vector value.
@@ -184,7 +181,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteVector2(string tag, Vector2 value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Writes the specified rectangle value.
@@ -193,7 +190,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="value">The value.</param>
         public void WriteRectangle(string tag, Rectangle value)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         #endregion
     }

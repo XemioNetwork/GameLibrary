@@ -51,6 +51,7 @@
     <Compile Include="Common\Property.cs" />
     <Compile Include="Common\ReflectionCache.cs" />
     <Compile Include="Common\Retry.cs" />
+    <Compile Include="Components\IComponentManager.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\Compressor.cs" />
     <Compile Include="Content\FileSystem\Compression\CompressedFileSystem.cs" />
@@ -58,32 +59,36 @@
     <Compile Include="Content\FileSystem\Disk\DiskPath.cs" />
     <Compile Include="Content\FileSystem\IFileSystemListener.cs" />
     <Compile Include="Content\FileSystem\IPath.cs" />
-    <Compile Include="Content\Formats\Fallback\FallbackException.cs" />
-    <Compile Include="Content\Formats\Fallback\FallbackReader.cs" />
-    <Compile Include="Content\Formats\Fallback\FallbackWriter.cs" />
+    <Compile Include="Content\Formats\Corrupted\CorruptedException.cs" />
+    <Compile Include="Content\Formats\Corrupted\CorruptedReader.cs" />
+    <Compile Include="Content\Formats\Corrupted\CorruptedWriter.cs" />
+    <Compile Include="Content\Formats\Metadata.cs" />
     <Compile Include="Content\Formats\Xml\XmlFormat.cs" />
     <Compile Include="Content\Formats\Xml\XmlReader.cs" />
     <Compile Include="Content\Formats\Xml\XmlWriter.cs" />
-    <Compile Include="Content\Layouts\BooleanElement.cs" />
-    <Compile Include="Content\Layouts\ByteElement.cs" />
-    <Compile Include="Content\Layouts\CharElement.cs" />
-    <Compile Include="Content\Layouts\DoubleElement.cs" />
-    <Compile Include="Content\Layouts\EachElement.cs" />
-    <Compile Include="Content\Layouts\FloatElement.cs" />
-    <Compile Include="Content\Layouts\GuidElement.cs" />
+    <Compile Include="Content\Layouts\InheritanceScope.cs" />
+    <Compile Include="Content\Layouts\CascadedPropertyPersistenceLayout.cs" />
+    <Compile Include="Content\Layouts\CascadedSectionPersistenceLayout.cs" />
+    <Compile Include="Content\Layouts\Collections\CollectionElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\BooleanPropertyElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\BytePropertyElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\CharPropertyElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\DoublePropertyElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\FloatPropertyElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\GuidPropertyElement.cs" />
     <Compile Include="Content\Layouts\ILayoutElement.cs" />
-    <Compile Include="Content\Layouts\IntegerElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\IntegerPropertyElement.cs" />
     <Compile Include="Content\Layouts\LayoutSerializer.cs" />
-    <Compile Include="Content\Layouts\LongElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\LongPropertyElement.cs" />
     <Compile Include="Content\Layouts\PersistenceLayout.cs" />
     <Compile Include="Content\Layouts\PropertyElement.cs" />
     <Compile Include="Common\PropertyHelper.cs" />
     <Compile Include="Content\Layouts\PropertySectionElement.cs" />
-    <Compile Include="Content\Layouts\RectangleElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\RectanglePropertyElement.cs" />
     <Compile Include="Content\Layouts\SectionElement.cs" />
-    <Compile Include="Content\Layouts\ShortElement.cs" />
-    <Compile Include="Content\Layouts\StringElement.cs" />
-    <Compile Include="Content\Layouts\Vector2Element.cs" />
+    <Compile Include="Content\Layouts\Primitives\ShortPropertyElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\StringPropertyElement.cs" />
+    <Compile Include="Content\Layouts\Primitives\Vector2PropertyElement.cs" />
     <Compile Include="Content\Serialization\Automatic\ArrayProcessor.cs" />
     <Compile Include="Content\Serialization\Automatic\DictionaryProcessor.cs" />
     <Compile Include="Content\Serialization\Automatic\EnumProcessor.cs" />
@@ -127,6 +132,7 @@
     <Compile Include="Content\Formats\IFormatReader.cs" />
     <Compile Include="Content\Formats\IFormatWriter.cs" />
     <Compile Include="Content\Serialization\Automatic\AutomaticSerializer.cs" />
+    <Compile Include="Content\Streams\LinkedMemoryStream.cs" />
     <Compile Include="Content\Streams\StreamedReader.cs" />
     <Compile Include="Content\Streams\StreamedSerializer.cs" />
     <Compile Include="Content\Streams\StreamedWriter.cs" />
@@ -134,6 +140,7 @@
     <Compile Include="Entities\Components\PositionComponentSerializer.cs" />
     <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="Entities\Components\IPositionComponent.cs" />
+    <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Events\IInterceptableEvent.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
@@ -222,12 +229,14 @@
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
     <Compile Include="Network\Timing\TimeSyncServerWorker.cs" />
     <Compile Include="Plugins\Contexts\MergedAssemblyContext.cs" />
+    <Compile Include="Plugins\Implementations\IImplementationManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Common\ImageExtensions.cs" />
+    <Compile Include="Rendering\Initialization\IGraphicsFactory.cs" />
     <Compile Include="Rendering\InterpolationMode.cs" />
     <Compile Include="Rendering\Events\ResolutionChangedEvent.cs" />
     <Compile Include="Rendering\Initialization\NamedInitializer.cs" />
@@ -275,7 +284,7 @@
     <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
     <Compile Include="Network\Handlers\ServerHandler.cs" />
     <Compile Include="Network\Packages\Package.cs" />
-    <Compile Include="Network\Packages\PackageBuffer.cs" />
+    <Compile Include="Network\Protocols\Tcp\TcpPackageBuffer.cs" />
     <Compile Include="Network\Protocols\IClientProtocol.cs" />
     <Compile Include="Network\Protocols\IServerProtocol.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpClientProtocol.cs" />

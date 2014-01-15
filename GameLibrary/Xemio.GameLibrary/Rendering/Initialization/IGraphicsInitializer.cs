@@ -23,29 +23,9 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// </summary>
         InterpolationMode InterpolationMode { get; set; }
         /// <summary>
-        /// Gets the texture writer.
+        /// Gets the factory.
         /// </summary>
-        IWriter CreateTextureWriter();
-        /// <summary>
-        /// Gets the texture reader.
-        /// </summary>
-        IReader CreateTextureReader();
-        /// <summary>
-        /// Gets the render manager.
-        /// </summary>
-        IRenderManager CreateRenderManager();
-        /// <summary>
-        /// Gets the render factory.
-        /// </summary>
-        IRenderFactory CreateRenderFactory();
-        /// <summary>
-        /// Gets the geometry manager.
-        /// </summary>
-        IGeometryManager CreateGeometryManager();
-        /// <summary>
-        /// Gets the geometry factory.
-        /// </summary>
-        IGeometryFactory CreateGeometryFactory();
+        IGraphicsFactory Factory { get; }
         /// <summary>
         /// Creates the graphics provider.
         /// </summary>

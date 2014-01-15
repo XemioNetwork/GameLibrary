@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Xemio.GameLibrary.Math;
 
-namespace Xemio.GameLibrary.Content.Formats.Fallback
+namespace Xemio.GameLibrary.Content.Formats.Corrupted
 {
-    public class FallbackReader : IFormatReader
+    public class CorruptedReader : IFormatReader
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="FallbackReader" /> class.
+        /// Initializes a new instance of the <see cref="CorruptedReader" /> class.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="exception">The inner exception.</param>
-        public FallbackReader(Stream stream, Exception exception)
+        public CorruptedReader(Stream stream, Exception exception)
         {
             this.Stream = stream;
             this.Exception = exception;
@@ -49,7 +46,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public IDisposable Section(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads an unsigned integer value.
@@ -57,7 +54,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public uint ReadUnsignedInteger(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads an unsigned short value.
@@ -65,7 +62,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public ushort ReadUnsignedShort(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads an unsigned long value.
@@ -73,7 +70,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public ulong ReadUnsignedLong(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads an integer value.
@@ -81,7 +78,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public int ReadInteger(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a short value.
@@ -89,7 +86,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public short ReadShort(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a long value.
@@ -97,7 +94,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public long ReadLong(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a float value.
@@ -105,7 +102,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public float ReadFloat(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a double value.
@@ -113,7 +110,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public double ReadDouble(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a decimal value.
@@ -121,7 +118,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public decimal ReadDecimal(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a boolean value.
@@ -129,7 +126,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public bool ReadBoolean(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a byte value.
@@ -137,7 +134,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public byte ReadByte(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a byte array value.
@@ -145,7 +142,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public byte[] ReadBytes(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a character value.
@@ -153,7 +150,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public char ReadCharacter(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a string value.
@@ -161,7 +158,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public string ReadString(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a vector2 value.
@@ -169,7 +166,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public Vector2 ReadVector2(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         /// <summary>
         /// Reads a rectangle value.
@@ -177,7 +174,7 @@ namespace Xemio.GameLibrary.Content.Formats.Fallback
         /// <param name="tag">The tag.</param>
         public Rectangle ReadRectangle(string tag)
         {
-            throw new FallbackException(this.Exception);
+            throw new CorruptedException(this.Exception);
         }
         #endregion
     }

@@ -27,6 +27,12 @@ namespace Xemio.GameLibrary
             this._gameLoop = new GameLoop();
             this._fileSystem = new DiskFileSystem();
             this._surface = new NullSurface();
+            this._eventManager = new EventManager();
+            this._implementationManager = new ImplementationManager();
+
+            this.CoreComponentsEnabled = true;
+            this.InputEnabled = true;
+            this.GameLoopEnabled = true;
         }
         #endregion
 
@@ -36,6 +42,8 @@ namespace Xemio.GameLibrary
         private IFileSystem _fileSystem;
         private IGameLoop _gameLoop;
         private ISurface _surface;
+        private IEventManager _eventManager;
+        private IImplementationManager _implementationManager;
         #endregion
 
         #region Properties
@@ -86,6 +94,22 @@ namespace Xemio.GameLibrary
         {
             this._surface = surface;
         }
+        /// <summary>
+        /// Sets the specified event manager.
+        /// </summary>
+        /// <param name="eventManager">The event manager.</param>
+        public void Set(IEventManager eventManager)
+        {
+            this._eventManager = eventManager;
+        }
+        /// <summary>
+        /// Sets the specified implementation manager.
+        /// </summary>
+        /// <param name="implementationManager">The implementation manager.</param>
+        public void Set(IImplementationManager implementationManager)
+        {
+            this._implementationManager = implementationManager;
+        }
         #endregion
 
         #region Overrides of Configuration
@@ -116,6 +140,20 @@ namespace Xemio.GameLibrary
         public override ISurface Surface
         {
             get { return this._surface; }
+        }
+        /// <summary>
+        /// Gets the event manager.
+        /// </summary>
+        public override IEventManager EventManager
+        {
+            get { return this._eventManager; }
+        }
+        /// <summary>
+        /// Gets the implementation manager.
+        /// </summary>
+        public override IImplementationManager ImplementationManager
+        {
+            get { return this._implementationManager; }
         }
         /// <summary>
         /// Registers the default components.

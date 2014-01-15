@@ -16,32 +16,39 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertySectionElement{T, TProperty}"/> class.
         /// </summary>
-        /// <param name="tag">The tag.</param>
-        /// <param name="selector">The selector.</param>
+        /// <param name="property">The property.</param>
         /// <param name="layout">The layout.</param>
-        public PropertySectionElement(string tag, Expression<Func<T, TProperty>> selector, PersistenceLayout<TProperty> layout)
+        public PropertySectionElement(PropertyInfo property, InheritanceScope scope, PersistenceLayout<TProperty> layout) : this(property.Name, property, scope, layout)
+        {
+        }  
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertySectionElement{T, TProperty}" /> class.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="layout">The layout.</param>
+        public PropertySectionElement(string tag, PropertyInfo property, InheritanceScope scope, PersistenceLayout<TProperty> layout)
         {
             this.Tag = tag;
-            this.Selector = selector;
+            this.Property = property;
+            this.Scope = scope;
             this.Layout = layout;
-
-            this._function = selector.Compile();
         }
         #endregion
-
-        #region Fields
-        private readonly Func<T, TProperty> _function; 
-        #endregion
-
+        
         #region Properties
         /// <summary>
         /// Gets the tag.
         /// </summary>
         public string Tag { get; private set; }
         /// <summary>
-        /// Gets the selector.
+        /// Gets the property.
         /// </summary>
-        public Expression<Func<T, TProperty>> Selector { get; private set; }
+        public PropertyInfo Property { get; private set; }
+        /// <summary>
+        /// Gets the scope.
+        /// </summary>
+        public InheritanceScope Scope { get; private set; }
         /// <summary>
         /// Gets the layout.
         /// </summary>
@@ -50,32 +57,42 @@ namespace Xemio.GameLibrary.Content.Layouts
 
         #region Implementation of ILayoutElement
         /// <summary>
-        /// Writes the specified value.
+        /// Writes the specified container.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        /// <param name="value">The value.</param>
-        public void Write(IFormatWriter writer, object value)
+        /// <param name="container">The container.</param>
+        public void Write(IFormatWriter writer, object container)
         {
             using (writer.Section(this.Tag))
             {
-                this.Layout.Write(writer, this._function((T)value));
+                object propertyInstance = this.Property.GetValue(container);
+                if (this.Scope == InheritanceScope.Derived)
+                {
+                    writer.WriteString("Type", propertyInstance.GetType().AssemblyQualifiedName);
+                }
+
+                this.Layout.Write(writer, propertyInstance);
             }
         }
         /// <summary>
-        /// Reads a property value for the specified instance.
+        /// Reads a property container for the specified instance.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <param name="value">The value.</param>
-        public void Read(IFormatReader reader, object value)
+        /// <param name="container">The container.</param>
+        public void Read(IFormatReader reader, object container)
         {
             using (reader.Section(this.Tag))
             {
-                object propertyInstance = Activator.CreateInstance(typeof(TProperty), true);
-                PropertyInfo property = PropertyHelper.GetProperty(this.Selector);
+                Type type = typeof(TProperty);
+                if (this.Scope == InheritanceScope.Derived)
+                {
+                    type = Type.GetType(reader.ReadString("Type"));
+                }
+
+                object propertyInstance = Activator.CreateInstance(type, true);
 
                 this.Layout.Read(reader, propertyInstance);
-
-                property.SetValue(value, propertyInstance);
+                this.Property.SetValue(container, propertyInstance);
             }
         }
         #endregion

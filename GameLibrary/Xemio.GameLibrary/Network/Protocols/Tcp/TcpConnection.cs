@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             this._tcpClient = tcpClient;
             this._tcpClient.NoDelay = (delay == TcpDelay.None);
             
-            this._buffer = new PackageBuffer();
+            this._buffer = new TcpPackageBuffer();
 
             this.Stream = tcpClient.GetStream();
             this.Address = ((IPEndPoint)this._tcpClient.Client.LocalEndPoint).Address;
@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
         #region Fields
         private readonly TcpClient _tcpClient;
-        private readonly PackageBuffer _buffer;
+        private readonly TcpPackageBuffer _buffer;
         #endregion
 
         #region Properties

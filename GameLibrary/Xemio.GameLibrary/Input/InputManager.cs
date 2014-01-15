@@ -13,7 +13,7 @@ using Xemio.GameLibrary.Input.Events;
 namespace Xemio.GameLibrary.Input
 {
     [Require(typeof(IGameLoop))]
-    [Require(typeof(EventManager))]
+    [Require(typeof(IEventManager))]
 
     public class InputManager : IConstructable, IGameHandler
     {
@@ -163,7 +163,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public void Construct()
         {
-            var eventManager = XGL.Components.Get<EventManager>();
+            var eventManager = XGL.Components.Get<IEventManager>();
 
             eventManager.Subscribe<KeyStateEvent>(this.HandleInputEvent);
             eventManager.Subscribe<MousePositionEvent>(this.HandleMousePositionEvent);

@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Network.Protocols
             string protocolName = segments[0];
             string url = segments[1];
 
-            var implementations = XGL.Components.Get<ImplementationManager>();
+            var implementations = XGL.Components.Get<IImplementationManager>();
             T protocol = implementations.GetNew<string, T>(protocolName);
 
             if (protocol == null)

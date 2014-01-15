@@ -8,7 +8,6 @@ using Xemio.GameLibrary;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Events.Logging;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
 using Xemio.GameLibrary.Plugins.Implementations;
@@ -21,22 +20,7 @@ namespace Xemio.Testing.EventSystem
 
         static void Main(string[] args)
         {
-            var config = XGL.Configure()
-                .EnableCoreComponents()
-                .BuildConfiguration();
-
-            XGL.Run(config);
-
-            EventManager eventManager = XGL.Components.Get<EventManager>();
-            disposable = eventManager.Subscribe<ExceptionEvent>(Program.OnException);
-
             throw new InvalidOperationException("Some exception text.");
-        }
-
-        private static void OnException(ExceptionEvent obj)
-        {
-            disposable.Dispose();
-            Console.WriteLine(obj.Message);
         }
 
         public static void OnNext(TestEvent value)

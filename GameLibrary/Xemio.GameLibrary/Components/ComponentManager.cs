@@ -11,7 +11,7 @@ using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Components
 {
-    public class ComponentManager
+    public class ComponentManager : IComponentManager
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -110,7 +110,7 @@ namespace Xemio.GameLibrary.Components
         }
         #endregion
 
-        #region Methods
+        #region Implementation of IComponentManager
         /// <summary>
         /// Constructs all loaded components.
         /// </summary>
