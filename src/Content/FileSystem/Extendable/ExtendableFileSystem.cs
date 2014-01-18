@@ -2,28 +2,45 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Plugins.Implementations;
 
-namespace Xemio.GameLibrary.Content.FileSystem.Modular
+namespace Xemio.GameLibrary.Content.FileSystem.Extendable
 {
-    public class ModularFileSystem : IFileSystem
+    public class ExtendableFileSystem<T> : ExtendableFileSystem where T : IFileSystem, new()
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModularFileSystem"/> class.
+        /// Initializes a new instance of the <see cref="ExtendableFileSystem" /> class.
         /// </summary>
-        public ModularFileSystem()
+        public ExtendableFileSystem() : base(new T())
         {
-            this.FileSystems = new List<IFileSystem>();
+        }
+        #endregion
+    }
+    public class ExtendableFileSystem : IFileSystem, IConstructable
+    {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtendableFileSystem" /> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        public ExtendableFileSystem(IFileSystem fileSystem)
+        {
+            this.FileSystem = fileSystem;
+            this.Extensions = new List<IFileSystem>();
         }
         #endregion
 
         #region Properties
         /// <summary>
+        /// Gets the file system.
+        /// </summary>
+        public IFileSystem FileSystem { get; private set; }
+        /// <summary>
         /// Gets the file systems.
         /// </summary>
-        public IList<IFileSystem> FileSystems { get; private set; } 
+        public IList<IFileSystem> Extensions { get; private set; } 
         #endregion
         
         #region Implementation of IFileSystem
@@ -34,7 +51,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="fileName">Name of the file.</param>
         public Stream Open(string fileName)
         {
-            IFileSystem fileSystem = this.FileSystems.FirstOrDefault(fs => fs.FileExists(fileName));
+            IFileSystem fileSystem = this.Extensions.FirstOrDefault(fs => fs.FileExists(fileName));
             if (fileSystem == null)
             {
                 throw new InvalidOperationException("File " + fileName + " not found.");
@@ -49,7 +66,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="fileName">Name of the file.</param>
         public Stream Create(string fileName)
         {
-            throw new NotImplementedException();
+            return this.FileSystem.Create(fileName);
         }
         /// <summary>
         /// Deletes the specified file. Throws an exception if the file
@@ -58,7 +75,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="fileName">Name of the file.</param>
         public void Delete(string fileName)
         {
-            foreach (IFileSystem fileSystem in this.FileSystems)
+            foreach (IFileSystem fileSystem in this.Extensions)
             {
                 if (fileSystem.FileExists(fileName))
                 {
@@ -72,7 +89,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="path">The path.</param>
         public void CreateDirectory(string path)
         {
-            throw new NotImplementedException();
+            this.FileSystem.CreateDirectory(path);
         }
         /// <summary>
         /// Deletes the specified directory. Throws an exception if the
@@ -81,7 +98,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="path">The path.</param>
         public void DeleteDirectory(string path)
         {
-            foreach (IFileSystem fileSystem in this.FileSystems)
+            foreach (IFileSystem fileSystem in this.Extensions)
             {
                 if (fileSystem.DirectoryExists(path))
                 {
@@ -95,7 +112,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="fileName">Name of the file.</param>
         public bool FileExists(string fileName)
         {
-            return this.FileSystems.Any(fileSystem => fileSystem.FileExists(fileName));
+            return this.Extensions.Any(fileSystem => fileSystem.FileExists(fileName));
         }
         /// <summary>
         /// Determines wether the specified directory exists.
@@ -103,7 +120,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="directoryName">Name of the directory.</param>
         public bool DirectoryExists(string directoryName)
         {
-            return this.FileSystems.Any(fileSystem => fileSystem.DirectoryExists(directoryName));
+            return this.Extensions.Any(fileSystem => fileSystem.DirectoryExists(directoryName));
         }
         /// <summary>
         /// Gets all files inside the specified directory. Returns an empty array
@@ -112,7 +129,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="directory">The directory.</param>
         public string[] GetFiles(string directory)
         {
-            return this.FileSystems
+            return this.Extensions
                 .Where(fileSystem => fileSystem.DirectoryExists(directory))
                 .SelectMany(fileSystem => fileSystem.GetFiles(directory))
                 .Distinct()
@@ -125,7 +142,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="directory">The directory.</param>
         public string[] GetDirectories(string directory)
         {
-            return this.FileSystems
+            return this.Extensions
                 .Where(fileSystem => fileSystem.DirectoryExists(directory))
                 .SelectMany(fileSystem => fileSystem.GetDirectories(directory))
                 .Distinct()
@@ -138,7 +155,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="listener">The listener.</param>
         public void Subscribe(string path, IFileSystemListener listener)
         {
-            foreach (IFileSystem fileSystem in this.FileSystems)
+            foreach (IFileSystem fileSystem in this.Extensions)
             {
                 if (fileSystem.DirectoryExists(path))
                 {
@@ -152,7 +169,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <param name="listener">The listener.</param>
         public void Unsubscribe(IFileSystemListener listener)
         {
-            foreach (IFileSystem fileSystem in this.FileSystems)
+            foreach (IFileSystem fileSystem in this.Extensions)
             {
                 fileSystem.Unsubscribe(listener);
             }
@@ -160,7 +177,28 @@ namespace Xemio.GameLibrary.Content.FileSystem.Modular
         /// <summary>
         /// Gets the pathing tool for the file system implementation.
         /// </summary>
-        public IPath Path { get; private set; }
+        public IPath Path
+        {
+            get { return this.FileSystem.Path; }
+        }
+        #endregion
+
+        #region Implementation of IConstructable
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            var implementations = XGL.Components.Get<IImplementationManager>();
+            if (implementations != null)
+            {
+                var extensions = implementations.All<string, IFileSystemExtension>();
+                foreach (IFileSystemExtension extension in extensions)
+                {
+                    this.Extensions.Add(extension.FileSystem);
+                }
+            }
+        }
         #endregion
     }
 }
