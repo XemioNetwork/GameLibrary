@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Content.Layouts.Collections;
 using Xemio.GameLibrary.Content.Layouts.Primitives;
 using Xemio.GameLibrary.Content.Layouts.References;
@@ -12,24 +13,80 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Layouts.Generation
 {
-    internal class LayoutGenerator
+    internal class LayoutGenerator : IComputationProvider<Type, ILayoutElement>
     {
-        #region Singleton
+        #region Private Methods
         /// <summary>
-        /// Gets the cache.
+        /// Handles the value types.
         /// </summary>
-        public static LayoutCache Cache
+        /// <param name="container">The container.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="tag">The tag.</param>
+        private bool HandleValueTypes(IElementContainer container, PropertyInfo property, string tag)
         {
-            get { return Singleton<LayoutCache>.Value; }
+            if (property.PropertyType == typeof(bool))
+            {
+                container.Add(new BooleanPropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(byte))
+            {
+                container.Add(new BytePropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(char))
+            {
+                container.Add(new CharPropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(double))
+            {
+                container.Add(new DoublePropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(float))
+            {
+                container.Add(new FloatPropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(Guid))
+            {
+                container.Add(new GuidPropertyElement(tag, "N", property));
+            }
+            else if (property.PropertyType == typeof(int))
+            {
+                container.Add(new IntegerPropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(long))
+            {
+                container.Add(new LongPropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(Rectangle))
+            {
+                container.Add(new RectanglePropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(short))
+            {
+                container.Add(new ShortPropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(string))
+            {
+                container.Add(new StringPropertyElement(tag, property));
+            }
+            else if (property.PropertyType == typeof(Vector2))
+            {
+                container.Add(new Vector2PropertyElement(tag, property));
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
         }
         #endregion
 
-        #region Methods
+        #region Implementation of IComputationProvider<Type, ILayoutElement>
         /// <summary>
-        /// Generates the persistence layout for specified type.
+        /// Computes the specified key.
         /// </summary>
         /// <param name="type">The type.</param>
-        public static ILayoutElement Generate(Type type)
+        public ILayoutElement Compute(Type type)
         {
             Type layoutType = typeof(PersistenceLayout<>).MakeGenericType(type);
             var container = (IElementContainer)Activator.CreateInstance(layoutType);
@@ -47,55 +104,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                         .Tag;
                 }
 
-                if (property.PropertyType == typeof(bool))
-                {
-                    container.Add(new BooleanPropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(byte))
-                {
-                    container.Add(new BytePropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(char))
-                {
-                    container.Add(new CharPropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(double))
-                {
-                    container.Add(new DoublePropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(float))
-                {
-                    container.Add(new FloatPropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(Guid))
-                {
-                    container.Add(new GuidPropertyElement(tag, "N", property));
-                }
-                else if (property.PropertyType == typeof(int))
-                {
-                    container.Add(new IntegerPropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(long))
-                {
-                    container.Add(new LongPropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(Rectangle))
-                {
-                    container.Add(new RectanglePropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(short))
-                {
-                    container.Add(new ShortPropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof(string))
-                {
-                    container.Add(new StringPropertyElement(tag, property));
-                }
-                else if (property.PropertyType == typeof (Vector2))
-                {
-                    container.Add(new Vector2PropertyElement(tag, property));
-                }
-                else
+                if (!this.HandleValueTypes(container, property, tag))
                 {
                     bool isCollection = false;
 
@@ -141,7 +150,10 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
 
                     if (!isCollection)
                     {
-                        if (ReflectionCache.HasCustomAttribute<DerivableAttribute>(property))
+                        bool isAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
+                        bool isDerivable = isAbstraction || ReflectionCache.HasCustomAttribute<DerivableAttribute>(property);
+
+                        if (isDerivable)
                         {
                             container.Add(new DerivablePropertyReferenceElement(tag, property));
                         }

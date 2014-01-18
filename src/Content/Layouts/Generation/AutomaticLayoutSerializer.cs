@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content.Formats;
 
@@ -11,6 +12,10 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
     [ManuallyLinked]
     public class AutomaticLayoutSerializer : Serializer<object>
     {
+        #region Fields
+        private static readonly Cache<Type, ILayoutElement> cache = new Cache<Type, ILayoutElement, LayoutGenerator>(); 
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="AutomaticLayoutSerializer"/> class.
@@ -37,7 +42,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
         public override object Read(IFormatReader reader)
         {
             object instance = Activator.CreateInstance(this.Type, true);
-            LayoutGenerator.Cache.Get(this.Type).Read(reader, instance);
+            cache.Get(this.Type).Read(reader, instance);
 
             return instance;
         }
@@ -48,7 +53,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
         /// <param name="value">The value.</param>
         public override void Write(IFormatWriter writer, object value)
         {
-            LayoutGenerator.Cache.Get(this.Type).Write(writer, value);
+            cache.Get(this.Type).Write(writer, value);
         }
         #endregion
     }
