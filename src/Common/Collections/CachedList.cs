@@ -90,7 +90,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <summary>
         /// Gets the enumerator.
         /// </summary>
-        public IEnumerator<T> GetEnumerator()
+        public virtual IEnumerator<T> GetEnumerator()
         {
             return this._list.GetEnumerator();
         }
