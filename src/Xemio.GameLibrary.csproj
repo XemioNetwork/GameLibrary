@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Collections\AutoCachedList.cs" />
+    <Compile Include="Common\Collections\Cache.cs" />
+    <Compile Include="Common\Collections\IComputationProvider.cs" />
     <Compile Include="Common\Link\DuplicateBehavior.cs" />
     <Compile Include="Common\Properties.cs" />
     <Compile Include="Common\Property.cs" />
@@ -75,7 +77,6 @@
     <Compile Include="Content\Layouts\Generation\AutomaticLayoutSerializer.cs" />
     <Compile Include="Content\Layouts\Generation\DerivableAttribute.cs" />
     <Compile Include="Content\Layouts\Generation\ElementTagAttribute.cs" />
-    <Compile Include="Content\Layouts\Generation\LayoutCache.cs" />
     <Compile Include="Content\Layouts\Generation\LayoutGenerator.cs" />
     <Compile Include="Content\Layouts\Generation\TagAttribute.cs" />
     <Compile Include="Content\Layouts\IElementContainer.cs" />
