@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xemio.GameLibrary</RootNamespace>
-    <AssemblyName>XGL</AssemblyName>
+    <AssemblyName>Xemio.GameLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -46,9 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Collections\AutoCachedList.cs" />
     <Compile Include="Common\Link\DuplicateBehavior.cs" />
     <Compile Include="Common\Properties.cs" />
     <Compile Include="Common\Property.cs" />
+    <Compile Include="Common\Randomization\CryptoRandom.cs" />
     <Compile Include="Common\ReflectionCache.cs" />
     <Compile Include="Common\Retry.cs" />
     <Compile Include="Components\IComponentManager.cs" />
@@ -68,10 +70,15 @@
     <Compile Include="Content\Formats\Xml\XmlFormat.cs" />
     <Compile Include="Content\Formats\Xml\XmlReader.cs" />
     <Compile Include="Content\Formats\Xml\XmlWriter.cs" />
-    <Compile Include="Content\Layouts\InheritanceScope.cs" />
-    <Compile Include="Content\Layouts\CascadedPropertyPersistenceLayout.cs" />
-    <Compile Include="Content\Layouts\CascadedSectionPersistenceLayout.cs" />
-    <Compile Include="Content\Layouts\Collections\CollectionElement.cs" />
+    <Compile Include="Content\Layouts\Collections\DerivableCollectionPropertyElement.cs" />
+    <Compile Include="Content\Layouts\Collections\CollectionPropertyElement.cs" />
+    <Compile Include="Content\Layouts\Generation\AutomaticLayoutSerializer.cs" />
+    <Compile Include="Content\Layouts\Generation\DerivableAttribute.cs" />
+    <Compile Include="Content\Layouts\Generation\ElementTagAttribute.cs" />
+    <Compile Include="Content\Layouts\Generation\LayoutCache.cs" />
+    <Compile Include="Content\Layouts\Generation\LayoutGenerator.cs" />
+    <Compile Include="Content\Layouts\Generation\TagAttribute.cs" />
+    <Compile Include="Content\Layouts\IElementContainer.cs" />
     <Compile Include="Content\Layouts\Primitives\BooleanPropertyElement.cs" />
     <Compile Include="Content\Layouts\Primitives\BytePropertyElement.cs" />
     <Compile Include="Content\Layouts\Primitives\CharPropertyElement.cs" />
@@ -87,10 +94,12 @@
     <Compile Include="Common\PropertyHelper.cs" />
     <Compile Include="Content\Layouts\PropertySectionElement.cs" />
     <Compile Include="Content\Layouts\Primitives\RectanglePropertyElement.cs" />
+    <Compile Include="Content\Layouts\References\PropertyReferenceElement.cs" />
     <Compile Include="Content\Layouts\SectionElement.cs" />
     <Compile Include="Content\Layouts\Primitives\ShortPropertyElement.cs" />
     <Compile Include="Content\Layouts\Primitives\StringPropertyElement.cs" />
     <Compile Include="Content\Layouts\Primitives\Vector2PropertyElement.cs" />
+    <Compile Include="Content\Layouts\References\DerivablePropertyReferenceElement.cs" />
     <Compile Include="Content\Serialization\Automatic\ArrayProcessor.cs" />
     <Compile Include="Content\Serialization\Automatic\DictionaryProcessor.cs" />
     <Compile Include="Content\Serialization\Automatic\EnumProcessor.cs" />
@@ -143,7 +152,7 @@
     <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="Entities\Components\IPositionComponent.cs" />
     <Compile Include="Events\IEventManager.cs" />
-    <Compile Include="Events\IInterceptableEvent.cs" />
+    <Compile Include="Events\ICancelableEvent.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
     <Compile Include="Game\Scenes\SceneProvider.cs" />
@@ -227,8 +236,11 @@
     <Compile Include="Content\Texts\TextWriter.cs" />
     <Compile Include="Entities\Events\EntityPositionChangedEvent.cs" />
     <Compile Include="Events\EventFilter.cs" />
+    <Compile Include="Network\Protocols\Streamed\StreamedClientProtocol.cs" />
+    <Compile Include="Network\Protocols\Streamed\StreamedSerializer.cs" />
     <Compile Include="Network\Protocols\IProtocol.cs" />
     <Compile Include="Network\Protocols\ProtocolFactory.cs" />
+    <Compile Include="Network\Protocols\Streamed\StreamedServerConnection.cs" />
     <Compile Include="Network\Timing\TimeSyncServerWorker.cs" />
     <Compile Include="Plugins\Contexts\MergedAssemblyContext.cs" />
     <Compile Include="Plugins\Implementations\IImplementationManager.cs" />
@@ -270,7 +282,6 @@
     <Compile Include="Localization\Language.cs" />
     <Compile Include="Localization\LanguageSerializer.cs" />
     <Compile Include="Localization\LocalizationManager.cs" />
-    <Compile Include="Localization\LanguageValue.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="Math\Rectangle.cs" />
     <Compile Include="Math\Vector2.cs" />
@@ -286,11 +297,10 @@
     <Compile Include="Network\Protocols\Tcp\TcpDelay.cs" />
     <Compile Include="Network\Handlers\ServerHandler.cs" />
     <Compile Include="Network\Packages\Package.cs" />
-    <Compile Include="Network\Protocols\Tcp\TcpPackageBuffer.cs" />
     <Compile Include="Network\Protocols\IClientProtocol.cs" />
     <Compile Include="Network\Protocols\IServerProtocol.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpClientProtocol.cs" />
-    <Compile Include="Network\Protocols\Tcp\TcpConnection.cs" />
+    <Compile Include="Network\Protocols\Tcp\TcpServerConnection.cs" />
     <Compile Include="Network\Protocols\Tcp\TcpServerProtocol.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\Timing\LatencyClientHandler.cs" />

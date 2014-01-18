@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Events
 {
-    public interface IInterceptableEvent : IEvent
+    public interface ICancelableEvent : IEvent
     {
         /// <summary>
         /// Gets a value indicating whether the event propagation was canceled.

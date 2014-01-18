@@ -111,33 +111,33 @@ namespace Xemio.GameLibrary.Events
         {
             lock (this._observerMappings)
             {
-                if (!this._observerMappings.ContainsKey(typeof (TEvent)))
+                if (!this._observerMappings.ContainsKey(typeof(TEvent)))
                 {
                     this.LoadEventsFromAssemblyOf<TEvent>();
-                    this.LoadEventsFromAssemblyOf(e.GetType());
-
-                    if (!this._observerMappings.ContainsKey(typeof (TEvent)))
+                    if (e.GetType() != typeof(TEvent))
                     {
-                        throw new InvalidOperationException("Could not resolve event inheritance tree for " + typeof (TEvent) + ".");
+                        this.LoadEventsFromAssemblyOf(e.GetType());
+                    }
+
+                    if (!this._observerMappings.ContainsKey(typeof(TEvent)))
+                    {
+                        throw new InvalidOperationException("Could not resolve event inheritance tree for " + typeof(TEvent) + ".");
                     }
                 }
 
-                using (this._observerMappings[typeof (TEvent)].StartCaching())
+                var interceptable = e as ICancelableEvent;
+                foreach (IObserver<TEvent> observer in this._observerMappings[typeof(TEvent)])
                 {
-                    var interceptable = e as IInterceptableEvent;
-                    foreach (IObserver<TEvent> observer in this._observerMappings[typeof (TEvent)])
+                    try
                     {
-                        try
-                        {
-                            observer.OnNext(e);
+                        observer.OnNext(e);
 
-                            if (interceptable != null && interceptable.IsCanceled)
-                                break;
-                        }
-                        catch (Exception ex)
-                        {
-                            observer.OnError(ex);
-                        }
+                        if (interceptable != null && interceptable.IsCanceled)
+                            break;
+                    }
+                    catch (Exception ex)
+                    {
+                        observer.OnError(ex);
                     }
                 }
             }
@@ -164,7 +164,7 @@ namespace Xemio.GameLibrary.Events
 
             lock (this._typeInheritanceMappings)
             {
-                if (this._typeInheritanceMappings.ContainsKey(typeof (T)) == false)
+                if (this._typeInheritanceMappings.ContainsKey(typeof(T)) == false)
                 {
                     this.LoadEventsFrom(ContextFactory.CreateSingleAssemblyContext(typeof(T).Assembly));
                 }
@@ -191,7 +191,7 @@ namespace Xemio.GameLibrary.Events
                     foreach (Type baseType in eventTypes)
                     {
                         if (this._observerMappings.ContainsKey(baseType) == false)
-                            this._observerMappings.Add(baseType, new CachedList<dynamic>());
+                            this._observerMappings.Add(baseType, new AutoCachedList<dynamic>());
 
                         foreach (Type knownSuperType in this._observerMappings.Keys.Where(baseType.IsAssignableFrom))
                         {
