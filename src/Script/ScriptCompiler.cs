@@ -61,7 +61,7 @@ namespace Xemio.GameLibrary.Script
             parameters.ReferencedAssemblies.Add("System.dll");
             parameters.ReferencedAssemblies.Add("System.Linq.dll");
             parameters.ReferencedAssemblies.Add("System.Core.dll");
-            parameters.ReferencedAssemblies.Add("XGL.dll");
+            parameters.ReferencedAssemblies.Add(typeof(XGL).Assembly.Location);
 
             parameters.ReferencedAssemblies.AddRange(this.Assemblies.ToArray());
 

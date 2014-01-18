@@ -16,9 +16,9 @@ namespace Xemio.GameLibrary.Localization
         /// </summary>
         public Language()
         {
-            this.Values = new List<LanguageValue>();
+            this.Values = new Dictionary<string, string>();
         }
-        #endregion Constructors
+        #endregion
 
         #region Properties
         /// <summary>
@@ -28,8 +28,8 @@ namespace Xemio.GameLibrary.Localization
         /// <summary>
         /// Gets or sets the values.
         /// </summary>
-        public List<LanguageValue> Values { get; set; }
-        #endregion Properties
+        public Dictionary<string, string> Values { get; set; }
+        #endregion
 
         #region Overriden Methods
         /// <summary>
@@ -37,13 +37,13 @@ namespace Xemio.GameLibrary.Localization
         /// </summary>
         public override bool Equals(object obj)
         {
-            Language language = obj as Language;
+            var language = obj as Language;
             if (language != null)
                 return this.Equals(language);
 
             return base.Equals(obj);
         }
-        #endregion Overriden Methods
+        #endregion
 
         #region IEquatable<Language> Member
         /// <summary>
@@ -54,6 +54,6 @@ namespace Xemio.GameLibrary.Localization
         {
             return this.CultureName == other.CultureName;
         }
-        #endregion IEquatable<Language> Member
+        #endregion
     }
 }

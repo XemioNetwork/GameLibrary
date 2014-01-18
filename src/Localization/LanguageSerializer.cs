@@ -16,20 +16,18 @@ namespace Xemio.GameLibrary.Localization
         /// Reads a XML formatted langauage from the readers stream.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <returns></returns>
         public override Language Read(IFormatReader reader)
         {
             var document = XDocument.Load(reader.Stream);
-            var language = new Language();
 
+            var language = new Language();
             language.CultureName = document.Root.Attribute("name").Value;
-            IEnumerable<LanguageValue> values = from element in document.Root.Descendants()
-                                                select new LanguageValue
-                                                           {
-                                                               Id = element.Attribute("id").Value,
-                                                               Localized = element.Value
-                                                           };
-            language.Values.AddRange(values);
+
+            foreach (XElement element in document.Root.Descendants())
+            {
+                language.Values.Add(element.Attribute("id").Value, element.Value);
+            }
+
 
             return language;
         }
@@ -37,15 +35,15 @@ namespace Xemio.GameLibrary.Localization
         /// Writes the specified language as XML to the writers stream.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        /// <param name="value">The value.</param>
-        public override void Write(IFormatWriter writer, Language value)
+        /// <param name="language">The language.</param>
+        public override void Write(IFormatWriter writer, Language language)
         {
-            var rootElement = new XElement("language", new XAttribute("name", value.CultureName));
+            var rootElement = new XElement("language", new XAttribute("name", language.CultureName));
 
-            foreach (LanguageValue languageValue in value.Values)
+            foreach (KeyValuePair<string, string> pair in language.Values)
             {
-                var element = new XElement("value", new XAttribute("id", languageValue.Id));
-                element.Add(languageValue.Localized);
+                var element = new XElement("value", new XAttribute("id", pair.Key));
+                element.Add(pair.Value);
 
                 rootElement.Add(element);
             }

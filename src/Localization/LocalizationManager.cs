@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using NLog;
 using Xemio.GameLibrary.Components;
@@ -32,7 +33,7 @@ namespace Xemio.GameLibrary.Localization
         public LocalizationManager(string directory)
         {
             this.Languages = new List<Language>();
-            this.RootDirectory = directory;
+            this.Directory = directory;
         }
         #endregion
 
@@ -46,9 +47,9 @@ namespace Xemio.GameLibrary.Localization
         /// </summary>
         public List<Language> Languages { get; private set; }
         /// <summary>
-        /// Gets the root directory.
+        /// Gets the directory.
         /// </summary>
-        public string RootDirectory { get; private set; }
+        public string Directory { get; private set; }
         #endregion
 
         #region IConstructable Member
@@ -57,11 +58,19 @@ namespace Xemio.GameLibrary.Localization
         /// </summary>
         public void Construct()
         {
-            this.LoadLanguages(this.RootDirectory);
+            this.LoadLanguages(this.Directory);
+            this.ChangeToSystemLanguage();
         }
         #endregion
         
         #region Methods
+        /// <summary>
+        /// Changes the current language to the users language.
+        /// </summary>
+        public void ChangeToSystemLanguage()
+        {
+            this.ChangeLanguage(Thread.CurrentThread.CurrentCulture.Name);
+        }
         /// <summary>
         /// Changes the current language.
         /// </summary>
@@ -72,21 +81,32 @@ namespace Xemio.GameLibrary.Localization
             if (currentLanguage == null)
             {
                 logger.Warn("Language {0} does not exist. Could not change language.", language);
+                return;
             }
 
             this.CurrentLanguage = currentLanguage;
         }
         /// <summary>
-        /// Gets the localized string.
+        /// Gets the localized string for the specified id.
         /// </summary>
         /// <param name="id">The id.</param>
-        public string GetLocalizedString(string id)
+        public string Get(string id)
         {
-            LanguageValue value = this.CurrentLanguage.Values.FirstOrDefault(f => f.Id == id);
-            if (value == null)
+            if (this.CurrentLanguage == null || !this.CurrentLanguage.Values.ContainsKey(id))
+            {
                 return id;
-            
-            return value.Localized;
+            }
+
+            return this.CurrentLanguage.Values[id];
+        }
+        /// <summary>
+        /// Gets the localized format for the specified id and appends format parameters.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="parameters">The parameters.</param>
+        public string Get(string id, params object[] parameters)
+        {
+            return string.Format(this.Get(id), parameters);
         }
         /// <summary>
         /// Adds the directory to the root directories and loads all languages inside it.
@@ -112,17 +132,16 @@ namespace Xemio.GameLibrary.Localization
             logger.Info("Loading languages from {0}.", directory);
 
             string[] localizationFiles = fileSystem.GetFiles(directory);
-            foreach (string file in localizationFiles)
+            foreach (Language language in localizationFiles.Select(content.Get<Language>))
             {
-                var language = content.Get<Language>(file);
-
                 if (this.Languages.Contains(language))
                 {
                     this.MergeLanguage(language);
-                    continue;
                 }
-
-                this.Languages.Add(language);
+                else
+                {
+                    this.Languages.Add(language);
+                }
             }
         }
         #endregion
@@ -135,16 +154,15 @@ namespace Xemio.GameLibrary.Localization
         private void MergeLanguage(Language language)
         {
             Language existentLanguage = this.Languages.First(f => f.Equals(language));
-            foreach (LanguageValue value in language.Values)
+            foreach (KeyValuePair<string, string> pair in language.Values)
             {
-                LanguageValue existingValue = existentLanguage.Values.FirstOrDefault(f => f.Id == value.Id);
-                if (existingValue != null)
+                if (existentLanguage.Values.ContainsKey(pair.Key))
                 {
-                    existingValue.Localized = value.Localized;
+                    existentLanguage.Values[pair.Key] = pair.Value;
                 }
                 else
                 {
-                    existentLanguage.Values.Add(value);
+                    existentLanguage.Values.Add(pair.Key, pair.Value);
                 }
             }
         }
