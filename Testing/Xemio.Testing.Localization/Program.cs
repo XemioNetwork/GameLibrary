@@ -14,17 +14,17 @@ namespace Xemio.Testing.Localization
             Language language = new Language
                                     {
                                         CultureName = "de-DE",
-                                        Values = new List<LanguageValue>
+                                        Values = new List<LocalizedValue>
                                                      {
-                                                         new LanguageValue
+                                                         new LocalizedValue
                                                              {
                                                                  Id = "MyString",
-                                                                 Localized = "Mein Text" + Environment.NewLine + "Günther"
+                                                                 Value = "Mein Text" + Environment.NewLine + "Günther"
                                                              },
-                                                         new LanguageValue
+                                                         new LocalizedValue
                                                              {
                                                                  Id = "AnotherString",
-                                                                 Localized = "Ein anderer Text"
+                                                                 Value = "Ein anderer Text"
                                                              }
                                                      }
                                     };

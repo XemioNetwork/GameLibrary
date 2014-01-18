@@ -15,6 +15,7 @@ using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Layouts;
+using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game.Timing;
@@ -27,128 +28,70 @@ using Xemio.GameLibrary.Script;
 
 namespace Xemio.Testing.Input
 {
-    public class BaseEvent : IEvent
-    {
-        public bool Test { get; set; }
-    }
-
-    public class MidEvent : BaseEvent
-    {
-        public BaseEvent BaseEvent { get; set; }
-    }
-
-    public class SuperEvent : MidEvent
-    {
-        
-    }
-
-    public class SuperSuperEvent : SuperEvent
-    {
-        
-    }
-
-    public class MyEvent : SuperSuperEvent
-    {
-        
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
-            var layout = new PersistenceLayout<MidEvent>()
-                .Section(midEvent => midEvent.BaseEvent)
-                    .Property(f => f.Test);
-            
+            var s = XGL.Components.Get<SerializationManager>();
             var memory = new MemoryStream();
-            using (IFormatWriter writer = Format.Xml.CreateWriter(memory))
+            var streamReader = new StreamReader(memory, Encoding.Default);
+
+            s.Save(new TestClass()
             {
-                layout.Write(writer, new MidEvent() {BaseEvent = new BaseEvent() {Test = true}});
-            }
+                A = 33,
+                B = "Hallo Welt",
+                C = new TestImpl()
+                {
+                    IsTrue = true,
+                    Content = "asdf",
+                    SubClasses = new List<ISubClass>()
+                    {
+                        new SubClass() {IsTrue = false},
+                        new TestImpl()
+                        {
+                            Content = "a",
+                            SubClasses = new List<ISubClass>(),
+                            IsTrue = false
+                        }
+                    }
+                }
+            }, memory, Format.Xml);
 
             memory.Position = 0;
 
-            MidEvent m = new MidEvent();
-            using (IFormatReader reader = Format.Xml.CreateReader(memory))
-            {
-                layout.Read(reader, m);
-            }
-            
-
-
-            string a = "3";
-            /*var memoryStream = new MemoryStream();
-
-            var serializer = XGL.Components.Get<SerializationManager>();
-
-            var entity = new Parent()
-            {
-                Child = new TestClass()
-                {
-                    A = ""
-                },
-                ChildB = new TestClassImpl2()
-                {
-                    A = "Welt",
-                    G = 0.077
-                }
-            };
-            
-            serializer.Save(entity, memoryStream, Format.Xml);
-            memoryStream.Position = 0;
-
-            string content = new StreamReader(memoryStream).ReadToEnd();*/
+            Console.WriteLine(streamReader.ReadToEnd());
+            Console.ReadLine();
         }
     }
 
-    public class TestEvent : IEvent
+    public class TestClass
     {
-        #region Overrides of Object
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        public override string ToString()
-        {
-            return "Hallo Welt";
-        }
-        #endregion
+        public int A { get; set; }
+        public string B { get; set; }
+
+        [Derivable]
+        public ISubClass C { get; set; }
     }
 
-    public interface ITest
+    public interface ISubClass
     {
-        string A { get; set; }
+        bool IsTrue { get; set; }
     }
 
-    public class Parent
+    public class SubClass : ISubClass
     {
-        public ITest Child { get; set; }
-        public ITest ChildB { get; set; }
+        public bool IsTrue { get; set; }
     }
 
-    public class TestClass : ITest
+    public class TestImpl : ISubClass
     {
-        #region Constructors
+        #region Implementation of ISubClass
 
-        public TestClass()
-        {
-            this.B = 7;
-        }
-        #endregion
+        public bool IsTrue { get; set; }
+        public string Content { get; set; }
 
-        #region Implementation of ITest
-
-        public string A { get; set; }
-        private int B { get; set; }
-
-        #endregion
-    }
-
-    public class TestClassImpl2 : ITest
-    {
-        #region Implementation of ITest
-
-        public string A { get; set; }
-        public double G { get; set; }
+        [Derivable]
+        public List<ISubClass> SubClasses { get; set; } 
 
         #endregion
     }
