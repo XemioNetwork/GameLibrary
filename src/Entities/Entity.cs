@@ -17,10 +17,6 @@ namespace Xemio.GameLibrary.Entities
 {
     public class Entity
     {
-        #region Logger
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
