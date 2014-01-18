@@ -78,7 +78,9 @@ namespace Xemio.Testing.Input
             watch.Stop();
 
             Console.WriteLine(streamReader.ReadToEnd());
-            Console.WriteLine("Elapsed: {0}ms", watch.Elapsed.TotalMilliseconds);
+            Console.WriteLine();
+
+            Console.WriteLine("Elapsed XGL Serialize: {0}ms", watch.Elapsed.TotalMilliseconds);
 
             watch = Stopwatch.StartNew();
             var seri = new XmlSerializer(typeof(TestClass));
@@ -92,7 +94,7 @@ namespace Xemio.Testing.Input
                 }
             });
             watch.Stop();
-            Console.WriteLine("Elapsed XML Serialize: {0}ms", watch.Elapsed.TotalMilliseconds);
+            Console.WriteLine("Elapsed .NET Serialize: {0}ms", watch.Elapsed.TotalMilliseconds);
 
             Console.ReadLine();
         }
