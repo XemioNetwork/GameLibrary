@@ -10,28 +10,27 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts
 {
-    public class PropertySectionElement<T, TProperty> : ILayoutElement
+    internal class PropertySectionElement : ILayoutElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertySectionElement{T, TProperty}"/> class.
+        /// Initializes a new instance of the <see cref="PropertySectionElement"/> class.
         /// </summary>
         /// <param name="property">The property.</param>
         /// <param name="layout">The layout.</param>
-        public PropertySectionElement(PropertyInfo property, InheritanceScope scope, PersistenceLayout<TProperty> layout) : this(property.Name, property, scope, layout)
+        public PropertySectionElement(PropertyInfo property, ILayoutElement layout) : this(property.Name, property, layout)
         {
         }  
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertySectionElement{T, TProperty}" /> class.
+        /// Initializes a new instance of the <see cref="PropertySectionElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
         /// <param name="layout">The layout.</param>
-        public PropertySectionElement(string tag, PropertyInfo property, InheritanceScope scope, PersistenceLayout<TProperty> layout)
+        public PropertySectionElement(string tag, PropertyInfo property, ILayoutElement layout)
         {
             this.Tag = tag;
             this.Property = property;
-            this.Scope = scope;
             this.Layout = layout;
         }
         #endregion
@@ -46,13 +45,9 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// </summary>
         public PropertyInfo Property { get; private set; }
         /// <summary>
-        /// Gets the scope.
-        /// </summary>
-        public InheritanceScope Scope { get; private set; }
-        /// <summary>
         /// Gets the layout.
         /// </summary>
-        public PersistenceLayout<TProperty> Layout { get; private set; }
+        public ILayoutElement Layout { get; private set; }
         #endregion
 
         #region Implementation of ILayoutElement
@@ -66,11 +61,6 @@ namespace Xemio.GameLibrary.Content.Layouts
             using (writer.Section(this.Tag))
             {
                 object propertyInstance = this.Property.GetValue(container);
-                if (this.Scope == InheritanceScope.Derived)
-                {
-                    writer.WriteString("Type", propertyInstance.GetType().AssemblyQualifiedName);
-                }
-
                 this.Layout.Write(writer, propertyInstance);
             }
         }
@@ -83,12 +73,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         {
             using (reader.Section(this.Tag))
             {
-                Type type = typeof(TProperty);
-                if (this.Scope == InheritanceScope.Derived)
-                {
-                    type = Type.GetType(reader.ReadString("Type"));
-                }
-
+                Type type = this.Property.PropertyType;
                 object propertyInstance = Activator.CreateInstance(type, true);
 
                 this.Layout.Read(reader, propertyInstance);

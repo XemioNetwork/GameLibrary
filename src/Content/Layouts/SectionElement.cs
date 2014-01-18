@@ -8,16 +8,15 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts
 {
-    public class SectionElement<T> : ILayoutElement
+    internal class SectionElement : ILayoutElement
     {
-
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SectionElement{T}"/> class.
+        /// Initializes a new instance of the <see cref="SectionElement{T}" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="layout">The layout.</param>
-        public SectionElement(string tag, PersistenceLayout<T> layout)
+        public SectionElement(string tag, ILayoutElement layout)
         {
             this.Tag = tag;
             this.Layout = layout;
@@ -32,7 +31,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <summary>
         /// Gets the layout.
         /// </summary>
-        public PersistenceLayout<T> Layout { get; private set; }
+        public ILayoutElement Layout { get; private set; }
         #endregion
 
         #region Implementation of ILayoutElement

@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts
 {
-    public abstract class PropertyElement : ILayoutElement
+    internal abstract class PropertyElement : ILayoutElement
     {
         #region Constructors
         /// <summary>
