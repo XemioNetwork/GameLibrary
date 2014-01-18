@@ -93,7 +93,7 @@ namespace Xemio.GameLibrary.Rendering
             get { return this._displayMode; }
             set
             {
-                logger.Trace("Changing display mode to " + this._displayMode.Width + "x" + this._displayMode.Height);
+                logger.Trace("Changing display mode to " + value.Width + "x" + value.Height);
 
                 if (this._displayMode != null)
                 {
