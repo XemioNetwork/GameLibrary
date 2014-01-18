@@ -8,10 +8,11 @@ using System.Net;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Network.Exceptions;
 using Xemio.GameLibrary.Network.Packages;
+using Xemio.GameLibrary.Network.Protocols.Streamed;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
-    public class TcpClientProtocol : IClientProtocol
+    public class TcpClientProtocol : StreamedClientProtocol
     {
         #region Constructors
         /// <summary>
@@ -26,23 +27,25 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <param name="delay">The delay.</param>
         public TcpClientProtocol(TcpDelay delay)
         {
-            this._buffer = new TcpPackageBuffer();
             this._delay = delay;
         }
         #endregion
 
         #region Fields
-        private readonly TcpPackageBuffer _buffer;
         private readonly TcpDelay _delay;
 
         private TcpClient _tcpClient;
+        private Stream _stream;
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the stream.
         /// </summary>
-        public Stream Stream { get; private set; }
+        protected override Stream Stream
+        {
+            get { return this._stream; }
+        }
         #endregion
 
         #region IProtocol Member
@@ -50,12 +53,12 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// Connects to the specified ip.
         /// </summary>
         /// <param name="url">The URL.</param>
-        public void Open(string url)
+        public override void Open(string url)
         {
             string[] segments = url.Split(":".ToCharArray());
             if (segments.Length != 2)
             {
-                throw new ArgumentException("Invalid url [" + url + "]", "url");
+                throw new ArgumentException(@"Invalid url [" + url + "]", "url");
             }
 
             string ip = segments[0];
@@ -63,7 +66,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
 
             if (!int.TryParse(segments[1], out port))
             {
-                throw new ArgumentException("Invalid port for url [" + url + "]", "url");
+                throw new ArgumentException(@"Invalid port for url [" + url + "]", "url");
             }
 
             this._tcpClient = new TcpClient
@@ -72,66 +75,22 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
                                   };
 
             this._tcpClient.Connect(IPAddress.Parse(ip), port);
-            this.Stream = this._tcpClient.GetStream();
+            this._stream = this._tcpClient.GetStream();
         }
         /// <summary>
         /// Disconnects the client.
         /// </summary>
-        public void Close()
+        public override void Close()
         {
             this._tcpClient.Close();
-        }
-        /// <summary>
-        /// Sends the specified package.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        public void Send(Package package)
-        {
-            try
-            {
-                lock (this._buffer)
-                {
-                    this._buffer.Serialize(package, this.Stream);
-                }
-            }
-            catch (ObjectDisposedException)
-            {
-                throw new ClientLostConnectionException();
-            }
-            catch (IOException)
-            {
-                throw new ClientLostConnectionException();
-            }
-        }
-        /// <summary>
-        /// Receives a package.
-        /// </summary>
-        public Package Receive()
-        {
-            try
-            {
-                return this._buffer.Deserialize(this.Stream);
-            }
-            catch (ObjectDisposedException)
-            {
-                throw new ClientLostConnectionException();
-            }
-            catch (IOException)
-            {
-                throw new ClientLostConnectionException();
-            }
         }
         #endregion
 
         #region IClientProtocol Member
         /// <summary>
-        /// Gets or sets the client.
-        /// </summary>
-        public Client Client { get; set; }
-        /// <summary>
         /// Gets a value indicating whether this <see cref="IClientProtocol"/> is connected.
         /// </summary>
-        public bool Connected
+        public override bool Connected
         {
             get { return this._tcpClient != null && this._tcpClient.Connected; }
         }
@@ -141,7 +100,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Gets the identifier.
         /// </summary>
-        public string Id
+        public override string Id
         {
             get { return "tcp"; }
         }

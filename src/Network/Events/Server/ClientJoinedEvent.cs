@@ -2,7 +2,7 @@
 
 namespace Xemio.GameLibrary.Network.Events.Server
 {
-    public class ClientJoinedEvent : IInterceptableEvent
+    public class ClientJoinedEvent : ICancelableEvent
     {
         #region Constructors
         /// <summary>

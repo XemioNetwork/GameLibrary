@@ -46,7 +46,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             int port;
             if (!int.TryParse(url, out port))
             {
-                throw new ArgumentException("Invalid port [" + url + "].", "url");
+                throw new ArgumentException(@"Invalid port [" + url + "].", "url");
             }
 
             this._listener = new TcpListener(IPAddress.Any, port);
@@ -65,17 +65,14 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <returns></returns>
         public IServerConnection AcceptConnection()
         {
-            return new TcpConnection(this._listener.AcceptTcpClient(), this._delay);
+            return new TcpServerConnection(this._listener.AcceptTcpClient(), this._delay);
         }
-        #endregion
-
-        #region IServerProtocol Member
         /// <summary>
         /// Gets ot sets the server.
         /// </summary>
         public Server Server { get; set; }
         #endregion
-
+        
         #region Implementation of ILinkable<string>
         /// <summary>
         /// Gets the identifier.

@@ -3,7 +3,7 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Events.Client
 {
-    public abstract class ClientPackageEvent : IInterceptableEvent
+    public abstract class ClientPackageEvent : ICancelableEvent
     {
         #region Constructors
         /// <summary>

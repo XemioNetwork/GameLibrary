@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Events;
 
 namespace Xemio.GameLibrary.Network.Events.Client
 {
-    public class ClientDisconnectedEvent : IInterceptableEvent
+    public class ClientDisconnectedEvent : ICancelableEvent
     {
         #region Constructors
         /// <summary>

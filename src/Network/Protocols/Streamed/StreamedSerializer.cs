@@ -1,27 +1,25 @@
 ﻿using System;
 using System.IO;
-using NLog;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Plugins.Implementations;
-using BinaryReader = System.IO.BinaryReader;
-using BinaryWriter = System.IO.BinaryWriter;
 
-namespace Xemio.GameLibrary.Network.Protocols.Tcp
+namespace Xemio.GameLibrary.Network.Protocols.Streamed
 {
-    internal class TcpPackageBuffer
+    public class StreamedSerializer
     {
-        #region Logger
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #region Fields
+        private readonly object _writeSemaphore = new object();
+        private readonly object _readSemaphore = new object();
         #endregion
 
         #region Methods
         /// <summary>
-        /// Serializes the specified package buffered into the network stream to prevent several packages from being sent.
+        /// Serializes the specified package.
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="stream">The stream.</param>
-        public void Serialize(Package package, Stream stream)
+        protected void Serialize(Package package, Stream stream)
         {
             var buffer = new MemoryStream();
             var binaryWriter = new BinaryWriter(buffer);
@@ -31,15 +29,16 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             serializer.Save(package, buffer);
 
             byte[] data = buffer.ToArray();
-            stream.Write(data, 0, data.Length);
-            
-            logger.Trace("Sending [{0}]", BitConverter.ToString(data));
+            lock (this._writeSemaphore)
+            {
+                stream.Write(data, 0, data.Length);
+            }
         }
         /// <summary>
-        /// Deserializes the specified stream.
+        /// Deserializes a package from the specified stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        public Package Deserialize(Stream stream)
+        protected Package Deserialize(Stream stream)
         {
             var binaryReader = new BinaryReader(stream);
             var implementations = XGL.Components.Require<IImplementationManager>();
@@ -48,7 +47,10 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             int packageId = binaryReader.ReadInt32();
             Type type = implementations.GetType<int, Package>(packageId);
 
-            return (Package)serializer.Load(type, stream);
+            lock (this._readSemaphore)
+            {
+                return (Package) serializer.Load(type, stream);
+            }
         }
         #endregion
     }

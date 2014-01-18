@@ -84,7 +84,7 @@ namespace Xemio.GameLibrary.Network
         /// <param name="handlers">The handlers.</param>
         /// <param name="interceptorAction">The interceptor action.</param>
         /// <param name="handlerAction">The handler action.</param>
-        private bool HandleEvent(IInterceptableEvent evt, IEnumerable<IClientHandler> handlers, Action<IClientInterceptor> interceptorAction, Action<IClientHandler> handlerAction)
+        private bool HandleEvent(ICancelableEvent evt, IEnumerable<IClientHandler> handlers, Action<IClientInterceptor> interceptorAction, Action<IClientHandler> handlerAction)
         {
             foreach (IClientInterceptor interceptor in this._interceptors)
             {

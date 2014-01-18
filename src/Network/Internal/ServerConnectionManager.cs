@@ -16,8 +16,8 @@ namespace Xemio.GameLibrary.Network.Internal
         #endregion
 
         #region Fields
-        private readonly Dictionary<ISender, ServerPackageDispatcher> _dispatcherMappings;
-        private readonly Dictionary<ISender, OutputQueue> _queueMappings; 
+        private readonly Dictionary<IServerConnection, ServerPackageDispatcher> _dispatcherMappings;
+        private readonly Dictionary<IServerConnection, OutputQueue> _queueMappings; 
         #endregion Fields
 
         #region Properties
@@ -38,8 +38,8 @@ namespace Xemio.GameLibrary.Network.Internal
         /// <param name="server">The server.</param>
         public ServerConnectionManager(IServer server)
         {
-            this._dispatcherMappings = new Dictionary<ISender, ServerPackageDispatcher>();
-            this._queueMappings = new Dictionary<ISender, OutputQueue>();
+            this._dispatcherMappings = new Dictionary<IServerConnection, ServerPackageDispatcher>();
+            this._queueMappings = new Dictionary<IServerConnection, OutputQueue>();
 
             this.Server = server;
             this.Server.Subscribe(new ServerDisconnectHandler(this));
