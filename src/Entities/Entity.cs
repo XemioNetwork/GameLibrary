@@ -6,7 +6,7 @@ using System.Text;
 using System.IO;
 using NLog;
 using Xemio.GameLibrary.Content;
-using Xemio.GameLibrary.Content.Attributes;
+using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Entities.Components;
 using Xemio.GameLibrary.Entities.Events;
 using Xemio.GameLibrary.Events;
@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
-        [ExcludeSerialization]
+        [Exclude]
         public PositionComponent Position
         {
             get { return this.Get<PositionComponent>(); }
@@ -64,7 +64,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets the environment.
         /// </summary>
-        [ExcludeSerialization]
+        [Exclude]
         public EntityEnvironment Environment { get; internal set; }
         #endregion
 

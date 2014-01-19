@@ -6,7 +6,7 @@ using System.IO;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content;
-using Xemio.GameLibrary.Content.Attributes;
+using Xemio.GameLibrary.Content.Layouts.Generation;
 
 namespace Xemio.GameLibrary.Network.Packages
 {
@@ -16,7 +16,7 @@ namespace Xemio.GameLibrary.Network.Packages
         /// <summary>
         /// Gets the identifier.
         /// </summary>
-        [ExcludeSerialization]
+        [Exclude]
         public int Id
         {
             get { return this.GetType().Name.GetHashCode(); }

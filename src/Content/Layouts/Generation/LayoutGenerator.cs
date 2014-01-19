@@ -95,6 +95,9 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
 
             foreach (PropertyInfo property in ReflectionCache.GetProperties(type))
             {
+                if (ReflectionCache.HasCustomAttribute<ExcludeAttribute>(property))
+                    continue;
+
                 string tag = property.Name;
                 if (ReflectionCache.HasCustomAttribute<TagAttribute>(property))
                 {

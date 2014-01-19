@@ -1,4 +1,4 @@
-﻿using Xemio.GameLibrary.Content.Attributes;
+﻿using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Timing;
 
@@ -10,7 +10,7 @@ namespace Xemio.GameLibrary.Entities.Components
         /// <summary>
         /// Gets the entity.
         /// </summary>
-        [ExcludeSerialization]
+        [Exclude]
         public Entity Entity { get; internal set; }
         #endregion
 

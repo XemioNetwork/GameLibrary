@@ -77,6 +77,7 @@
     <Compile Include="Content\Layouts\Generation\AutomaticLayoutSerializer.cs" />
     <Compile Include="Content\Layouts\Generation\DerivableAttribute.cs" />
     <Compile Include="Content\Layouts\Generation\ElementTagAttribute.cs" />
+    <Compile Include="Content\Layouts\Generation\ExcludeAttribute.cs" />
     <Compile Include="Content\Layouts\Generation\LayoutGenerator.cs" />
     <Compile Include="Content\Layouts\Generation\TagAttribute.cs" />
     <Compile Include="Content\Layouts\IElementContainer.cs" />
@@ -100,13 +101,6 @@
     <Compile Include="Content\Layouts\Primitives\StringPropertyElement.cs" />
     <Compile Include="Content\Layouts\Primitives\Vector2PropertyElement.cs" />
     <Compile Include="Content\Layouts\References\DerivablePropertyReferenceElement.cs" />
-    <Compile Include="Content\Serialization\Automatic\ArrayProcessor.cs" />
-    <Compile Include="Content\Serialization\Automatic\DictionaryProcessor.cs" />
-    <Compile Include="Content\Serialization\Automatic\EnumProcessor.cs" />
-    <Compile Include="Content\Serialization\Automatic\IAutomaticProcessor.cs" />
-    <Compile Include="Content\Serialization\Automatic\ListProcessor.cs" />
-    <Compile Include="Content\Serialization\Automatic\PropertyProcessor.cs" />
-    <Compile Include="Content\Serialization\Automatic\TypeHelper.cs" />
     <Compile Include="Content\Serialization\GuidSerializer.cs" />
     <Compile Include="BasicConfigurator.cs" />
     <Compile Include="Common\ActionDisposable.cs" />
@@ -133,7 +127,6 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Common\Cryptography\CryptoHashProvider.cs" />
     <Compile Include="Common\ApplicationExceptionHandler.cs" />
-    <Compile Include="Content\Attributes\ExcludeSerializationAttribute.cs" />
     <Compile Include="Content\FileSystem\IVirtualFileSystem.cs" />
     <Compile Include="Content\Formats\Binary\BinaryFormat.cs" />
     <Compile Include="Content\Formats\Binary\BinaryReader.cs" />
@@ -142,7 +135,6 @@
     <Compile Include="Content\Formats\IFormat.cs" />
     <Compile Include="Content\Formats\IFormatReader.cs" />
     <Compile Include="Content\Formats\IFormatWriter.cs" />
-    <Compile Include="Content\Serialization\Automatic\AutomaticSerializer.cs" />
     <Compile Include="Content\Streams\LinkedMemoryStream.cs" />
     <Compile Include="Content\Streams\StreamedReader.cs" />
     <Compile Include="Content\Streams\StreamedSerializer.cs" />
