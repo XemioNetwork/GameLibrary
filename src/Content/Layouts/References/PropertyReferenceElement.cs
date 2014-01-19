@@ -1,9 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.References
 {
-    internal class PropertyReferenceElement : PropertyElement
+    internal class PropertyReferenceElement : BaseElement
     {
         #region Constructors
         /// <summary>
@@ -11,12 +12,28 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public PropertyReferenceElement(string tag, PropertyInfo property) : base(tag, property)
+        public PropertyReferenceElement(string tag, PropertyInfo property) : this(tag, property.PropertyType, property.GetValue, property.SetValue)
         {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyReferenceElement" /> class.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="getAction">The get action.</param>
+        /// <param name="setAction">The set action.</param>
+        public PropertyReferenceElement(string tag, Type type, Func<object, object> getAction, Action<object, object> setAction)
+            : base(tag, getAction, setAction)
+        {
+            this.Type = type;
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        public Type Type { get; private set; }
         /// <summary>
         /// Gets the serializer.
         /// </summary>
@@ -36,7 +53,7 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         {
             using (writer.Section(this.Tag))
             {
-                this.Serializer.Save(this.Property.GetValue(container), writer);
+                this.Serializer.Save(this.GetAction(container), writer);
             }
         }
         /// <summary>
@@ -48,7 +65,7 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         {
             using (reader.Section(this.Tag))
             {
-                this.Property.SetValue(container, this.Serializer.Load(this.Property.PropertyType, reader));
+                this.SetAction(container, this.Serializer.Load(this.Type, reader));
             }
         }
         #endregion

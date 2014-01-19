@@ -8,18 +8,20 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts
 {
-    internal abstract class PropertyElement : ILayoutElement
+    internal abstract class BaseElement : ILayoutElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyElement"/> class.
+        /// Initializes a new instance of the <see cref="BaseElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <param name="property">The property.</param>
-        protected PropertyElement(string tag, PropertyInfo property)
+        /// <param name="getAction">The get action.</param>
+        /// <param name="setAction">The set action.</param>
+        protected BaseElement(string tag, Func<object, object> getAction, Action<object, object> setAction)
         {
             this.Tag = tag;
-            this.Property = property;
+            this.GetAction = getAction;
+            this.SetAction = setAction;
         }
         #endregion
 
@@ -29,9 +31,13 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// </summary>
         protected string Tag { get; private set; }
         /// <summary>
-        /// Gets the property.
+        /// Gets the read action.
         /// </summary>
-        protected PropertyInfo Property { get; private set; }
+        protected Func<object, object> GetAction { get; private set; }
+        /// <summary>
+        /// Gets the write action.
+        /// </summary>
+        protected Action<object, object> SetAction { get; private set; }
         #endregion
         
         #region Implementation of ILayoutElement

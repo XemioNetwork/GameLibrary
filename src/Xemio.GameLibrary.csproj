@@ -91,9 +91,8 @@
     <Compile Include="Content\Layouts\LayoutSerializer.cs" />
     <Compile Include="Content\Layouts\Primitives\LongPropertyElement.cs" />
     <Compile Include="Content\Layouts\PersistenceLayout.cs" />
-    <Compile Include="Content\Layouts\PropertyElement.cs" />
+    <Compile Include="Content\Layouts\BaseElement.cs" />
     <Compile Include="Common\PropertyHelper.cs" />
-    <Compile Include="Content\Layouts\PropertySectionElement.cs" />
     <Compile Include="Content\Layouts\Primitives\RectanglePropertyElement.cs" />
     <Compile Include="Content\Layouts\References\PropertyReferenceElement.cs" />
     <Compile Include="Content\Layouts\SectionElement.cs" />

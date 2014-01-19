@@ -11,24 +11,6 @@ namespace Xemio.Testing.Localization
     {
         static void Main(string[] args)
         {
-            Language language = new Language
-                                    {
-                                        CultureName = "de-DE",
-                                        Values = new List<LocalizedValue>
-                                                     {
-                                                         new LocalizedValue
-                                                             {
-                                                                 Id = "MyString",
-                                                                 Value = "Mein Text" + Environment.NewLine + "Günther"
-                                                             },
-                                                         new LocalizedValue
-                                                             {
-                                                                 Id = "AnotherString",
-                                                                 Value = "Ein anderer Text"
-                                                             }
-                                                     }
-                                    };
-            
             Console.ReadLine();
         }
     }

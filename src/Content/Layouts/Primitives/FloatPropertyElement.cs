@@ -1,9 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.Primitives
 {
-    internal class FloatPropertyElement : PropertyElement
+    internal class FloatPropertyElement : BaseElement
     {
         #region Constructors
         /// <summary>
@@ -11,11 +12,20 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public FloatPropertyElement(string tag, PropertyInfo property) : base(tag, property)
+        public FloatPropertyElement(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FloatPropertyElement" /> class.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="getAction">The get action.</param>
+        /// <param name="setAction">The set action.</param>
+        public FloatPropertyElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
         {
         }
         #endregion
-
+        
         #region Implementation of ILayoutElement
         /// <summary>
         /// Writes property for the specified container.
@@ -24,7 +34,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="container">The container.</param>
         public override void Write(IFormatWriter writer, object container)
         {
-            writer.WriteFloat(this.Tag, (float)this.Property.GetValue(container));
+            writer.WriteFloat(this.Tag, (float)this.GetAction(container));
         }
         /// <summary>
         /// Reads the property for the specified container.
@@ -33,7 +43,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="container">The container.</param>
         public override void Read(IFormatReader reader, object container)
         {
-            this.Property.SetValue(container, reader.ReadFloat(this.Tag));
+            this.SetAction(container, reader.ReadFloat(this.Tag));
         }
         #endregion
     }

@@ -13,9 +13,9 @@ namespace Xemio.GameLibrary.Content
         /// <summary>
         /// Gets the type.
         /// </summary>
-        public Type Id
+        public virtual Type Id
         {
-            get { return typeof (T); }
+            get { return typeof(T); }
         }
         /// <summary>
         /// Gets the content.

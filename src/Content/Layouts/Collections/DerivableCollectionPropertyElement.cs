@@ -5,11 +5,11 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.Collections
 {
-    internal class DerivableCollectionPropertyElement<TElement> : ILayoutElement
+    internal class DerivableCollectionPropertyElement<TElement> : BaseElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DerivableCollectionPropertyElement{TElement}" /> class.
+        /// Initializes a new instance of the <see cref="CollectionPropertyElement{TElement}" /> class.
         /// </summary>
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
@@ -17,32 +17,33 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="DerivableCollectionPropertyElement{TElement}" /> class.
+        /// Initializes a new instance of the <see cref="CollectionPropertyElement{TElement}" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
-        public DerivableCollectionPropertyElement(string tag, string elementTag, PropertyInfo property)
+        public DerivableCollectionPropertyElement(string tag, string elementTag, PropertyInfo property) : this(tag, elementTag, property.GetValue, property.SetValue)
         {
-            this.Tag = tag;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionPropertyElement{TElement}" /> class.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="elementTag">The element tag.</param>
+        /// <param name="getAction">The get action.</param>
+        /// <param name="setAction">The set action.</param>
+        public DerivableCollectionPropertyElement(string tag, string elementTag, Func<object, object> getAction, Action<object, object> setAction)
+            : base(tag, getAction, setAction)
+        {
             this.ElementTag = elementTag;
-            this.Property = property;
         } 
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the tag.
-        /// </summary>
-        public string Tag { get; private set; }
-        /// <summary>
         /// Gets the element tag.
         /// </summary>
         public string ElementTag { get; private set; }
-        /// <summary>
-        /// Gets the property.
-        /// </summary>
-        public PropertyInfo Property { get; private set; }
         /// <summary>
         /// Gets the serializer.
         /// </summary>
@@ -58,11 +59,11 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="container">The container.</param>
-        public void Write(IFormatWriter writer, object container)
+        public override void Write(IFormatWriter writer, object container)
         {
             using (writer.Section(this.Tag))
             {
-                var collection = (ICollection<TElement>)this.Property.GetValue(container);
+                var collection = (ICollection<TElement>)this.GetAction(container);
 
                 writer.WriteInteger("Length", collection.Count);
                 foreach (TElement element in collection)
@@ -80,7 +81,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="container">The container.</param>
-        public void Read(IFormatReader reader, object container)
+        public override void Read(IFormatReader reader, object container)
         {
             using (reader.Section(this.Tag))
             {
@@ -98,7 +99,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
                     }
                 }
 
-                this.Property.SetValue(container, collection);
+                this.SetAction(container, collection);
             }
         }
         #endregion

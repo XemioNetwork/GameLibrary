@@ -69,7 +69,7 @@ namespace Xemio.GameLibrary.Localization
         /// </summary>
         public void ChangeToSystemLanguage()
         {
-            this.ChangeLanguage(Thread.CurrentThread.CurrentCulture.Name);
+            this.ChangeLanguage(Thread.CurrentThread.CurrentUICulture.Name);
         }
         /// <summary>
         /// Changes the current language.

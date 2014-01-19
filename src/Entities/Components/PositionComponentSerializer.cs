@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Entities.Components
         public override PersistenceLayout<PositionComponent> CreateLayout()
         {
             return new PersistenceLayout<PositionComponent>()
-                .Property("Position", component => component.Value);
+                .Element("Position", component => component.Value);
         }
         #endregion
     }

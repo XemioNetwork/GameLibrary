@@ -25,6 +25,14 @@ namespace Xemio.GameLibrary.Content.Layouts
 
         #region Methods
         /// <summary>
+        /// Creates a new instance inside the reading process.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        protected virtual T CreateInstance(IFormatReader reader)
+        {
+            return (T)Activator.CreateInstance(typeof(T), true);
+        }
+        /// <summary>
         /// Creates the layout.
         /// </summary>
         public abstract PersistenceLayout<T> CreateLayout();
@@ -37,10 +45,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="reader">The reader.</param>
         public override T Read(IFormatReader reader)
         {
-            object instance = Activator.CreateInstance(typeof(T), true);
+            T instance = this.CreateInstance(reader);
             this.Layout.Read(reader, instance);
 
-            return (T)instance;
+            return instance;
         }
         /// <summary>
         /// Writes the specified value.

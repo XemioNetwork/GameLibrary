@@ -20,6 +20,7 @@ using Xemio.GameLibrary.Entities;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
 using Xemio.GameLibrary.Plugins;
@@ -35,44 +36,13 @@ namespace Xemio.Testing.Input
             var s = XGL.Components.Get<SerializationManager>();
             var memory = new MemoryStream();
             var streamReader = new StreamReader(memory, Encoding.Default);
-
-            for (int i = 0; i < 100000; i++)
-            {
-                s.Save(new TestClass()
-                {
-                    A = 33,
-                    B = "Hallo Welt",
-                    C = new SubClass()
-                    {
-                        IsTrue = true
-                    }
-                }, memory, Format.Xml);
-                var sss = new XmlSerializer(typeof(TestClass));
-                sss.Serialize(memory, new TestClass()
-                {
-                    A = 33,
-                    B = "Hallo Welt",
-                    C = new SubClass()
-                    {
-                        IsTrue = true
-                    }
-                });
-
-                memory.Position = 0;
-            }
-
-            memory = new MemoryStream();
+            
             Stopwatch watch = Stopwatch.StartNew();
             
-            s.Save(new TestClass()
-            {
-                A = 33,
-                B = "Hallo Welt",
-                C = new SubClass()
-                {
-                    IsTrue = true
-                }
-            }, memory, Format.Xml);
+            var entity = new Entity();
+            entity.Position.Value = new Vector2(10, 10);
+
+            s.Save(entity, memory, Format.Xml);
 
             memory.Position = 0;
             watch.Stop();
@@ -82,7 +52,7 @@ namespace Xemio.Testing.Input
 
             Console.WriteLine("Elapsed XGL Serialize: {0}ms", watch.Elapsed.TotalMilliseconds);
 
-            watch = Stopwatch.StartNew();
+            /*watch = Stopwatch.StartNew();
             var seri = new XmlSerializer(typeof(TestClass));
             seri.Serialize(memory, new TestClass()
             {
@@ -94,7 +64,7 @@ namespace Xemio.Testing.Input
                 }
             });
             watch.Stop();
-            Console.WriteLine("Elapsed .NET Serialize: {0}ms", watch.Elapsed.TotalMilliseconds);
+            Console.WriteLine("Elapsed .NET Serialize: {0}ms", watch.Elapsed.TotalMilliseconds);*/
 
             Console.ReadLine();
         }
@@ -104,7 +74,11 @@ namespace Xemio.Testing.Input
     {
         public int A { get; set; }
         public string B { get; set; }
-        public SubClass C { get; set; }
+
+        [Tag("Subclasses")]
+        [ElementTag("Subclass")]
+        [Derivable]
+        public List<ISubClass> C { get; set; }
     }
 
     public interface ISubClass
