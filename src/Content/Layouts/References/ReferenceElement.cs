@@ -4,25 +4,25 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.References
 {
-    internal class PropertyReferenceElement : BaseElement
+    internal class ReferenceElement : BaseElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyReferenceElement"/> class.
+        /// Initializes a new instance of the <see cref="ReferenceElement"/> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public PropertyReferenceElement(string tag, PropertyInfo property) : this(tag, property.PropertyType, property.GetValue, property.SetValue)
+        public ReferenceElement(string tag, PropertyInfo property) : this(tag, property.PropertyType, property.GetValue, property.SetValue)
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyReferenceElement" /> class.
+        /// Initializes a new instance of the <see cref="ReferenceElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="type">The type.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public PropertyReferenceElement(string tag, Type type, Func<object, object> getAction, Action<object, object> setAction)
+        public ReferenceElement(string tag, Type type, Func<object, object> getAction, Action<object, object> setAction)
             : base(tag, getAction, setAction)
         {
             this.Type = type;

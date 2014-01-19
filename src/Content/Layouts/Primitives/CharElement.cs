@@ -4,40 +4,29 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.Primitives
 {
-    internal class GuidPropertyElement : BaseElement
+    internal class CharElement : BaseElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GuidPropertyElement" /> class.
+        /// Initializes a new instance of the <see cref="CharElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <param name="guidFormat">The unique identifier format.</param>
         /// <param name="property">The property.</param>
-        public GuidPropertyElement(string tag, string guidFormat, PropertyInfo property) : this(tag, guidFormat, property.GetValue, property.SetValue)
+        public CharElement(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
         {
-            this.GuidFormat = guidFormat;
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GuidPropertyElement" /> class.
+        /// Initializes a new instance of the <see cref="CharElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <param name="guidFormat">The unique identifier format.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public GuidPropertyElement(string tag, string guidFormat, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public CharElement(string tag, Func<object, object> getAction, Action<object, object> setAction)
+            : base(tag, getAction, setAction)
         {
-            this.GuidFormat = guidFormat;
         }
         #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets the format.
-        /// </summary>
-        public string GuidFormat { get; private set; }
-        #endregion
-
-
+        
         #region Implementation of ILayoutElement
         /// <summary>
         /// Writes property for the specified container.
@@ -46,10 +35,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="container">The container.</param>
         public override void Write(IFormatWriter writer, object container)
         {
-            var guid = (Guid)this.GetAction(container);
-            string content = guid.ToString(this.GuidFormat);
-
-            writer.WriteString(this.Tag, content);
+            writer.WriteCharacter(this.Tag, (char)this.GetAction(container));
         }
         /// <summary>
         /// Reads the property for the specified container.
@@ -58,7 +44,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="container">The container.</param>
         public override void Read(IFormatReader reader, object container)
         {
-            this.SetAction(container, Guid.Parse(reader.ReadString(this.Tag)));
+            this.SetAction(container, reader.ReadCharacter(this.Tag));
         }
         #endregion
     }

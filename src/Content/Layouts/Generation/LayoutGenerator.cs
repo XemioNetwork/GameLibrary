@@ -26,51 +26,51 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
         {
             if (property.PropertyType == typeof(bool))
             {
-                container.Add(new BooleanPropertyElement(tag, property));
+                container.Add(new BooleanElement(tag, property));
             }
             else if (property.PropertyType == typeof(byte))
             {
-                container.Add(new BytePropertyElement(tag, property));
+                container.Add(new ByteElement(tag, property));
             }
             else if (property.PropertyType == typeof(char))
             {
-                container.Add(new CharPropertyElement(tag, property));
+                container.Add(new CharElement(tag, property));
             }
             else if (property.PropertyType == typeof(double))
             {
-                container.Add(new DoublePropertyElement(tag, property));
+                container.Add(new DoubleElement(tag, property));
             }
             else if (property.PropertyType == typeof(float))
             {
-                container.Add(new FloatPropertyElement(tag, property));
+                container.Add(new FloatElement(tag, property));
             }
             else if (property.PropertyType == typeof(Guid))
             {
-                container.Add(new GuidPropertyElement(tag, "N", property));
+                container.Add(new GuidElement(tag, "N", property));
             }
             else if (property.PropertyType == typeof(int))
             {
-                container.Add(new IntegerPropertyElement(tag, property));
+                container.Add(new IntegerElement(tag, property));
             }
             else if (property.PropertyType == typeof(long))
             {
-                container.Add(new LongPropertyElement(tag, property));
+                container.Add(new LongElement(tag, property));
             }
             else if (property.PropertyType == typeof(Rectangle))
             {
-                container.Add(new RectanglePropertyElement(tag, property));
+                container.Add(new RectangleElement(tag, property));
             }
             else if (property.PropertyType == typeof(short))
             {
-                container.Add(new ShortPropertyElement(tag, property));
+                container.Add(new ShortElement(tag, property));
             }
             else if (property.PropertyType == typeof(string))
             {
-                container.Add(new StringPropertyElement(tag, property));
+                container.Add(new StringElement(tag, property));
             }
             else if (property.PropertyType == typeof(Vector2))
             {
-                container.Add(new Vector2PropertyElement(tag, property));
+                container.Add(new Vector2Element(tag, property));
             }
             else
             {
@@ -118,13 +118,27 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                             Type elementType;
                             Type genericType = ReflectionCache.GetGenericArguments(interfaceType).Single();
 
-                            if (ReflectionCache.HasCustomAttribute<DerivableAttribute>(property))
+                            bool isCollectionAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
+                            bool isElementAbstraction = genericType.IsAbstract || genericType.IsInterface;
+
+                            bool isDerivable = isCollectionAbstraction || ReflectionCache.HasCustomAttribute<DerivableAttribute>(property);
+                            bool hasDerivableChildren = isElementAbstraction || ReflectionCache.HasCustomAttribute<DerivableElementsAttribute>(property);
+
+                            if (isDerivable && hasDerivableChildren)
                             {
-                                elementType = typeof(DerivableCollectionPropertyElement<>);
+                                elementType = typeof(DerivableCollectionWithDerivableChildrenElement<>);
+                            }
+                            else if (isDerivable)
+                            {
+                                elementType = typeof(DerivableCollectionElement<>);
+                            }
+                            else if (hasDerivableChildren)
+                            {
+                                elementType = typeof(CollectionWithDerivableChildrenElement<>);
                             }
                             else
                             {
-                                elementType = typeof(CollectionPropertyElement<>);
+                                elementType = typeof(CollectionElement<>);
                             }
 
                             string elementTag = "Element";
@@ -158,11 +172,11 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
 
                         if (isDerivable)
                         {
-                            container.Add(new DerivablePropertyReferenceElement(tag, property));
+                            container.Add(new DerivableReferenceElement(tag, property));
                         }
                         else
                         {
-                            container.Add(new PropertyReferenceElement(tag, property));
+                            container.Add(new ReferenceElement(tag, property));
                         }
                     }
                 }

@@ -4,24 +4,24 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.References
 {
-    internal class DerivablePropertyReferenceElement : BaseElement
+    internal class DerivableReferenceElement : BaseElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyReferenceElement"/> class.
+        /// Initializes a new instance of the <see cref="ReferenceElement"/> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public DerivablePropertyReferenceElement(string tag, PropertyInfo property) : base(tag, property.GetValue, property.SetValue)
+        public DerivableReferenceElement(string tag, PropertyInfo property) : base(tag, property.GetValue, property.SetValue)
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyReferenceElement" /> class.
+        /// Initializes a new instance of the <see cref="ReferenceElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public DerivablePropertyReferenceElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public DerivableReferenceElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
         {
         }
         #endregion

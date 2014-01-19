@@ -4,24 +4,24 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.Primitives
 {
-    internal class StringPropertyElement : BaseElement
+    internal class StringElement : BaseElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringPropertyElement" /> class.
+        /// Initializes a new instance of the <see cref="StringElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public StringPropertyElement(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
+        public StringElement(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringPropertyElement" /> class.
+        /// Initializes a new instance of the <see cref="StringElement" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public StringPropertyElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public StringElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
         {
         }
         #endregion

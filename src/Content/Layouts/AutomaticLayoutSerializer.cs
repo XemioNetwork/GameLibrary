@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Content.Layouts.Generation;
 
-namespace Xemio.GameLibrary.Content.Layouts.Generation
+namespace Xemio.GameLibrary.Content.Layouts
 {
     [ManuallyLinked]
     public class AutomaticLayoutSerializer : Serializer<object>

@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Reflection;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Content.Layouts.Primitives
 {
-    internal class BooleanPropertyElement : BaseElement
+    internal class Vector2Element : BaseElement
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="BooleanPropertyElement" /> class.
+        /// Initializes a new instance of the <see cref="Vector2Element" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public BooleanPropertyElement(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
+        public Vector2Element(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
         {
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="BooleanPropertyElement" /> class.
+        /// Initializes a new instance of the <see cref="Vector2Element" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public BooleanPropertyElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public Vector2Element(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
         {
         }
         #endregion
@@ -34,7 +35,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="container">The container.</param>
         public override void Write(IFormatWriter writer, object container)
         {
-            writer.WriteBoolean(this.Tag, (bool)this.GetAction(container));
+            writer.WriteVector2(this.Tag, (Vector2)this.GetAction(container));
         }
         /// <summary>
         /// Reads the property for the specified container.
@@ -43,7 +44,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="container">The container.</param>
         public override void Read(IFormatReader reader, object container)
         {
-            this.SetAction(container, reader.ReadBoolean(this.Tag));
+            this.SetAction(container, reader.ReadVector2(this.Tag));
         }
         #endregion
     }

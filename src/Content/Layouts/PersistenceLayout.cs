@@ -27,7 +27,32 @@ namespace Xemio.GameLibrary.Content.Layouts
         #region Fields
         private readonly IList<ILayoutElement> _elements;
         #endregion
-        
+
+        #region Protected Methods
+        /// <summary>
+        /// Creates the get action.
+        /// </summary>
+        /// <typeparam name="TContainer">The type of the container.</typeparam>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="tag">The tag.</param>
+        /// <param name="getAction">The get action.</param>
+        protected virtual Func<object, object> CreateGetAction<TContainer, TProperty>(string tag, Func<TContainer, TProperty> getAction)
+        {
+            return obj => getAction((TContainer)obj);
+        }
+        /// <summary>
+        /// Creates the set action.
+        /// </summary>
+        /// <typeparam name="TContainer">The type of the container.</typeparam>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="tag">The tag.</param>
+        /// <param name="setAction">The set action.</param>
+        protected virtual Action<object, object> CreateSetAction<TContainer, TProperty>(string tag,Action<TContainer, TProperty> setAction)
+        {
+            return (container, value) => setAction((TContainer)container, (TProperty)value);
+        } 
+        #endregion
+
         #region Methods
         /// <summary>
         /// Adds the specified element.
@@ -55,7 +80,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Reference<TProperty>(string tag, Expression<Func<T, TProperty>> property)
         {
-            this.Add(new PropertyReferenceElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new ReferenceElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -67,10 +92,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The write action.</param>
         public PersistenceLayout<T> Reference<TProperty>(string tag, Func<T, TProperty> getAction, Action<T, TProperty> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (TProperty)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new PropertyReferenceElement(tag, typeof(TProperty), read, write));
+            this.Add(new ReferenceElement(tag, typeof(TProperty), read, write));
             return this;
         }
         /// <summary>
@@ -81,7 +106,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> DerivableReference<TProperty>(string tag, Expression<Func<T, TProperty>> property)
         {
-            this.Add(new DerivablePropertyReferenceElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new DerivableReferenceElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -93,10 +118,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> DerivableReference<TProperty>(string tag, Func<T, TProperty> getAction, Action<T, TProperty> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (TProperty)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new DerivablePropertyReferenceElement(tag, read, write));
+            this.Add(new DerivableReferenceElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -105,76 +130,88 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <typeparam name="TElement">The type of the element.</typeparam>
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
-        public PersistenceLayout<T> Collection<TElement>(string elementTag, Expression<Func<T, ICollection<TElement>>> property)
+        /// <param name="scope">The scope.</param>
+        public PersistenceLayout<T> Collection<TElement>(string elementTag, Expression<Func<T, ICollection<TElement>>> property, DerivableScope scope = DerivableScope.None)
         {
-            this.Add(new CollectionPropertyElement<TElement>(elementTag, PropertyHelper.GetProperty(property)));
+            if (scope.HasFlag(DerivableScope.Element) && scope.HasFlag(DerivableScope.Collection))
+            {
+                this.Add(new DerivableCollectionWithDerivableChildrenElement<TElement>(elementTag, PropertyHelper.GetProperty(property)));
+            }
+            else if (scope.HasFlag(DerivableScope.Element))
+            {
+                this.Add(new CollectionWithDerivableChildrenElement<TElement>(elementTag, PropertyHelper.GetProperty(property)));
+            }
+            else if (scope.HasFlag(DerivableScope.Collection))
+            {
+                this.Add(new DerivableCollectionElement<TElement>(elementTag, PropertyHelper.GetProperty(property)));
+            }
+            else
+            {
+                this.Add(new CollectionElement<TElement>(elementTag, PropertyHelper.GetProperty(property)));
+            }
+
             return this;
         }
         /// <summary>
         /// Adds a collection to the persistence layout.
         /// </summary>
         /// <typeparam name="TElement">The type of the element.</typeparam>
-        /// <param name="tag">The tag.</param>
         /// <param name="elementTag">The element tag.</param>
+        /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public PersistenceLayout<T> Collection<TElement>(string tag, string elementTag, Expression<Func<T, ICollection<TElement>>> property)
+        /// <param name="scope">The scope.</param>
+        public PersistenceLayout<T> Collection<TElement>(string elementTag, string tag, Expression<Func<T, ICollection<TElement>>> property, DerivableScope scope = DerivableScope.None)
         {
-            this.Add(new CollectionPropertyElement<TElement>(tag, elementTag, PropertyHelper.GetProperty(property)));
+            if (scope.HasFlag(DerivableScope.Element) && scope.HasFlag(DerivableScope.Collection))
+            {
+                this.Add(new DerivableCollectionWithDerivableChildrenElement<TElement>(tag, elementTag, PropertyHelper.GetProperty(property)));
+            }
+            else if (scope.HasFlag(DerivableScope.Element))
+            {
+                this.Add(new CollectionWithDerivableChildrenElement<TElement>(tag, elementTag, PropertyHelper.GetProperty(property)));
+            }
+            else if (scope.HasFlag(DerivableScope.Collection))
+            {
+                this.Add(new DerivableCollectionElement<TElement>(tag, elementTag, PropertyHelper.GetProperty(property)));
+            }
+            else
+            {
+                this.Add(new CollectionElement<TElement>(tag, elementTag, PropertyHelper.GetProperty(property)));
+            }
+
             return this;
         }
         /// <summary>
         /// Adds a collection to the persistence layout.
         /// </summary>
         /// <typeparam name="TElement">The type of the element.</typeparam>
-        /// <param name="tag">The tag.</param>
         /// <param name="elementTag">The element tag.</param>
+        /// <param name="tag">The tag.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public PersistenceLayout<T> Collection<TElement>(string tag, string elementTag, Func<T, ICollection<TElement>> getAction, Action<T, ICollection<TElement>> setAction)
+        /// <param name="scope">The scope.</param>
+        public PersistenceLayout<T> Collection<TElement>(string elementTag, string tag, Func<T, ICollection<TElement>> getAction, Action<T, ICollection<TElement>> setAction, DerivableScope scope = DerivableScope.None)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (ICollection<TElement>)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new CollectionPropertyElement<TElement>(tag, elementTag, read, write));
-            return this;
-        }
-        /// <summary>
-        /// Adds a collection supporting derived elements to the persistence layout.
-        /// </summary>
-        /// <typeparam name="TElement">The type of the element.</typeparam>
-        /// <param name="elementTag">The element tag.</param>
-        /// <param name="property">The property.</param>
-        public PersistenceLayout<T> DerivableCollection<TElement>(string elementTag, Expression<Func<T, ICollection<TElement>>> property)
-        {
-            this.Add(new DerivableCollectionPropertyElement<TElement>(elementTag, PropertyHelper.GetProperty(property)));
-            return this;
-        }
-        /// <summary>
-        /// Adds a collection supporting derived elements to the persistence layout.
-        /// </summary>
-        /// <typeparam name="TElement">The type of the element.</typeparam>
-        /// <param name="tag">The tag.</param>
-        /// <param name="elementTag">The element tag.</param>
-        /// <param name="property">The property.</param>
-        public PersistenceLayout<T> DerivableCollection<TElement>(string tag, string elementTag, Expression<Func<T, ICollection<TElement>>> property)
-        {
-            this.Add(new DerivableCollectionPropertyElement<TElement>(tag, elementTag, PropertyHelper.GetProperty(property)));
-            return this;
-        }
-        /// <summary>
-        /// Adds a collection supporting derived elements to the persistence layout.
-        /// </summary>
-        /// <typeparam name="TElement">The type of the element.</typeparam>
-        /// <param name="tag">The tag.</param>
-        /// <param name="elementTag">The element tag.</param>
-        /// <param name="getAction">The get action.</param>
-        /// <param name="setAction">The set action.</param>
-        public PersistenceLayout<T> DerivableCollection<TElement>(string tag, string elementTag, Func<T, ICollection<TElement>> getAction, Action<T, ICollection<TElement>> setAction)
-        {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (ICollection<TElement>)value);
+            if (scope.HasFlag(DerivableScope.Element) && scope.HasFlag(DerivableScope.Collection))
+            {
+                this.Add(new DerivableCollectionWithDerivableChildrenElement<TElement>(tag, elementTag, read, write));
+            }
+            else if (scope.HasFlag(DerivableScope.Element))
+            {
+                this.Add(new CollectionWithDerivableChildrenElement<TElement>(tag, elementTag, read, write));
+            }
+            else if (scope.HasFlag(DerivableScope.Collection))
+            {
+                this.Add(new DerivableCollectionElement<TElement>(tag, elementTag, read, write));
+            }
+            else
+            {
+                this.Add(new CollectionElement<TElement>(tag, elementTag, read, write));
+            }
 
-            this.Add(new DerivableCollectionPropertyElement<TElement>(tag, elementTag, read, write));
             return this;
         }
         /// <summary>
@@ -192,7 +229,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, bool>> property)
         {
-            this.Add(new BooleanPropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new BooleanElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -203,10 +240,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, bool> getAction, Action<T, bool> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (bool)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new BooleanPropertyElement(tag, read, write));
+            this.Add(new BooleanElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -224,7 +261,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, byte>> property)
         {
-            this.Add(new BytePropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new ByteElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -235,10 +272,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, byte> getAction, Action<T, byte> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (byte)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new BytePropertyElement(tag, read, write));
+            this.Add(new ByteElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -256,7 +293,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, char>> property)
         {
-            this.Add(new CharPropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new CharElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -267,10 +304,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, char> getAction, Action<T, char> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (char)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new CharPropertyElement(tag, read, write));
+            this.Add(new CharElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -288,7 +325,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, double>> property)
         {
-            this.Add(new DoublePropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new DoubleElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -299,10 +336,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, double> getAction, Action<T, double> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (double)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new DoublePropertyElement(tag, read, write));
+            this.Add(new DoubleElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -320,7 +357,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, float>> property)
         {
-            this.Add(new FloatPropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new FloatElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -331,10 +368,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, float> getAction, Action<T, float> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (float)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new FloatPropertyElement(tag, read, write));
+            this.Add(new FloatElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -362,7 +399,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, string guidFormat, Expression<Func<T, Guid>> property)
         {
-            this.Add(new GuidPropertyElement(tag, guidFormat, PropertyHelper.GetProperty(property)));
+            this.Add(new GuidElement(tag, guidFormat, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -385,10 +422,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, string guidFormat, Func<T, Guid> getAction, Action<T, Guid> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (Guid)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new GuidPropertyElement(tag, guidFormat, read, write));
+            this.Add(new GuidElement(tag, guidFormat, read, write));
             return this;
         }
         /// <summary>
@@ -406,7 +443,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, int>> property)
         {
-            this.Add(new IntegerPropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new IntegerElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -417,10 +454,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, int> getAction, Action<T, int> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (int)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new IntegerPropertyElement(tag, read, write));
+            this.Add(new IntegerElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -438,7 +475,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, long>> property)
         {
-            this.Add(new LongPropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new LongElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -449,10 +486,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, long> getAction, Action<T, long> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (long)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new LongPropertyElement(tag, read, write));
+            this.Add(new LongElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -470,7 +507,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, short>> property)
         {
-            this.Add(new ShortPropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new ShortElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -481,10 +518,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, short> getAction, Action<T, short> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (short)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new ShortPropertyElement(tag, read, write));
+            this.Add(new ShortElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -502,7 +539,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, string>> property)
         {
-            this.Add(new StringPropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new StringElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -513,10 +550,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, string> getAction, Action<T, string> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (string)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new StringPropertyElement(tag, read, write));
+            this.Add(new StringElement(tag, read, write));
             return this;
         }
         /// <summary>
@@ -534,7 +571,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, Vector2>> property)
         {
-            this.Add(new Vector2PropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new Vector2Element(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -545,10 +582,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, Vector2> getAction, Action<T, Vector2> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (Vector2)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new Vector2PropertyElement(tag, read, write));
+            this.Add(new Vector2Element(tag, read, write));
             return this;
         }
         /// <summary>
@@ -566,7 +603,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="property">The property.</param>
         public PersistenceLayout<T> Element(string tag, Expression<Func<T, Rectangle>> property)
         {
-            this.Add(new RectanglePropertyElement(tag, PropertyHelper.GetProperty(property)));
+            this.Add(new RectangleElement(tag, PropertyHelper.GetProperty(property)));
             return this;
         }
         /// <summary>
@@ -577,10 +614,10 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// <param name="setAction">The set action.</param>
         public PersistenceLayout<T> Element(string tag, Func<T, Rectangle> getAction, Action<T, Rectangle> setAction)
         {
-            Func<object, object> read = obj => getAction((T)obj);
-            Action<object, object> write = (container, value) => setAction((T)container, (Rectangle)value);
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
 
-            this.Add(new RectanglePropertyElement(tag, read, write));
+            this.Add(new RectangleElement(tag, read, write));
             return this;
         }
         #endregion
@@ -591,7 +628,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="container">The container.</param>
-        public void Write(IFormatWriter writer, object container)
+        public virtual void Write(IFormatWriter writer, object container)
         {
             foreach (ILayoutElement element in this._elements)
             {
@@ -603,7 +640,7 @@ namespace Xemio.GameLibrary.Content.Layouts
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="container">The container.</param>
-        public void Read(IFormatReader reader, object container)
+        public virtual void Read(IFormatReader reader, object container)
         {
             foreach (ILayoutElement element in this._elements)
             {

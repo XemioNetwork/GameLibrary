@@ -11,6 +11,7 @@ using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Formats.Binary;
 using Xemio.GameLibrary.Content.Formats.Corrupted;
+using Xemio.GameLibrary.Content.Layouts;
 using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Content.Serialization;
 using Xemio.GameLibrary.Events;
