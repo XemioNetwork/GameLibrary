@@ -48,7 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Xemio.GameLibrary.csproj">
+    <ProjectReference Include="..\..\GameLibrary\Xemio.GameLibrary.csproj">
       <Project>{474ca844-ea03-48dc-a790-5f18510799ac}</Project>
       <Name>Xemio.GameLibrary</Name>
     </ProjectReference>

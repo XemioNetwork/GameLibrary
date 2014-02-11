@@ -40,7 +40,7 @@ namespace Xemio.Testing.Input
             Stopwatch watch = Stopwatch.StartNew();
             
             var entity = new Entity();
-            entity.Position.Value = new Vector2(10, 10);
+            entity.Position.Relative = new Vector2(10, 10);
 
             s.Save(entity, memory, Format.Xml);
 
