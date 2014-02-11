@@ -58,6 +58,8 @@
     <Compile Include="Components\IComponentManager.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\Compressor.cs" />
+    <Compile Include="Content\ContentReference.cs" />
+    <Compile Include="Content\ContentWatcher.cs" />
     <Compile Include="Content\FileSystem\Compression\CompressedFileSystem.cs" />
     <Compile Include="Content\FileSystem\Disk\DiskFileSystemWatcher.cs" />
     <Compile Include="Content\FileSystem\Disk\DiskPath.cs" />

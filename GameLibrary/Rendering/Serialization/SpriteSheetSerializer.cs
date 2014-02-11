@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.Rendering.Serialization
             string fileName = reader.ReadString("Texture");
 
             var contentManager = XGL.Components.Require<ContentManager>();
-            var texture = contentManager.Get<ITexture>(fileName);
+            var texture = contentManager.Query<ITexture>(fileName);
 
             return new SpriteSheet(texture, frameWidth, frameHeight);
         }

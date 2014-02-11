@@ -132,7 +132,7 @@ namespace Xemio.GameLibrary.Localization
             logger.Info("Loading languages from {0}.", directory);
 
             string[] localizationFiles = fileSystem.GetFiles(directory);
-            foreach (Language language in localizationFiles.Select(content.Get<Language>))
+            foreach (Language language in localizationFiles.Select(content.Query<Language>))
             {
                 if (this.Languages.Contains(language))
                 {

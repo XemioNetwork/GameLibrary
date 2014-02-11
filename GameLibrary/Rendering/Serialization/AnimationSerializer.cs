@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Rendering.Serialization
             var serializer = XGL.Components.Require<SerializationManager>();
             var content = XGL.Components.Require<ContentManager>();
 
-            var sheet = content.Get<SpriteSheet>(reader.ReadString("SpriteSheet"));
+            var sheet = content.Query<SpriteSheet>(reader.ReadString("SpriteSheet"));
 
             float frameTime = reader.ReadFloat("FrameTime");
             bool isLooped = reader.ReadBoolean("IsLooped");

@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Common
         /// </summary>
         /// <param name="timeout">The timeout.</param>
         /// <param name="action">The action.</param>
-        public static void Unlimited(int timeout, Action action)
+        public static void Unlimited(TimeSpan timeout, Action action)
         {
             Retry.Unlimited<object>(timeout, () =>
             {
@@ -26,11 +26,9 @@ namespace Xemio.GameLibrary.Common
         /// <summary>
         /// Retries the specified function until it succeed. WARNING: dangerous.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
-        /// <returns></returns>
-        public static T Unlimited<T>(int timeout, Func<T> function)
+        public static T Unlimited<T>(TimeSpan timeout, Func<T> function)
         {
             while (true)
             {
@@ -50,7 +48,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="max">The maximum retry count.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="action">The action.</param>
-        public static void Limited(int max, int timeout, Action action)
+        public static void Limited(int max, TimeSpan timeout, Action action)
         {
             Retry.Limited<object>(max, timeout, () =>
             {
@@ -65,7 +63,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="max">The maximum retry count.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
-        public static T Limited<T>(int max, int timeout, Func<T> function)
+        public static T Limited<T>(int max, TimeSpan timeout, Func<T> function)
         {
             int counter = 0;
             while (counter++ < max)

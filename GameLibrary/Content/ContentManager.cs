@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Content
 {
     [Require(typeof(SerializationManager))]
 
-    public class ContentManager : IComponent
+    public class ContentManager : IConstructable
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -114,34 +114,72 @@ namespace Xemio.GameLibrary.Content
             {
                 serializer.Save(value, stream, this.Format);
             }
-            
-            this.Cache(value, Path.GetFullPath(fileName));
+
+            lock (this._cache)
+            {
+                this.Cache(value, Path.GetFullPath(fileName));
+            }
         }
         /// <summary>
-        /// Gets the specified file.
+        /// Removes the specified file name from the internal content cache.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="fileName">Name of the file.</param>
-        public T Get<T>(string fileName)
+        public void Unload(string fileName)
+        {
+            lock (this._cache)
+            {
+                if (this.IsCached(fileName))
+                {
+                    this._reverseMappings.Remove(this._cache[fileName]);
+                    this._cache.Remove(fileName);
+                }
+            }
+        }
+        /// <summary>
+        /// Gets the resource for the specified file name.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="fileName">Name of the file.</param>
+        public ContentReference<T> Get<T>(string fileName)
+        {
+            return new ContentReference<T>(this, fileName);
+        }
+        /// <summary>
+        /// Queries the specified file.
+        /// </summary>
+        /// <typeparam name="T">The resource type.</typeparam>
+        /// <param name="fileName">Name of the file.</param>
+        public T Query<T>(string fileName)
         {
             var fullPath = Path.GetFullPath(fileName);
             var serializer = XGL.Components.Require<SerializationManager>();
             var fileSystem = XGL.Components.Require<IFileSystem>();
 
-            if (!this.IsCached(fullPath))
+            lock (this._cache)
             {
-                logger.Debug("Loading file {0} as [{1}].", fileName, typeof(T));
-
-                using (Stream stream = fileSystem.Open(fileName))
+                if (!this.IsCached(fullPath))
                 {
-                    var value = serializer.Load<T>(stream, this.Format);
+                    logger.Debug("Loading file {0} as [{1}].", fileName, typeof (T));
 
-                    this._cache.Add(fullPath, value);
-                    this._reverseMappings.Add(value, fullPath);
+                    using (Stream stream = fileSystem.Open(fileName))
+                    {
+                        this.Cache(serializer.Load<T>(stream, this.Format), fullPath);
+                    }
                 }
             }
 
             return (T)this._cache[fullPath];
+        }
+        #endregion
+
+        #region Implementation of IConstructable
+        /// <summary>
+        /// Constructs this instance.
+        /// </summary>
+        public void Construct()
+        {
+            var fileSystem = XGL.Components.Get<IFileSystem>();
+            fileSystem.Subscribe(".", new ContentWatcher(this));
         }
         #endregion
     }

@@ -55,7 +55,7 @@ namespace Xemio.GameLibrary.Script
             if (fileSystem.Path.GetExtension(fileName) != ".cs")
                 return;
 
-            Retry.Limited(10, 1000, () =>
+            Retry.Limited(10, TimeSpan.FromSeconds(1.0), () =>
             {
                 using (Stream stream = fileSystem.Open(fileName))
                 {
