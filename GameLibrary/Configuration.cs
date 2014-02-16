@@ -56,6 +56,10 @@ namespace Xemio.GameLibrary
         /// </summary>
         public IFormat ContentFormat { get; set; }
         /// <summary>
+        /// Gets or sets the content tracking.
+        /// </summary>
+        public ContentTracking ContentTracking { get; set; }
+        /// <summary>
         /// Gets or sets the script directory.
         /// </summary>
         public string ScriptDirectory { get; set; }

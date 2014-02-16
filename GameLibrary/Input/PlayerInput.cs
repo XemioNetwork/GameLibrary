@@ -63,7 +63,7 @@ namespace Xemio.GameLibrary.Input
         /// Creates the reference.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        public InputReference Get(string id)
+        public InputReference Reference(string id)
         {
             return new InputReference(XGL.Components.Get<InputManager>(), this.PlayerIndex, id);
         }

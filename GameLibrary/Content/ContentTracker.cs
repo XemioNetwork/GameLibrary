@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Content.FileSystem;
 
 namespace Xemio.GameLibrary.Content
 {
-    internal class ContentWatcher : IFileSystemListener
+    internal class ContentTracker : IFileSystemListener
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -16,10 +16,10 @@ namespace Xemio.GameLibrary.Content
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContentWatcher"/> class.
+        /// Initializes a new instance of the <see cref="ContentTracker"/> class.
         /// </summary>
         /// <param name="contentManager">The content manager.</param>
-        public ContentWatcher(ContentManager contentManager)
+        public ContentTracker(ContentManager contentManager)
         {
             this._contentManager = contentManager;
         }

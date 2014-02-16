@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using NLog;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Game;
@@ -203,6 +204,21 @@ namespace Xemio.GameLibrary
             logger.Debug("ContentFormat={0}", format);
 
             this._configuration.ContentFormat = format;
+            return this;
+        }
+        /// <summary>
+        /// Sets the content format and content tracking mode.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="tracking">The tracking.</param>
+        public FluentConfigurator Content(IFormat format, ContentTracking tracking)
+        {
+            logger.Debug("ContentFormat={0}", format);
+            logger.Debug("ContentTracking={0}", tracking);
+
+            this._configuration.ContentFormat = format;
+            this._configuration.ContentTracking = tracking;
+
             return this;
         }
         /// <summary>

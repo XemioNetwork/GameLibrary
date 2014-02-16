@@ -27,12 +27,6 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// <param name="property">The property.</param>
         public DerivableCollectionElement(string tag, string elementTag, PropertyInfo property) : base(tag, elementTag, property.GetValue, property.SetValue)
         {
-            if (!property.PropertyType.IsAssignableFrom(typeof(List<TElement>)))
-            {
-                throw new InvalidOperationException(
-                    "The property " + property.Name + " is not assignable from List<" + typeof(TElement).Name + ">. " +
-                    "Use DerivableScope.Collection to support collection inheritance.");
-            }
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="DerivableCollectionElement{TElement}" /> class.

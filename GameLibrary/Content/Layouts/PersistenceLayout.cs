@@ -125,6 +125,45 @@ namespace Xemio.GameLibrary.Content.Layouts
             return this;
         }
         /// <summary>
+        /// Adds an array to the persistence layout.
+        /// </summary>
+        /// <typeparam name="TElement">The type of the element.</typeparam>
+        /// <param name="elementTag">The element tag.</param>
+        /// <param name="property">The property.</param>
+        public PersistenceLayout<T> Array<TElement>(string elementTag, Expression<Func<T, TElement[]>> property)
+        {
+            this.Add(new ArrayElement<TElement>(elementTag, PropertyHelper.GetProperty(property)));
+            return this;
+        }
+        /// <summary>
+        /// Adds an array to the persistence layout.
+        /// </summary>
+        /// <typeparam name="TElement">The type of the element.</typeparam>
+        /// <param name="elementTag">The element tag.</param>
+        /// <param name="tag">The tag.</param>
+        /// <param name="property">The property.</param>
+        public PersistenceLayout<T> Array<TElement>(string elementTag, string tag, Expression<Func<T, TElement[]>> property)
+        {
+            this.Add(new ArrayElement<TElement>(tag, elementTag, PropertyHelper.GetProperty(property)));
+            return this;
+        }
+        /// <summary>
+        /// Adds an array to the persistence layout.
+        /// </summary>
+        /// <typeparam name="TElement">The type of the element.</typeparam>
+        /// <param name="elementTag">The element tag.</param>
+        /// <param name="tag">The tag.</param>
+        /// <param name="getAction">The get action.</param>
+        /// <param name="setAction">The set action.</param>
+        public PersistenceLayout<T> Array<TElement>(string elementTag, string tag, Func<T, ICollection<TElement>> getAction, Action<T, ICollection<TElement>> setAction)
+        {
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
+
+            this.Add(new ArrayElement<TElement>(tag, elementTag, read, write));
+            return this;
+        }
+        /// <summary>
         /// Adds a collection to the persistence layout.
         /// </summary>
         /// <typeparam name="TElement">The type of the element.</typeparam>

@@ -59,7 +59,8 @@
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\Compressor.cs" />
     <Compile Include="Content\ContentReference.cs" />
-    <Compile Include="Content\ContentWatcher.cs" />
+    <Compile Include="Content\ContentTracking.cs" />
+    <Compile Include="Content\ContentTracker.cs" />
     <Compile Include="Content\FileSystem\Compression\CompressedFileSystem.cs" />
     <Compile Include="Content\FileSystem\Disk\DiskFileSystemWatcher.cs" />
     <Compile Include="Content\FileSystem\Disk\DiskPath.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Content\Formats\Xml\XmlFormat.cs" />
     <Compile Include="Content\Formats\Xml\XmlReader.cs" />
     <Compile Include="Content\Formats\Xml\XmlWriter.cs" />
+    <Compile Include="Content\Layouts\Collections\ArrayElement.cs" />
     <Compile Include="Content\Layouts\Collections\CollectionBaseElement.cs" />
     <Compile Include="Content\Layouts\Collections\DerivableCollectionElement.cs" />
     <Compile Include="Content\Layouts\Collections\CollectionWithDerivableChildrenElement.cs" />

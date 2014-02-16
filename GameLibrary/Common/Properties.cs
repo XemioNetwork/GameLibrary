@@ -47,7 +47,7 @@ namespace Xemio.GameLibrary.Common
                 {
                     string key = this._lines[i].Substring(0, seperatorIndex);
                     string value = this._lines[i].Substring(++seperatorIndex);
-
+                    
                     this._indexMappings.Add(i, key);
                     this._propertyMappings.Add(key, new Property(key, value, i));
                 }
@@ -70,14 +70,17 @@ namespace Xemio.GameLibrary.Common
         }
         #endregion
 
-        #region Methods
+        #region Properties
         /// <summary>
         /// Gets the keys.
         /// </summary>
-        public IEnumerable<string> GetKeys()
+        public IEnumerable<string> Keys
         {
-            return this._propertyMappings.Select(pair => pair.Key);
+            get { return this._propertyMappings.Select(pair => pair.Key); }
         }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Gets the property.
         /// </summary>

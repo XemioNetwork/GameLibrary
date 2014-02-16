@@ -11,7 +11,7 @@ namespace Xemio.GameLibrary.Rendering.Shapes.Factories
         /// <param name="rectangle">The rectangle.</param>
         public RectangleShape CreateRectangle(Rectangle rectangle)
         {
-            return new RectangleShape {Region = rectangle};
+            return new RectangleShape { Region = rectangle };
         }
         /// <summary>
         /// Creates a rectangle.
@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Rendering.Shapes.Factories
         /// <param name="background">The background.</param>
         public RectangleShape CreateRectangle(Rectangle rectangle, IBrush background)
         {
-            return new RectangleShape {Region = rectangle, Background = background};
+            return new RectangleShape { Region = rectangle, Background = background };
         }
         /// <summary>
         /// Creates a rectangle.
@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Rendering.Shapes.Factories
         /// <param name="outline">The outline.</param>
         public RectangleShape CreateRectangle(Rectangle rectangle, IPen outline)
         {
-            return new RectangleShape {Region = rectangle, Outline = outline};
+            return new RectangleShape { Region = rectangle, Outline = outline };
         }
         /// <summary>
         /// Creates a rectangle.
@@ -39,7 +39,7 @@ namespace Xemio.GameLibrary.Rendering.Shapes.Factories
         /// <param name="outline">The outline.</param>
         public RectangleShape CreateRectangle(Rectangle rectangle, IBrush background, IPen outline)
         {
-            return new RectangleShape {Region = rectangle, Background = background, Outline = outline};
+            return new RectangleShape { Region = rectangle, Background = background, Outline = outline };
         }
         /// <summary>
         /// Creates a rectangle.

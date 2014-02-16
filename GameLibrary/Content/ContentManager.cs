@@ -43,11 +43,22 @@ namespace Xemio.GameLibrary.Content
         }
         #endregion
 
+        #region Fields
+        private ContentTracker _tracker;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets or sets the format.
         /// </summary>
         public IFormat Format { get; set; }
+        /// <summary>
+        /// Gets a value indicating whether the content manager is tracking changes to the file system.
+        /// </summary>
+        public bool IsTracking
+        {
+            get { return this._tracker != null; }
+        }
         #endregion
 
         #region Private Methods
@@ -58,15 +69,6 @@ namespace Xemio.GameLibrary.Content
         /// <param name="fullPath">The full path.</param>
         private void Cache(object value, string fullPath)
         {
-            if (!this._cache.ContainsKey(fullPath))
-            {
-                this._cache.Add(fullPath, value);
-            }
-            if (!this._reverseMappings.ContainsKey(value))
-            {
-                this._reverseMappings.Add(value, fullPath);
-            }
-
             this._cache[fullPath] = value;
             this._reverseMappings[value] = fullPath;
         }
@@ -110,10 +112,12 @@ namespace Xemio.GameLibrary.Content
             var serializer = XGL.Components.Require<SerializationManager>();
             var fileSystem = XGL.Components.Get<IFileSystem>();
 
+            this.DisableTracking();
             using (Stream stream = fileSystem.Create(fileName))
             {
                 serializer.Save(value, stream, this.Format);
             }
+            this.EnableTracking();
 
             lock (this._cache)
             {
@@ -173,6 +177,36 @@ namespace Xemio.GameLibrary.Content
 
             return (T)this._cache[fullPath];
         }
+        /// <summary>
+        /// Enables the content tracking.
+        /// </summary>
+        public void EnableTracking()
+        {
+            if (this._tracker == null)
+            {
+                this._tracker = new ContentTracker(this);
+
+                var fileSystem = XGL.Components.Get<IFileSystem>();
+                fileSystem.Subscribe(".", this._tracker);
+
+                logger.Info("Enabled content tracking.");
+            }
+        }
+        /// <summary>
+        /// Disables the content tracking.
+        /// </summary>
+        public void DisableTracking()
+        {
+            if (this._tracker != null)
+            {
+                var fileSystem = XGL.Components.Get<IFileSystem>();
+                fileSystem.Unsubscribe(this._tracker);
+
+                this._tracker = null;
+
+                logger.Info("Disabled content tracking.");
+            }
+        }
         #endregion
 
         #region Implementation of IConstructable
@@ -181,8 +215,7 @@ namespace Xemio.GameLibrary.Content
         /// </summary>
         public void Construct()
         {
-            var fileSystem = XGL.Components.Get<IFileSystem>();
-            fileSystem.Subscribe(".", new ContentWatcher(this));
+            this.EnableTracking();
         }
         #endregion
     }

@@ -118,13 +118,19 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                             Type elementType;
                             Type genericType = ReflectionCache.GetGenericArguments(interfaceType).Single();
 
+                            bool isArray = property.PropertyType.IsArray;
+
                             bool isCollectionAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
                             bool isElementAbstraction = genericType.IsAbstract || genericType.IsInterface;
 
                             bool isDerivable = isCollectionAbstraction || ReflectionCache.HasCustomAttribute<DerivableAttribute>(property);
                             bool hasDerivableChildren = isElementAbstraction || ReflectionCache.HasCustomAttribute<DerivableElementsAttribute>(property);
 
-                            if (isDerivable && hasDerivableChildren)
+                            if (isArray)
+                            {
+                                elementType = typeof(ArrayElement<>);
+                            }
+                            else if (isDerivable && hasDerivableChildren)
                             {
                                 elementType = typeof(DerivableCollectionWithDerivableChildrenElement<>);
                             }

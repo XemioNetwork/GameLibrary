@@ -56,5 +56,15 @@ namespace Xemio.GameLibrary.Content.FileSystem.Disk
         /// </summary>
         public IFileSystemListener Listener { get; private set; }
         #endregion
+
+        #region Methods
+        /// <summary>
+        /// Disables this instance.
+        /// </summary>
+        public void Disable()
+        {
+            this._watcher.EnableRaisingEvents = false;
+        }
+        #endregion
     }
 }

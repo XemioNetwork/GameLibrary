@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Layouts.Collections
 {
-    internal class CollectionBaseElement<TElement> : BaseElement
+    public class CollectionBaseElement<TElement> : BaseElement
     {
         #region Constructors
         /// <summary>
@@ -65,7 +65,6 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// <param name="element">The element.</param>
         protected virtual void WriteElement(IFormatWriter writer, TElement element)
         {
-            writer.WriteString("Type", element.GetType().AssemblyQualifiedName);
             this.Serializer.Save(element, writer);
         }
         /// <summary>

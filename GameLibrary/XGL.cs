@@ -139,6 +139,10 @@ namespace Xemio.GameLibrary
             if (content != null)
             {
                 content.Format = configuration.ContentFormat;
+                if (configuration.ContentTracking == ContentTracking.Enabled)
+                {
+                    content.EnableTracking();
+                }
             }
         }
         /// <summary>

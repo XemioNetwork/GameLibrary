@@ -116,6 +116,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Disk
             var watcher = this._watchers.FirstOrDefault(w => w.Listener == listener);
             if (watcher != null)
             {
+                watcher.Disable();
                 this._watchers.Remove(watcher);
             }
         }
