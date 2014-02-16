@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using System.Collections;
+using System.Collections.Generic;
+using NLog;
 using Xemio.GameLibrary.Events;
 using System.Windows.Forms;
 using Xemio.GameLibrary.Input.Events;
@@ -13,21 +15,22 @@ namespace Xemio.GameLibrary.Input.Listeners
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
-
+        
         #region Methods
         /// <summary>
         /// Converts mouse buttons into our keys enum.
         /// </summary>
         /// <param name="button">The button.</param>
-        private Keys GetKeys(MouseButtons button)
+        private IEnumerable<string> GetKeys(MouseButtons button)
         {
-            var keys = Keys.None;
+            if (button.HasFlag(MouseButtons.Left)) 
+                yield return "mouse.left";
 
-            if (button.HasFlag(MouseButtons.Left)) keys |= Keys.LeftMouse;
-            if (button.HasFlag(MouseButtons.Right)) keys |= Keys.RightMouse;
-            if (button.HasFlag(MouseButtons.Middle)) keys |= Keys.MouseWheel;
+            if (button.HasFlag(MouseButtons.Right))
+                yield return "mouse.right";
 
-            return keys;
+            if (button.HasFlag(MouseButtons.Middle))
+                yield return "mouse.wheel";
         }
         /// <summary>
         /// Publishes the event.
@@ -47,10 +50,10 @@ namespace Xemio.GameLibrary.Input.Listeners
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void SurfaceMouseMove(object sender, MouseEventArgs e)
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            GraphicsDevice graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-            Vector2 divider = new Vector2(1, 1);
+            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
+            var divider = new Vector2(1, 1);
 
             if (graphicsDevice != null)
             {
@@ -58,68 +61,64 @@ namespace Xemio.GameLibrary.Input.Listeners
             }
 
             Vector2 position = new Vector2(e.X, e.Y) / divider;
-            this.PublishEvent(new MousePositionEvent(position, this.PlayerIndex.Value));
+
+            this.PublishEvent(new InputStateEvent("mouse.position.x", new InputState(position.X), this.PlayerIndex));
+            this.PublishEvent(new InputStateEvent("mouse.position.y", new InputState(position.Y), this.PlayerIndex));
         }
         /// <summary>
         /// Handles the MouseDown event of the surface control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void SurfaceMouseDown(object sender, MouseEventArgs e)
+        private void OnMouseDown(object sender, MouseEventArgs e)
         {
-            Keys key = this.GetKeys(e.Button);
-
-            if (key == Keys.None)
-                return;
-
-            this.PublishEvent(new KeyStateEvent(key, new InputState(true, 1.0f), this.PlayerIndex.Value));
+            foreach (string id in this.GetKeys(e.Button))
+            {
+                this.PublishEvent(new InputStateEvent(id, InputState.Released, this.PlayerIndex));
+            }
         }
         /// <summary>
         /// Handles the MouseUp event of the surface control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void SurfaceMouseUp(object sender, MouseEventArgs e)
+        private void OnMouseUp(object sender, MouseEventArgs e)
         {
-            Keys key = this.GetKeys(e.Button);
-
-            if (key == Keys.None)
-                return;
-
-            this.PublishEvent(new KeyStateEvent(key, new InputState(false, 0.0f), this.PlayerIndex.Value));
+            foreach (string id in this.GetKeys(e.Button))
+            {
+                this.PublishEvent(new InputStateEvent(id, InputState.Released, this.PlayerIndex));
+            }
         }
         #endregion
         
         #region Implementation of IInputListener
         /// <summary>
-        /// Gets or sets the index of the player.
+        /// Gets the index of the player.
         /// </summary>
-        public int? PlayerIndex { get; set; }
+        public int PlayerIndex { get; private set; }
         /// <summary>
         /// Called when the input listener was attached to the player.
         /// </summary>
-        public void OnAttached()
+        /// <param name="playerIndex">Index of the player.</param>
+        public void Attach(int playerIndex)
         {
+            this.PlayerIndex = playerIndex;
+
             var surface = XGL.Components.Require<WindowSurface>();
-
-            surface.Control.MouseMove += this.SurfaceMouseMove;
-            surface.Control.MouseDown += this.SurfaceMouseDown;
-            surface.Control.MouseUp += this.SurfaceMouseUp;
-
-            logger.Debug("Attached mouse listener {0}.", this.PlayerIndex.Value);
+            surface.Control.MouseMove += this.OnMouseMove;
+            surface.Control.MouseDown += this.OnMouseDown;
+            surface.Control.MouseUp += this.OnMouseUp;
         }
         /// <summary>
         /// Called when the input listener was detached from the player.
         /// </summary>
-        public void OnDetached()
+        public void Detach()
         {
             var surface = XGL.Components.Require<WindowSurface>();
 
-            surface.Control.MouseMove -= this.SurfaceMouseMove;
-            surface.Control.MouseDown -= this.SurfaceMouseDown;
-            surface.Control.MouseUp -= this.SurfaceMouseUp;
-
-            logger.Debug("Detached mouse listener {0}.", this.PlayerIndex.Value);
+            surface.Control.MouseMove -= this.OnMouseMove;
+            surface.Control.MouseDown -= this.OnMouseDown;
+            surface.Control.MouseUp -= this.OnMouseUp;
         }
         #endregion
     }

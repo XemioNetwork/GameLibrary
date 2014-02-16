@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Xemio.GameLibrary.Common;
-using Xemio.GameLibrary.Content.FileSystem.Disk;
 
-namespace Xemio.GameLibrary.Content.FileSystem
+namespace Xemio.GameLibrary.Content.FileSystem.Disk
 {
     public class DiskFileSystem : IFileSystem
     {

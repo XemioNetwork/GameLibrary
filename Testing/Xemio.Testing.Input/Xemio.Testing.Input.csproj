@@ -48,27 +48,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmInput.cs">
+    <Compile Include="InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmInput.Designer.cs">
-      <DependentUpon>frmInput.cs</DependentUpon>
+    <Compile Include="InputForm.Designer.cs">
+      <DependentUpon>InputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenes\TestScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Contrib\Rendering\Xemio.GameLibrary.Rendering.GdiPlus\Xemio.GameLibrary.Rendering.GdiPlus.csproj">
+      <Project>{b2587704-ff2b-4028-a43b-336a3bb8fa43}</Project>
+      <Name>Xemio.GameLibrary.Rendering.GdiPlus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\GameLibrary\Xemio.GameLibrary.csproj">
       <Project>{474ca844-ea03-48dc-a790-5f18510799ac}</Project>
       <Name>Xemio.GameLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmInput.resx">
-      <DependentUpon>frmInput.cs</DependentUpon>
+    <EmbeddedResource Include="InputForm.resx">
+      <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

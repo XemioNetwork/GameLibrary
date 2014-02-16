@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
-    public class Frame : IGameHandler
+    public class Frame : ITickHandler
     {
         #region Constructors
         /// <summary>
@@ -57,12 +57,6 @@ namespace Xemio.GameLibrary.Game.Timing
             {
                 this._actions.Remove(action);
             }
-        }
-        /// <summary>
-        /// Handles render calls.
-        /// </summary>
-        public void Render()
-        {
         }
         #endregion
 

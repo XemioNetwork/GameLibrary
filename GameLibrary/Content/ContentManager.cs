@@ -117,7 +117,7 @@ namespace Xemio.GameLibrary.Content
 
             lock (this._cache)
             {
-                this.Cache(value, Path.GetFullPath(fileName));
+                this.Cache(value, fileSystem.Path.GetFullPath(fileName));
             }
         }
         /// <summary>
@@ -126,12 +126,15 @@ namespace Xemio.GameLibrary.Content
         /// <param name="fileName">Name of the file.</param>
         public void Unload(string fileName)
         {
+            var fileSystem = XGL.Components.Require<IFileSystem>();
+            var fullPath = fileSystem.Path.GetFullPath(fileName);
+
             lock (this._cache)
             {
-                if (this.IsCached(fileName))
+                if (this.IsCached(fullPath))
                 {
-                    this._reverseMappings.Remove(this._cache[fileName]);
-                    this._cache.Remove(fileName);
+                    this._reverseMappings.Remove(this._cache[fullPath]);
+                    this._cache.Remove(fullPath);
                 }
             }
         }
@@ -151,9 +154,9 @@ namespace Xemio.GameLibrary.Content
         /// <param name="fileName">Name of the file.</param>
         public T Query<T>(string fileName)
         {
-            var fullPath = Path.GetFullPath(fileName);
             var serializer = XGL.Components.Require<SerializationManager>();
             var fileSystem = XGL.Components.Require<IFileSystem>();
+            var fullPath = fileSystem.Path.GetFullPath(fileName);
 
             lock (this._cache)
             {

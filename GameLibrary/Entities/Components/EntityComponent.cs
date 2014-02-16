@@ -4,7 +4,7 @@ using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities.Components
 {
-    public abstract class EntityComponent : IGameHandler
+    public abstract class EntityComponent : IRenderHandler, ITickHandler
     {
         #region Properties
         /// <summary>

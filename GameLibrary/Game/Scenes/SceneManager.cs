@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
-    public class SceneManager : SceneProvider, IGameHandler, IConstructable
+    public class SceneManager : SceneProvider, IRenderHandler, ITickHandler, IConstructable
     {
         #region Properties
         /// <summary>

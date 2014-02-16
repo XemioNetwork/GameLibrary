@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Content.FileSystem.Disk
 {
@@ -21,17 +22,25 @@ namespace Xemio.GameLibrary.Content.FileSystem.Disk
         {
             this.Listener = listener;
 
-            string directoryName = fileSystem.Path.GetDirectoryName(path);
+            const int retryLimit = 5;
+            var timeout = TimeSpan.FromMilliseconds(500);
 
-            this._watcher = new FileSystemWatcher(path) {IncludeSubdirectories = true};
-            this._watcher.Changed += (sender, args) => this.Listener.OnChanged(directoryName + "/" + args.Name, args.Name);
-            this._watcher.Created += (sender, args) => this.Listener.OnCreated(directoryName + "/" + args.Name, args.Name);
-            this._watcher.Deleted += (sender, args) => this.Listener.OnDeleted(directoryName + "/" + args.Name, args.Name);
-            this._watcher.Renamed += (sender, args) =>
+            this._watcher = new FileSystemWatcher(path) { IncludeSubdirectories = true };
+
+            this._watcher.Changed += (sender, args) => Retry.Limited(retryLimit, timeout, () =>
+                this.Listener.OnChanged(Path.GetFullPath(args.Name), args.Name));
+
+            this._watcher.Created += (sender, args) => Retry.Limited(retryLimit, timeout, () => 
+                this.Listener.OnCreated(Path.GetFullPath(args.Name), args.Name));
+
+            this._watcher.Deleted += (sender, args) => Retry.Limited(retryLimit, timeout, () => 
+                this.Listener.OnDeleted(Path.GetFullPath(args.Name), args.Name));
+
+            this._watcher.Renamed += (sender, args) => Retry.Limited(retryLimit, timeout, () =>
             {
-                this.Listener.OnDeleted(directoryName + "/" + args.OldName, args.OldName);
-                this.Listener.OnCreated(directoryName + "/" + args.Name, args.Name);
-            };
+                this.Listener.OnDeleted(Path.GetFullPath(args.OldName), args.OldName);
+                this.Listener.OnCreated(Path.GetFullPath(args.Name), args.Name);
+            });
 
             this._watcher.EnableRaisingEvents = true;
         }

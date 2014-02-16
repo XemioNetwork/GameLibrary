@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Input
@@ -10,171 +11,189 @@ namespace Xemio.GameLibrary.Input
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlayerInput"/> class.
+        /// Initializes a new instance of the <see cref="PlayerInput" /> class.
         /// </summary>
         /// <param name="playerIndex">Index of the player.</param>
         public PlayerInput(int playerIndex)
         {
             this.PlayerIndex = playerIndex;
 
-            this._states = new Dictionary<Keys, InputState>();
-            this._lastStates = new Dictionary<Keys, InputState>();
+            this._states = new Dictionary<string, InputState>();
+            this._previousStates = new Dictionary<string, InputState>();
+
+            this._bindings = new Dictionary<string, IList<string>>();
         }
         #endregion
         
         #region Fields
-        private readonly Dictionary<Keys, InputState> _states;
-        private readonly Dictionary<Keys, InputState> _lastStates;
+        private readonly Dictionary<string, InputState> _states;
+        private readonly Dictionary<string, InputState> _previousStates;
+
+        private readonly Dictionary<string, IList<string>> _bindings;
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the index of the player.
         /// </summary>
-        public int PlayerIndex { get; private set; }
+        public int PlayerIndex { get; private set; } 
         /// <summary>
-        /// Gets or sets the mouse position.
+        /// Gets the <see cref="Xemio.GameLibrary.Input.InputState"/> with the specified id.
         /// </summary>
-        public Vector2 MousePosition { get; internal set; }
-        /// <summary>
-        /// Gets the <see cref="Xemio.GameLibrary.Input.InputState"/> with the specified key.
-        /// </summary>
-        public InputState this[Keys key]
+        public InputState this[string id]
         {
             get
             {
-                if (!this._states.ContainsKey(key))
+                if (!this._states.ContainsKey(id))
                 {
-                    return InputState.Empty;
+                    return InputState.Released;
                 }
 
-                return this._states[key];
+                return this._states[id];
             }
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Gets the current active state for the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        private bool GetValue(Keys key)
-        {
-            return this._states.ContainsKey(key) && this._states[key].Active;
-        }
-        /// <summary>
-        /// Gets the last active state for the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        private bool GetPreviousValue(Keys key)
-        {
-            return this._lastStates.ContainsKey(key) && this._lastStates[key].Active;
+            set
+            {
+                this._states[id] = value;
+            }
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Determines whether the specified key has a state.
+        /// Creates the reference.
         /// </summary>
-        /// <param name="key">The key.</param>
-        public bool HasState(Keys key)
+        /// <param name="id">The identifier.</param>
+        public InputReference Get(string id)
         {
-            return this._states.ContainsKey(key);
+            return new InputReference(XGL.Components.Get<InputManager>(), this.PlayerIndex, id);
         }
         /// <summary>
-        /// Determines whether the specified key is down.
+        /// Gets the current active state for the specified id.
         /// </summary>
-        /// <param name="key">The key.</param>
-        public bool IsKeyDown(Keys key)
+        /// <param name="id">The id.</param>
+        public bool IsActive(string id)
         {
-            return this.GetValue(key);
+            return this._states.ContainsKey(id) && this._states[id].Active;
         }
         /// <summary>
-        /// Determines whether the specified key is up.
+        /// Gets the last active state for the specified id.
         /// </summary>
-        /// <param name="key">The key.</param>
-        public bool IsKeyUp(Keys key)
+        /// <param name="id">The id.</param>
+        public bool WasPreviouslyActive(string id)
         {
-            return !this.GetValue(key);
+            return this._previousStates.ContainsKey(id) && this._previousStates[id].Active;
         }
         /// <summary>
-        /// Determines whether the specified key is first down inside the current frame.
+        /// Determines whether the specified id has a state.
         /// </summary>
-        /// <param name="key">The key.</param>
-        public bool IsKeyPressed(Keys key)
+        /// <param name="id">The id.</param>
+        public bool Contains(string id)
         {
-            return this.GetValue(key) && !this.GetPreviousValue(key);
+            return this.HasBinding(id) || this.HasState(id);
         }
         /// <summary>
-        /// Determines whether the specified key is first up inside the current frame.
+        /// Determines whether the specified identifier is contained inside the states dictionary.
         /// </summary>
-        /// <param name="key">The key.</param>
-        public bool IsKeyReleased(Keys key)
+        /// <param name="id">The identifier.</param>
+        public bool HasState(string id)
         {
-            return !this.GetValue(key) && this.GetPreviousValue(key);
+            return this._states.ContainsKey(id);
         }
         /// <summary>
-        /// Gets the last state of the specified key.
+        /// Determines whether the specified binding identifier is contained.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
-        public InputState GetPreviousState(Keys key)
+        /// <param name="bindingId">The binding identifier.</param>
+        public bool HasBinding(string bindingId)
         {
-            if (!this._lastStates.ContainsKey(key))
+            return this._bindings.ContainsKey(bindingId);
+        }
+        /// <summary>
+        /// Binds the specified source to the target key id.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        public void Bind(string source, string target)
+        {
+            if (!this._bindings.ContainsKey(target))
             {
-                return InputState.Empty;
+                this._bindings[target] = new List<string>();
             }
 
-            return this._lastStates[key];
+            this._bindings[target].Add(source);
+        }
+        /// <summary>
+        /// Unbinds the specified source.
+        /// </summary>
+        /// <param name="bindingId">The binding identifier.</param>
+        public void Unbind(string bindingId)
+        {
+            this._bindings.Remove(bindingId);
+        }
+        /// <summary>
+        /// Resolves the specified binding and returns its original keys.
+        /// </summary>
+        /// <param name="bindingId">The binding identifier.</param>
+        public IEnumerable<string> Resolve(string bindingId)
+        {
+            if (this._bindings.ContainsKey(bindingId))
+            {
+                var resolvedIds = new List<string>();
+                
+                if (this.HasState(bindingId))
+                {
+                    resolvedIds.Add(bindingId);
+                }
+
+                foreach (string id in this._bindings[bindingId])
+                {
+                    if (this.HasBinding(id))
+                    {
+                        resolvedIds.AddRange(this.Resolve(id));
+                    }
+                    else
+                    {
+                        resolvedIds.Add(id);
+                    }
+                }
+
+                return resolvedIds;
+            }
+
+            return new[] {bindingId};
+        }
+        /// <summary>
+        /// Gets the last state of the specified id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        public InputState GetPreviousState(string id)
+        {
+            if (!this._previousStates.ContainsKey(id))
+            {
+                return InputState.Released;
+            }
+
+            return this._previousStates[id];
         }
         /// <summary>
         /// Gets the inputs matching the given filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        public IEnumerable<Keys> GetKeys(Func<Keys, bool> filter)
+        public IEnumerable<string> GetKeys(Func<string, bool> filter)
         {
-            return Enum.GetValues(typeof(Keys)).Cast<Keys>().Where(filter);
-        }
-        /// <summary>
-        /// Gets the pressed inputs.
-        /// </summary>
-        public IEnumerable<Keys> GetPressedKeys()
-        {
-            return this.GetKeys(this.IsKeyPressed);
-        }
-        /// <summary>
-        /// Gets the released inputs.
-        /// </summary>
-        public IEnumerable<Keys> GetReleasedKeys()
-        {
-            return this.GetKeys(this.IsKeyReleased);
+            return this._states.Keys.Where(filter);
         }
         #endregion
 
         #region Internal Methods
         /// <summary>
-        /// Sets the state of the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="state">The state.</param>
-        internal void SetState(Keys key, InputState state)
-        {
-            if (!this._states.ContainsKey(key))
-            {
-                this._states.Add(key, state);
-            }
-
-            this._states[key] = state;
-        }
-        /// <summary>
         /// Updates the changes from the current into the last state.
         /// </summary>
-        internal void UpdateStates()
+        internal void PushCurrentToPrevious()
         {
-            this._lastStates.Clear();
-            foreach (KeyValuePair<Keys, InputState> pair in this._states)
+            this._previousStates.Clear();
+            foreach (KeyValuePair<string, InputState> pair in this._states)
             {
-                this._lastStates.Add(pair.Key, pair.Value);
+                this._previousStates[pair.Key] = pair.Value;
             }
         }
         #endregion

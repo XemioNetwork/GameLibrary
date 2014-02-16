@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+    <metadata minClientVersion="2.0">
+        <id>Xemio-GameLibrary-Xna-Renderer</id>
+        <version>0.0.0</version>
+        <title>XNA Renderer</title>
+        <authors>XemioNetwork</authors>
+        <licenseUrl>https://raw.github.com/XemioNetwork/GameLibrary-Contrib/master/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/XemioNetwork/GameLibrary-Contrib</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>A hardware accelerated Xna renderer for XGL.</description>
+        <summary />
+        <copyright>XemioNetwork</copyright>
+        <language>es-US</language>
+        <tags>xemio game library xna gdi renderer xgl</tags>
+        <dependencies>
+            <dependency id="Xemio-GameLibrary" version="0.5.75" />
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+	<files>
+		<file src="..\bin\Release\XGL.Rendering.Xna.dll" target="lib\net40\XGL.Rendering.Xna.dll" />
+		<file src="..\bin\Release\Microsoft.Xna.Framework.dll" target="lib\net40\Microsoft.Xna.Framework.dll" />
+		<file src="..\bin\Release\Microsoft.Xna.Framework.Graphics.dll" target="lib\net40\Microsoft.Xna.Framework.Graphics.dll" />
+	</files>
+</package>

@@ -11,7 +11,7 @@ using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public class EntityEnvironment : IEnumerable<Entity>, IGameHandler
+    public class EntityEnvironment : IEnumerable<Entity>, ITickHandler, IRenderHandler
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();

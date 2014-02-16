@@ -8,16 +8,17 @@ namespace Xemio.GameLibrary.Input
     public interface IInputListener
     {
         /// <summary>
-        /// Gets or sets the index of the player.
+        /// Gets the index of the player.
         /// </summary>
-        int? PlayerIndex { get; set; }
+        int PlayerIndex { get; }
         /// <summary>
         /// Called when the input listener was attached to the player.
         /// </summary>
-        void OnAttached();
+        /// <param name="playerIndex">Index of the player.</param>
+        void Attach(int playerIndex);
         /// <summary>
         /// Called when the input listener was detached from the player.
         /// </summary>
-        void OnDetached();
+        void Detach();
     }
 }

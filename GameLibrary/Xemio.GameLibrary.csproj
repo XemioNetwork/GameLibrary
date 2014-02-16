@@ -157,6 +157,10 @@
     <Compile Include="Events\ICancelableEvent.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
+    <Compile Include="Game\IRenderHandler.cs" />
+    <Compile Include="Game\ISortableRenderHandler.cs" />
+    <Compile Include="Game\ISortableTickHandler.cs" />
+    <Compile Include="Game\ITickHandler.cs" />
     <Compile Include="Game\Scenes\SceneProvider.cs" />
     <Compile Include="Game\Scenes\SplashScreen.cs" />
     <Compile Include="Game\Timing\Frame.cs" />
@@ -165,6 +169,7 @@
     <Compile Include="Game\LagCompensation.cs" />
     <Compile Include="Input\IInputListener.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Input\InputReference.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="Network\Events\Client\ClientDisconnectedEvent.cs" />
@@ -176,6 +181,15 @@
     <Compile Include="Network\Events\Server\ServerSendingPackageEvent.cs" />
     <Compile Include="Network\Exceptions\ConnectionClosedException.cs" />
     <Compile Include="Network\Exceptions\ClientLostConnectionException.cs" />
+    <Compile Include="Network\Handlers\Attributes\IServerHandlerAttribute.cs" />
+    <Compile Include="Network\Handlers\Attributes\OnBeginSendAttribute.cs" />
+    <Compile Include="Network\Handlers\Attributes\OnClientJoinedAttribute.cs" />
+    <Compile Include="Network\Handlers\Attributes\OnClientLeftAttribute.cs" />
+    <Compile Include="Network\Handlers\Attributes\OnDisconnectedAttribute.cs" />
+    <Compile Include="Network\Handlers\Attributes\OnReceiveAttribute.cs" />
+    <Compile Include="Network\Handlers\Attributes\OnSentAttribute.cs" />
+    <Compile Include="Network\Handlers\ReflectedClientHandler.cs" />
+    <Compile Include="Network\Handlers\ReflectedServerHandler.cs" />
     <Compile Include="Network\IClient.cs" />
     <Compile Include="Network\Intercetors\IClientInterceptor.cs" />
     <Compile Include="Network\Intercetors\IServerInterceptor.cs" />
@@ -252,6 +266,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Common\ImageExtensions.cs" />
+    <Compile Include="Rendering\Effects\BlendModeExtensions.cs" />
     <Compile Include="Rendering\Effects\Processors\EffectProcessor.cs" />
     <Compile Include="Rendering\Effects\FlipEffect.cs" />
     <Compile Include="Rendering\Effects\FlipEffectOptions.cs" />
@@ -259,6 +274,7 @@
     <Compile Include="Rendering\Effects\Processors\IEffectProcessor.cs" />
     <Compile Include="Rendering\Effects\RotateEffect.cs" />
     <Compile Include="Rendering\Effects\TintEffect.cs" />
+    <Compile Include="Rendering\Effects\BlendMode.cs" />
     <Compile Include="Rendering\Effects\TranslateEffect.cs" />
     <Compile Include="Rendering\Initialization\IGraphicsFactory.cs" />
     <Compile Include="Rendering\InterpolationMode.cs" />
@@ -295,10 +311,8 @@
     <Compile Include="Game\IGameHandler.cs" />
     <Compile Include="Game\PrecisionLevel.cs" />
     <Compile Include="Game\Scenes\SceneWrapper.cs" />
-    <Compile Include="Input\Events\KeyStateEvent.cs" />
-    <Compile Include="Input\Events\MousePositionEvent.cs" />
+    <Compile Include="Input\InputStateEvent.cs" />
     <Compile Include="Input\Listeners\KeyboardListener.cs" />
-    <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\Listeners\MouseListener.cs" />
     <Compile Include="Localization\Language.cs" />
     <Compile Include="Localization\LanguageSerializer.cs" />
@@ -369,9 +383,7 @@
     <Compile Include="XGL.cs" />
     <Compile Include="XGLState.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Input\Bindings\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

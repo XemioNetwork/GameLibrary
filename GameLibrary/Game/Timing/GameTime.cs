@@ -6,7 +6,7 @@ namespace Xemio.GameLibrary.Game.Timing
 {
     [Require(typeof(IGameLoop))]
 
-    public class GameTime : IConstructable, IGameHandler
+    public class GameTime : IConstructable, ITickHandler
     {
         #region Constructors
         /// <summary>
@@ -61,12 +61,6 @@ namespace Xemio.GameLibrary.Game.Timing
                     this.Time += TimeSpan.FromMilliseconds(elapsed / this.DayLength.TotalMilliseconds);
                     break;
             }
-        }
-        /// <summary>
-        /// Handles render calls.
-        /// </summary>
-        public void Render()
-        {
         }
         #endregion
     }

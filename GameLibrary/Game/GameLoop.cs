@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
@@ -30,7 +33,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public GameLoop()
         {
-            this._handlers = new CachedList<IGameHandler>();
+            this._handlers = new AutoCachedList<IGameHandler>();
 
             this.Precision = PrecisionLevel.High;
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
@@ -113,6 +116,44 @@ namespace Xemio.GameLibrary.Game
         /// Gets the target frame time.
         /// </summary>
         public double TargetFrameTime { get; set; }
+        /// <summary>
+        /// Gets the tick handlers.
+        /// </summary>
+        public IEnumerable<ITickHandler> TickHandlers
+        {
+            get
+            {
+                return this._handlers.OfType<ITickHandler>().OrderBy(handler =>
+                {
+                    var sortable = handler as ISortableTickHandler;
+                    if (sortable != null)
+                    {
+                        return sortable.TickIndex;
+                    }
+
+                    return 0;
+                });
+            }
+        }
+        /// <summary>
+        /// Gets the render handlers.
+        /// </summary>
+        public IEnumerable<IRenderHandler> RenderHandlers
+        {
+            get
+            {
+                return this._handlers.OfType<IRenderHandler>().OrderBy(handler =>
+                {
+                    var sortable = handler as ISortableRenderHandler;
+                    if (sortable != null)
+                    {
+                        return sortable.RenderIndex;
+                    }
+
+                    return 0;
+                });
+            }
+        }
         #endregion
         
         #region Event Methods
@@ -129,12 +170,9 @@ namespace Xemio.GameLibrary.Game
             //as frequent as tick
             this.FrameIndex++;
 
-            using (this._handlers.StartCaching())
+            foreach (ITickHandler gameHandler in this.TickHandlers)
             {
-                foreach (IGameHandler gameHandler in this._handlers)
-                {
-                    gameHandler.Tick(elapsed);
-                }
+                gameHandler.Tick(elapsed);
             }
 
             tickWatch.Stop();
@@ -148,12 +186,9 @@ namespace Xemio.GameLibrary.Game
         {
             Stopwatch renderWatch = Stopwatch.StartNew();
 
-            using (this._handlers.StartCaching())
+            foreach (IRenderHandler gameHandler in this.RenderHandlers)
             {
-                foreach (IGameHandler gameHandler in this._handlers)
-                {
-                    gameHandler.Render();
-                }
+                gameHandler.Render();
             }
 
             renderWatch.Stop();
@@ -331,7 +366,6 @@ namespace Xemio.GameLibrary.Game
                 }
 
                 this._timeSinceLastTick = 0;
-                this.ManagePrecisionLevel();
             }
         }
         /// <summary>
@@ -357,36 +391,6 @@ namespace Xemio.GameLibrary.Game
 
                 this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
                 this._fpsCount = 0;
-            }
-        }
-        /// <summary>
-        /// Manages the precision level.
-        /// </summary>
-        private void ManagePrecisionLevel()
-        {
-            double frameTime = this._renderTime + this._tickTime;
-            int timeTillNextFrame = (int)(this.TargetFrameTime - frameTime);
-
-            if (timeTillNextFrame < 0)
-                return;
-
-            switch (this.Precision)
-            {
-                case PrecisionLevel.Highest:
-                    //Use busy waiting for the game loop
-                    break;
-                case PrecisionLevel.High:
-                    Thread.Sleep(timeTillNextFrame / 8);
-                    break;
-                case PrecisionLevel.Normal:
-                    Thread.Sleep(timeTillNextFrame / 4);
-                    break;
-                case PrecisionLevel.Low:
-                    Thread.Sleep(timeTillNextFrame / 2);
-                    break;
-                case PrecisionLevel.Lowest:
-                    Thread.Sleep(timeTillNextFrame);
-                    break;
             }
         }
         #endregion

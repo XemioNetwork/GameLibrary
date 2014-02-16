@@ -141,7 +141,7 @@ namespace Xemio.GameLibrary.Math
         }
         #endregion
 
-        #region Empty Rectangle
+        #region Released Rectangle
         private static Rectangle _empty = new Rectangle(0, 0, 0, 0);
         /// <summary>
         /// Gets an empty rectangle instance.

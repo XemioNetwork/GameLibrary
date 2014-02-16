@@ -20,6 +20,20 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// Gets or sets the game handler.
         /// </summary>
         public IGameHandler GameHandler { get; private set; }
+        /// <summary>
+        /// Gets the tick handler.
+        /// </summary>
+        public ITickHandler TickHandler
+        {
+            get { return this.GameHandler as ITickHandler; }
+        }
+        /// <summary>
+        /// Gets the render handler.
+        /// </summary>
+        public IRenderHandler RenderHandler
+        {
+            get { return this.GameHandler as IRenderHandler; }
+        }
         #endregion
 
         #region Methods
@@ -29,14 +43,20 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="elapsed">The elapsed.</param>
         public override void Tick(float elapsed)
         {
-            this.GameHandler.Tick(elapsed);
+            if (this.TickHandler != null)
+            {
+                this.TickHandler.Tick(elapsed);
+            }
         }
         /// <summary>
         /// Handles a game render request.
         /// </summary>
         public override void Render()
         {
-            this.GameHandler.Render();
+            if (this.RenderHandler != null)
+            {
+                this.RenderHandler.Render();
+            }
         }
         #endregion
     }

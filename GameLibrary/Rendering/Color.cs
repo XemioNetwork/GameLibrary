@@ -1,4 +1,5 @@
 ﻿using System;
+using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Common.Randomization;
 
@@ -85,6 +86,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Gets or sets the packed value.
         /// </summary>
+        [Exclude]
         public int PackedValue
         {
             get { return this._packedValue; }
@@ -755,7 +757,7 @@ namespace Xemio.GameLibrary.Rendering
             int b = (byte)(value._packedValue >> 16);
             int a = (byte)(value._packedValue >> 24);
 
-            int intScale = (int)MathHelper.Clamp(scale * 65536f, 0, 0xffffff);
+            var intScale = (int)MathHelper.Clamp(scale * 65536f, 0, 0xffffff);
 
             r = (r * intScale) >> 16;
             g = (g * intScale) >> 16;
@@ -770,6 +772,90 @@ namespace Xemio.GameLibrary.Rendering
             color._packedValue = ((r | (g << 8)) | (b << 0x10)) | (a << 0x18);
 
             return color;
+        }
+        /// <summary>
+        /// Adds the specified colors.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color Add(Color a, Color b)
+        {
+            a.A = (byte)(int)MathHelper.Min(a.A + b.A, 255);
+            a.R = (byte)(int)MathHelper.Min(a.R + b.R, 255);
+            a.G = (byte)(int)MathHelper.Min(a.G + b.G, 255);
+            a.B = (byte)(int)MathHelper.Min(a.B + b.B, 255);
+
+            return a;
+        }
+        /// <summary>
+        /// Subtracts the specified colors.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color Subtract(Color a, Color b)
+        {
+            a.A = (byte)(int)MathHelper.Max(a.A - b.A, 0);
+            a.R = (byte)(int)MathHelper.Max(a.R - b.R, 0);
+            a.G = (byte)(int)MathHelper.Max(a.G - b.G, 0);
+            a.B = (byte)(int)MathHelper.Max(a.B - b.B, 0);
+
+            return a;
+        }
+        /// <summary>
+        /// Multiplies the specified colors.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color Multiply(Color a, Color b)
+        {
+            a.A = (byte)(int)MathHelper.Min(a.A * (b.A / 255.0f), 255);
+            a.R = (byte)(int)MathHelper.Min(a.R * (b.R / 255.0f), 255);
+            a.G = (byte)(int)MathHelper.Min(a.G * (b.G / 255.0f), 255);
+            a.B = (byte)(int)MathHelper.Min(a.B * (b.B / 255.0f), 255);
+
+            return a;
+        }
+        /// <summary>
+        /// Divides the specified colors.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color Divide(Color a, Color b)
+        {
+            a.A = (byte)(int)MathHelper.Min(a.A / (float)b.A * 255, 255);
+            a.R = (byte)(int)MathHelper.Min(a.R / (float)b.R * 255, 255);
+            a.G = (byte)(int)MathHelper.Min(a.G / (float)b.G * 255, 255);
+            a.B = (byte)(int)MathHelper.Min(a.B / (float)b.B * 255, 255);
+
+            return a;
+        }
+        /// <summary>
+        /// Returns a color containing the minimum components of the specified colors.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color Min(Color a, Color b)
+        {
+            a.A = (byte)(int)MathHelper.Min(a.A, b.A);
+            a.R = (byte)(int)MathHelper.Min(a.R, b.R);
+            a.G = (byte)(int)MathHelper.Min(a.G, b.G);
+            a.B = (byte)(int)MathHelper.Min(a.B, b.B);
+
+            return a;
+        }
+        /// <summary>
+        /// Returns a color containing the maximum components of the specified colors.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color Max(Color a, Color b)
+        {
+            a.A = (byte)(int)MathHelper.Max(a.A, b.A);
+            a.R = (byte)(int)MathHelper.Max(a.R, b.R);
+            a.G = (byte)(int)MathHelper.Max(a.G, b.G);
+            a.B = (byte)(int)MathHelper.Max(a.B, b.B);
+
+            return a;
         }
         #endregion
 
@@ -800,6 +886,42 @@ namespace Xemio.GameLibrary.Rendering
         public static Color operator *(Color a, float scale)
         {
             return Multiply(a, scale);
+        }
+        /// <summary>
+        /// Implements the operator +.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color operator +(Color a, Color b)
+        {
+            return Add(a, b);
+        }
+        /// <summary>
+        /// Implements the operator -.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color operator -(Color a, Color b)
+        {
+            return Subtract(a, b);
+        }
+        /// <summary>
+        /// Implements the operator *.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color operator *(Color a, Color b)
+        {
+            return Multiply(a, b);
+        }
+        /// <summary>
+        /// Implements the operator /.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        public static Color operator /(Color a, Color b)
+        {
+            return Divide(a, b);
         }
         #endregion
 

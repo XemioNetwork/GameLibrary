@@ -5,7 +5,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Properties;
 using Xemio.GameLibrary.Rendering;
-using Xemio.GameLibrary.Rendering.Geometry.Shapes;
+using Xemio.GameLibrary.Rendering.Shapes;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         private float _elapsed;
 
         private ITexture _texture;
-        private IShape _rectangle;
+        private Rectangle _rectangle;
 
         private readonly IEnumerable<Scene> _scenes;
         #endregion
@@ -41,7 +41,7 @@ namespace Xemio.GameLibrary.Game.Scenes
             DisplayMode displayMode = this.GraphicsDevice.DisplayMode;
 
             this._texture = this.Serializer.Load<ITexture>(Resources.intro.ToStream());
-            this._rectangle = this.GeometryFactory.CreateRectangle(new Rectangle(0, 0, displayMode.Width, displayMode.Height));
+            this._rectangle = new Rectangle(0, 0, displayMode.Width, displayMode.Height);
         }
         /// <summary>
         /// Handles a game tick.
@@ -74,10 +74,10 @@ namespace Xemio.GameLibrary.Game.Scenes
                                           displayMode.Center.X - this._texture.Width * 0.5f,
                                           displayMode.Center.Y - this._texture.Height * 0.5f));
 
-            Color color = new Color(0, 0, 0, this._alpha);
-            IBrush brush = this.GraphicsDevice.GeometryFactory.CreateSolid(color);
+            var color = new Color(0, 0, 0, this._alpha);
+            IBrush brush = this.GraphicsDevice.RenderFactory.CreateSolidBrush(color);
 
-            this.RenderManager.Render(this._rectangle, Vector2.Zero, brush);
+            this.RenderManager.FillRectangle(brush, this._rectangle);
         }
         #endregion
     }

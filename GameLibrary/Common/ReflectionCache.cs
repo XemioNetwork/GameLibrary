@@ -65,6 +65,14 @@ namespace Xemio.GameLibrary.Common
             return ReflectionCache.Get(propertyInfo, "CustomAttributes", () => propertyInfo.GetCustomAttributes(true));
         }
         /// <summary>
+        /// Gets custom attributes for the specified method.
+        /// </summary>
+        /// <param name="methodInfo">The method information.</param>
+        public static object[] GetCustomAttributes(MethodInfo methodInfo)
+        {
+            return ReflectionCache.Get(methodInfo, "CustomAttributes", () => methodInfo.GetCustomAttributes(true));
+        }
+        /// <summary>
         /// Determines whether the specified type has a custom attribute with the specified attribute type.
         /// </summary>
         /// <typeparam name="TAttribute">The type of the attribute.</typeparam>

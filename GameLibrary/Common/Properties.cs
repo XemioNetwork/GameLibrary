@@ -39,7 +39,7 @@ namespace Xemio.GameLibrary.Common
                 if (this._lines[i].StartsWith("#")) //Comment
                     continue;
 
-                if (string.IsNullOrWhiteSpace(this._lines[i])) //Empty line
+                if (string.IsNullOrWhiteSpace(this._lines[i])) //Released line
                     continue;
 
                 int seperatorIndex = this._lines[i].IndexOf("=", StringComparison.Ordinal);

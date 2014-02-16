@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+    <metadata minClientVersion="2.0">
+        <id>Xemio-GameLibrary-Syncput</id>
+        <version>0.0.0</version>
+        <title>Xemio Syncput</title>
+        <authors>XemioNetwork</authors>
+        <licenseUrl>https://raw.github.com/XemioNetwork/GameLibrary-Contrib/master/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/XemioNetwork/GameLibrary-Contrib</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>An input synchronization library.</description>
+        <summary />
+        <copyright>XemioNetwork</copyright>
+        <language>es-US</language>
+        <tags>xemio game library syncput network synchronized input xgl</tags>
+        <dependencies>
+            <dependency id="Xemio-GameLibrary" version="0.5.41" />
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+	<files>
+		<file src="..\bin\Release\XGL.Network.Syncput.dll" target="lib\net40\XGL.Network.Syncput.dll" />
+	</files>
+</package>

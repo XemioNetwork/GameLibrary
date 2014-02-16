@@ -21,18 +21,6 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <param name="position">The position.</param>
         public static void Render(this IRenderManager renderManager, SpriteFont font, string value, Vector2 position)
         {
-            renderManager.Render(font, value, position, Color.White);
-        }
-        /// <summary>
-        /// Renders the specified text.
-        /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        /// <param name="font">The font.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="position">The position.</param>
-        /// <param name="color">The color.</param>
-        public static void Render(this IRenderManager renderManager, SpriteFont font, string value, Vector2 position, Color color)
-        {
             string[] lines = value.Split('\n');
             Vector2 currentPosition = position;
 
@@ -51,14 +39,8 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                             "Cannot render character " + character + " (" + index + ").");
                     }
 
-                    renderManager.Render(
-                        texture,
-                        new Rectangle(
-                            currentPosition.X,
-                            currentPosition.Y,
-                            texture.Width,
-                            texture.Height),
-                        color);
+                    renderManager.Render(texture,
+                        new Rectangle(currentPosition.X, currentPosition.Y, texture.Width, texture.Height));
 
                     currentPosition.X += texture.Width + font.Kerning;
                     currentPosition.X += character == ' ' ? font.Spacing : 0;

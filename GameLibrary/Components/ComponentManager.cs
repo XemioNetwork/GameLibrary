@@ -163,6 +163,13 @@ namespace Xemio.GameLibrary.Components
             }
         }
         /// <summary>
+        /// Removes the specified component abstraction.
+        /// </summary>
+        public void Remove<T>() where T : class, IComponent
+        {
+            this.Remove(this.Get<T>());
+        }
+        /// <summary>
         /// Gets a component by a specified type.
         /// </summary>
         /// <typeparam name="T">The type of the component.</typeparam>

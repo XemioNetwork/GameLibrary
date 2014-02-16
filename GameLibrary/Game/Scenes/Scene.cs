@@ -45,6 +45,23 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public SceneProvider Parent { get; internal set; }
         /// <summary>
+        /// Gets a value indicating the index during a game tick.
+        /// </summary>
+        public virtual int TickIndex
+        {
+            get { return 0; }
+        }
+        /// <summary>
+        /// Gets a value indicating the index during the rendering process.
+        /// </summary>
+        public virtual int RenderIndex
+        {
+            get { return 0; }
+        }
+        #endregion
+
+        #region Helper Properties
+        /// <summary>
         /// Gets the serializer.
         /// </summary>
         public SerializationManager Serializer
@@ -54,7 +71,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Gets the content manager.
         /// </summary>
-        public ContentManager Content
+        public ContentManager ContentManager
         {
             get { return XGL.Components.Require<ContentManager>(); }
         }
@@ -73,18 +90,18 @@ namespace Xemio.GameLibrary.Game.Scenes
             get { return this.GraphicsDevice.RenderFactory; }
         }
         /// <summary>
-        /// Gets the geometry factory.
-        /// </summary>
-        public IGeometryFactory GeometryFactory
-        {
-            get { return this.GraphicsDevice.GeometryFactory; }
-        }
-        /// <summary>
         /// Gets the mouse listener.
         /// </summary>
-        public InputManager Input
+        public InputManager InputManager
         {
             get { return XGL.Components.Get<InputManager>(); }
+        }
+        /// <summary>
+        /// Gets the local player input.
+        /// </summary>
+        public PlayerInput Input
+        {
+            get { return this.InputManager.LocalInput; }
         }
         /// <summary>
         /// Gets the scene manager.
@@ -92,20 +109,6 @@ namespace Xemio.GameLibrary.Game.Scenes
         public SceneManager SceneManager
         {
             get { return XGL.Components.Get<SceneManager>(); }
-        }
-        /// <summary>
-        /// Gets a value indicating the index during a game tick.
-        /// </summary>
-        public virtual int TickIndex
-        {
-            get { return 0; }
-        }
-        /// <summary>
-        /// Gets a value indicating the index during the rendering process.
-        /// </summary>
-        public virtual int RenderIndex
-        {
-            get { return 0; }
         }
         #endregion
 

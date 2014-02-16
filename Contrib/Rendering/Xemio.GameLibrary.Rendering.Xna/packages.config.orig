@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<packages>
+<<<<<<< HEAD
+  <package id="Xemio-GameLibrary" version="0.5.77" targetFramework="net40" />
+=======
+  <package id="Xemio-GameLibrary" version="0.5.75" targetFramework="net40" />
+>>>>>>> 45ee52c071c7dff4fdcc26dd0692330c4ee9d5e6
+</packages>

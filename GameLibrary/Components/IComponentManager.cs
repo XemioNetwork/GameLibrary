@@ -23,6 +23,10 @@ namespace Xemio.GameLibrary.Components
         /// <param name="component">The component.</param>
         void Remove(IComponent component);
         /// <summary>
+        /// Removes the specified component abstraction.
+        /// </summary>
+        void Remove<T>() where T : class, IComponent;
+        /// <summary>
         /// Gets a component by a specified type.
         /// </summary>
         /// <typeparam name="T">The type of the component.</typeparam>

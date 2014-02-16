@@ -15,13 +15,14 @@ namespace Xemio.GameLibrary.Input
     [Require(typeof(IGameLoop))]
     [Require(typeof(IEventManager))]
 
-    public class InputManager : IConstructable, IGameHandler
+    public class InputManager : IConstructable, ISortableTickHandler
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
         #region Fields
+        private readonly IList<PlayerInput> _inputs; 
         private readonly IList<IInputListener> _listeners;
         #endregion
 
@@ -31,12 +32,8 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public PlayerInput LocalInput
         {
-            get { return this.PlayerInputs.First(); }
+            get { return this._inputs.First(); }
         }
-        /// <summary>
-        /// Gets the player inputs.
-        /// </summary>
-        public IList<PlayerInput> PlayerInputs { get; private set; }
         /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Input.PlayerInput"/> with the specified player index.
         /// </summary>
@@ -47,7 +44,7 @@ namespace Xemio.GameLibrary.Input
                 if (!this.IsPlayerIndexValid(playerIndex))
                     return null;
 
-                return this.PlayerInputs[playerIndex];
+                return this._inputs[playerIndex];
             }
         }
         #endregion
@@ -59,20 +56,20 @@ namespace Xemio.GameLibrary.Input
         public InputManager()
         {
             this._listeners = new List<IInputListener>();
-            this.PlayerInputs = new List<PlayerInput>();
+            this._inputs = new List<PlayerInput>();
         }
-        #endregion Constructors
-        
+        #endregion
+
         #region Methods
         /// <summary>
         /// Creates a player input.
         /// </summary>
         public PlayerInput CreateInput()
         {
-            logger.Info("Creating player input with id {0}", this.PlayerInputs.Count);
+            logger.Info("Creating player input with id {0}", this._inputs.Count);
 
-            var playerInput = new PlayerInput(this.PlayerInputs.Count);
-            this.PlayerInputs.Add(playerInput);
+            var playerInput = new PlayerInput(this._inputs.Count);
+            this._inputs.Add(playerInput);
 
             return playerInput;
         }
@@ -85,8 +82,7 @@ namespace Xemio.GameLibrary.Input
         {
             logger.Debug("Adding {0} for player {1}.", listener.GetType().Name, playerIndex);
 
-            listener.PlayerIndex = playerIndex;
-            listener.OnAttached();
+            listener.Attach(playerIndex);
 
             this._listeners.Add(listener);
         }
@@ -98,8 +94,7 @@ namespace Xemio.GameLibrary.Input
         {
             logger.Debug("Removing {0} for player {1}.", listener.GetType().Name, listener.PlayerIndex);
 
-            listener.PlayerIndex = null;
-            listener.OnDetached();
+            listener.Detach();
 
             this._listeners.Remove(listener);
         }
@@ -120,7 +115,7 @@ namespace Xemio.GameLibrary.Input
         /// <param name="playerIndex">Index of the player.</param>
         private bool IsPlayerIndexValid(int playerIndex)
         {
-            return playerIndex < this.PlayerInputs.Count;
+            return playerIndex < this._inputs.Count;
         }
         #endregion
 
@@ -129,33 +124,18 @@ namespace Xemio.GameLibrary.Input
         /// Handles the input event.
         /// </summary>
         /// <param name="stateEvent">The key event.</param>
-        private void HandleInputEvent(KeyStateEvent stateEvent)
+        private void ProcessState(InputStateEvent stateEvent)
         {
             if (!this.IsPlayerIndexValid(stateEvent.PlayerIndex))
             {
-                logger.Debug("Invalid input state event for player with id {0}.", stateEvent.PlayerIndex);
+                logger.Warn("Invalid input state event for player with id {0}.", stateEvent.PlayerIndex);
                 return;
             }
 
-            PlayerInput playerInput = this.PlayerInputs[stateEvent.PlayerIndex];
-            playerInput.SetState(stateEvent.Key, stateEvent.State);
+            PlayerInput playerInput = this._inputs[stateEvent.PlayerIndex];
+            playerInput[stateEvent.Id] = stateEvent.State;
         }
-        /// <summary>
-        /// Handles a mouse position event.
-        /// </summary>
-        /// <param name="mouseEvent">The mouse event.</param>
-        private void HandleMousePositionEvent(MousePositionEvent mouseEvent)
-        {
-            if (!this.IsPlayerIndexValid(mouseEvent.PlayerIndex))
-            {
-                logger.Debug("Invalid mouse position event for player with id {0}.", mouseEvent.PlayerIndex);
-                return;
-            }
-
-            PlayerInput playerInput = this.PlayerInputs[mouseEvent.PlayerIndex];
-            playerInput.MousePosition = mouseEvent.Position;
-        }
-        #endregion Event Handlers
+        #endregion
 
         #region Implementation of IConstructable
         /// <summary>
@@ -164,9 +144,7 @@ namespace Xemio.GameLibrary.Input
         public void Construct()
         {
             var eventManager = XGL.Components.Get<IEventManager>();
-
-            eventManager.Subscribe<KeyStateEvent>(this.HandleInputEvent);
-            eventManager.Subscribe<MousePositionEvent>(this.HandleMousePositionEvent);
+            eventManager.Subscribe<InputStateEvent>(this.ProcessState);
 
             var gameLoop = XGL.Components.Get<IGameLoop>();
             gameLoop.Subscribe(this);
@@ -175,21 +153,28 @@ namespace Xemio.GameLibrary.Input
 
         #region Implementation of IGameHandler
         /// <summary>
+        /// Gets the index of the tick. Default: 0.
+        /// </summary>
+        public int TickIndex
+        {
+            get
+            {
+                //Ensure that the input manager will be
+                //updated last, since we need to correctly push the
+                //current input state the the previous one.
+                return int.MaxValue;
+            }
+        }
+        /// <summary>
         /// Handles game updates.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
         {
-            foreach (PlayerInput playerInput in this.PlayerInputs)
+            foreach (PlayerInput playerInput in this._inputs)
             {
-                playerInput.UpdateStates();
+                playerInput.PushCurrentToPrevious();
             }
-        }
-        /// <summary>
-        /// Handles render calls.
-        /// </summary>
-        public void Render()
-        {
         }
         #endregion
     }
