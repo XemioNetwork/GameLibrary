@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Timing;
-using Xemio.GameLibrary.Input.Events;
+using Xemio.GameLibrary.Input.Adapters;
 
 namespace Xemio.GameLibrary.Input
 {
@@ -21,9 +21,18 @@ namespace Xemio.GameLibrary.Input
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InputManager"/> class.
+        /// </summary>
+        public InputManager()
+        {
+            this._inputs = new List<PlayerInput>();
+        }
+        #endregion
+
         #region Fields
         private readonly IList<PlayerInput> _inputs; 
-        private readonly IList<IInputListener> _listeners;
         #endregion
 
         #region Properties
@@ -41,7 +50,7 @@ namespace Xemio.GameLibrary.Input
         {
             get
             {
-                if (!this.IsPlayerIndexValid(playerIndex))
+                if (playerIndex >= this._inputs.Count)
                     return null;
 
                 return this._inputs[playerIndex];
@@ -49,73 +58,18 @@ namespace Xemio.GameLibrary.Input
         }
         #endregion
 
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InputManager"/> class.
-        /// </summary>
-        public InputManager()
-        {
-            this._listeners = new List<IInputListener>();
-            this._inputs = new List<PlayerInput>();
-        }
-        #endregion
-
         #region Methods
         /// <summary>
         /// Creates a player input.
         /// </summary>
-        public PlayerInput CreateInput()
+        public PlayerInput CreatePlayerInput()
         {
             logger.Info("Creating player input with id {0}", this._inputs.Count);
 
-            var playerInput = new PlayerInput(this._inputs.Count);
+            var playerInput = new PlayerInput(this, this._inputs.Count);
             this._inputs.Add(playerInput);
 
             return playerInput;
-        }
-        /// <summary>
-        /// Adds the listener to the specified player index.
-        /// </summary>
-        /// <param name="listener">The listener.</param>
-        /// <param name="playerIndex">Index of the player.</param>
-        public void AddListener(IInputListener listener, int playerIndex)
-        {
-            logger.Debug("Adding {0} for player {1}.", listener.GetType().Name, playerIndex);
-
-            listener.Attach(playerIndex);
-
-            this._listeners.Add(listener);
-        }
-        /// <summary>
-        /// Removes the listener from its player.
-        /// </summary>
-        /// <param name="listener">The listener.</param>
-        public void RemoveListener(IInputListener listener)
-        {
-            logger.Debug("Removing {0} for player {1}.", listener.GetType().Name, listener.PlayerIndex);
-
-            listener.Detach();
-
-            this._listeners.Remove(listener);
-        }
-        /// <summary>
-        /// Gets the listeners from the specified player index.
-        /// </summary>
-        /// <param name="playerIndex">Index of the player.</param>
-        public IEnumerable<IInputListener> GetListeners(int playerIndex)
-        {
-            return this._listeners.Where(listener => listener.PlayerIndex == playerIndex);
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Determines whether the player index is valid.
-        /// </summary>
-        /// <param name="playerIndex">Index of the player.</param>
-        private bool IsPlayerIndexValid(int playerIndex)
-        {
-            return playerIndex < this._inputs.Count;
         }
         #endregion
 
@@ -126,14 +80,11 @@ namespace Xemio.GameLibrary.Input
         /// <param name="stateEvent">The key event.</param>
         private void ProcessState(InputStateEvent stateEvent)
         {
-            if (!this.IsPlayerIndexValid(stateEvent.PlayerIndex))
+            if (stateEvent.Adapter.PlayerIndex >= this._inputs.Count)
             {
-                logger.Warn("Invalid input state event for player with id {0}.", stateEvent.PlayerIndex);
-                return;
+                logger.Warn("Invalid input state event for player with id {0}.", stateEvent.Adapter.PlayerIndex);
+                stateEvent.Cancel();
             }
-
-            PlayerInput playerInput = this._inputs[stateEvent.PlayerIndex];
-            playerInput[stateEvent.Id] = stateEvent.State;
         }
         #endregion
 
@@ -144,9 +95,9 @@ namespace Xemio.GameLibrary.Input
         public void Construct()
         {
             var eventManager = XGL.Components.Get<IEventManager>();
-            eventManager.Subscribe<InputStateEvent>(this.ProcessState);
-
             var gameLoop = XGL.Components.Get<IGameLoop>();
+
+            eventManager.Subscribe<InputStateEvent>(this.ProcessState);
             gameLoop.Subscribe(this);
         }
         #endregion

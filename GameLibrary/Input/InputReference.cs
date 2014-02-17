@@ -15,48 +15,37 @@ namespace Xemio.GameLibrary.Input
         /// <param name="inputManager">The input manager.</param>
         /// <param name="playerIndex">Index of the player.</param>
         /// <param name="id">The identifier.</param>
-        public InputReference(InputManager inputManager, int playerIndex, string id)
+        /// <param name="associatedIds">The associated ids.</param>
+        internal InputReference(InputManager inputManager, int playerIndex, string id, IEnumerable<string> associatedIds)
         {
             this._inputManager = inputManager;
             this._playerIndex = playerIndex;
-            this._id = id;
+
+            this.Id = id;
+            this.AssociatedIds = associatedIds;
         }
         #endregion
 
         #region Fields
         private readonly InputManager _inputManager;
         private readonly int _playerIndex;
-        private readonly string _id;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the key identifier.
+        /// </summary>
+        public string Id { get; private set; }
+        /// <summary>
+        /// Gets the associated identifiers.
+        /// </summary>
+        public IEnumerable<string> AssociatedIds { get; private set; }
         /// <summary>
         /// Gets the player input.
         /// </summary>
         public PlayerInput PlayerInput
         {
             get { return this._inputManager[this._playerIndex]; }
-        }
-        /// <summary>
-        /// Gets the associated identifiers.
-        /// </summary>
-        public IEnumerable<string> AssociatedIds
-        {
-            get { return this.PlayerInput.Resolve(this._id); }
-        }
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        public InputState State
-        {
-            get { return this.PlayerInput[this._id]; }
-        }
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        public float Value
-        {
-            get { return this.State.Value; }
         }
         /// <summary>
         /// Gets a value indicating whether the key is pressed.
@@ -85,6 +74,13 @@ namespace Xemio.GameLibrary.Input
         public bool WasPreviouslyActive
         {
             get { return this.AssociatedIds.Any(id => this.PlayerInput.WasPreviouslyActive(id)); }
+        }
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        public float Value
+        {
+            get { return this.AssociatedIds.Sum(id => this.PlayerInput[id].Value); }
         }
         #endregion
     }

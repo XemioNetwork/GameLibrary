@@ -1,21 +1,22 @@
 ﻿using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Input.Adapters;
 
-namespace Xemio.GameLibrary.Input.Events
+namespace Xemio.GameLibrary.Input
 {
-    public class InputStateEvent : IEvent
+    public class InputStateEvent : ICancelableEvent
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="InputStateEvent" /> class.
         /// </summary>
+        /// <param name="adapter">The adapter.</param>
         /// <param name="id">The id.</param>
         /// <param name="state">The new state.</param>
-        /// <param name="playerIndex">The player index.</param>
-        public InputStateEvent(string id, InputState state, int playerIndex)
+        public InputStateEvent(IInputAdapter adapter, string id, InputState state)
         {
             this.Id = id;
             this.State = state;
-            this.PlayerIndex = playerIndex;
+            this.Adapter = adapter;
         }
         #endregion
 
@@ -29,9 +30,23 @@ namespace Xemio.GameLibrary.Input.Events
         /// </summary>
         public InputState State { get; private set; }
         /// <summary>
-        /// Gets or sets the index of the player.
+        /// Gets the adapter.
         /// </summary>
-        public int PlayerIndex { get; set; }
+        public IInputAdapter Adapter { get; private set; }
+        #endregion
+
+        #region Implementation of ICancelableEvent
+        /// <summary>
+        /// Gets a value indicating whether the event propagation was canceled.
+        /// </summary>
+        public bool IsCanceled { get; private set; }
+        /// <summary>
+        /// Cancels the event propagation.
+        /// </summary>
+        public void Cancel()
+        {
+            this.IsCanceled = true;
+        }
         #endregion
     }
 }

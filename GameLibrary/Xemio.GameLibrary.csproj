@@ -169,7 +169,8 @@
     <Compile Include="Game\Timing\FrameDelayAction.cs" />
     <Compile Include="Game\IGameLoop.cs" />
     <Compile Include="Game\LagCompensation.cs" />
-    <Compile Include="Input\IInputListener.cs" />
+    <Compile Include="Input\Adapters\BaseInputAdapter.cs" />
+    <Compile Include="Input\Adapters\IInputAdapter.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputReference.cs" />
     <Compile Include="Input\InputState.cs" />
@@ -314,8 +315,8 @@
     <Compile Include="Game\PrecisionLevel.cs" />
     <Compile Include="Game\Scenes\SceneWrapper.cs" />
     <Compile Include="Input\InputStateEvent.cs" />
-    <Compile Include="Input\Listeners\KeyboardListener.cs" />
-    <Compile Include="Input\Listeners\MouseListener.cs" />
+    <Compile Include="Input\Adapters\KeyboardAdapter.cs" />
+    <Compile Include="Input\Adapters\MouseAdapter.cs" />
     <Compile Include="Localization\Language.cs" />
     <Compile Include="Localization\LanguageSerializer.cs" />
     <Compile Include="Localization\LocalizationManager.cs" />

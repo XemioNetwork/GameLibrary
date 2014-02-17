@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xemio.GameLibrary;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Input.Adapters;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Effects;
@@ -17,7 +19,7 @@ namespace Xemio.Testing.Input.Scenes
         #region Fields
         private ContentReference<ITexture> _texture;
         private ContentReference<Color> _color;
-        private ContentReference<Vector2> _offset;
+        private Vector2 _offset;
         #endregion
 
         #region Overrides of Scene
@@ -29,6 +31,19 @@ namespace Xemio.Testing.Input.Scenes
             this._texture = this.ContentManager.Get<ITexture>(@"test.png");
             this._color = this.ContentManager.Get<Color>(@"test.color");
             this._offset = this.ContentManager.Get<Vector2>(@"test.offset");
+        }
+        /// <summary>
+        /// Handles a game tick.
+        /// </summary>
+        /// <param name="elapsed">The elapsed.</param>
+        public override void Tick(float elapsed)
+        {
+            var inputManager = XGL.Components.Get<InputManager>();
+
+            if (inputManager.LocalInput.Get("key.right").IsActive)
+            {
+                this._offset += new Vector2(1, 0);
+            }
         }
         /// <summary>
         /// Handles a game render.

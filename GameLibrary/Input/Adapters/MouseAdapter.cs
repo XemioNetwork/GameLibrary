@@ -1,16 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using NLog;
 using Xemio.GameLibrary.Events;
-using System.Windows.Forms;
-using Xemio.GameLibrary.Input.Events;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
-namespace Xemio.GameLibrary.Input.Listeners
+namespace Xemio.GameLibrary.Input.Adapters
 {
-    public class MouseListener : IInputListener
+    public class MouseAdapter : BaseInputAdapter
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -32,16 +30,6 @@ namespace Xemio.GameLibrary.Input.Listeners
             if (button.HasFlag(MouseButtons.Middle))
                 yield return "mouse.wheel";
         }
-        /// <summary>
-        /// Publishes the event.
-        /// </summary>
-        /// <typeparam name="TEvent">The type of the event.</typeparam>
-        /// <param name="e">The event.</param>
-        protected virtual void PublishEvent<TEvent>(TEvent e) where TEvent : class, IEvent
-        {
-            var eventManager = XGL.Components.Get<IEventManager>();
-            eventManager.Publish(e);
-        }
         #endregion
 
         #region Event Handlers
@@ -62,8 +50,8 @@ namespace Xemio.GameLibrary.Input.Listeners
 
             Vector2 position = new Vector2(e.X, e.Y) / divider;
 
-            this.PublishEvent(new InputStateEvent("mouse.position.x", new InputState(position.X), this.PlayerIndex));
-            this.PublishEvent(new InputStateEvent("mouse.position.y", new InputState(position.Y), this.PlayerIndex));
+            this.Send("mouse.position.x", new InputState(position.X));
+            this.Send("mouse.position.y", new InputState(position.Y));
         }
         /// <summary>
         /// Handles the MouseDown event of the surface control.
@@ -74,7 +62,7 @@ namespace Xemio.GameLibrary.Input.Listeners
         {
             foreach (string id in this.GetKeys(e.Button))
             {
-                this.PublishEvent(new InputStateEvent(id, InputState.Released, this.PlayerIndex));
+                this.Send(id, InputState.Released);
             }
         }
         /// <summary>
@@ -86,23 +74,19 @@ namespace Xemio.GameLibrary.Input.Listeners
         {
             foreach (string id in this.GetKeys(e.Button))
             {
-                this.PublishEvent(new InputStateEvent(id, InputState.Released, this.PlayerIndex));
+                this.Send(id, InputState.Released);
             }
         }
         #endregion
         
-        #region Implementation of IInputListener
+        #region Implementation of IInputAdapter
         /// <summary>
-        /// Gets the index of the player.
-        /// </summary>
-        public int PlayerIndex { get; private set; }
-        /// <summary>
-        /// Called when the input listener was attached to the player.
+        /// Called when the input adapter was attached to the player.
         /// </summary>
         /// <param name="playerIndex">Index of the player.</param>
-        public void Attach(int playerIndex)
+        public override void Attach(int playerIndex)
         {
-            this.PlayerIndex = playerIndex;
+            base.Attach(playerIndex);
 
             var surface = XGL.Components.Require<WindowSurface>();
             surface.Control.MouseMove += this.OnMouseMove;
@@ -110,15 +94,17 @@ namespace Xemio.GameLibrary.Input.Listeners
             surface.Control.MouseUp += this.OnMouseUp;
         }
         /// <summary>
-        /// Called when the input listener was detached from the player.
+        /// Called when the input adapter was detached from the player.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             var surface = XGL.Components.Require<WindowSurface>();
 
             surface.Control.MouseMove -= this.OnMouseMove;
             surface.Control.MouseDown -= this.OnMouseDown;
             surface.Control.MouseUp -= this.OnMouseUp;
+
+            base.Detach();
         }
         #endregion
     }

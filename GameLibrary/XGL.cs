@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
-using Xemio.GameLibrary.Input.Listeners;
+using Xemio.GameLibrary.Input.Adapters;
 using Xemio.GameLibrary.Localization;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;
@@ -195,10 +195,10 @@ namespace Xemio.GameLibrary
 
             if (inputManager != null && configuration.CreatePlayerInput)
             {
-                PlayerInput playerInput = inputManager.CreateInput();
+                PlayerInput playerInput = inputManager.CreatePlayerInput();
 
-                inputManager.AddListener(new MouseListener(), playerInput.PlayerIndex);
-                inputManager.AddListener(new KeyboardListener(), playerInput.PlayerIndex);
+                playerInput.Attach(new MouseAdapter());
+                playerInput.Attach(new KeyboardAdapter());
             }
         }
         /// <summary>

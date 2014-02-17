@@ -1,29 +1,14 @@
 ﻿using System.Windows.Forms;
 using NLog;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Input.Events;
-using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
-namespace Xemio.GameLibrary.Input.Listeners
+namespace Xemio.GameLibrary.Input.Adapters
 {
-    public class KeyboardListener : IInputListener
+    public class KeyboardAdapter : BaseInputAdapter
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        #endregion
-        
-        #region Methods
-        /// <summary>
-        /// Publishes the event.
-        /// </summary>
-        /// <typeparam name="TEvent">The type of the event.</typeparam>
-        /// <param name="e">The event.</param>
-        protected virtual void PublishEvent<TEvent>(TEvent e) where TEvent : class, IEvent
-        {
-            var eventManager = XGL.Components.Get<IEventManager>();
-            eventManager.Publish(e);
-        }
         #endregion
 
         #region Event Handlers
@@ -37,7 +22,7 @@ namespace Xemio.GameLibrary.Input.Listeners
             string keyName = e.KeyCode.ToString();
             string id = "key." + keyName.ToLower();
 
-            this.PublishEvent(new InputStateEvent(id, InputState.Pressed, this.PlayerIndex));
+            this.Send(id, InputState.Pressed);
         }
         /// <summary>
         /// Handles the KeyUp event of the surface.
@@ -49,36 +34,34 @@ namespace Xemio.GameLibrary.Input.Listeners
             string keyName = e.KeyCode.ToString();
             string id = "key." + keyName.ToLower();
 
-            this.PublishEvent(new InputStateEvent(id, InputState.Released, this.PlayerIndex));
+            this.Send(id, InputState.Released);
         }
         #endregion
 
-        #region Implementation of IInputListener
+        #region Implementation of IInputAdapter
         /// <summary>
-        /// Gets the index of the player.
-        /// </summary>
-        public int PlayerIndex { get; private set; }
-        /// <summary>
-        /// Called when the input listener was attached to the player.
+        /// Called when the input adapter was attached to the player.
         /// </summary>
         /// <param name="playerIndex">Index of the player.</param>
-        public void Attach(int playerIndex)
+        public override void Attach(int playerIndex)
         {
-            this.PlayerIndex = playerIndex;
+            base.Attach(playerIndex);
 
             var surface = XGL.Components.Require<WindowSurface>();
             surface.Control.KeyDown += this.OnKeyDown;
             surface.Control.KeyUp += this.OnKeyUp;
         }
         /// <summary>
-        /// Called when the input listener was detached from the player.
+        /// Called when the input adapter was detached from the player.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             var surface = XGL.Components.Require<WindowSurface>();
 
             surface.Control.KeyDown -= this.OnKeyDown;
             surface.Control.KeyUp -= this.OnKeyUp;
+
+            base.Detach();
         }
         #endregion
     }

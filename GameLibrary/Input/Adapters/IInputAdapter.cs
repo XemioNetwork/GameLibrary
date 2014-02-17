@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Xemio.GameLibrary.Input
+﻿namespace Xemio.GameLibrary.Input.Adapters
 {
-    public interface IInputListener
+    public interface IInputAdapter
     {
         /// <summary>
         /// Gets the index of the player.
