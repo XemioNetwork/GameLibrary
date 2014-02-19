@@ -286,6 +286,17 @@
     <Compile Include="Rendering\Fonts\IFont.cs" />
     <Compile Include="Rendering\Fonts\ITextRasterizer.cs" />
     <Compile Include="Rendering\Initialization\IGraphicsFactory.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullBrush.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullFont.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullGraphicsFactory.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullGraphicsInitializer.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullPen.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullRenderFactory.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullRenderManager.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullTextRasterizer.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullTexture.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullTextureReader.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullTextureWriter.cs" />
     <Compile Include="Rendering\InterpolationMode.cs" />
     <Compile Include="Rendering\Events\ResolutionChangedEvent.cs" />
     <Compile Include="Rendering\Initialization\NamedInitializer.cs" />

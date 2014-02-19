@@ -7,13 +7,6 @@ namespace Xemio.GameLibrary.Common
 {
     public class ActionDisposable : IDisposable
     {
-        #region Properties
-        /// <summary>
-        /// Gets the method beeing executed.
-        /// </summary>
-        public Action Method { get; private set; }
-        #endregion Properties
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionDisposable"/> class.
@@ -23,8 +16,24 @@ namespace Xemio.GameLibrary.Common
         {
             this.Method = method;
         }
+        #endregion
 
-        #endregion Constructors
+        #region Properties
+        /// <summary>
+        /// Gets the method beeing executed.
+        /// </summary>
+        public Action Method { get; private set; }
+        #endregion
+
+        #region Static Properties
+        /// <summary>
+        /// Gets an empty disposable.
+        /// </summary>
+        public static IDisposable Empty
+        {
+            get { return new ActionDisposable(() => { }); }
+        }
+        #endregion
 
         #region Implementation of IDisposable
         /// <summary>

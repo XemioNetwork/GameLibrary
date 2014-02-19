@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Rendering.Initialization.Default;
 
 namespace Xemio.GameLibrary.Rendering.Initialization
 {
     [ManuallyLinked]
     public class PriorizedInitializer : IGraphicsInitializer
     {
+        #region Logger
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="PriorizedInitializer"/> class.
@@ -20,10 +26,17 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         #endregion
 
         #region Fields
-        private IGraphicsInitializer _current;
+        private IGraphicsInitializer _current = new NullGraphicsInitializer();
         private readonly List<IGraphicsInitializer> _initializers; 
         #endregion
-        
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets a value indicating whether to exit if none of the specified initializers is available.
+        /// </summary>
+        public bool FailIfNoneAvailable { get; set; }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Adds the specified provider.
@@ -42,7 +55,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <returns></returns>
         public bool IsAvailable()
         {
-            return this._initializers.Any(i => i.IsAvailable());
+            return true;
         }
         /// <summary>
         /// Gets or sets the smoothing mode.
@@ -83,7 +96,12 @@ namespace Xemio.GameLibrary.Rendering.Initialization
                 }
             }
 
-            throw new InvalidOperationException("Your system doesn't support any rendering providers.");
+            if (this.FailIfNoneAvailable)
+            {
+                throw new InvalidOperationException("Your system doesn't support any of the specified rendering providers.");
+            }
+
+            logger.Warn("Your system doesn't support any of the specified rendering providers, initializing with NullGraphicsInitializer as fallback.");
         }
         #endregion
 
