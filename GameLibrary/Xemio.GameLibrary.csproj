@@ -90,6 +90,7 @@
     <Compile Include="Content\Layouts\Generation\LayoutGenerator.cs" />
     <Compile Include="Content\Layouts\Generation\TagAttribute.cs" />
     <Compile Include="Content\Layouts\IElementContainer.cs" />
+    <Compile Include="Content\Layouts\Link\LinkableElement.cs" />
     <Compile Include="Content\Layouts\Migration\DynamicPersistenceLayout.cs" />
     <Compile Include="Content\Layouts\Migration\ILayoutMigration.cs" />
     <Compile Include="Content\Layouts\Migration\MigrationManager.cs" />

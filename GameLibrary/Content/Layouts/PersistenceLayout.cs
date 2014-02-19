@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Layouts.Collections;
+using Xemio.GameLibrary.Content.Layouts.Link;
 using Xemio.GameLibrary.Content.Layouts.Primitives;
 using Xemio.GameLibrary.Content.Layouts.References;
 using Xemio.GameLibrary.Math;
@@ -251,6 +253,45 @@ namespace Xemio.GameLibrary.Content.Layouts
                 this.Add(new CollectionElement<TElement>(tag, elementTag, read, write));
             }
 
+            return this;
+        }
+        /// <summary>
+        /// Adds a linkable element to the persistence layout.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="property">The property.</param>
+        public PersistenceLayout<T> Linkable<TKey, TValue>(Expression<Func<T, TValue>> property) where TValue : ILinkable<TKey>
+        {
+            this.Add(new LinkableElement<TKey, TValue>(PropertyHelper.GetProperty(property)));
+            return this;
+        }
+        /// <summary>
+        /// Adds a linkable element to the persistence layout.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="tag">The tag.</param>
+        /// <param name="property">The property.</param>
+        public PersistenceLayout<T> Linkable<TKey, TValue>(string tag, Expression<Func<T, TValue>> property) where TValue : ILinkable<TKey>
+        {
+            this.Add(new LinkableElement<TKey, TValue>(tag, PropertyHelper.GetProperty(property)));
+            return this;
+        }
+        /// <summary>
+        /// Adds a property to the persistence layout.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="tag">The tag.</param>
+        /// <param name="getAction">The get action.</param>
+        /// <param name="setAction">The set action.</param>
+        public PersistenceLayout<T> Linkable<TKey, TValue>(string tag, Func<T, TValue> getAction, Action<T, TValue> setAction) where TValue : ILinkable<TKey>
+        {
+            Func<object, object> read = this.CreateGetAction(tag, getAction);
+            Action<object, object> write = this.CreateSetAction(tag, setAction);
+
+            this.Add(new LinkableElement<TKey, TValue>(tag, read, write));
             return this;
         }
         /// <summary>
