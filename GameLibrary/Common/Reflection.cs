@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Xemio.GameLibrary.Common
 {
-    public static class ReflectionCache
+    public static class Reflection
     {
         #region Static Fields
         private static readonly Dictionary<object, Dictionary<string, object>> _cache = new Dictionary<object, Dictionary<string, object>>();
@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The type.</param>
         public static Type[] GetInterfaces(Type type)
         {
-            return ReflectionCache.Get(type, "Interfaces", type.GetInterfaces);
+            return Reflection.Get(type, "Interfaces", type.GetInterfaces);
         }
         /// <summary>
         /// Gets the properties for the specified type.
@@ -46,7 +46,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The key.</param>
         public static PropertyInfo[] GetProperties(Type type)
         {
-            return ReflectionCache.Get(type, "Properties", () => type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
+            return Reflection.Get(type, "Properties", () => type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
         }
         /// <summary>
         /// Gets custom attributes for the specified property.
@@ -54,7 +54,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The type.</param>
         public static object[] GetCustomAttributes(Type type)
         {
-            return ReflectionCache.Get(type, "CustomAttributes", () => type.GetCustomAttributes(true));
+            return Reflection.Get(type, "CustomAttributes", () => type.GetCustomAttributes(true));
         }
         /// <summary>
         /// Gets custom attributes for the specified property.
@@ -62,7 +62,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="propertyInfo">The property information.</param>
         public static object[] GetCustomAttributes(PropertyInfo propertyInfo)
         {
-            return ReflectionCache.Get(propertyInfo, "CustomAttributes", () => propertyInfo.GetCustomAttributes(true));
+            return Reflection.Get(propertyInfo, "CustomAttributes", () => propertyInfo.GetCustomAttributes(true));
         }
         /// <summary>
         /// Gets custom attributes for the specified method.
@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="methodInfo">The method information.</param>
         public static object[] GetCustomAttributes(MethodInfo methodInfo)
         {
-            return ReflectionCache.Get(methodInfo, "CustomAttributes", () => methodInfo.GetCustomAttributes(true));
+            return Reflection.Get(methodInfo, "CustomAttributes", () => methodInfo.GetCustomAttributes(true));
         }
         /// <summary>
         /// Determines whether the specified type has a custom attribute with the specified attribute type.
@@ -79,7 +79,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The type.</param>
         public static bool HasCustomAttribute<TAttribute>(Type type)
         {
-            return ReflectionCache.GetCustomAttributes(type).Any(attr => attr is TAttribute);
+            return Reflection.GetCustomAttributes(type).Any(attr => attr is TAttribute);
         }
         /// <summary>
         /// Determines whether the specified type has a custom attribute with the specified attribute type.
@@ -88,7 +88,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="propertyInfo">The property information.</param>
         public static bool HasCustomAttribute<TAttribute>(PropertyInfo propertyInfo)
         {
-            return ReflectionCache.GetCustomAttributes(propertyInfo).Any(attr => attr is TAttribute);
+            return Reflection.GetCustomAttributes(propertyInfo).Any(attr => attr is TAttribute);
         }
         /// <summary>
         /// Gets the constructors for the specified key.
@@ -96,7 +96,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The key.</param>
         public static ConstructorInfo[] GetConstructors(Type type)
         {
-            return ReflectionCache.Get(type, "Constructors", () => type.GetConstructors(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance));
+            return Reflection.Get(type, "Constructors", () => type.GetConstructors(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance));
         }
         /// <summary>
         /// Gets the generic arguments.
@@ -104,7 +104,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The key.</param>
         public static Type[] GetGenericArguments(Type type)
         {
-            return ReflectionCache.Get(type, "GenericArguments", type.GetGenericArguments);
+            return Reflection.Get(type, "GenericArguments", type.GetGenericArguments);
         }
         /// <summary>
         /// Gets the element key for the specified key.
@@ -112,7 +112,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The key.</param>
         public static Type GetElementType(Type type)
         {
-            return ReflectionCache.Get(type, "ElementType", type.GetElementType);
+            return Reflection.Get(type, "ElementType", type.GetElementType);
         }
         /// <summary>
         /// Gets the constructor parameters for the specified constructor.
@@ -120,7 +120,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="constructor">The constructor.</param>
         public static ParameterInfo[] GetConstructorParameters(ConstructorInfo constructor)
         {
-            return ReflectionCache.Get(constructor, "Parameters", constructor.GetParameters);
+            return Reflection.Get(constructor, "Parameters", constructor.GetParameters);
         }
         /// <summary>
         /// Gets the set method.
@@ -128,7 +128,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="propertyInfo">The property information.</param>
         public static MethodInfo GetSetMethod(PropertyInfo propertyInfo)
         {
-            return ReflectionCache.Get(propertyInfo, "SetMethod", propertyInfo.GetSetMethod);
+            return Reflection.Get(propertyInfo, "SetMethod", propertyInfo.GetSetMethod);
         }
         /// <summary>
         /// Gets the get method.
@@ -136,7 +136,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="propertyInfo">The property information.</param>
         public static MethodInfo GetGetMethod(PropertyInfo propertyInfo)
         {
-            return ReflectionCache.Get(propertyInfo, "GetMethod", propertyInfo.GetGetMethod);
+            return Reflection.Get(propertyInfo, "GetMethod", propertyInfo.GetGetMethod);
         }
         /// <summary>
         /// Gets the methods.
@@ -144,7 +144,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The type.</param>
         public static MethodInfo[] GetMethods(Type type)
         {
-            return ReflectionCache.Get(type, "Methods", type.GetMethods);
+            return Reflection.Get(type, "Methods", type.GetMethods);
         }
         /// <summary>
         /// Gets the parameters for the specified method.
@@ -152,7 +152,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="method">The method.</param>
         public static ParameterInfo[] GetParameters(MethodInfo method)
         {
-            return ReflectionCache.Get(method, "Methods", method.GetParameters);
+            return Reflection.Get(method, "Methods", method.GetParameters);
         }
         /// <summary>
         /// Gets the inherited types.
@@ -160,7 +160,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="type">The type.</param>
         public static IList<Type> GetInheritedTypes(Type type)
         {
-            return ReflectionCache.Get(type, "GetInheritedTypes", () =>
+            return Reflection.Get(type, "GetInheritedTypes", () =>
             {
                 var types = new List<Type> { type };
 

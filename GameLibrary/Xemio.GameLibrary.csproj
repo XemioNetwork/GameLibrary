@@ -53,7 +53,7 @@
     <Compile Include="Common\Properties.cs" />
     <Compile Include="Common\Property.cs" />
     <Compile Include="Common\Randomization\CryptoRandom.cs" />
-    <Compile Include="Common\ReflectionCache.cs" />
+    <Compile Include="Common\Reflection.cs" />
     <Compile Include="Common\Retry.cs" />
     <Compile Include="Components\IComponentManager.cs" />
     <Compile Include="Content\ContentManager.cs" />

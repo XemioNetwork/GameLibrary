@@ -123,8 +123,8 @@ namespace Xemio.GameLibrary.Common.Link
 
             foreach (Type type in types)
             {
-                if (typeof (TValue).IsAssignableFrom(type) &&
-                    type.GetCustomAttributes(typeof(ManuallyLinkedAttribute), true).Length == 0 &&
+                if (typeof(TValue).IsAssignableFrom(type) &&
+                    Reflection.HasCustomAttribute<ManuallyLinkedAttribute>(type) &&
                     type.ContainsGenericParameters == false &&
                     type.IsAbstract == false &&
                     type.IsInterface == false)

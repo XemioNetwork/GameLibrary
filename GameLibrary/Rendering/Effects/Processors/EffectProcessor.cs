@@ -1,7 +1,9 @@
 ﻿using System;
+using Xemio.GameLibrary.Common.Link;
 
 namespace Xemio.GameLibrary.Rendering.Effects.Processors
 {
+    [ManuallyLinked]
     public abstract class EffectProcessor<T> : IEffectProcessor where T : IEffect
     {
         #region Methods

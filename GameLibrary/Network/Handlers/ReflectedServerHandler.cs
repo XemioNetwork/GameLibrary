@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Network.Handlers
             Type type = this.GetType();
             foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic))
             {
-                var attributes = ReflectionCache.GetCustomAttributes(method).OfType<IServerHandlerAttribute>().ToList();
+                var attributes = Reflection.GetCustomAttributes(method).OfType<IServerHandlerAttribute>().ToList();
 
                 if (attributes.Count > 0)
                 {

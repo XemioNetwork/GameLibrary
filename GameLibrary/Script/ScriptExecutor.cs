@@ -28,12 +28,12 @@ namespace Xemio.GameLibrary.Script
         /// <param name="script">The script.</param>
         public void Send(IEvent evt, IScript script)
         {
-            var interfaces = ReflectionCache.GetInterfaces(script.GetType())
+            var interfaces = Reflection.GetInterfaces(script.GetType())
                 .Where(i => typeof(IHandler).IsAssignableFrom(i) && i.IsGenericType);
 
             foreach (Type interfaceType in interfaces)
             {
-                Type genericType = ReflectionCache.GetGenericArguments(interfaceType).First();
+                Type genericType = Reflection.GetGenericArguments(interfaceType).First();
                 if (genericType.IsInstanceOfType(evt))
                 {
                     try

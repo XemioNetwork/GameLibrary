@@ -93,15 +93,15 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
 
             //TODO: Make code a little bit more object orientated.
 
-            foreach (PropertyInfo property in ReflectionCache.GetProperties(type))
+            foreach (PropertyInfo property in Reflection.GetProperties(type))
             {
-                if (ReflectionCache.HasCustomAttribute<ExcludeAttribute>(property))
+                if (Reflection.HasCustomAttribute<ExcludeAttribute>(property))
                     continue;
 
                 string tag = property.Name;
-                if (ReflectionCache.HasCustomAttribute<TagAttribute>(property))
+                if (Reflection.HasCustomAttribute<TagAttribute>(property))
                 {
-                    tag = ReflectionCache.GetCustomAttributes(property)
+                    tag = Reflection.GetCustomAttributes(property)
                         .OfType<TagAttribute>()
                         .Single()
                         .Tag;
@@ -111,20 +111,20 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                 {
                     bool isCollection = false;
 
-                    foreach (Type interfaceType in ReflectionCache.GetInterfaces(property.PropertyType))
+                    foreach (Type interfaceType in Reflection.GetInterfaces(property.PropertyType))
                     {
                         if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
                         {
                             Type elementType;
-                            Type genericType = ReflectionCache.GetGenericArguments(interfaceType).Single();
+                            Type genericType = Reflection.GetGenericArguments(interfaceType).Single();
 
                             bool isArray = property.PropertyType.IsArray;
 
                             bool isCollectionAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
                             bool isElementAbstraction = genericType.IsAbstract || genericType.IsInterface;
 
-                            bool isDerivable = isCollectionAbstraction || ReflectionCache.HasCustomAttribute<DerivableAttribute>(property);
-                            bool hasDerivableChildren = isElementAbstraction || ReflectionCache.HasCustomAttribute<DerivableElementsAttribute>(property);
+                            bool isDerivable = isCollectionAbstraction || Reflection.HasCustomAttribute<DerivableAttribute>(property);
+                            bool hasDerivableChildren = isElementAbstraction || Reflection.HasCustomAttribute<DerivableElementsAttribute>(property);
 
                             if (isArray)
                             {
@@ -148,9 +148,9 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                             }
 
                             string elementTag = "Element";
-                            if (ReflectionCache.HasCustomAttribute<ElementTagAttribute>(property))
+                            if (Reflection.HasCustomAttribute<ElementTagAttribute>(property))
                             {
-                                elementTag = ReflectionCache.GetCustomAttributes(property)
+                                elementTag = Reflection.GetCustomAttributes(property)
                                     .OfType<ElementTagAttribute>()
                                     .Single()
                                     .Tag;
@@ -174,7 +174,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                     if (!isCollection)
                     {
                         bool isAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
-                        bool isDerivable = isAbstraction || ReflectionCache.HasCustomAttribute<DerivableAttribute>(property);
+                        bool isDerivable = isAbstraction || Reflection.HasCustomAttribute<DerivableAttribute>(property);
 
                         if (isDerivable)
                         {

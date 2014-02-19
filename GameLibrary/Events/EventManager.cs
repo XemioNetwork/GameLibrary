@@ -55,7 +55,7 @@ namespace Xemio.GameLibrary.Events
             }
             lock (this._observerMappings)
             {
-                foreach (Type type in ReflectionCache.GetInheritedTypes(typeof(TEvent)))
+                foreach (Type type in Reflection.GetInheritedTypes(typeof(TEvent)))
                 {
                     if (this._observerMappings.ContainsKey(type))
                     {
@@ -229,19 +229,19 @@ namespace Xemio.GameLibrary.Events
         /// <param name="observer">The observer.</param>
         IDisposable IObservable<IEvent>.Subscribe(IObserver<IEvent> observer)
         {
-            var interfaces = ReflectionCache.GetInterfaces(observer.GetType())
+            var interfaces = Reflection.GetInterfaces(observer.GetType())
                 .Where(i => typeof(IObservable<>).IsAssignableFrom(i) && i.IsGenericType);
 
             foreach (Type interfaceType in interfaces)
             {
-                Type genericType = ReflectionCache.GetGenericArguments(interfaceType).First();
+                Type genericType = Reflection.GetGenericArguments(interfaceType).First();
 
                 if (subscribeMethod == null)
                 {
-                    subscribeMethod = ReflectionCache
+                    subscribeMethod = Reflection
                         .GetMethods(this.GetType())
                         .Where(method => method.Name == "Subscribe" && method.IsGenericMethod)
-                        .Single(method => ReflectionCache.GetParameters(method).First().Name == "observer");
+                        .Single(method => Reflection.GetParameters(method).First().Name == "observer");
                 }
 
                 subscribeMethod.MakeGenericMethod(genericType).Invoke(this, new[] {observer});
