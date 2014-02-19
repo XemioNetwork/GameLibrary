@@ -7,6 +7,7 @@ using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Rendering.Effects.Processors;
 using Xemio.GameLibrary.Rendering.Fonts;
 using Xemio.GameLibrary.Rendering.GdiPlus.Geometry;
+using Xemio.GameLibrary.Rendering.GdiPlus.Processors;
 using Xemio.GameLibrary.Rendering.GdiPlus.Serialization;
 using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Shapes.Factories;
@@ -82,7 +83,9 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// </summary>
         public IEnumerable<IEffectProcessor> CreateEffectProcessors()
         {
-            yield break;
+            yield return new TintEffectProcessor();
+            yield return new TranslateEffectProcessor();
+            yield return new TranslateToEffectProcessor();
         }
         #endregion
     }
