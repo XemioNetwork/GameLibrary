@@ -92,9 +92,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
         {
             Type layoutType = typeof(PersistenceLayout<>).MakeGenericType(type);
             var container = (IElementContainer)Activator.CreateInstance(layoutType);
-
-            //TODO: Make code a little bit more object orientated.
-
+            
             foreach (PropertyInfo property in Reflection.GetProperties(type))
             {
                 if (Reflection.HasCustomAttribute<ExcludeAttribute>(property))
@@ -159,12 +157,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                             }
 
                             Type instanceType = elementType.MakeGenericType(genericType);
-                            object instance = Activator.CreateInstance(instanceType, new object[]
-                            {
-                                tag,
-                                elementTag,
-                                property
-                            });
+                            object instance = Activator.CreateInstance(instanceType, new object[] { tag, elementTag, property });
 
                             container.Add((ILayoutElement)instance);
                             isCollection = true;
@@ -198,8 +191,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
                         if (!isLinkable)
                         {
                             bool isAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
-                            bool isDerivable = isAbstraction ||
-                                               Reflection.HasCustomAttribute<DerivableAttribute>(property);
+                            bool isDerivable = isAbstraction || Reflection.HasCustomAttribute<DerivableAttribute>(property);
 
                             if (isDerivable)
                             {
