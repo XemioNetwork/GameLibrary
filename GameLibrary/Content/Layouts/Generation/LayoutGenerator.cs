@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
+using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content.Layouts.Collections;
+using Xemio.GameLibrary.Content.Layouts.Link;
 using Xemio.GameLibrary.Content.Layouts.Primitives;
 using Xemio.GameLibrary.Content.Layouts.References;
 using Xemio.GameLibrary.Math;
@@ -173,16 +175,40 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
 
                     if (!isCollection)
                     {
-                        bool isAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
-                        bool isDerivable = isAbstraction || Reflection.HasCustomAttribute<DerivableAttribute>(property);
+                        bool isLinkable = false;
 
-                        if (isDerivable)
+                        foreach (Type interfaceType in Reflection.GetInterfaces(property.PropertyType))
                         {
-                            container.Add(new DerivableReferenceElement(tag, property));
+                            if (interfaceType.IsGenericType &&
+                                interfaceType.GetGenericTypeDefinition() == typeof(ILinkable<>))
+                            {
+                                isLinkable = true;
+
+                                Type keyType = interfaceType.GetGenericArguments().First();
+                                Type linkableType = typeof(LinkableElement<,>).MakeGenericType(keyType, property.PropertyType);
+
+                                object instance = Activator.CreateInstance(linkableType, new object[] { tag, property });
+                                var element = (ILayoutElement)instance;
+
+                                container.Add(element);
+                                break;
+                            }
                         }
-                        else
+
+                        if (!isLinkable)
                         {
-                            container.Add(new ReferenceElement(tag, property));
+                            bool isAbstraction = property.PropertyType.IsAbstract || property.PropertyType.IsInterface;
+                            bool isDerivable = isAbstraction ||
+                                               Reflection.HasCustomAttribute<DerivableAttribute>(property);
+
+                            if (isDerivable)
+                            {
+                                container.Add(new DerivableReferenceElement(tag, property));
+                            }
+                            else
+                            {
+                                container.Add(new ReferenceElement(tag, property));
+                            }
                         }
                     }
                 }
