@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Rendering.Serialization;
 
 namespace Xemio.GameLibrary.Rendering.GdiPlus.Serialization
 {
-    public class GDITextureWriter : TextureWriter
+    public class GdiTextureWriter : TextureWriter
     {
         #region Overrides of TextureWriter
         /// <summary>
