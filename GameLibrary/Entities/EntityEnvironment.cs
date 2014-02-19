@@ -7,6 +7,7 @@ using System.Collections;
 using NLog;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Game.Handlers;
 using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities

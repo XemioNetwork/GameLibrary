@@ -7,6 +7,7 @@ using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Game.Handlers;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input.Adapters;
 

@@ -7,6 +7,7 @@ using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Rendering.Fonts;
 using Xemio.GameLibrary.Rendering.GdiPlus.Geometry;
 using Rectangle = Xemio.GameLibrary.Math.Rectangle;
 
@@ -15,6 +16,16 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
     public class GdiRenderFactory : IRenderFactory
     {
         #region Implementation of IRenderFactory
+        /// <summary>
+        /// Creates a new font for the specified parameters.
+        /// </summary>
+        /// <param name="fontFamily">The font family.</param>
+        /// <param name="size">The size.</param>
+        public IFont CreateFont(string fontFamily, float size)
+        {
+            //TODO: implement GDI+ font capabilities, placeholder for now.
+            return new SpriteFont(fontFamily, size);
+        }
         /// <summary>
         /// Creates a render target.
         /// </summary>

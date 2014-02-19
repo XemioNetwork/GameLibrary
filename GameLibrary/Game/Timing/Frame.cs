@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Game.Handlers;
 
 namespace Xemio.GameLibrary.Game.Timing
 {

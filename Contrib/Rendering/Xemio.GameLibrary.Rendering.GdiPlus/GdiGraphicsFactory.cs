@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Rendering.Effects.Processors;
+using Xemio.GameLibrary.Rendering.Fonts;
 using Xemio.GameLibrary.Rendering.GdiPlus.Geometry;
 using Xemio.GameLibrary.Rendering.GdiPlus.Serialization;
 using Xemio.GameLibrary.Rendering.Initialization;
@@ -68,6 +69,13 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         public IShapeFactory CreateShapeFactory()
         {
             return new ShapeFactory();
+        }
+        /// <summary>
+        /// Creates the text rasterizer.
+        /// </summary>
+        public ITextRasterizer CreateTextRasterizer()
+        {
+            return new SpriteFontRasterizer();
         }
         /// <summary>
         /// Creates the effect processors.

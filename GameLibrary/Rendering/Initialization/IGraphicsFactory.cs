@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Rendering.Effects;
 using Xemio.GameLibrary.Rendering.Effects.Processors;
+using Xemio.GameLibrary.Rendering.Fonts;
 using Xemio.GameLibrary.Rendering.Shapes;
 using Xemio.GameLibrary.Rendering.Shapes.Factories;
 
@@ -33,6 +34,10 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// Creates the shape factory.
         /// </summary>
         IShapeFactory CreateShapeFactory();
+        /// <summary>
+        /// Creates the text rasterizer.
+        /// </summary>
+        ITextRasterizer CreateTextRasterizer();
         /// <summary>
         /// Creates the effect processors.
         /// </summary>

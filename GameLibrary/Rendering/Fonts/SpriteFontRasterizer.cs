@@ -9,18 +9,22 @@ using Xemio.GameLibrary.Components;
 
 namespace Xemio.GameLibrary.Rendering.Fonts
 {
-    public static class SpriteFontRenderer
+    public class SpriteFontRasterizer : ITextRasterizer
     {
-        #region Methods
+        #region Implementation of ITextRasterizer
         /// <summary>
         /// Renders the specified text.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
         /// <param name="font">The font.</param>
         /// <param name="value">The value.</param>
         /// <param name="position">The position.</param>
-        public static void Render(this IRenderManager renderManager, SpriteFont font, string value, Vector2 position)
+        public void Render(IFont font, string value, Vector2 position)
         {
+            var spriteFont = (SpriteFont)font;
+
+            var graphicsDevice = XGL.Components.Require<GraphicsDevice>();
+            var renderManager = graphicsDevice.RenderManager;
+
             string[] lines = value.Split('\n');
             Vector2 currentPosition = position;
 
@@ -32,27 +36,28 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                 {
                     int index = character;
 
-                    ITexture texture = font.Textures[index];
+                    ITexture texture = spriteFont.Textures[index];
                     if (texture == null)
                     {
-                        throw new InvalidOperationException(
-                            "Cannot render character " + character + " (" + index + ").");
+                        throw new InvalidOperationException("Cannot render character " + character + " (" + index + ").");
                     }
 
-                    renderManager.Render(texture,
-                        new Rectangle(currentPosition.X, currentPosition.Y, texture.Width, texture.Height));
+                    renderManager.Render(texture, new Rectangle(currentPosition.X, currentPosition.Y, texture.Width, texture.Height));
 
-                    currentPosition.X += texture.Width + font.Kerning;
-                    currentPosition.X += character == ' ' ? font.Spacing : 0;
-
+                    if (character == ' ')
+                    {
+                        currentPosition.X += spriteFont.Spacing;
+                    }
                     if (texture.Height > maximumHeight)
                     {
                         maximumHeight = texture.Height;
                     }
+
+                    currentPosition.X += texture.Width + spriteFont.Kerning;
                 }
 
                 currentPosition.X = position.X;
-                currentPosition += new Vector2(0, maximumHeight + font.Kerning + 2);
+                currentPosition += new Vector2(0, maximumHeight + spriteFont.Kerning + 2);
             }
         }
         #endregion

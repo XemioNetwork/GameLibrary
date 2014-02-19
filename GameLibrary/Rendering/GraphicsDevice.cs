@@ -15,6 +15,7 @@ using Xemio.GameLibrary.Rendering.Effects.Processors;
 using Xemio.GameLibrary.Rendering.Events;
 using Xemio.GameLibrary.Math;
 using System.Windows.Forms;
+using Xemio.GameLibrary.Rendering.Fonts;
 using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
@@ -77,6 +78,10 @@ namespace Xemio.GameLibrary.Rendering
         /// Gets the render factory.
         /// </summary>
         public IRenderFactory RenderFactory { get; private set; }
+        /// <summary>
+        /// Gets the text rasterizer.
+        /// </summary>
+        public ITextRasterizer TextRasterizer { get; private set; }
         /// <summary>
         /// Gets the display mode.
         /// </summary>
@@ -155,6 +160,7 @@ namespace Xemio.GameLibrary.Rendering
 
             this.RenderManager = initializer.Factory.CreateRenderManager();
             this.RenderFactory = initializer.Factory.CreateRenderFactory();
+            this.TextRasterizer = initializer.Factory.CreateTextRasterizer();
 
             var implementations = XGL.Components.Require<IImplementationManager>();
             implementations.Add<Type, IReader>(initializer.Factory.CreateTextureReader());

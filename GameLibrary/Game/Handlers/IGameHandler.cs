@@ -1,4 +1,4 @@
-﻿namespace Xemio.GameLibrary.Game
+﻿namespace Xemio.GameLibrary.Game.Handlers
 {
     public interface IGameHandler
     {

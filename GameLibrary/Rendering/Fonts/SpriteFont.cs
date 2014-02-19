@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
     using Rectangle = Xemio.GameLibrary.Math.Rectangle;
     using Drawing = System.Drawing;
 
-    public class SpriteFont
+    public class SpriteFont : IFont
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -46,7 +46,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
             this.Kerning = kerning;
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="SpriteFont"/> class.
+        /// Initializes a new instance of the <see cref="SpriteFont" /> class.
         /// </summary>
         /// <param name="fontFamily">The font family.</param>
         /// <param name="size">The size.</param>
@@ -69,15 +69,12 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
             for (int i = 31; i < 253; i++)
             {
-                char character = (char)i;
+                var character = (char)i;
                 string current = character.ToString();
 
                 SizeF size = graphics.MeasureString(current, font);
 
-                Bitmap letterMap = new Bitmap(
-                    (int)size.Width,
-                    (int)size.Height,
-                    PixelFormat.Format32bppPArgb);
+                var letterMap = new Bitmap((int)size.Width, (int)size.Height, PixelFormat.Format32bppPArgb);
 
                 using (Graphics letterGraphics = Graphics.FromImage(letterMap))
                 {
@@ -88,8 +85,15 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                 }
             }
 
-            this.Initialize(bitmaps);
+            this.FontFamily = font.FontFamily.Name;
+            this.Size = font.Size;
+
+            this.Bitmaps = bitmaps;
         }
+        #endregion
+
+        #region Fields
+        private Bitmap[] _bitmaps;
         #endregion
 
         #region Properties
@@ -108,43 +112,31 @@ namespace Xemio.GameLibrary.Rendering.Fonts
         /// <summary>
         /// Gets the font cache.
         /// </summary>
-        internal Bitmap[] Bitmaps { get; set; }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Initializes the spritefont textures.
-        /// </summary>
-        /// <param name="bitmaps">The bitmaps.</param>
-        private void Initialize(Bitmap[] bitmaps)
+        internal Bitmap[] Bitmaps
         {
-            var serializer = XGL.Components.Get<SerializationManager>();
-
-            for (int i = 0; i < bitmaps.Length; i++)
+            get { return this._bitmaps; }
+            set
             {
-                if (bitmaps[i] != null)
+                this._bitmaps = value;
+
+                var serializer = XGL.Components.Get<SerializationManager>();
+                for (int i = 0; i < this._bitmaps.Length; i++)
                 {
-                    this.Textures[i] = serializer.Load<ITexture>(bitmaps[i].ToStream());
-                    this.Bitmaps[i] = bitmaps[i];
+                    if (this._bitmaps[i] != null)
+                    {
+                        this.Textures[i] = serializer.Load<ITexture>(this._bitmaps[i].ToStream());
+                    }
                 }
             }
         }
         #endregion
 
-        #region Methods
-        /// <summary>
-        /// Measures the specified string.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        public Vector2 MeasureString(string value)
-        {
-            return this.MeasureString(value.Split('\n'));
-        }
+        #region Private Methods
         /// <summary>
         /// Measures the specified string.
         /// </summary>
         /// <param name="lines">The lines.</param>
-        public Vector2 MeasureString(string[] lines)
+        private Vector2 MeasureString(string[] lines)
         {
             Vector2 result = Vector2.Zero;
 
@@ -184,6 +176,29 @@ namespace Xemio.GameLibrary.Rendering.Fonts
             }
 
             return result;
+        }
+        #endregion
+
+        #region Implementation of IFont
+        /// <summary>
+        /// Gets the font family.
+        /// </summary>
+        public string FontFamily { get; private set; }
+        /// <summary>
+        /// Gets the size.
+        /// </summary>
+        public float Size { get; private set; }
+        /// <summary>
+        /// Gets the style.
+        /// </summary>
+        public FontStyle Style { get; private set; }
+        /// <summary>
+        /// Measures the specified string.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public Vector2 MeasureString(string value)
+        {
+            return this.MeasureString(value.Split('\n'));
         }
         #endregion
     }

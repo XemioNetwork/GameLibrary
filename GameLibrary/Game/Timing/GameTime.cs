@@ -1,6 +1,7 @@
 ﻿using System;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
+using Xemio.GameLibrary.Game.Handlers;
 
 namespace Xemio.GameLibrary.Game.Timing
 {

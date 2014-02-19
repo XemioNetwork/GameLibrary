@@ -10,6 +10,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Common.Threads;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Game.Handlers;
 using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Game
@@ -35,9 +36,7 @@ namespace Xemio.GameLibrary.Game
         {
             this._handlers = new AutoCachedList<IGameHandler>();
 
-            this.Precision = PrecisionLevel.High;
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
-
             this.Subscribe(Frame.Instance);
         }
         #endregion
@@ -76,12 +75,6 @@ namespace Xemio.GameLibrary.Game
         /// Gets the current frame index.
         /// </summary>
         public long FrameIndex { get; private set; }
-        /// <summary>
-        /// Gets or sets the precision. The precision level determines the amount of "Thread.Sleep"
-        /// used to wait for the next frame. The higher the precision level, the lower the amount
-        /// of Thread.Sleep used.
-        /// </summary>
-        public PrecisionLevel Precision { get; set; }
         /// <summary>
         /// Gets or sets the lag compensation. If set to ExecuteMissedTicks, the game loop will
         /// always run at the same tick frequency.

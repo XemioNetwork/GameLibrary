@@ -26,7 +26,7 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Gets or sets the region.
         /// </summary>
-        public Rectangle Region
+        public virtual Rectangle Region
         {
             get { return this._region; }
             set

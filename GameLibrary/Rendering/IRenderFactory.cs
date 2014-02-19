@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Rendering.Fonts;
 
 namespace Xemio.GameLibrary.Rendering
 {
     public interface IRenderFactory
     {
+        /// <summary>
+        /// Creates a new font for the specified parameters.
+        /// </summary>
+        /// <param name="fontFamily">The font family.</param>
+        /// <param name="size">The size.</param>
+        IFont CreateFont(string fontFamily, float size);
         /// <summary>
         /// Creates a new render target.
         /// </summary>

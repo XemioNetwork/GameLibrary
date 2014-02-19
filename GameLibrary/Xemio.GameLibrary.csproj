@@ -159,10 +159,10 @@
     <Compile Include="Events\ICancelableEvent.cs" />
     <Compile Include="FluentConfiguration.cs" />
     <Compile Include="FluentConfigurator.cs" />
-    <Compile Include="Game\IRenderHandler.cs" />
-    <Compile Include="Game\ISortableRenderHandler.cs" />
-    <Compile Include="Game\ISortableTickHandler.cs" />
-    <Compile Include="Game\ITickHandler.cs" />
+    <Compile Include="Game\Handlers\IRenderHandler.cs" />
+    <Compile Include="Game\Handlers\ISortableRenderHandler.cs" />
+    <Compile Include="Game\Handlers\ISortableTickHandler.cs" />
+    <Compile Include="Game\Handlers\ITickHandler.cs" />
     <Compile Include="Game\Scenes\SceneProvider.cs" />
     <Compile Include="Game\Scenes\SplashScreen.cs" />
     <Compile Include="Game\Timing\Frame.cs" />
@@ -175,6 +175,7 @@
     <Compile Include="Input\InputReference.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
+    <Compile Include="Math\Vector3.cs" />
     <Compile Include="Network\Events\Client\ClientDisconnectedEvent.cs" />
     <Compile Include="Network\Events\Client\ClientPackageEvent.cs" />
     <Compile Include="Network\Events\Client\ClientReceivedPackageEvent.cs" />
@@ -279,6 +280,10 @@
     <Compile Include="Rendering\Effects\TintEffect.cs" />
     <Compile Include="Rendering\Effects\BlendMode.cs" />
     <Compile Include="Rendering\Effects\TranslateEffect.cs" />
+    <Compile Include="Rendering\Effects\TranslateToEffect.cs" />
+    <Compile Include="Rendering\Fonts\FontStyle.cs" />
+    <Compile Include="Rendering\Fonts\IFont.cs" />
+    <Compile Include="Rendering\Fonts\ITextRasterizer.cs" />
     <Compile Include="Rendering\Initialization\IGraphicsFactory.cs" />
     <Compile Include="Rendering\InterpolationMode.cs" />
     <Compile Include="Rendering\Events\ResolutionChangedEvent.cs" />
@@ -287,8 +292,14 @@
     <Compile Include="Rendering\Serialization\AnimationSerializer.cs" />
     <Compile Include="Rendering\Serialization\SpriteSheetSerializer.cs" />
     <Compile Include="Rendering\Shapes\ArcShape.cs" />
-    <Compile Include="Rendering\Shapes\CachedRectangleShape.cs" />
+    <Compile Include="Rendering\Shapes\Cached\CachedArcShape.cs" />
+    <Compile Include="Rendering\Shapes\Cached\CachedEllipseShape.cs" />
+    <Compile Include="Rendering\Shapes\Cached\CachedLineShape.cs" />
+    <Compile Include="Rendering\Shapes\Cached\CachedPieShape.cs" />
+    <Compile Include="Rendering\Shapes\Cached\CachedPolygonShape.cs" />
+    <Compile Include="Rendering\Shapes\Cached\CachedRectangleShape.cs" />
     <Compile Include="Rendering\Shapes\EllipseShape.cs" />
+    <Compile Include="Rendering\Shapes\Factories\CachedShapeFactory.cs" />
     <Compile Include="Rendering\Shapes\IShape.cs" />
     <Compile Include="Rendering\Shapes\Factories\IShapeFactory.cs" />
     <Compile Include="Rendering\Shapes\LineShape.cs" />
@@ -311,8 +322,7 @@
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\Timing\GameTime.cs" />
     <Compile Include="Game\Timing\GameTimeMode.cs" />
-    <Compile Include="Game\IGameHandler.cs" />
-    <Compile Include="Game\PrecisionLevel.cs" />
+    <Compile Include="Game\Handlers\IGameHandler.cs" />
     <Compile Include="Game\Scenes\SceneWrapper.cs" />
     <Compile Include="Input\InputStateEvent.cs" />
     <Compile Include="Input\Adapters\KeyboardAdapter.cs" />
@@ -355,7 +365,6 @@
     <Compile Include="Plugins\Contexts\MultipleAssemblyContext.cs" />
     <Compile Include="Plugins\Contexts\SingleAssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendering\Fonts\SpriteFontSerializer.cs" />
     <Compile Include="Rendering\Initialization\IGraphicsInitializer.cs" />
     <Compile Include="Rendering\IRenderTarget.cs" />
     <Compile Include="Rendering\Initialization\PriorizedInitializer.cs" />
@@ -365,7 +374,7 @@
     <Compile Include="Rendering\Color.cs" />
     <Compile Include="Rendering\DisplayMode.cs" />
     <Compile Include="Rendering\Fonts\SpriteFont.cs" />
-    <Compile Include="Rendering\Fonts\SpriteFontRenderer.cs" />
+    <Compile Include="Rendering\Fonts\SpriteFontRasterizer.cs" />
     <Compile Include="Rendering\IBrush.cs" />
     <Compile Include="Rendering\IPen.cs" />
     <Compile Include="Rendering\GraphicsDevice.cs" />

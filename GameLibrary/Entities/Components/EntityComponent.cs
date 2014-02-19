@@ -1,5 +1,6 @@
 ﻿using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Game;
+using Xemio.GameLibrary.Game.Handlers;
 using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities.Components

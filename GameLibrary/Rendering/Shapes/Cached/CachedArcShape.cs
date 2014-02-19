@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Math;
-using Xemio.GameLibrary.Rendering.Effects;
 
-namespace Xemio.GameLibrary.Rendering.Shapes
+namespace Xemio.GameLibrary.Rendering.Shapes.Cached
 {
-    internal class CachedRectangleShape : RectangleShape
+    public class CachedArcShape : ArcShape
     {
         #region Properties
         /// <summary>
@@ -18,24 +17,36 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Gets a value indicating whether the shape has changed.
         /// </summary>
-        protected bool HasChanged { get; private set; }
+        protected bool NeedsRedraw { get; private set; }
         /// <summary>
         /// Gets or sets a value indicating whether the rectangle has changed.
         /// </summary>
-        protected bool HasRegionChanged { get; private set; }
+        protected bool NeedsRenderTarget { get; private set; }
         #endregion
 
-        #region Overrides of RectangleShape
+        #region Overrides of ArcShape
         /// <summary>
-        /// Gets or sets the background brush.
+        /// Gets or sets the start angle.
         /// </summary>
-        public override IBrush Background
+        public override float StartAngle
         {
-            get { return base.Background; }
+            get { return base.StartAngle; }
             set
             {
-                base.Background = value;
-                this.HasChanged = true;
+                base.StartAngle = value;
+                this.NeedsRedraw = true;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the sweep angle.
+        /// </summary>
+        public override float SweepAngle
+        {
+            get { return base.SweepAngle; }
+            set
+            {
+                base.SweepAngle = value;
+                this.NeedsRedraw = true;
             }
         }
         /// <summary>
@@ -47,7 +58,7 @@ namespace Xemio.GameLibrary.Rendering.Shapes
             set
             {
                 base.Outline = value;
-                this.HasChanged = true;
+                this.NeedsRedraw = true;
             }
         }
         /// <summary>
@@ -60,8 +71,8 @@ namespace Xemio.GameLibrary.Rendering.Shapes
             {
                 base.Region = value;
 
-                this.HasChanged = true;
-                this.HasRegionChanged = true;
+                this.NeedsRedraw = true;
+                this.NeedsRenderTarget = true;
             }
         }
         /// <summary>
@@ -71,23 +82,20 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         public override void Render(IRenderManager renderManager)
         {
             var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
-            if (this.RenderTarget == null || this.HasRegionChanged)
+            if (this.RenderTarget == null || this.NeedsRenderTarget)
             {
+                this.NeedsRenderTarget = false;
                 this.RenderTarget = graphicsDevice.RenderFactory.CreateTarget((int)this.Region.Width, (int)this.Region.Height);
             }
 
-            if (this.HasChanged)
+            if (this.NeedsRedraw)
             {
+                this.NeedsRedraw = false;
+
+                using (renderManager.TranslateTo(Vector2.Zero))
                 using (graphicsDevice.RenderTo(this.RenderTarget))
                 {
-                    //Reset origin to 0,0 causing the RenderManager to
-                    //render properly inside the render target.
-
-                    IShape shape = this;
-                    using (renderManager.Translate(-shape.Position))
-                    {
-                        base.Render(renderManager);
-                    }
+                    base.Render(renderManager);
                 }
             }
 

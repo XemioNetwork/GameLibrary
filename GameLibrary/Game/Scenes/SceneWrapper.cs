@@ -1,4 +1,5 @@
-﻿using Xemio.GameLibrary.Game.Timing;
+﻿using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {

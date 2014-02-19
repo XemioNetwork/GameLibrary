@@ -159,6 +159,15 @@ namespace Xemio.GameLibrary.Rendering
             return renderManager.Apply(new TranslateEffect(offset));
         }
         /// <summary>
+        /// Translates the render manager to the specified position.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="position">The position.</param>
+        public static IDisposable TranslateTo(this IRenderManager renderManager, Vector2 position)
+        {
+            return renderManager.Apply(new TranslateToEffect(position));
+        }
+        /// <summary>
         /// Tints the specified render manager.
         /// </summary>
         /// <param name="renderManager">The render manager.</param>
