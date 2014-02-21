@@ -18,35 +18,39 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
         /// </summary>
         public TintEffectProcessor()
         {
-            this._colors = new Stack<Color>();
+            this.Effects = new List<TintEffect>();
         }
         #endregion
 
-        #region Fields
-        private Color _current;
-        private readonly Stack<Color> _colors; 
+        #region Properties
+        public List<TintEffect> Effects { get; private set; }
         #endregion
 
-        #region Methods
+        #region Private Methods
         /// <summary>
         /// Sets the opacity.
         /// </summary>
         /// <param name="renderManager">The render manager.</param>
         /// <param name="color">The color.</param>
-        private void Tint(GdiRenderManager renderManager, Color color)
+        private void Apply(GdiRenderManager renderManager)
         {
-            this._current = color;
-
-            if (color == Color.White)
+            if (this.Effects.Count == 0)
             {
                 renderManager.Attributes = null;
                 return;
             }
 
-            float a = color.A / 255.0f;
-            float r = color.R / 255.0f;
-            float g = color.G / 255.0f;
-            float b = color.B / 255.0f;
+            Color color = new Color();
+            foreach (TintEffect effect in this.Effects)
+            {
+                color = effect.BlendMode.Combine(color, effect.Color);
+            }
+
+            float m = 1.0f / 255.0f;
+            float a = color.A * m;
+            float r = color.R * m;
+            float g = color.G * m;
+            float b = color.B * m;
 
             var matrix = new ColorMatrix(new[]
             {
@@ -58,7 +62,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
             });
 
             renderManager.Attributes = new ImageAttributes();
-            renderManager.Attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            renderManager.Attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default);
         }
         #endregion
 
@@ -70,10 +74,8 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
         /// <param name="renderManager">The render manager.</param>
         protected override void Enable(TintEffect effect, IRenderManager renderManager)
         {
-            var gdiRenderManager = (GdiRenderManager)renderManager;
-
-            this._colors.Push(this._current);
-            this.Tint(gdiRenderManager, effect.Color);
+            this.Effects.Add(effect);
+            this.Apply((GdiRenderManager)renderManager);
         }
         /// <summary>
         /// Disables the specified effect.
@@ -82,7 +84,8 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
         /// <param name="renderManager">The render manager.</param>
         protected override void Disable(TintEffect effect, IRenderManager renderManager)
         {
-            this.Tint((GdiRenderManager)renderManager, this._colors.Pop());
+            this.Effects.RemoveAt(this.Effects.Count - 1);
+            this.Apply((GdiRenderManager)renderManager);
         }
         #endregion
     }

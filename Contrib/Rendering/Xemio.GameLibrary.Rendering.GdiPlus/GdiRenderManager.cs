@@ -72,6 +72,10 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// </summary>
         public ImageAttributes Attributes { get; set; }
         #endregion
+
+        #region Private Methods
+        
+        #endregion
         
         #region IRenderProvider Member
         /// <summary>

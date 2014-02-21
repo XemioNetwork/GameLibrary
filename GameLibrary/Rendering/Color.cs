@@ -834,7 +834,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="a">The first color.</param>
         /// <param name="b">The second color.</param>
-        public static Color Min(Color a, Color b)
+        public static Color Darken(Color a, Color b)
         {
             a.A = (byte)(int)MathHelper.Min(a.A, b.A);
             a.R = (byte)(int)MathHelper.Min(a.R, b.R);
@@ -848,7 +848,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="a">The first color.</param>
         /// <param name="b">The second color.</param>
-        public static Color Max(Color a, Color b)
+        public static Color Lighten(Color a, Color b)
         {
             a.A = (byte)(int)MathHelper.Max(a.A, b.A);
             a.R = (byte)(int)MathHelper.Max(a.R, b.R);

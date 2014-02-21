@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,9 +30,9 @@ namespace Xemio.GameLibrary.Rendering.Effects
                 case BlendMode.Subtract:
                     return Color.Subtract(a, b);
                 case BlendMode.LightenOnly:
-                    return Color.Max(a, b);
+                    return Color.Lighten(a, b);
                 case BlendMode.DarkenOnly:
-                    return Color.Min(a, b);
+                    return Color.Darken(a, b);
                 default:
                     throw new ArgumentOutOfRangeException("blendMode");
             }
