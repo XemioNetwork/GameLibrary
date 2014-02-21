@@ -159,6 +159,16 @@ namespace Xemio.GameLibrary.Rendering
             return renderManager.Apply(new TranslateEffect(offset));
         }
         /// <summary>
+        /// Translates the specified render manager.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        public static IDisposable Translate(this IRenderManager renderManager, float x, float y)
+        {
+            return renderManager.Apply(new TranslateEffect(new Vector2(x, y)));
+        }
+        /// <summary>
         /// Translates the render manager to the specified position.
         /// </summary>
         /// <param name="renderManager">The render manager.</param>
@@ -168,6 +178,16 @@ namespace Xemio.GameLibrary.Rendering
             return renderManager.Apply(new TranslateToEffect(position));
         }
         /// <summary>
+        /// Translates the render manager to the specified position.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        public static IDisposable TranslateTo(this IRenderManager renderManager, float x, float y)
+        {
+            return renderManager.Apply(new TranslateToEffect(new Vector2(x, y)));
+        }
+        /// <summary>
         /// Tints the specified render manager.
         /// </summary>
         /// <param name="renderManager">The render manager.</param>
@@ -175,6 +195,18 @@ namespace Xemio.GameLibrary.Rendering
         public static IDisposable Tint(this IRenderManager renderManager, Color color)
         {
             return renderManager.Apply(new TintEffect(color));
+        }
+        /// <summary>
+        /// Tints the specified render manager.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="a">The alpha channel.</param>
+        /// <param name="r">The red channel.</param>
+        /// <param name="g">The green channel.</param>
+        /// <param name="b">The blue channel.</param>
+        public static IDisposable Tint(this IRenderManager renderManager, float r, float g, float b, float a)
+        {
+            return renderManager.Apply(new TintEffect(new Color(r, g, b, a)));
         }
         /// <summary>
         /// Tints the specified render manager.
