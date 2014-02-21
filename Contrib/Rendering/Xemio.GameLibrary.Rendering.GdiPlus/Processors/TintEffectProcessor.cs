@@ -40,7 +40,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
                 return;
             }
 
-            Color color = new Color();
+            Color color;
             foreach (TintEffect effect in this.Effects)
             {
                 color = effect.BlendMode.Combine(color, effect.Color);
@@ -62,7 +62,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
             });
 
             renderManager.Attributes = new ImageAttributes();
-            renderManager.Attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default);
+            renderManager.Attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Any);
         }
         #endregion
 

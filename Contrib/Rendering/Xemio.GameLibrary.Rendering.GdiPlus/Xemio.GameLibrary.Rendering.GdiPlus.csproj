@@ -52,7 +52,6 @@
     <Compile Include="GdiRenderManager.cs" />
     <Compile Include="GdiTexture.cs" />
     <Compile Include="Geometry\GdiPen.cs" />
-    <Compile Include="Processors\TintEffectProcessor.cs" />
     <Compile Include="Processors\TranslateEffectProcessor.cs" />
     <Compile Include="Processors\TranslateToEffectProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +60,7 @@
     <Compile Include="Gdi.cs" />
     <Compile Include="NativeGdiRenderManager.cs" />
     <Compile Include="ManagedGdiRenderManager.cs" />
+    <Compile Include="Processors\TintEffectProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

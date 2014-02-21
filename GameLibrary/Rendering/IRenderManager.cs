@@ -177,6 +177,16 @@ namespace Xemio.GameLibrary.Rendering
             return renderManager.Apply(new TintEffect(color));
         }
         /// <summary>
+        /// Tints the specified render manager.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="color">The color.</param>
+        /// <param name="blendMode">The blend mode.</param>
+        public static IDisposable Tint(this IRenderManager renderManager, Color color, BlendMode blendMode)
+        {
+            return renderManager.Apply(new TintEffect(color, blendMode));
+        }
+        /// <summary>
         /// Rotates the specified render manager.
         /// </summary>
         /// <param name="renderManager">The render manager.</param>

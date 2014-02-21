@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Rendering.Effects
         /// Initializes a new instance of the <see cref="TintEffect"/> class.
         /// </summary>
         /// <param name="color">The color.</param>
-        public TintEffect(Color color) : this(color, BlendMode.Add)
+        public TintEffect(Color color) : this(color, BlendMode.Override)
         {
         }
         /// <summary>

@@ -3,6 +3,7 @@ using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Common.Randomization;
+using Xemio.GameLibrary.Rendering.Effects;
 
 namespace Xemio.Testing.Mono
 {
@@ -19,7 +20,7 @@ namespace Xemio.Testing.Mono
 
         public override void LoadContent ()
         {
-            this._brush = this.RenderFactory.CreateSolidBrush(Color.Red);
+            this._brush = this.RenderFactory.CreateSolidBrush(Color.White);
         }
 
         public override void Tick(float elapsed)
@@ -41,11 +42,11 @@ namespace Xemio.Testing.Mono
 
         public override void Render()
         {
-            var d = this.RenderManager.Translate(this._position);
-
-            this.RenderManager.FillRectangle(this._brush, new Rectangle(0, 0, 50, 50));
-
-            d.Dispose();
+            using (this.RenderManager.Tint(Color.Red, BlendMode.Override))
+            using (this.RenderManager.Translate(this._position))
+            {
+                this.RenderManager.FillRectangle(this._brush, new Rectangle(0, 0, 50, 50));
+            }
         }
     }
 }
