@@ -26,27 +26,8 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
     using Rectangle = Xemio.GameLibrary.Math.Rectangle;
     using Color = System.Drawing.Color;
 
-    public class GdiRenderManager : BaseRenderManager
+    public abstract class GdiRenderManager : BaseRenderManager
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GdiRenderManager"/> class.
-        /// </summary>
-        /// <param name="smoothing">The smoothing.</param>
-        /// <param name="interpolation">The interpolation.</param>
-        public GdiRenderManager(SmoothingMode smoothing, InterpolationMode interpolation)
-        {
-            this.Offset = Vector2.Zero;
-
-            this.SmoothingMode = smoothing;
-            this.InterpolationMode = interpolation;
-        }
-        #endregion
-
-        #region Fields
-        private bool _hasRegisteredPaintHandler = false;
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets the graphics device.
@@ -58,11 +39,11 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <summary>
         /// Gets the smoothing mode.
         /// </summary>
-        public SmoothingMode SmoothingMode { get; private set; }
+        public SmoothingMode SmoothingMode { get; set; }
         /// <summary>
         /// Gets the interpolation mode.
         /// </summary>
-        public InterpolationMode InterpolationMode { get; private set; }
+        public InterpolationMode InterpolationMode { get; set; }
         /// <summary>
         /// Gets the buffer graphics.
         /// </summary>
@@ -216,90 +197,13 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
 
             this.Graphics.ResetTransform();
         }
-        #endregion
-
-        #region Present Methods
         /// <summary>
-        /// Presents this instance.
+        /// Presents this instance. 
         /// </summary>
         public override void Present()
         {
-            var surface = XGL.Components.Require<WindowSurface>();
-
-            if (surface.Control == null)
-                return;
-
-            if (SystemHelper.IsWindows)
-            {
-                this.PresentNative(surface);
-            }
-            else
-            {
-                this.PresentCompatible(surface);
-            }
-
             this.Offset = Vector2.Zero;
             this.Graphics.Clear(Color.Black);
-        }
-        /// <summary>
-        /// Presents the currently rendered view windows-specific using native GDI invokes.
-        /// </summary>
-        /// <param name="surface">The surface.</param>
-        private void PresentNative(WindowSurface surface)
-        {
-            Graphics graphics = surface.Control.CreateGraphics();
-    
-            var backBuffer = (GdiRenderTarget)this.GraphicsDevice.BackBuffer;
-            var bitmap = backBuffer.Bitmap;
-
-            IntPtr hdc = graphics.GetHdc();
-            IntPtr dc = Gdi.CreateCompatibleDC(hdc);
-            IntPtr buffer = bitmap.GetHbitmap();
-
-            Gdi.SelectObject(dc, buffer);
-
-            Gdi.StretchBlt
-            (
-                hdc, 0, 0,
-                surface.Width,
-                surface.Height,
-                dc,
-                0, 0,
-                this.GraphicsDevice.DisplayMode.Width, 
-                this.GraphicsDevice.DisplayMode.Height,
-                GdiRasterOperations.SRCCOPY
-            );
-
-            Gdi.DeleteObject(buffer);
-            Gdi.DeleteObject(dc);
-
-            graphics.ReleaseHdc(hdc);
-        }
-        /// <summary>
-        /// Presents the currently rendered view platform independant using the Mono drawing API.
-        /// </summary>
-        /// <param name="surface">The surface.</param>
-        private void PresentCompatible(WindowSurface surface)
-        {            
-            Control control = surface.Control;
-            if (!this._hasRegisteredPaintHandler)
-            {
-                control.Paint += (sender, e) => {                
-                    var backBuffer = (GdiRenderTarget)this.GraphicsDevice.BackBuffer;
-                    var bitmap = backBuffer.Bitmap;
-    
-                    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
-                    e.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
-                    e.Graphics.CompositingMode = Drawing2D.CompositingMode.SourceCopy;
-                    e.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
-
-                    e.Graphics.DrawImage(bitmap, 0, 0, surface.Width, surface.Height);
-                };
-    
-                this._hasRegisteredPaintHandler = true;
-            }
-    
-            control.Invoke((Action)(() => control.Refresh()));
         }
         #endregion
     }

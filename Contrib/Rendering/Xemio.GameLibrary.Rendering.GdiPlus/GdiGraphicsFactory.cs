@@ -54,7 +54,17 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <returns></returns>
         public IRenderManager CreateRenderManager()
         {
-            return new GdiRenderManager(this._initializer.SmoothingMode, this._initializer.InterpolationMode);
+            GdiRenderManager renderManager = new ManagedGdiRenderManager();
+
+            if (SystemHelper.IsWindows)
+            {
+                renderManager = new NativeGdiRenderManager();
+            }
+
+            renderManager.InterpolationMode = this._initializer.InterpolationMode;
+            renderManager.SmoothingMode = this._initializer.SmoothingMode;
+
+            return renderManager;
         }
         /// <summary>
         /// Creates the render factory.

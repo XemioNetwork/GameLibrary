@@ -59,6 +59,8 @@
     <Compile Include="Serialization\GdiTextureReader.cs" />
     <Compile Include="Serialization\GdiTextureWriter.cs" />
     <Compile Include="Gdi.cs" />
+    <Compile Include="NativeGdiRenderManager.cs" />
+    <Compile Include="ManagedGdiRenderManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
