@@ -38,6 +38,7 @@ namespace Xemio.Testing.Mono
                .Content(Format.Xml)
                .Surface(form)
                .Scenes(new TestScene())
+               .CreatePlayerInput()
                .BuildConfiguration();
 
             XGL.Run(config);
