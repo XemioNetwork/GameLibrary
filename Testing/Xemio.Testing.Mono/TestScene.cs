@@ -20,7 +20,7 @@ namespace Xemio.Testing.Mono
 
         public override void LoadContent ()
         {
-            this._brush = this.RenderFactory.CreateSolidBrush(Color.White);
+            this._brush = this.RenderFactory.CreateSolidBrush(Color.Red);
         }
 
         public override void Tick(float elapsed)

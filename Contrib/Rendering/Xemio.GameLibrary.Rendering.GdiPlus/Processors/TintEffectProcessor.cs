@@ -62,7 +62,11 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
             });
 
             renderManager.Attributes = new ImageAttributes();
-            renderManager.Attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Any);
+            renderManager.Attributes.SetColorMatrix(matrix, 
+                ColorMatrixFlag.Default, 
+                ColorAdjustType.Bitmap |
+                ColorAdjustType.Brush |
+                ColorAdjustType.Pen);
         }
         #endregion
 
