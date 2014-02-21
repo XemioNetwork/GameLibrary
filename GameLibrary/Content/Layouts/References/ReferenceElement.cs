@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Content.Layouts.References
 {
@@ -12,7 +13,8 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public ReferenceElement(string tag, PropertyInfo property) : this(tag, property.PropertyType, property.GetValue, property.SetValue)
+        public ReferenceElement(string tag, PropertyInfo property) 
+			: this(tag, property.PropertyType, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>

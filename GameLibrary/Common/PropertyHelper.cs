@@ -38,6 +38,22 @@ namespace Xemio.GameLibrary.Common
 
             return property;
         }
+        /// <summary>
+        /// Gets the get method for the specified property.
+        /// </summary>
+        /// <param name="property">The property.</param>
+		public static Func<object, object> Get(PropertyInfo property)
+		{
+			return instance => property.GetValue(instance, null);
+		}
+        /// <summary>
+        /// Gets the set method for the specified property.
+        /// </summary>
+        /// <param name="property">The property.</param>
+		public static Action<object, object> Set(PropertyInfo property) 
+		{
+			return (instance, value) => property.SetValue(instance, value, null);
+		}
         #endregion
     }
 }

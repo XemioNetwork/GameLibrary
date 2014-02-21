@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xemio.GameLibrary.Network.SyncputServer</RootNamespace>
     <AssemblyName>syncput-server</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -34,9 +33,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -73,9 +69,9 @@
       <Project>{40FEF4F5-F29B-41ED-B276-1789DC3B5CB8}</Project>
       <Name>Xemio.GameLibrary.Network.Syncput</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Rendering\Xemio.GameLibrary.Rendering.GDIPlus\Xemio.GameLibrary.Rendering.GDIPlus.csproj">
+    <ProjectReference Include="..\..\Rendering\Xemio.GameLibrary.Rendering.GdiPlus\Xemio.GameLibrary.Rendering.GdiPlus.csproj">
       <Project>{B2587704-FF2B-4028-A43B-336A3BB8FA43}</Project>
-      <Name>Xemio.GameLibrary.Rendering.GDIPlus</Name>
+      <Name>Xemio.GameLibrary.Rendering.GdiPlus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

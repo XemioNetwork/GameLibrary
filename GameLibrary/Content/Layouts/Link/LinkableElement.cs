@@ -18,7 +18,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Link
         /// Initializes a new instance of the <see cref="LinkableElement{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="property">The property.</param>
-        public LinkableElement(PropertyInfo property) : this(property.Name, property)
+        public LinkableElement(PropertyInfo property)
+			: this(property.Name, property)
         {
         } 
         /// <summary>
@@ -26,7 +27,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Link
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public LinkableElement(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
+        public LinkableElement(string tag, PropertyInfo property)
+			: this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>
@@ -35,7 +37,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Link
         /// <param name="tag">The tag.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public LinkableElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public LinkableElement(string tag, Func<object, object> getAction, Action<object, object> setAction)
+			: base(tag, getAction, setAction)
         {
         }
         #endregion
@@ -51,7 +54,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Link
             object linkable = this.GetAction(container);
             var id = (TKey)Reflection.GetProperties(linkable.GetType())
                                 .First(p => p.Name == "Id")
-                                .GetValue(linkable);
+                                .GetValue(linkable, null);
 
             var serializer = XGL.Components.Require<SerializationManager>();
             serializer.Save(id, writer);

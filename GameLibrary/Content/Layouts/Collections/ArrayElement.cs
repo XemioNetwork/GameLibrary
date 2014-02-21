@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Content.Layouts.Collections
 {
@@ -16,7 +17,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// </summary>
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
-        public ArrayElement(string elementTag, PropertyInfo property) : this(property.Name, elementTag, property)
+        public ArrayElement(string elementTag, PropertyInfo property)
+			: this(property.Name, elementTag, property)
         {
         }
         /// <summary>
@@ -26,7 +28,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
         public ArrayElement(string tag, string elementTag, PropertyInfo property)
-            : base(tag, elementTag, property.GetValue, property.SetValue)
+            : base(tag, elementTag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>

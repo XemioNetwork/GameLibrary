@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Content.Layouts.References
 {
@@ -12,7 +13,8 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public DerivableReferenceElement(string tag, PropertyInfo property) : base(tag, property.GetValue, property.SetValue)
+        public DerivableReferenceElement(string tag, PropertyInfo property) 
+			: base(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>
@@ -21,7 +23,8 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         /// <param name="tag">The tag.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public DerivableReferenceElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public DerivableReferenceElement(string tag, Func<object, object> getAction, Action<object, object> setAction) 
+			: base(tag, getAction, setAction)
         {
         }
         #endregion

@@ -2,6 +2,7 @@
 using System.Reflection;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Content.Layouts.Primitives
 {
@@ -13,7 +14,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
-        public RectangleElement(string tag, PropertyInfo property) : this(tag, property.GetValue, property.SetValue)
+        public RectangleElement(string tag, PropertyInfo property) 
+			: this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>
@@ -22,7 +24,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="tag">The tag.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public RectangleElement(string tag, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public RectangleElement(string tag, Func<object, object> getAction, Action<object, object> setAction) 
+			: base(tag, getAction, setAction)
         {
         }
         #endregion

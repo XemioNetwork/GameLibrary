@@ -11,8 +11,6 @@
     <RootNamespace>Xemio.Testing.Input</RootNamespace>
     <AssemblyName>Xemio.Testing.Input</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -63,11 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Contrib\Rendering\Xemio.GameLibrary.Rendering.GdiPlus\Xemio.GameLibrary.Rendering.GdiPlus.csproj">
-      <Project>{b2587704-ff2b-4028-a43b-336a3bb8fa43}</Project>
+      <Project>{B2587704-FF2B-4028-A43B-336A3BB8FA43}</Project>
       <Name>Xemio.GameLibrary.Rendering.GdiPlus</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\GameLibrary\Xemio.GameLibrary.csproj">
-      <Project>{474ca844-ea03-48dc-a790-5f18510799ac}</Project>
+      <Project>{474CA844-EA03-48DC-A790-5F18510799AC}</Project>
       <Name>Xemio.GameLibrary</Name>
     </ProjectReference>
   </ItemGroup>

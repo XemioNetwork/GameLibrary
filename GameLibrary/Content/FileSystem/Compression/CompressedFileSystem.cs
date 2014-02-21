@@ -59,7 +59,7 @@ namespace Xemio.GameLibrary.Content.FileSystem.Compression
                     return Compressor.Decompress(fileStream);
                 }
             }
-            catch (InvalidDataException ex)
+            catch (InvalidDataException)
             {
                 logger.Warn("Could not decompress {0}. Trying to read plain data from file.", fileName);
                 return this.FileSystem.Open(fileName);

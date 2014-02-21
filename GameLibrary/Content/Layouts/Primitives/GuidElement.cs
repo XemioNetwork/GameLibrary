@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Xemio.GameLibrary.Content.Formats;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Content.Layouts.Primitives
 {
@@ -13,7 +14,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="tag">The tag.</param>
         /// <param name="guidFormat">The unique identifier format.</param>
         /// <param name="property">The property.</param>
-        public GuidElement(string tag, string guidFormat, PropertyInfo property) : this(tag, guidFormat, property.GetValue, property.SetValue)
+        public GuidElement(string tag, string guidFormat, PropertyInfo property) 
+			: this(tag, guidFormat, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
             this.GuidFormat = guidFormat;
         }
@@ -24,7 +26,8 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="guidFormat">The unique identifier format.</param>
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
-        public GuidElement(string tag, string guidFormat, Func<object, object> getAction, Action<object, object> setAction) : base(tag, getAction, setAction)
+        public GuidElement(string tag, string guidFormat, Func<object, object> getAction, Action<object, object> setAction) 
+			: base(tag, getAction, setAction)
         {
             this.GuidFormat = guidFormat;
         }

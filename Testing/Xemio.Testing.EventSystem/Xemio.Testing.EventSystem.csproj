@@ -11,8 +11,6 @@
     <RootNamespace>Xemio.Testing.EventSystem</RootNamespace>
     <AssemblyName>Xemio.Testing.EventSystem</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
