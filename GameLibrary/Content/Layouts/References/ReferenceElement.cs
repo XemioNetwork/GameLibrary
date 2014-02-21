@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
         public ReferenceElement(string tag, PropertyInfo property) 
-			: this(tag, property.PropertyType, PropertyHelper.Get(property), PropertyHelper.Set(property))
+            : this(tag, property.PropertyType, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>

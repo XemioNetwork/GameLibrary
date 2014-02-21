@@ -19,7 +19,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Link
         /// </summary>
         /// <param name="property">The property.</param>
         public LinkableElement(PropertyInfo property)
-			: this(property.Name, property)
+            : this(property.Name, property)
         {
         } 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Link
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
         public LinkableElement(string tag, PropertyInfo property)
-			: this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
+            : this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>
@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Link
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
         public LinkableElement(string tag, Func<object, object> getAction, Action<object, object> setAction)
-			: base(tag, getAction, setAction)
+            : base(tag, getAction, setAction)
         {
         }
         #endregion

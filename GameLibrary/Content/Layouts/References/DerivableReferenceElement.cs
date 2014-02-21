@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
         public DerivableReferenceElement(string tag, PropertyInfo property) 
-			: base(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
+            : base(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>
@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Content.Layouts.References
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
         public DerivableReferenceElement(string tag, Func<object, object> getAction, Action<object, object> setAction) 
-			: base(tag, getAction, setAction)
+            : base(tag, getAction, setAction)
         {
         }
         #endregion

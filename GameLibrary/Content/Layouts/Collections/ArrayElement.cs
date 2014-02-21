@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
         public ArrayElement(string elementTag, PropertyInfo property)
-			: this(property.Name, elementTag, property)
+            : this(property.Name, elementTag, property)
         {
         }
         /// <summary>

@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
         public Vector2Element(string tag, PropertyInfo property) 
-			: this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
+            : this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>
@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="getAction">The get action.</param>
         /// <param name="setAction">The set action.</param>
         public Vector2Element(string tag, Func<object, object> getAction, Action<object, object> setAction) 
-			: base(tag, getAction, setAction)
+            : base(tag, getAction, setAction)
         {
         }
         #endregion

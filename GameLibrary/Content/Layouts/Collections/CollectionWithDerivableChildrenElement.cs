@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
         public CollectionWithDerivableChildrenElement(string elementTag, PropertyInfo property)
-			: this(property.Name, elementTag, property)
+            : this(property.Name, elementTag, property)
         {
         }
         /// <summary>
@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Collections
         /// <param name="elementTag">The element tag.</param>
         /// <param name="property">The property.</param>
         public CollectionWithDerivableChildrenElement(string tag, string elementTag, PropertyInfo property)
-			: base(tag, elementTag, PropertyHelper.Get(property), PropertyHelper.Set(property))
+            : base(tag, elementTag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
             if (!property.PropertyType.IsAssignableFrom(typeof(List<TElement>)))
             {

@@ -14,7 +14,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// <param name="tag">The tag.</param>
         /// <param name="property">The property.</param>
         public ByteElement(string tag, PropertyInfo property)
-			: this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
+            : this(tag, PropertyHelper.Get(property), PropertyHelper.Set(property))
         {
         }
         /// <summary>
