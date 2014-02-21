@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Input.Adapters;
 using Xemio.GameLibrary.Math;
+using Xemio.GameLibrary.Common.Collections;
 
 namespace Xemio.GameLibrary.Input
 {
@@ -23,8 +24,8 @@ namespace Xemio.GameLibrary.Input
 
             this._inputManager = inputManager;
 
-            this._states = new Dictionary<string, InputState>();
-            this._previousStates = new Dictionary<string, InputState>();
+            this._states = new AutoCachedDictionary<string, InputState>();
+            this._previousStates = new AutoCachedDictionary<string, InputState>();
 
             this._adapters = new List<IInputAdapter>();
             this._bindings = new Dictionary<string, IList<string>>();
@@ -40,8 +41,8 @@ namespace Xemio.GameLibrary.Input
         #region Fields
         private readonly InputManager _inputManager;
 
-        private readonly Dictionary<string, InputState> _states;
-        private readonly Dictionary<string, InputState> _previousStates;
+        private readonly IDictionary<string, InputState> _states;
+        private readonly IDictionary<string, InputState> _previousStates;
 
         private readonly List<IInputAdapter> _adapters; 
         private readonly Dictionary<string, IList<string>> _bindings;
@@ -219,7 +220,9 @@ namespace Xemio.GameLibrary.Input
         internal void PushCurrentToPrevious()
         {
             this._previousStates.Clear();
-            foreach (KeyValuePair<string, InputState> pair in this._states)
+
+            var pairs = this._states.ToList();
+            foreach (KeyValuePair<string, InputState> pair in pairs)
             {
                 this._previousStates[pair.Key] = pair.Value;
             }

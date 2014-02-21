@@ -11,6 +11,7 @@ using Xemio.GameLibrary.Rendering.GdiPlus.Processors;
 using Xemio.GameLibrary.Rendering.GdiPlus.Serialization;
 using Xemio.GameLibrary.Rendering.Initialization;
 using Xemio.GameLibrary.Rendering.Shapes.Factories;
+using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Rendering.GdiPlus
 {

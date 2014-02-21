@@ -1,6 +1,6 @@
 using System;
 
-namespace Xemio.GameLibrary
+namespace Xemio.GameLibrary.Common
 {
     public class SystemHelper
     {

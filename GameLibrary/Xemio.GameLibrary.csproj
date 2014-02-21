@@ -405,6 +405,7 @@
     <Compile Include="XGL.cs" />
     <Compile Include="XGLState.cs" />
     <Compile Include="Common\SystemHelper.cs" />
+    <Compile Include="Common\Collections\AutoCachedDictionary.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

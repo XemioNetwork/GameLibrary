@@ -27,7 +27,8 @@ namespace Xemio.Testing.Mono
         public static void Main(string[] args)
         {
             var form = new BufferedForm();
-            form.ClientSize = new Size(800, 600);            
+            form.ClientSize = new Size(800, 600);  
+            form.Text = "XGL - Mono Test";          
 
             var config = XGL.Configure()
                .DisableSplashScreen()
