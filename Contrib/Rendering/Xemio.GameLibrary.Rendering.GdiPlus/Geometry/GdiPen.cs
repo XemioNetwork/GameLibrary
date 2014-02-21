@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Geometry
             this.Color = color;
             this.Thickness = thickness;
 
-            this.Pen = new Pen(new SolidBrush(GdiHelper.Convert(color)), thickness);
+            this.Pen = new Pen(new SolidBrush(Gdi.Convert(color)), thickness);
         }
         #endregion
         

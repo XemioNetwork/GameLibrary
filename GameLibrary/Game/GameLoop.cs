@@ -60,7 +60,7 @@ namespace Xemio.GameLibrary.Game
         private double _elapsedRenderTime;
 
         private int _fpsCount;
-        private double _lastFpsMeasure;
+        private double _lastFpsUpdate;
 
         private double _lastTryToTick;
         private double _lastRender;
@@ -246,7 +246,7 @@ namespace Xemio.GameLibrary.Game
             double totalMilliseconds = this._gameTime.Elapsed.TotalMilliseconds;
 
             this._tickTime = this._renderTime = 0;
-            this._lastFpsMeasure = this._lastTryToTick = this._lastRender = totalMilliseconds;
+            this._lastFpsUpdate = this._lastTryToTick = this._lastRender = totalMilliseconds;
             this._unprocessedTicks = this._elapsedRenderTime = this._timeSinceLastTick = 0;
             this._fpsCount = 0;
         }
@@ -279,6 +279,14 @@ namespace Xemio.GameLibrary.Game
             catch (Exception ex)
             {
                 logger.ErrorException("Unexpected exception in game loop: ", ex);
+
+                Exception current = ex;
+                while (current != null)
+                {
+                    logger.Error (current.GetType() + "->" + current.Message + "=====" + current.StackTrace + "\n\n");
+                    current = current.InnerException;
+                }
+
                 throw;
             }
         }
@@ -376,13 +384,11 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         private void UpdateFramesPerSecond()
         {
-            if (this.IsElapsed(this._lastFpsMeasure, 1000.0))
+            if (this.IsElapsed(this._lastFpsUpdate, 1000.0))
             {
                 this.FramesPerSecond = this._fpsCount;
 
-                logger.Debug("GameLoop running with {0} fps", this.FramesPerSecond);
-
-                this._lastFpsMeasure = this._gameTime.Elapsed.TotalMilliseconds;
+                this._lastFpsUpdate = this._gameTime.Elapsed.TotalMilliseconds;
                 this._fpsCount = 0;
             }
         }

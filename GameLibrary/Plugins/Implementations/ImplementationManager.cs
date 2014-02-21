@@ -28,7 +28,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         public ImplementationManager(IAssemblyContext context)
         {
             this._cacheFlags = new Dictionary<Type, bool>();
-            this._linkers = new Dictionary<Type, dynamic>();
+            this._linkers = new Dictionary<Type, object>();
 
             this._context = context;
         }
@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
 
         #region Fields
         private readonly Dictionary<Type, bool> _cacheFlags;
-        private readonly Dictionary<Type, dynamic> _linkers;
+        private readonly Dictionary<Type, object> _linkers;
 
         private IAssemblyContext _context;
         #endregion
@@ -72,7 +72,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
 
                 if (this._linkers.ContainsKey(typeof(TValue)))
                 {
-                    linker = this._linkers[typeof(TValue)];
+                    linker = (Linker<TKey, TValue>)this._linkers[typeof(TValue)];
                 }
                 else
                 {
@@ -169,7 +169,7 @@ namespace Xemio.GameLibrary.Plugins.Implementations
                 this.Cache<TKey, TValue>();
             }
 
-            return this._linkers[typeof(TValue)];
+            return (IEnumerable<TValue>)this._linkers[typeof(TValue)];
         }
         /// <summary>
         /// Returns a value that determines wether the specified context was already cached or not.

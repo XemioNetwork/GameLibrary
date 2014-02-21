@@ -42,7 +42,11 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
             this.InterpolationMode = interpolation;
         }
         #endregion
-        
+
+        #region Fields
+        private bool _hasRegisteredPaintHandler = false;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the graphics device.
@@ -69,8 +73,8 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
                 var renderTarget = (GdiRenderTarget)this.GraphicsDevice.RenderTarget;
 
                 Graphics graphics = renderTarget.Graphics;
-                graphics.SmoothingMode = GdiHelper.Convert(this.SmoothingMode);
-                graphics.InterpolationMode = GdiHelper.Convert(this.InterpolationMode);
+                graphics.SmoothingMode = Gdi.Convert(this.SmoothingMode);
+                graphics.InterpolationMode = Gdi.Convert(this.InterpolationMode);
 
                 return graphics;
             }
@@ -95,7 +99,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="color">The color.</param>
         public override void Clear(Rendering.Color color)
         {
-            this.Graphics.Clear(GdiHelper.Convert(color));
+            this.Graphics.Clear(Gdi.Convert(color));
         }
         /// <summary>
         /// Draws a line.
@@ -105,7 +109,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="end">The end.</param>
         public override void DrawLine(IPen pen, Vector2 start, Vector2 end)
         {
-            this.Graphics.DrawLine(((GdiPen)pen).Pen, start.X, start.Y, end.X, end.Y);
+            this.Graphics.DrawLine(((GdiPen)pen).Pen, start.X + this.Offset.X, start.Y + this.Offset.Y, end.X + this.Offset.X, end.Y + this.Offset.Y);
         }
         /// <summary>
         /// Draws an arc.
@@ -116,7 +120,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="sweepAngle">The sweep angle.</param>
         public override void DrawArc(IPen pen, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Graphics.DrawArc(((GdiPen)pen).Pen, region.X, region.Y, region.Width, region.Height, startAngle, sweepAngle);
+            this.Graphics.DrawArc(((GdiPen)pen).Pen, region.X + this.Offset.X, region.Y + this.Offset.Y, region.Width, region.Height, startAngle, sweepAngle);
         }
         /// <summary>
         /// Fills the specified rectangle.
@@ -125,7 +129,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="rectangle">The rectangle.</param>
         public override void FillRectangle(IBrush brush, Rectangle rectangle)
         {
-            this.Graphics.FillRectangle(((GdiBrush)brush).Brush, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+            this.Graphics.FillRectangle(((GdiBrush)brush).Brush, rectangle.X + this.Offset.X, rectangle.Y + this.Offset.Y, rectangle.Width, rectangle.Height);
         }
         /// <summary>
         /// Fills a rounded rectangle.
@@ -144,7 +148,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="region">The region.</param>
         public override void FillEllipse(IBrush brush, Rectangle region)
         {
-            this.Graphics.FillEllipse(((GdiBrush)brush).Brush, region.X, region.Y, region.Width, region.Height);
+            this.Graphics.FillEllipse(((GdiBrush)brush).Brush, region.X + this.Offset.X, region.Y + this.Offset.Y, region.Width, region.Height);
         }
         /// <summary>
         /// Fills a polygon.
@@ -153,7 +157,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="vertices">The vertices.</param>
         public override void FillPolygon(IBrush brush, Vector2[] vertices)
         {
-            this.Graphics.FillPolygon(((GdiBrush)brush).Brush, GdiHelper.Convert(vertices));
+            this.Graphics.FillPolygon(((GdiBrush)brush).Brush, Gdi.Convert(vertices, this.Offset));
         }
         /// <summary>
         /// Fills a pie.
@@ -164,7 +168,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="sweepAngle">The sweep angle.</param>
         public override void FillPie(IBrush brush, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Graphics.FillPie(((GdiBrush)brush).Brush, region.X, region.Y, region.Width, region.Height, startAngle, sweepAngle);
+            this.Graphics.FillPie(((GdiBrush)brush).Brush, region.X + this.Offset.X, region.Y + this.Offset.Y, region.Width, region.Height, startAngle, sweepAngle);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -206,12 +210,15 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
                 this.Graphics.DrawImage(
                     gdiTexture.Bitmap, 
                     new Drawing.Rectangle(x, y, w, h),
-                    GdiHelper.Convert(origin),
+                    Gdi.Convert(origin),
                     GraphicsUnit.Pixel);
             }
 
             this.Graphics.ResetTransform();
         }
+        #endregion
+
+        #region Present Methods
         /// <summary>
         /// Presents this instance.
         /// </summary>
@@ -222,18 +229,36 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
             if (surface.Control == null)
                 return;
 
-            Graphics graphics = surface.Control.CreateGraphics();
+            if (SystemHelper.IsWindows)
+            {
+                this.PresentNative(surface);
+            }
+            else
+            {
+                this.PresentCompatible(surface);
+            }
 
+            this.Offset = Vector2.Zero;
+            this.Graphics.Clear(Color.Black);
+        }
+        /// <summary>
+        /// Presents the currently rendered view windows-specific using native GDI invokes.
+        /// </summary>
+        /// <param name="surface">The surface.</param>
+        private void PresentNative(WindowSurface surface)
+        {
+            Graphics graphics = surface.Control.CreateGraphics();
+    
             var backBuffer = (GdiRenderTarget)this.GraphicsDevice.BackBuffer;
             var bitmap = backBuffer.Bitmap;
 
             IntPtr hdc = graphics.GetHdc();
-            IntPtr dc = GdiHelper.CreateCompatibleDC(hdc);
+            IntPtr dc = Gdi.CreateCompatibleDC(hdc);
             IntPtr buffer = bitmap.GetHbitmap();
 
-            GdiHelper.SelectObject(dc, buffer);
+            Gdi.SelectObject(dc, buffer);
 
-            GdiHelper.StretchBlt
+            Gdi.StretchBlt
             (
                 hdc, 0, 0,
                 surface.Width,
@@ -245,13 +270,36 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
                 GdiRasterOperations.SRCCOPY
             );
 
-            GdiHelper.DeleteObject(buffer);
-            GdiHelper.DeleteObject(dc);
+            Gdi.DeleteObject(buffer);
+            Gdi.DeleteObject(dc);
 
             graphics.ReleaseHdc(hdc);
+        }
+        /// <summary>
+        /// Presents the currently rendered view platform independant using the Mono drawing API.
+        /// </summary>
+        /// <param name="surface">The surface.</param>
+        private void PresentCompatible(WindowSurface surface)
+        {            
+            Control control = surface.Control;
+            if (!this._hasRegisteredPaintHandler)
+            {
+                control.Paint += (sender, e) => {                
+                    var backBuffer = (GdiRenderTarget)this.GraphicsDevice.BackBuffer;
+                    var bitmap = backBuffer.Bitmap;
+    
+                    e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed;
+                    e.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
+                    e.Graphics.CompositingMode = Drawing2D.CompositingMode.SourceCopy;
+                    e.Graphics.CompositingQuality = Drawing2D.CompositingQuality.AssumeLinear;
 
-            this.Offset = Vector2.Zero;
-            this.Graphics.Clear(Color.Black);
+                    e.Graphics.DrawImage(bitmap, 0, 0, surface.Width, surface.Height);
+                };
+    
+                this._hasRegisteredPaintHandler = true;
+            }
+    
+            control.Invoke((Action)(() => control.Refresh()));
         }
         #endregion
     }

@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xemio.GameLibrary.Rendering.GdiPlus</RootNamespace>
     <AssemblyName>Xemio.GameLibrary.Rendering.GdiPlus</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -49,7 +48,6 @@
     <Compile Include="GdiRenderTarget.cs" />
     <Compile Include="Geometry\GdiBrush.cs" />
     <Compile Include="GdiGraphicsInitializer.cs" />
-    <Compile Include="GdiHelper.cs" />
     <Compile Include="GdiRasterOperations.cs" />
     <Compile Include="GdiRenderManager.cs" />
     <Compile Include="GdiTexture.cs" />
@@ -60,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\GdiTextureReader.cs" />
     <Compile Include="Serialization\GdiTextureWriter.cs" />
+    <Compile Include="Gdi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

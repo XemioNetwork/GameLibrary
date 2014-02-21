@@ -404,6 +404,7 @@
     <Compile Include="Script\ScriptExecutor.cs" />
     <Compile Include="XGL.cs" />
     <Compile Include="XGLState.cs" />
+    <Compile Include="Common\SystemHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

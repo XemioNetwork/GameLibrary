@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="color">The color.</param>
         public IBrush CreateSolidBrush(Color color)
         {
-            return new GdiBrush(new SolidBrush(GdiHelper.Convert(color)));
+            return new GdiBrush(new SolidBrush(Gdi.Convert(color)));
         }
         /// <summary>
         /// Creates a gradient brush.
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
             var angle = MathHelper.ToDegrees(MathHelper.ToAngle(to - from));
 
             return new GdiBrush(
-                new LinearGradientBrush(GdiHelper.Convert(rectangle), GdiHelper.Convert(top), GdiHelper.Convert(bottom), angle));
+                new LinearGradientBrush(Gdi.Convert(rectangle), Gdi.Convert(top), Gdi.Convert(bottom), angle));
         }
         /// <summary>
         /// Creates a texture brush.
