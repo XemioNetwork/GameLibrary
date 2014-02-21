@@ -17,6 +17,7 @@ namespace Xemio.GameLibrary.Content
 
     public class ContentManager : IConstructable
     {
+
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
