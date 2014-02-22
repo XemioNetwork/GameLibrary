@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,10 +30,17 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Program.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TestScene.cs" />
+    <Compile Include="TestSceneLoader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Contrib\Network\Xemio.GameLibrary.Network.Pipes\Xemio.GameLibrary.Network.Pipes.csproj">
+      <Project>{bed72860-fd72-4f23-949a-1ef4387a2053}</Project>
+      <Name>Xemio.GameLibrary.Network.Pipes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\GameLibrary\Xemio.GameLibrary.csproj">
       <Project>{474CA844-EA03-48DC-A790-5F18510799AC}</Project>
       <Name>Xemio.GameLibrary</Name>
@@ -44,9 +51,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Dynamic" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>

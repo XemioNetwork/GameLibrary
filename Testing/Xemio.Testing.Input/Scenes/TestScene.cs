@@ -22,7 +22,7 @@ namespace Xemio.Testing.Input.Scenes
         private Vector2 _offset;
         #endregion
 
-        #region Overrides of Scene
+        #region Overrides of Target
         /// <summary>
         /// Loads the scene content.
         /// </summary>
