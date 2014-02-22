@@ -24,12 +24,18 @@ namespace Xemio.GameLibrary.Rendering.Fonts
 
             var graphicsDevice = XGL.Components.Require<GraphicsDevice>();
             var renderManager = graphicsDevice.RenderManager;
-
-            string[] lines = value.Split('\n');
+            
+            string[] lines = value.Replace("\r", string.Empty).Split('\n');
             Vector2 currentPosition = position;
 
             foreach (string line in lines)
             {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    currentPosition.Y += spriteFont.Spacing;
+                    continue;
+                }
+
                 int maximumHeight = int.MinValue;
 
                 foreach (char character in line)

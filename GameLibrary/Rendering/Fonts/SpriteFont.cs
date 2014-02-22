@@ -88,6 +88,9 @@ namespace Xemio.GameLibrary.Rendering.Fonts
             this.FontFamily = font.FontFamily.Name;
             this.Size = font.Size;
 
+            this.Kerning = (int)(font.Size * -0.4);
+            this.Spacing = (int)(font.Size * 0.5);
+
             this.Bitmaps = bitmaps;
         }
         #endregion

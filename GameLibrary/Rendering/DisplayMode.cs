@@ -58,5 +58,16 @@ namespace Xemio.GameLibrary.Rendering
             get { return new Vector2(this.Width * .5f, this.Height * .5f); }
         }
         #endregion
+
+        #region Operators
+        /// <summary>
+        /// Converts the specified display mode to a vector implicitly.
+        /// </summary>
+        /// <param name="displayMode">The display mode.</param>
+        public static implicit operator Vector2(DisplayMode displayMode)
+        {
+            return new Vector2(displayMode.Width, displayMode.Height);
+        }
+        #endregion
     }
 }

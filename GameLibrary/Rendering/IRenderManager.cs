@@ -188,6 +188,15 @@ namespace Xemio.GameLibrary.Rendering
             return renderManager.Apply(new TranslateToEffect(new Vector2(x, y)));
         }
         /// <summary>
+        /// Tints the specified render manager using an alpha channel value.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="alpha">The alpha.</param>
+        public static IDisposable Alpha(this IRenderManager renderManager, float alpha)
+        {
+            return renderManager.Apply(new TintEffect(new Color(1.0f, 1.0f, 1.0f, alpha)));
+        }
+        /// <summary>
         /// Tints the specified render manager.
         /// </summary>
         /// <param name="renderManager">The render manager.</param>

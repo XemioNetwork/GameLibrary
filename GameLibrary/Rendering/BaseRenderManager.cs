@@ -43,6 +43,15 @@ namespace Xemio.GameLibrary.Rendering
                     processor.Enable(effect, this);
                     actions.Push(() => processor.Disable(currentEffect, this));
                 }
+
+                var bundle = effect as EffectBundle;
+                if (bundle != null)
+                {
+                    var bundleEffects = bundle.Effects.ToArray();
+                    var dispoable = this.Apply(bundleEffects);
+
+                    actions.Push(dispoable.Dispose);
+                }
             }
 
             return new ActionDisposable(() =>
