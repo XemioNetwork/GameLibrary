@@ -46,7 +46,7 @@ namespace Xemio.GameLibrary.Network.Internal.Dispatchers
                     if (package != null)
                     {
                         logger.Trace("Received {0}.", package.GetType().Name);
-                        this._threadInvoker.Invoke(() => this._client.OnReceivePackage(package));
+                        this._client.OnReceivePackage(package);
                     }
                     else
                     {
@@ -54,7 +54,7 @@ namespace Xemio.GameLibrary.Network.Internal.Dispatchers
                     }
                 }
             }
-            catch (ClientLostConnectionException ex)
+            catch (ClientLostConnectionException)
             {
                 logger.Info("Lost connection to the server.");
             }

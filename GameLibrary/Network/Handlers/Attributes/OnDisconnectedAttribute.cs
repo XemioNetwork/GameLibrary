@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Network.Handlers.Attributes
 {
-    public class OnDisconnectedAttribute : Attribute
+    public class OnDisconnectedAttribute : Attribute, IClientHandlerAttribute
     {
     }
 }

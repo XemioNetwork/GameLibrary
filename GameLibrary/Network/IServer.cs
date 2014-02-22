@@ -64,7 +64,7 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        bool OnBeginSendPackage(Package package, IServerConnection connection);
+        bool OnSendingPackage(Package package, IServerConnection connection);
         /// <summary>
         /// Called when server sent a package.
         /// </summary>

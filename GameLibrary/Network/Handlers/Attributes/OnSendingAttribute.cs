@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Network.Handlers.Attributes
 {
-    public class OnSentAttribute : Attribute, IServerHandlerAttribute, IClientHandlerAttribute
+    public class OnSendingAttribute : Attribute, IServerHandlerAttribute, IClientHandlerAttribute
     {
     }
 }

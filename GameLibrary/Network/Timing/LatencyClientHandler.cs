@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// <param name="package">The package.</param>
         public override void OnReceive(IClient client, LatencyPackage package)
         {
-            logger.Trace("Received latency information: {0}ms", package.Latency);
+            logger.Debug("Received latency information: {0}ms", package.Latency);
             client.Latency = package.Latency;
         }
         #endregion

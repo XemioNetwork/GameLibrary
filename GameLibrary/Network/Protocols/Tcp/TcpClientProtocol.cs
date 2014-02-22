@@ -48,7 +48,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         }
         #endregion
 
-        #region IProtocol Member
+        #region IClientProtocol Member
         /// <summary>
         /// Connects to the specified ip.
         /// </summary>
@@ -84,9 +84,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             this._tcpClient.Close();
         }
-        #endregion
-
-        #region IClientProtocol Member
         /// <summary>
         /// Gets a value indicating whether this <see cref="IClientProtocol"/> is connected.
         /// </summary>
@@ -94,9 +91,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         {
             get { return this._tcpClient != null && this._tcpClient.Connected; }
         }
-        #endregion
-
-        #region Implementation of ILinkable<string>
         /// <summary>
         /// Gets the identifier.
         /// </summary>

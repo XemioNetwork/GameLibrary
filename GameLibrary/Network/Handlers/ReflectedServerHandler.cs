@@ -10,41 +10,8 @@ using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Handlers
 {
-    public class ReflectedServerHandler : IServerHandler
+    public class ReflectedServerHandler : ReflectedHandler<IServerHandlerAttribute>, IServerHandler
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReflectedServerHandler"/> class.
-        /// </summary>
-        public ReflectedServerHandler()
-        {
-            Type type = this.GetType();
-            foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                var attributes = Reflection.GetCustomAttributes(method).OfType<IServerHandlerAttribute>().ToList();
-
-                if (attributes.Count > 0)
-                {
-                    throw new InvalidOperationException("Handling multiple events inside one method is not supported.");
-                }
-
-                this.AddMethod(method, attributes.Single());
-            }
-        }
-        #endregion
-        
-        #region Methods
-        /// <summary>
-        /// Adds the specified method.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="attribute">The attribute.</param>
-        private void AddMethod(MethodInfo method, IServerHandlerAttribute attribute)
-        {
-            
-        }
-        #endregion
-
         #region Implementation of IServerHandler
         /// <summary>
         /// Gets the type of the package.
@@ -60,7 +27,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="connection">The connection.</param>
         public void OnClientJoined(IServer server, IServerConnection connection)
         {
-            throw new NotImplementedException();
+            this.Invoke<OnClientJoinedAttribute>(server, connection);
         }
         /// <summary>
         /// Called when a client left the server.
@@ -69,7 +36,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="connection">The connection.</param>
         public void OnClientLeft(IServer server, IServerConnection connection)
         {
-            throw new NotImplementedException();
+            this.Invoke<OnClientLeftAttribute>(server, connection);
         }
         /// <summary>
         /// Called when the server receives a package.
@@ -79,6 +46,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="sender">The sender.</param>
         public void OnReceive(IServer server, Package package, IServerConnection sender)
         {
+            this.Invoke<OnReceiveAttribute>(method => this.Matches(method, package), server, package, sender);
         }
         /// <summary>
         /// Called when the server is sending a package.
@@ -86,9 +54,9 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public void OnBeginSend(IServer server, Package package, IServerConnection receiver)
+        public void OnSending(IServer server, Package package, IServerConnection receiver)
         {
-            throw new NotImplementedException();
+            this.Invoke<OnSendingAttribute>(method => this.Matches(method, package), server, package, receiver);
         }
         /// <summary>
         /// Called when the server sent a package.
@@ -98,7 +66,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="receiver">The receiver.</param>
         public void OnSent(IServer server, Package package, IServerConnection receiver)
         {
-            throw new NotImplementedException();
+            this.Invoke<OnSentAttribute>(method => this.Matches(method, package), server, package, receiver);
         }
         #endregion
     }

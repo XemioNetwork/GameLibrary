@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xemio.GameLibrary.Network;
-using Xemio.GameLibrary.Network.Nested;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Protocols;
 using System.Net;
@@ -35,11 +34,11 @@ namespace Xemio.GameLibrary.Network
     {
         #region Methods
         /// <summary>
-        /// Resolves the specified connection and removes the INestedConnection wrapper.
+        /// Unwraps the specified connection and removes the INestedConnection wrapper.
         /// </summary>
         /// <typeparam name="T">The connection type</typeparam>
         /// <param name="connection">The connection.</param>
-        public static T Resolve<T>(this IServerConnection connection)
+        public static T Unwrap<T>(this IServerConnection connection)
         {
             IServerConnection current = connection;
             while (current is INestedServerConnection && !(current is T))

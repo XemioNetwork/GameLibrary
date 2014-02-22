@@ -75,7 +75,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IServerHandler.OnBeginSend(IServer server, Package package, IServerConnection receiver)
+        void IServerHandler.OnSending(IServer server, Package package, IServerConnection receiver)
         {
             this.OnBeginSend(server, package as T, receiver);
         }

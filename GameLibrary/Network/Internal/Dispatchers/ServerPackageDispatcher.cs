@@ -52,7 +52,7 @@ namespace Xemio.GameLibrary.Network.Internal.Dispatchers
                     if (package != null)
                     {
                         logger.Trace("Received {0} from {1}.", package.GetType().Name, this._connection.Address);
-                        this._threadInvoker.Invoke(() => this._server.OnReceivePackage(package, this._connection));
+                        this._server.OnReceivePackage(package, this._connection);
                     }
                 }
             }

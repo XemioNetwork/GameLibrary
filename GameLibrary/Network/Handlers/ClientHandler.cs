@@ -61,7 +61,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientHandler.OnBeginSend(IClient client, Package package)
+        void IClientHandler.OnSending(IClient client, Package package)
         {
             this.OnBeginSend(client, package as T);
         }

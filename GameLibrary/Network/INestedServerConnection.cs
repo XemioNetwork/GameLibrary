@@ -1,4 +1,4 @@
-﻿namespace Xemio.GameLibrary.Network.Nested
+﻿namespace Xemio.GameLibrary.Network
 {
     public interface INestedServerConnection : IServerConnection
     {

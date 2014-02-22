@@ -23,7 +23,7 @@ namespace Xemio.GameLibrary.Network.Protocols
         /// </exception>
         private static T CreateProtocol<T>(string protocolUrl) where T : class, IProtocol
         {
-            string[] segments = protocolUrl.Split(new[] {"://"}, StringSplitOptions.RemoveEmptyEntries);
+            string[] segments = protocolUrl.Split(new[] {"://"}, StringSplitOptions.None);
             if (segments.Length != 2)
             {
                 throw new InvalidOperationException("Invalid protocol URL. Protocol could not be created for [" + protocolUrl + "]");

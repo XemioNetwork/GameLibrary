@@ -23,7 +23,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void OnBeginSend(IServer server, Package package, IServerConnection receiver);
+        void OnSending(IServer server, Package package, IServerConnection receiver);
         /// <summary>
         /// Called when the server sent a package.
         /// </summary>

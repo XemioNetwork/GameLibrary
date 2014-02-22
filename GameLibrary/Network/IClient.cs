@@ -56,7 +56,7 @@ namespace Xemio.GameLibrary.Network
         /// Calls the client handlers when the specified package is going to be send.
         /// </summary>
         /// <param name="package">The package.</param>
-        bool OnBeginSendPackage(Package package);
+        bool OnSendingPackage(Package package);
         /// <summary>
         /// Calls the client handlers when the specified package is sent.
         /// </summary>

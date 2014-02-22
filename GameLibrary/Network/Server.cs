@@ -123,14 +123,14 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         /// <param name="package">The package.</param>
         /// <param name="connection">The connection.</param>
-        public virtual bool OnBeginSendPackage(Package package, IServerConnection connection)
+        public virtual bool OnSendingPackage(Package package, IServerConnection connection)
         {
             var evt = new ServerSendingPackageEvent(this, package, connection);
 
             return this.HandleEvent(
                 evt, this.GetSubscribers(package),
-                interceptor => interceptor.InterceptBeginSend(evt),
-                subscriber => subscriber.OnBeginSend(this, package, connection));
+                interceptor => interceptor.InterceptSending(evt),
+                subscriber => subscriber.OnSending(this, package, connection));
         }
         /// <summary>
         /// Called when server sent a package.
@@ -211,14 +211,9 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            var cachedList = (CachedList<IServerConnection>)this.Connections;
-
-            using (cachedList.StartCaching())
+            foreach (IServerConnection connection in this.Connections)
             {
-                foreach (IServerConnection connection in this.Connections)
-                {
-                    this.Send(package, connection);
-                }
+                this.Send(package, connection);
             }
         }
         /// <summary>
@@ -230,9 +225,9 @@ namespace Xemio.GameLibrary.Network
         {
             logger.Trace("Sending {0} to {1}.", package.GetType().Name, receiver.Address);
 
-            if (this.OnBeginSendPackage(package, receiver))
+            if (this.OnSendingPackage(package, receiver))
             {
-                this._connectionManager.GetOutputQueue(receiver).Enqueue(package);
+                this._connectionManager.Enqueue(receiver, package);
                 this.OnSentPackage(package, receiver);
             }
         }

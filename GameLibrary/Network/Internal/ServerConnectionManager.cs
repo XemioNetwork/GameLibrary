@@ -6,6 +6,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Common.Threads;
 using Xemio.GameLibrary.Network.Internal.Dispatchers;
+using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Internal
 {
@@ -16,9 +17,8 @@ namespace Xemio.GameLibrary.Network.Internal
         #endregion
 
         #region Fields
-        private readonly Dictionary<IServerConnection, ServerPackageDispatcher> _dispatcherMappings;
-        private readonly Dictionary<IServerConnection, OutputQueue> _queueMappings; 
-        #endregion Fields
+        private readonly Dictionary<IServerConnection, InternalConnection> _mappings;
+        #endregion
 
         #region Properties
         /// <summary>
@@ -38,51 +38,15 @@ namespace Xemio.GameLibrary.Network.Internal
         /// <param name="server">The server.</param>
         public ServerConnectionManager(IServer server)
         {
-            this._dispatcherMappings = new Dictionary<IServerConnection, ServerPackageDispatcher>();
-            this._queueMappings = new Dictionary<IServerConnection, OutputQueue>();
+            this._mappings = new Dictionary<IServerConnection, InternalConnection>();
 
             this.Server = server;
             this.Server.Subscribe(new ServerDisconnectHandler(this));
 
-            this.Connections = new CachedList<IServerConnection>();
+            this.Connections = new AutoCachedList<IServerConnection>();
         }
         #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Creates a new output queue for the specified connection.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        private void CreateOutputQueue(IServerConnection connection)
-        {
-            if (!this._queueMappings.ContainsKey(connection))
-            {
-                logger.Debug("Creating output queue for connection {0}.", connection.Address);
-
-                var outputQueue = new OutputQueue(connection);
-                outputQueue.Start();
-
-                this._queueMappings.Add(connection, outputQueue);
-            }
-        }
-        /// <summary>
-        /// Creates a new connection dispatcher to handle incoming packages from a client.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        private void CreateDispatcher(IServerConnection connection)
-        {
-            if (!this._dispatcherMappings.ContainsKey(connection))
-            {
-                logger.Debug("Creating dispatcher for connection {0}.", connection.Address);
-
-                var dispatcher = new ServerPackageDispatcher(this, connection);
-                dispatcher.Start();
-
-                this._dispatcherMappings.Add(connection, dispatcher);
-            }
-        }
-        #endregion
-
+        
         #region Methods
         /// <summary>
         /// Adds the specified connection.
@@ -92,9 +56,7 @@ namespace Xemio.GameLibrary.Network.Internal
         {
             lock (this.Connections)
             {
-                this.CreateDispatcher(connection);
-                this.CreateOutputQueue(connection);
-
+                this._mappings.Add(connection, new InternalConnection(this, connection));
                 this.Connections.Add(connection);
             }
 
@@ -108,21 +70,20 @@ namespace Xemio.GameLibrary.Network.Internal
         {
             lock (this.Connections)
             {
-                this._dispatcherMappings.Remove(connection);
-                this._queueMappings.Remove(connection);
-
+                this._mappings.Remove(connection);
                 this.Connections.Remove(connection);
             }
 
             logger.Debug("Removed {0} from connection list.", connection.Address);
         }
         /// <summary>
-        /// Gets the output queue for the specified connection.
+        /// Enqueues the specified package to the receivers output queue.
         /// </summary>
-        /// <param name="connection">The connection.</param>
-        public OutputQueue GetOutputQueue(IServerConnection connection)
+        /// <param name="receiver">The receiver.</param>
+        /// <param name="package">The package.</param>
+        public void Enqueue(IServerConnection receiver, Package package)
         {
-            return this._queueMappings[connection];
+            this._mappings[receiver].Queue.Enqueue(package);
         }
         #endregion
 

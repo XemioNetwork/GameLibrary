@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Network.Pipes
         /// <param name="name">The name.</param>
         public NamedPipeServerConnection(string name)
         {
-            this._stream = new NamedPipeServerStream(name);
+            this._stream = new NamedPipeServerStream(name, PipeDirection.InOut, 32);
             this._stream.WaitForConnection();
         }
         #endregion

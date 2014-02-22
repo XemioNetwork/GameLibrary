@@ -12,14 +12,11 @@ namespace Xemio.GameLibrary.Network.Protocols.Streamed
         protected abstract Stream Stream { get; }
         #endregion
 
-        #region Implementation of ILinkable<string>
+        #region Implementation of IClientProtocol
         /// <summary>
         /// Gets the identifier for the current instance.
         /// </summary>
         public abstract string Id { get; }
-        #endregion
-
-        #region Implementation of IProtocol
         /// <summary>
         /// Starts the protocol and connects corresponding to the site it is being created.
         /// </summary>
@@ -29,9 +26,6 @@ namespace Xemio.GameLibrary.Network.Protocols.Streamed
         /// Stops the protocol.
         /// </summary>
         public abstract void Close();
-        #endregion
-
-        #region Implementation of IClientProtocol
         /// <summary>
         /// Gets a value indicating whether the client is connected.
         /// </summary>

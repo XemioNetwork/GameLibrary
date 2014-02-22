@@ -140,14 +140,14 @@ namespace Xemio.GameLibrary.Network
         /// Calls the IClientLogics when the specified package is going to be send.
         /// </summary>
         /// <param name="package">The package.</param>
-        public virtual bool OnBeginSendPackage(Package package)
+        public virtual bool OnSendingPackage(Package package)
         {
             var evt = new ClientSendingPackageEvent(this, package);
 
             return this.HandleEvent(
                 evt, this.GetSubscribers(package),
-                interceptor => interceptor.InterceptBeginSend(evt),
-                subscriber => subscriber.OnBeginSend(this, package));
+                interceptor => interceptor.InterceptSending(evt),
+                subscriber => subscriber.OnSending(this, package));
         }
         /// <summary>
         /// Calls the IClientLogics when the specified package is sent.
@@ -182,7 +182,7 @@ namespace Xemio.GameLibrary.Network
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            if (this.OnBeginSendPackage(package))
+            if (this.OnSendingPackage(package))
             {
                 this._outputQueue.Enqueue(package);
                 this.OnSentPackage(package);

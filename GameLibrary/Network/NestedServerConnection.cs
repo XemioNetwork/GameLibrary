@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Xemio.GameLibrary.Network.Packages;
 
-namespace Xemio.GameLibrary.Network.Nested
+namespace Xemio.GameLibrary.Network
 {
     public abstract class NestedServerConnection : INestedServerConnection
     {

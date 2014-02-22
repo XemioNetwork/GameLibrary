@@ -26,7 +26,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void OnBeginSend(IClient client, Package package);
+        void OnSending(IClient client, Package package);
         /// <summary>
         /// Called when a package was sent.
         /// </summary>
