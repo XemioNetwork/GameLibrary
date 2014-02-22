@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace Xemio.GameLibrary.Network.Protocols.Local
+namespace Xemio.GameLibrary.Common.Collections
 {
     public class SignaledQueue<T>
     {

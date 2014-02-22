@@ -273,7 +273,7 @@
     <Compile Include="Network\Protocols\Local\LocalServerConnection.cs" />
     <Compile Include="Network\Protocols\Local\LocalServerProtocol.cs" />
     <Compile Include="Network\Protocols\Local\LocalTarget.cs" />
-    <Compile Include="Network\Protocols\Local\SignaledQueue.cs" />
+    <Compile Include="Common\Collections\SignaledQueue.cs" />
     <Compile Include="Network\Protocols\Streamed\StreamedClientProtocol.cs" />
     <Compile Include="Network\Protocols\Streamed\StreamedSerializer.cs" />
     <Compile Include="Network\Protocols\IProtocol.cs" />
