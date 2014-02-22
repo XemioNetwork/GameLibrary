@@ -36,7 +36,11 @@ namespace Xemio.GameLibrary.Common.Collections
         /// </summary>
         public T Dequeue()
         {
-            this._signal.WaitOne();
+            while (this._items.Count == 0)
+            {
+                this._signal.WaitOne();
+            }
+
             return this._items.Dequeue();
         }
         #endregion
