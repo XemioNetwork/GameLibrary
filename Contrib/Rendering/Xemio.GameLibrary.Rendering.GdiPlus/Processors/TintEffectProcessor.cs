@@ -31,7 +31,6 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
         /// Sets the opacity.
         /// </summary>
         /// <param name="renderManager">The render manager.</param>
-        /// <param name="color">The color.</param>
         private void Apply(GdiRenderManager renderManager)
         {
             if (this.Effects.Count == 0)
@@ -40,11 +39,8 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
                 return;
             }
 
-            Color color;
-            foreach (TintEffect effect in this.Effects)
-            {
-                color = effect.BlendMode.Combine(color, effect.Color);
-            }
+            var color = new Color();
+            color = this.Effects.Aggregate(color, (current, effect) => effect.BlendMode.Combine(current, effect.Color));
 
             float m = 1.0f / 255.0f;
             float a = color.A * m;
@@ -64,9 +60,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
             renderManager.Attributes = new ImageAttributes();
             renderManager.Attributes.SetColorMatrix(matrix, 
                 ColorMatrixFlag.Default, 
-                ColorAdjustType.Bitmap |
-                ColorAdjustType.Brush |
-                ColorAdjustType.Pen);
+                ColorAdjustType.Bitmap);
         }
         #endregion
 

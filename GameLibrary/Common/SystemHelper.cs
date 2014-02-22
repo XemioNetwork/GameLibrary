@@ -8,7 +8,7 @@ namespace Xemio.GameLibrary.Common
         /// <summary>
         /// Gets a value indicating whether the game library is currently running on mac.
         /// </summary>
-        public static bool IsMacOSX
+        public static bool IsMac
         {
             get { return Environment.OSVersion.Platform == PlatformID.MacOSX; }
         }

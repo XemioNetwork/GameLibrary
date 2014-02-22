@@ -6,17 +6,6 @@ using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Common.Collections
 {
-    public class Cache<TKey, TValue, TComputer> : Cache<TKey, TValue> where TComputer : IComputationProvider<TKey, TValue>, new()
-    {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Cache{TKey, TValue, TComputer}"/> class.
-        /// </summary>
-        public Cache() : base(new TComputer())
-        {
-        } 
-        #endregion
-    }
     public class Cache<TKey, TValue>
     {
         #region Constructors

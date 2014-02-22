@@ -58,6 +58,35 @@ namespace Xemio.GameLibrary.Math
         {
             get { return new Vector2(0, 1); }
         }
+        /// <summary>
+        /// Returns a vector that represents the left direction.
+        /// </summary>
+        public static Vector2 Left
+        {
+            get { return new Vector2(-1, 0); }
+        }
+        /// <summary>
+        /// Returns a vector that represents the right direction.
+        /// </summary>
+        public static Vector2 Right
+        {
+            get { return new Vector2(1, 0); }
+        }
+        /// <summary>
+        /// Returns a vector that represents the up direction.
+        /// </summary>
+        public static Vector2 Up
+        {
+            get { return new Vector2(0, -1); }
+        }
+        /// <summary>
+        /// Returns a vector that represents the down direction.
+        /// </summary>
+        public static Vector2 Down
+        {
+            get { return new Vector2(0, 1); }
+        }
+        
         #endregion
 
         #region Coordinates
