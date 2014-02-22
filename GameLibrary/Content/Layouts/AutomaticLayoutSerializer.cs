@@ -10,7 +10,7 @@ namespace Xemio.GameLibrary.Content.Layouts
     public class AutomaticLayoutSerializer : Serializer<object>
     {
         #region Fields
-        private static readonly Cache<Type, ILayoutElement> cache = new Cache<Type, ILayoutElement, LayoutGenerator>(); 
+        private static readonly Cache<Type, ILayoutElement> cache = new Cache<Type, ILayoutElement>(new LayoutGenerator()); 
         #endregion
 
         #region Constructors

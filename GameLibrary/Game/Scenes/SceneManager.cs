@@ -9,16 +9,24 @@ using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
-    public class SceneManager : SceneProvider, IRenderHandler, ITickHandler, IConstructable
+    public class SceneManager : SceneContainer, IRenderHandler, ITickHandler, IConstructable
     {
         #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether to present the changes to the control.
         /// </summary>
         public bool PresentChanges { get; set; }
-        #endregion Properties
+        #endregion
 
         #region Methods
+        /// <summary>
+        /// Adds the specified scenes.
+        /// </summary>
+        /// <param name="scenes">The scenes.</param>
+        public void Add(params Scene[] scenes)
+        {
+            this.Add((IEnumerable<Scene>)scenes);
+        }
         /// <summary>
         /// Adds the specified scenes.
         /// </summary>
@@ -29,14 +37,6 @@ namespace Xemio.GameLibrary.Game.Scenes
             {
                 base.Add(scene);
             }
-        }
-        /// <summary>
-        /// Adds the specified scenes.
-        /// </summary>
-        /// <param name="scenes">The scenes.</param>
-        public void Add(params Scene[] scenes)
-        {
-            this.Add((IEnumerable<Scene>)scenes);
         }
         #endregion
         
@@ -59,10 +59,10 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public void Construct()
         {
+            this.PresentChanges = true;
+
             var loop = XGL.Components.Get<IGameLoop>();
             loop.Subscribe(this);
-
-            this.PresentChanges = true;
         }
         #endregion
     }

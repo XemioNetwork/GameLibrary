@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Properties;
 using Xemio.GameLibrary.Rendering;
@@ -36,7 +37,8 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Loads the content.
         /// </summary>
-        public override void LoadContent()
+        /// <param name="loader">The content loader.</param>
+        public override void LoadContent(ContentLoader loader)
         {
             DisplayMode displayMode = this.GraphicsDevice.DisplayMode;
 

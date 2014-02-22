@@ -10,39 +10,49 @@ using Xemio.GameLibrary.Rendering;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
-    public abstract class SceneProvider
+    public abstract class SceneContainer
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
-        
-        #region Fields
-        protected readonly CachedList<Scene> _subScenes = new CachedList<Scene>();
-        #endregion Fields
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SceneContainer"/> class.
+        /// </summary>
+        protected SceneContainer()
+        {
+            this.Scenes = new CachedList<Scene>();
+        }
+        #endregion
 
         #region Properties
         /// <summary>
+        /// Gets the scenes.
+        /// </summary>
+        protected CachedList<Scene> Scenes { get; private set; } 
+        /// <summary>
         /// Gets the graphics device.
         /// </summary>
-        public GraphicsDevice GraphicsDevice
+        protected GraphicsDevice GraphicsDevice
         {
             get { return XGL.Components.Require<GraphicsDevice>(); }
         }
-        #endregion Properties
+        #endregion
         
-        #region Implementation of ISceneProvider
+        #region Implementation of SceneContainer
         /// <summary>
         /// Adds the specified scene.
         /// </summary>
         /// <param name="scene">The scene.</param>
         public void Add(Scene scene)
         {
-            logger.Debug("Adding scene {0}.", scene.GetType().Name);
-
             scene.Parent = this;
+            logger.Debug("Adding scene {0}.", scene.GetType().Name);
+            
             scene.OnEnter();
 
-            this._subScenes.Add(scene);
+            this.Scenes.Add(scene);
         }
         /// <summary>
         /// Removes the specified scene.
@@ -50,12 +60,12 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="scene">The scene.</param>
         public void Remove(Scene scene)
         {
+            scene.Parent = null;
             logger.Debug("Removing scene {0}.", scene.GetType().Name);
 
-            scene.Parent = null;
             scene.OnLeave();
 
-            this._subScenes.Remove(scene);
+            this.Scenes.Remove(scene);
         }
         #endregion
 
@@ -65,16 +75,18 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         private IEnumerable<Scene> OrderedTickScenes()
         {
-            return this._subScenes.OrderBy(scene => scene.TickIndex);
+            return this.Scenes.Where(scene => !scene.IsPaused)
+                              .OrderBy(scene => scene.TickIndex);
         }
         /// <summary>
         /// Orders the scenes for the rendering process.
         /// </summary>
         private IEnumerable<Scene> OrderedRenderScenes()
         {
-            return this._subScenes.OrderBy(scene => scene.RenderIndex);
+            return this.Scenes.Where(scene => scene.IsLoaded && scene.IsVisible)
+                              .OrderBy(scene => scene.RenderIndex);
         }
-        #endregion Private Methods
+        #endregion
 
         #region Methods
         /// <summary>
@@ -88,9 +100,9 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// Gets a scene.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
-        public Scene GetScene(Func<Scene, bool> predicate)
+        public Scene GetScene(Predicate<Scene> predicate)
         {
-            return this._subScenes.FirstOrDefault(predicate);
+            return this.Scenes.FirstOrDefault(scene => predicate(scene));
         }
         /// <summary>
         /// Handles a game tick.
@@ -98,15 +110,15 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
         {
-            using (this._subScenes.StartCaching())
+            using (this.Scenes.StartCaching())
             {
                 foreach (Scene scene in this.OrderedTickScenes())
                 {
-                    if (scene.Paused)
-                        continue;
-
-                    scene.TryLoadContent();
-                    scene.Tick(elapsed);
+                    scene.LoadContentIfNeeded();
+                    if (scene.IsLoaded)
+                    {
+                        scene.Tick(elapsed);
+                    }
                 }
             }
         }
@@ -115,20 +127,14 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public virtual void Render()
         {
-            using (this._subScenes.StartCaching())
+            using (this.Scenes.StartCaching())
             {
                 foreach (Scene scene in this.OrderedRenderScenes())
                 {
-                    if (!scene.Visible || !scene.Loaded)
-                        continue;
-
-                    if (this.GraphicsDevice != null)
-                        this.GraphicsDevice.RenderManager.Translate(Vector2.Zero);
-
                     scene.Render();
                 }
             }
         }
-        #endregion Methods
+        #endregion
     }
 }
