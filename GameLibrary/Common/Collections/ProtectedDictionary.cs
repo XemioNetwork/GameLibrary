@@ -8,18 +8,18 @@ using Xemio.GameLibrary.Common.Collections.DictionaryActions;
 
 namespace Xemio.GameLibrary.Common.Collections
 {
-    public class CachedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+    public class ProtectedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedDictionary&lt;TKey, TValue&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ProtectedDictionary{TKey,TValue}"/> class.
         /// </summary>
-        public CachedDictionary()
+        public ProtectedDictionary()
         {
             this._dictionary = new Dictionary<TKey, TValue>();
             this._actions = new List<IDictionaryAction<TKey, TValue>>();
 
-            this._startCachingCount = 0;
+            this._protectionCount = 0;
         }
         #endregion
 
@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Common.Collections
         private readonly Dictionary<TKey, TValue> _dictionary;
         private readonly List<IDictionaryAction<TKey, TValue>> _actions;
 
-        private int _startCachingCount;
+        private int _protectionCount;
         #endregion
         
         #region Methods
@@ -42,31 +42,31 @@ namespace Xemio.GameLibrary.Common.Collections
             }
         }
         /// <summary>
-        /// Starts the caching.
+        /// Protects the dictionary from changes.
         /// </summary>
-        public IDisposable StartCaching()
+        public IDisposable Protect()
         {
-            this._startCachingCount++;
+            this._protectionCount++;
 
             return new ActionDisposable(() =>
-                                          {
-                                              this._startCachingCount--;
+            {
+                this._protectionCount--;
 
-                                              if (this.IsCaching == false)
-                                                  this.ApplyChanges();
-                                          });
+                if (this.IsProtected == false)
+                    this.ApplyChanges();
+            });
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether this instance is caching.
+        /// Gets a value indicating whether this instance is protected from changes.
         /// </summary>
-        public bool IsCaching
+        public bool IsProtected
         {
-            get { return this._startCachingCount > 0; }
+            get { return this._protectionCount > 0; }
         }
-        #endregion Properties
+        #endregion
         
         #region Implementation of IEnumerable
         /// <summary>
@@ -99,7 +99,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// </summary>
         public void Clear()
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new ClearAction<TKey, TValue>());
                 return;
@@ -172,7 +172,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="value">The value.</param>
         public void Add(TKey key, TValue value)
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new AddAction<TKey, TValue>(key, value));
                 return;
@@ -186,7 +186,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="key">The key.</param>
         public bool Remove(TKey key)
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new RemoveAction<TKey, TValue>(key));
                 return true;
@@ -211,7 +211,7 @@ namespace Xemio.GameLibrary.Common.Collections
             get { return this._dictionary[key]; }
             set
             {
-                if (this.IsCaching)
+                if (this.IsProtected)
                 { 
                     this._actions.Add(new IndexerAction<TKey, TValue>(key, value));
                     return;

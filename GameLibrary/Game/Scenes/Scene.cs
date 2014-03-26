@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
+using Xemio.GameLibrary.Content.Loading;
 using Xemio.GameLibrary.Game.Handlers;
 using Xemio.GameLibrary.Game.Scenes.Transitions;
 using Xemio.GameLibrary.Game.Timing;
@@ -41,7 +42,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Gets the loading report.
         /// </summary>
-        public ILoadingReport LoadingReport { get; protected internal set; }
+        public ILoadingHandler LoadingReport { get; protected internal set; }
         /// <summary>
         /// Gets a value indicating whether this <see cref="Scene"/> is loaded.
         /// </summary>
@@ -139,10 +140,10 @@ namespace Xemio.GameLibrary.Game.Scenes
                 this.IsLoading = true;
                 Action action = () =>
                 {
-                    var loader = new ContentLoader(this.LoadingReport);
+                    var loader = new BatchedContentLoader(this.LoadingReport);
 
                     this.LoadContent(loader);
-                    loader.Execute();
+                    loader.ExecuteBatchedActions();
 
                     this.IsLoaded = true;
                     this.IsLoading = false;
@@ -172,10 +173,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="transition">The transition.</param>
         protected void TransitionTo(Scene scene, ITransition transition)
         {
-            transition.Current = this;
-            transition.Next = scene;
-
-            this.TransitionTo(new TransitionScene(transition));
+            this.TransitionTo(new TransitionScene(transition, this, scene));
         }
         /// <summary>
         /// Transitions the scene to the specified one.
@@ -199,13 +197,16 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public void Remove()
         {
-            this.Parent.Remove(this);
+            if (this.Parent != null)
+            {
+                this.Parent.Remove(this);
+            }
         }
         /// <summary>
         /// Loads the scenes content including textures, brushes, fonts, pens etc.
         /// </summary>
         /// <param name="loader">The content loader.</param>
-        public virtual void LoadContent(ContentLoader loader)
+        public virtual void LoadContent(IContentLoader loader)
         {
         }
         /// <summary>

@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Loading;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
-    public abstract class LoadingScene : Scene, ILoadingReport
+    public abstract class LoadingScene : Scene, ILoadingHandler
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadingScene"/> class.
         /// </summary>
-        /// <param name="scene">The scene.</param>
+        /// <param assetName="scene">The scene.</param>
         protected LoadingScene(Scene scene)
         {
             this.Target = scene;
@@ -57,7 +59,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Gets or sets the elements.
         /// </summary>
-        public int Elements { get; set; }
+        public int ElementCount { get; set; }
         /// <summary>
         /// Gets or sets the percentage.
         /// </summary>
@@ -65,18 +67,11 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Called when an element is loading.
         /// </summary>
-        /// <param name="name">The name.</param>
-        public virtual void OnLoading(string name)
+        /// <param name="assetName">The assetName.</param>
+        public virtual IDisposable OnLoading(string assetName)
         {
-            this.CurrentElement = name;
-        }
-        /// <summary>
-        /// Called when a file was loaded.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        public virtual void OnLoaded(string name)
-        {
-            this.CompletedElements.Add(name);
+            this.CurrentElement = assetName;
+            return new ActionDisposable(() => this.CompletedElements.Add(assetName));
         }
         #endregion
 

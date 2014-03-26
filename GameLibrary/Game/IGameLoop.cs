@@ -4,7 +4,7 @@ using Xemio.GameLibrary.Game.Handlers;
 
 namespace Xemio.GameLibrary.Game
 {
-    [AbstractComponent]
+    [Abstraction]
     public interface IGameLoop : IComponent
     {
         /// <summary>

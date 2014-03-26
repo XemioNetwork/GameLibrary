@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Events
 
         #region Fields
         private readonly List<dynamic> _observers = new List<dynamic>();
-        private readonly Dictionary<Type, CachedList<dynamic>> _observerMappings = new Dictionary<Type, CachedList<dynamic>>();
+        private readonly Dictionary<Type, ProtectedList<dynamic>> _observerMappings = new Dictionary<Type, ProtectedList<dynamic>>();
         /// <summary>
         /// A mapping from a base type to it's super types.
         /// We use this dictionary for faster subscribe times, since we already know what type-mappings we need.
@@ -191,7 +191,7 @@ namespace Xemio.GameLibrary.Events
                     foreach (Type baseType in eventTypes)
                     {
                         if (this._observerMappings.ContainsKey(baseType) == false)
-                            this._observerMappings.Add(baseType, new AutoCachedList<dynamic>());
+                            this._observerMappings.Add(baseType, new AutoProtectedList<dynamic>());
 
                         foreach (Type knownSuperType in this._observerMappings.Keys.Where(baseType.IsAssignableFrom))
                         {

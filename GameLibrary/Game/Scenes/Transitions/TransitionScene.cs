@@ -10,10 +10,12 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransitionScene"/> class.
+        /// Initializes a new instance of the <see cref="TransitionScene" /> class.
         /// </summary>
         /// <param name="transition">The transition.</param>
-        public TransitionScene(ITransition transition)
+        /// <param name="current">The current.</param>
+        /// <param name="next">The next.</param>
+        public TransitionScene(ITransition transition, Scene current, Scene next)
         {
             this.Transition = transition;
         }
@@ -29,29 +31,21 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
         /// Gets the transition.
         /// </summary>
         public ITransition Transition { get; private set; }
+        /// <summary>
+        /// Gets the current scene.
+        /// </summary>
+        public Scene Current { get; private set; }
+        /// <summary>
+        /// Gets the next scene.
+        /// </summary>
+        public Scene Next { get; private set; }
         #endregion
 
-        #region Overrides of SceneContainer
+        #region Methods
         /// <summary>
-        /// Handles a game tick.
+        /// Initializes the render targets if needed.
         /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        public override void Tick(float elapsed)
-        {
-            this.Transition.Current.Tick(elapsed);
-            this.Transition.Next.Tick(elapsed);
-
-            this.Transition.Tick(elapsed);
-            if (this.Transition.IsCompleted)
-            {
-                this.SceneManager.Add(this.Transition.Next);
-                this.Remove();
-            }
-        }
-        /// <summary>
-        /// Handles a game render.
-        /// </summary>
-        public override void Render()
+        private void InitializeRenderTargetsIfNeeded()
         {
             var graphicsDevice = XGL.Components.Require<GraphicsDevice>();
 
@@ -62,20 +56,49 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
             this._nextTarget = this._nextTarget ?? graphicsDevice.RenderFactory.CreateTarget(
                 graphicsDevice.DisplayMode.Width,
                 graphicsDevice.DisplayMode.Height);
+        }
+        #endregion
 
-            if (this.Transition.Current.IsVisible)
+        #region Overrides of SceneContainer
+        /// <summary>
+        /// Handles a game tick.
+        /// </summary>
+        /// <param name="elapsed">The elapsed.</param>
+        public override void Tick(float elapsed)
+        {
+            base.Tick(elapsed);
+
+            this.Transition.Tick(elapsed);
+            if (this.Transition.IsCompleted)
+            {
+                this.SceneManager.Add(this.Next);
+                this.Remove();
+            }
+        }
+        /// <summary>
+        /// Handles a game render.
+        /// </summary>
+        public override void Render()
+        {
+            var graphicsDevice = XGL.Components.Require<GraphicsDevice>();
+
+            this.InitializeRenderTargetsIfNeeded();
+
+            if (this.Current.IsLoaded)
             {
                 using (graphicsDevice.RenderTo(this._currentTarget))
                 {
-                    this.Transition.Current.Render();
+                    graphicsDevice.Clear(Color.Transparent);
+                    this.Current.Render();
                 }
             }
 
-            if (this.Transition.Next.IsVisible)
+            if (this.Next.IsLoaded)
             {
                 using (graphicsDevice.RenderTo(this._nextTarget))
                 {
-                    this.Transition.Next.Render();
+                    graphicsDevice.Clear(Color.Transparent);
+                    this.Next.Render();
                 }
             }
 

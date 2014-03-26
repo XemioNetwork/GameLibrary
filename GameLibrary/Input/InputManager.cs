@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
+using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events;
@@ -28,7 +29,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public InputManager()
         {
-            this._inputs = new List<PlayerInput>();
+            this._inputs = new AutoProtectedList<PlayerInput>();
         }
         #endregion
 

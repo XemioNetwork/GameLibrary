@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Xemio.GameLibrary
 {
-    public enum XGLState
+    public enum EngineState
     {
         None,
         Initializing,

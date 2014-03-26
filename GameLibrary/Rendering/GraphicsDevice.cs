@@ -32,11 +32,23 @@ namespace Xemio.GameLibrary.Rendering
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GraphicsDevice"/> class.
+        /// Initializes a new instance of the <see cref="GraphicsDevice" /> class.
         /// </summary>
-        public GraphicsDevice()
+        /// <param name="displayName">The display name.</param>
+        /// <param name="displayMode">The display mode.</param>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="renderFactory">The render factory.</param>
+        /// <param name="rasterizer">The rasterizer.</param>
+        public GraphicsDevice(string displayName, DisplayMode displayMode, IRenderManager renderManager, IRenderFactory renderFactory, ITextRasterizer rasterizer)
         {
             this._targets = new Stack<IRenderTarget>();
+
+            this.DisplayName = displayName;
+            this.DisplayMode = displayMode;
+
+            this.RenderManager = renderManager;
+            this.RenderFactory = renderFactory;
+            this.TextRasterizer = rasterizer;
         }
         #endregion
 
@@ -138,41 +150,6 @@ namespace Xemio.GameLibrary.Rendering
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Initializes the graphics device.
-        /// </summary>
-        /// <param name="initializer">The initializer.</param>
-        public void Initialize(IGraphicsInitializer initializer)
-        {
-            if (initializer == null)
-            {
-                throw new ArgumentNullException("initializer", @"No graphics initializer defined.");
-            }
-
-            initializer.Initialize(this);
-
-            this.DisplayName = initializer.DisplayName;
-
-            if (initializer.Factory == null)
-            {
-                throw new InvalidOperationException("Graphics initializer '" + initializer.Id + "' does not provide a graphics factory.");
-            }
-
-            this.RenderManager = initializer.Factory.CreateRenderManager();
-            this.RenderFactory = initializer.Factory.CreateRenderFactory();
-            this.TextRasterizer = initializer.Factory.CreateTextRasterizer();
-
-            var implementations = XGL.Components.Require<IImplementationManager>();
-            implementations.Add<Type, IReader>(initializer.Factory.CreateTextureReader());
-            implementations.Add<Type, IWriter>(initializer.Factory.CreateTextureWriter());
-
-            foreach (IEffectProcessor processor in initializer.Factory.CreateEffectProcessors())
-            {
-                implementations.Add<Type, IEffectProcessor>(processor);
-            }
-
-            logger.Info("Initialized graphics device with initializer {0}", initializer.Id);
-        }
         /// <summary>
         /// Clears the screen.
         /// </summary>

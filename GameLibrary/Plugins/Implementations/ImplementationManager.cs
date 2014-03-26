@@ -117,6 +117,15 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// <summary>
         /// Registers the specified value.
         /// </summary>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="value">The value.</param>
+        public void Add<TValue>(TValue value) where TValue : ILinkable<Type>
+        {
+            this.Add<Type, TValue>(value);
+        }
+        /// <summary>
+        /// Registers the specified value.
+        /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="value">The value.</param>

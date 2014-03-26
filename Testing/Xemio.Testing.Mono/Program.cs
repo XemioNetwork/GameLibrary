@@ -2,6 +2,7 @@ using System;
 using Xemio.GameLibrary;
 using System.Windows.Forms;
 using System.Drawing;
+using Xemio.GameLibrary.Config;
 using Xemio.GameLibrary.Network;
 using Xemio.GameLibrary.Network.Timing;
 using Xemio.GameLibrary.Rendering.GdiPlus;
@@ -32,17 +33,16 @@ namespace Xemio.Testing.Mono
             form.ClientSize = new Size(800, 600);  
             form.Text = "XGL - Mono Test";   
             
-            var config = XGL.Configure()
+            var config = Fluently.Configure()
                .DisableSplashScreen()
                .BackBuffer(form.ClientSize.Width / 2,
                            form.ClientSize.Height / 2)
-               .FrameRate(60)
+               .FramesPerSecond(60)
                .Graphics<GdiGraphicsInitializer>()
-               .Content(Format.Xml)
+               .ContentFormat(Format.Xml)
                .Surface(form)
                .Scenes(new TestSceneLoader())
-               .CreatePlayerInput()
-               .BuildConfiguration();
+               .CreatePlayerInput();
 
             XGL.Run(config);
             

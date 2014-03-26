@@ -4,7 +4,7 @@ using Xemio.GameLibrary.Components.Attributes;
 
 namespace Xemio.GameLibrary.Common.Threads
 {
-    [AbstractComponent]
+    [Abstraction]
     public interface IThreadInvoker : IComponent
     {
         /// <summary>

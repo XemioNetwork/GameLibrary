@@ -11,7 +11,7 @@ using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Components
 {
-    public class ComponentManager : IComponentManager
+    public class ComponentCatalog : IComponentCatalog
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -19,12 +19,12 @@ namespace Xemio.GameLibrary.Components
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComponentManager"/> class.
+        /// Initializes a new instance of the <see cref="ComponentCatalog"/> class.
         /// </summary>
-        public ComponentManager()
+        public ComponentCatalog()
         {
             this._componentMappings = new Dictionary<Type, IComponent>();
-            this.Components = new CachedList<IComponent>();
+            this.Components = new ProtectedList<IComponent>();
         }
         #endregion
 
@@ -36,9 +36,9 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Gets the components.
         /// </summary>
-        protected CachedList<IComponent> Components { get; private set; }
+        protected ProtectedList<IComponent> Components { get; private set; }
         /// <summary>
-        /// Gets a value indicating whether this <see cref="ComponentManager"/> is constructed.
+        /// Gets a value indicating whether this <see cref="ComponentCatalog"/> is constructed.
         /// </summary>
         public bool IsConstructed { get; private set; }
         #endregion
@@ -51,10 +51,7 @@ namespace Xemio.GameLibrary.Components
         /// <param name="value">The value.</param>
         private void Add(Type key, IComponent value)
         {
-            if (this._componentMappings.ContainsKey(key))
-                this._componentMappings[key] = value;
-            else
-                this._componentMappings.Add(key, value);
+            this._componentMappings[key] = value;
         }
         /// <summary>
         /// Gets the type of the interface.
@@ -62,14 +59,14 @@ namespace Xemio.GameLibrary.Components
         /// <param name="type">The component type.</param>
         private IEnumerable<Type> GetInterfaceTypes(Type type)
         {
-            List<Type> types = new List<Type>(from abstraction in type.GetInterfaces()
-                                              where abstraction.GetCustomAttributes(typeof(AbstractComponentAttribute), false).Length > 0
-                                              select abstraction);
+            var types = new List<Type>(from abstraction in type.GetInterfaces()
+                                       where abstraction.GetCustomAttributes(typeof(AbstractionAttribute), false).Length > 0
+                                       select abstraction);
 
             Type currentBaseType = type.BaseType;
             while (currentBaseType != typeof(object))
             {
-                if (currentBaseType.GetCustomAttributes(typeof(AbstractComponentAttribute), false).Length > 0)
+                if (Reflection.GetCustomAttributes(typeof(AbstractionAttribute)).Length > 0)
                     types.Add(currentBaseType);
 
                 currentBaseType = currentBaseType.BaseType;
@@ -85,7 +82,7 @@ namespace Xemio.GameLibrary.Components
         /// <param name="type">The type.</param>
         private void CheckRequiredComponents(Type type)
         {
-            object[] attributes = type.GetCustomAttributes(typeof(RequireAttribute), true);
+            var attributes = Reflection.GetCustomAttributes(type).OfType<RequireAttribute>();
 
             foreach (RequireAttribute attribute in attributes)
             {
@@ -101,7 +98,7 @@ namespace Xemio.GameLibrary.Components
         /// <param name="component">The component.</param>
         private void Construct(IComponent component)
         {
-            IConstructable constructable = component as IConstructable;
+            var constructable = component as IConstructable;
             if (constructable != null)
             {
                 this.CheckRequiredComponents(constructable.GetType());
@@ -119,8 +116,8 @@ namespace Xemio.GameLibrary.Components
             if (this.IsConstructed)
                 return;
 
-            logger.Info("Preparing to construct components...");
-            using (this.Components.StartCaching())
+            logger.Info("Constructing components.");
+            using (this.Components.Protect())
             { 
                 foreach (IComponent component in this.Components)
                 {
@@ -135,7 +132,7 @@ namespace Xemio.GameLibrary.Components
         /// Adds the specified component.
         /// </summary>
         /// <param name="component">The component.</param>
-        public void Add(IComponent component)
+        public void Install(IComponent component)
         {
             this.Components.Add(component);
             
@@ -175,7 +172,7 @@ namespace Xemio.GameLibrary.Components
         /// <typeparam name="T">The type of the component.</typeparam>
         public T Get<T>() where T : class, IComponent
         {
-            if (XGL.State == XGLState.None)
+            if (XGL.State == EngineState.None)
                 BasicConfigurator.Configure();
 
             if (this._componentMappings.ContainsKey(typeof(T)))
@@ -193,7 +190,7 @@ namespace Xemio.GameLibrary.Components
         /// <typeparam name="T">The component type.</typeparam>
         public T Require<T>() where T : class, IComponent
         {
-            T component = this.Get<T>();
+            var component = this.Get<T>();
 
             if (component == null)
             {

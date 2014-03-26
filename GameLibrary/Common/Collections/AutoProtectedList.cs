@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Xemio.GameLibrary.Common.Collections
 {
-    public class AutoCachedList<T> : CachedList<T>
+    public class AutoProtectedList<T> : ProtectedList<T>
     {
-        #region Overrides of CachedList<T>
+        #region Overrides of ProtectedList<T>
         /// <summary>
         /// Gets the enumerator.
         /// </summary>
         public override IEnumerator<T> GetEnumerator()
         {
-            using (this.StartCaching())
+            using (this.Protect())
             {
                 IEnumerator<T> enumerator = base.GetEnumerator();
                 while (enumerator.MoveNext())

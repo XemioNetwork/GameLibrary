@@ -32,18 +32,25 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
         /// </summary>
         public bool IsCompleted { get; private set; }
         /// <summary>
-        /// Gets or sets the current scene.
-        /// </summary>
-        Scene ITransition.Current { get; set; }
-        /// <summary>
-        /// Gets or sets the next scene.
-        /// </summary>
-        Scene ITransition.Next { get; set; }
-        /// <summary>
         /// Handles a game tick.
         /// </summary>
         /// <param name="elapsed">The elapsed.</param>
         public void Tick(float elapsed)
+        {
+        }
+        /// <summary>
+        /// Enters the transition.
+        /// </summary>
+        /// <param name="current">The current.</param>
+        /// <param name="next">The next.</param>
+        public void Enter(Scene current, Scene next)
+        {
+        }
+        /// <summary>
+        /// Leaves the transition. NOTE: Current contains now the scene, that was declared as next before.
+        /// </summary>
+        /// <param name="current">The current.</param>
+        public void Leave(Scene current)
         {
         }
         /// <summary>

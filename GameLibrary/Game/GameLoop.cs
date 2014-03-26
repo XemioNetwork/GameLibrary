@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public GameLoop()
         {
-            this._handlers = new AutoCachedList<IGameHandler>();
+            this._handlers = new AutoProtectedList<IGameHandler>();
 
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
             this.Subscribe(Frame.Instance);
@@ -48,7 +48,7 @@ namespace Xemio.GameLibrary.Game
         private CancellationTokenSource _cancellationTokenSource;
         private Stopwatch _gameTime;
 
-        private readonly CachedList<IGameHandler> _handlers;
+        private readonly ProtectedList<IGameHandler> _handlers;
 
         private double _renderTime;
         private double _tickTime;
@@ -279,14 +279,6 @@ namespace Xemio.GameLibrary.Game
             catch (Exception ex)
             {
                 logger.ErrorException("Unexpected exception in game loop: ", ex);
-
-                Exception current = ex;
-                while (current != null)
-                {
-                    logger.Error (current.GetType() + "->" + current.Message + "=====" + current.StackTrace + "\n\n");
-                    current = current.InnerException;
-                }
-
                 throw;
             }
         }

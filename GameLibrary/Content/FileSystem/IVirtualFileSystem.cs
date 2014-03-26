@@ -8,7 +8,7 @@ using Xemio.GameLibrary.Components.Attributes;
 
 namespace Xemio.GameLibrary.Content.FileSystem
 {
-    [AbstractComponent]
+    [Abstraction]
     public interface IVirtualFileSystem : IFileSystem
     {
         /// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Loading;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Scenes.Transitions;
 using Xemio.GameLibrary.Math;
@@ -24,7 +25,7 @@ namespace Xemio.Testing.Mono
         {
         }
 
-        public override void LoadContent(ContentLoader loader)
+        public override void LoadContent(IContentLoader loader)
         {
             var files = new[]
             {

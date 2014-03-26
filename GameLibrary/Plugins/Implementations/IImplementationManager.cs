@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Components.Attributes;
 
 namespace Xemio.GameLibrary.Plugins.Implementations
 {
-    [AbstractComponent]
+    [Abstraction]
     public interface IImplementationManager : IComponent
     {
         /// <summary>
@@ -21,6 +21,12 @@ namespace Xemio.GameLibrary.Plugins.Implementations
         /// </summary>
         /// <param name="context">The context.</param>
         void Add(IAssemblyContext context);
+        /// <summary>
+        /// Registers the specified value.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="value">The value.</param>
+        void Add<TValue>(TValue value) where TValue : ILinkable<Type>; 
         /// <summary>
         /// Registers the specified value.
         /// </summary>

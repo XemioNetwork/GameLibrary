@@ -139,7 +139,7 @@ namespace Xemio.GameLibrary.Rendering
             for (int i = 0; i < vertices.Length; i++)
             {
                 Vector2 start = vertices[i];
-                Vector2 end = vertices[i >= vertices.Length ? 0 : i + 1];
+                Vector2 end = vertices[i + 1 >= vertices.Length ? 0 : i + 1];
 
                 this.DrawLine(pen, start, end);
             }

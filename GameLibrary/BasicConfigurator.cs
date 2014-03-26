@@ -1,7 +1,9 @@
 ﻿using Xemio.GameLibrary.Common;
+using Xemio.GameLibrary.Config;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.FileSystem.Disk;
+using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Plugins.Implementations;
 
@@ -15,12 +17,11 @@ namespace Xemio.GameLibrary
         /// </summary>
         public static void Configure()
         {
-            var config = XGL.Configure()
-                .DisableGameLoop()
-                .DisableInput()
+            var config = Fluently.Configure()
+                .ContentFormat(Format.Xml)
+                .CreatePlayerInput()
                 .DisableSplashScreen()
-                .FileSystem<DiskFileSystem>()
-                .BuildConfiguration();
+                .FileSystem(new DiskFileSystem());
 
             XGL.Run(config);
         }

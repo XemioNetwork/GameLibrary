@@ -44,17 +44,54 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Collections\AutoCachedList.cs" />
+    <Compile Include="Common\Enumerables.cs" />
+    <Compile Include="Common\Collections\AutoProtectedList.cs" />
     <Compile Include="Common\Collections\Cache.cs" />
+    <Compile Include="Common\Collections\LinearCatalog.cs" />
+    <Compile Include="Common\Collections\ICatalog.cs" />
     <Compile Include="Common\Collections\IComputationProvider.cs" />
+    <Compile Include="Common\Lambdas.cs" />
     <Compile Include="Common\Link\DuplicateBehavior.cs" />
     <Compile Include="Common\Properties.cs" />
     <Compile Include="Common\Property.cs" />
     <Compile Include="Common\Randomization\CryptoRandom.cs" />
     <Compile Include="Common\Reflection.cs" />
     <Compile Include="Common\Retry.cs" />
-    <Compile Include="Components\IComponentManager.cs" />
-    <Compile Include="Content\ContentLoader.cs" />
+    <Compile Include="Components\IComponentCatalog.cs" />
+    <Compile Include="Config\FluentConfiguration.cs" />
+    <Compile Include="Config\FluentExtensions.cs" />
+    <Compile Include="Config\Fluently.cs" />
+    <Compile Include="Config\IConfigurationAccess.cs" />
+    <Compile Include="Config\Installers\AbstractInstaller.cs" />
+    <Compile Include="Config\Installers\INestedInstaller.cs" />
+    <Compile Include="Config\Installers\PluginInstaller.cs" />
+    <Compile Include="Config\Installers\PreInstaller.cs" />
+    <Compile Include="Config\Installers\SurfaceInstaller.cs" />
+    <Compile Include="Config\Installers\ThreadInstaller.cs" />
+    <Compile Include="Config\Validation\RequireComponent.cs" />
+    <Compile Include="Config\Validation\InversiveValidator.cs" />
+    <Compile Include="Config\Validation\ValidationEntry.cs" />
+    <Compile Include="Config\Validation\ValidationException.cs" />
+    <Compile Include="Config\Validation\ValidationManager.cs" />
+    <Compile Include="Config\Validation\ValidationScope.cs" />
+    <Compile Include="Config\Validation\FunctionValidator.cs" />
+    <Compile Include="Config\Validation\IValidator.cs" />
+    <Compile Include="Config\Validation\RequireInstaller.cs" />
+    <Compile Include="Config\Installers\ContentInstaller.cs" />
+    <Compile Include="Config\Installers\EventInstaller.cs" />
+    <Compile Include="Config\Installers\FileSystemInstaller.cs" />
+    <Compile Include="Config\Installers\GameLoopInstaller.cs" />
+    <Compile Include="Config\Installers\GraphicsInstaller.cs" />
+    <Compile Include="Config\Installers\InputInstaller.cs" />
+    <Compile Include="Config\Installers\SceneInstaller.cs" />
+    <Compile Include="Config\Installers\ScriptInstaller.cs" />
+    <Compile Include="Config\Dependencies\DependencyException.cs" />
+    <Compile Include="Config\Dependencies\DependencyManager.cs" />
+    <Compile Include="Config\Installers\IInstaller.cs" />
+    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\Dependencies\Dependency.cs" />
+    <Compile Include="Config\Installers\SerializationInstaller.cs" />
+    <Compile Include="Content\Loading\BatchedContentLoader.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\Compressor.cs" />
     <Compile Include="Content\ContentReference.cs" />
@@ -74,7 +111,8 @@
     <Compile Include="Content\Formats\Xml\XmlFormat.cs" />
     <Compile Include="Content\Formats\Xml\XmlReader.cs" />
     <Compile Include="Content\Formats\Xml\XmlWriter.cs" />
-    <Compile Include="Content\ILoadingReport.cs" />
+    <Compile Include="Content\Loading\IContentLoader.cs" />
+    <Compile Include="Content\Loading\ILoadingHandler.cs" />
     <Compile Include="Content\Layouts\Collections\ArrayElement.cs" />
     <Compile Include="Content\Layouts\Collections\CollectionBaseElement.cs" />
     <Compile Include="Content\Layouts\Collections\DerivableCollectionElement.cs" />
@@ -114,10 +152,11 @@
     <Compile Include="Content\Layouts\Primitives\StringElement.cs" />
     <Compile Include="Content\Layouts\Primitives\Vector2Element.cs" />
     <Compile Include="Content\Layouts\References\DerivableReferenceElement.cs" />
+    <Compile Include="Content\Loading\ContentLoader.cs" />
     <Compile Include="Content\Serialization\GuidSerializer.cs" />
     <Compile Include="BasicConfigurator.cs" />
     <Compile Include="Common\ActionDisposable.cs" />
-    <Compile Include="Common\Collections\CachedDictionary.cs" />
+    <Compile Include="Common\Collections\ProtectedDictionary.cs" />
     <Compile Include="Common\Collections\DictionaryActions\AddAction.cs" />
     <Compile Include="Common\Collections\DictionaryActions\ClearAction.cs" />
     <Compile Include="Common\Collections\DictionaryActions\IDictionaryAction.cs" />
@@ -129,15 +168,14 @@
     <Compile Include="Common\Collections\ListActions\InsertAction.cs" />
     <Compile Include="Common\Collections\ListActions\RemoveAction.cs" />
     <Compile Include="Common\Collections\ListActions\RemoveAtAction.cs" />
-    <Compile Include="Common\Collections\CachedList.cs" />
+    <Compile Include="Common\Collections\ProtectedList.cs" />
     <Compile Include="Common\Collections\ListActions\IListAction.cs" />
     <Compile Include="Common\Threads\IThreadInvoker.cs" />
     <Compile Include="Common\Link\ManuallyLinkedAttribute.cs" />
     <Compile Include="Common\Threads\Worker.cs" />
-    <Compile Include="Components\Attributes\AbstractComponentAttribute.cs" />
+    <Compile Include="Components\Attributes\AbstractionAttribute.cs" />
     <Compile Include="Components\MissingComponentException.cs" />
     <Compile Include="Components\Attributes\RequireAttribute.cs" />
-    <Compile Include="Configuration.cs" />
     <Compile Include="Common\ApplicationExceptionHandler.cs" />
     <Compile Include="Content\FileSystem\IVirtualFileSystem.cs" />
     <Compile Include="Content\Formats\Binary\BinaryFormat.cs" />
@@ -157,8 +195,6 @@
     <Compile Include="Entities\Components\IPositionComponent.cs" />
     <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Events\ICancelableEvent.cs" />
-    <Compile Include="FluentConfiguration.cs" />
-    <Compile Include="FluentConfigurator.cs" />
     <Compile Include="Game\Handlers\IRenderHandler.cs" />
     <Compile Include="Game\Handlers\ISortableRenderHandler.cs" />
     <Compile Include="Game\Handlers\ISortableTickHandler.cs" />
@@ -240,7 +276,7 @@
     <Compile Include="Common\Parser\StringParser.cs" />
     <Compile Include="Common\Parser\Primitives\RectangleParser.cs" />
     <Compile Include="Common\Parser\Primitives\VectorParser.cs" />
-    <Compile Include="Components\ComponentManager.cs" />
+    <Compile Include="Components\ComponentCatalog.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\IConstructable.cs" />
     <Compile Include="Content\SerializationManager.cs" />
@@ -422,9 +458,9 @@
     <Compile Include="Script\ScriptCompiler.cs" />
     <Compile Include="Script\ScriptExecutor.cs" />
     <Compile Include="XGL.cs" />
-    <Compile Include="XGLState.cs" />
+    <Compile Include="EngineState.cs" />
     <Compile Include="Common\SystemHelper.cs" />
-    <Compile Include="Common\Collections\AutoCachedDictionary.cs" />
+    <Compile Include="Common\Collections\AutoProtectedDictionary.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Loading;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 
@@ -37,7 +38,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// Loads the scene content.
         /// </summary>
         /// <param name="loader">The content loader.</param>
-        public override void LoadContent(ContentLoader loader)
+        public override void LoadContent(IContentLoader loader)
         {
             this._solidBrush = this.GraphicsDevice.RenderFactory.CreateSolidBrush(this.Color);
         }

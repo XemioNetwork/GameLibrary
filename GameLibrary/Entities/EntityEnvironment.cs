@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.Entities
         public EntityEnvironment()
         {
             this._guidMappings = new Dictionary<Guid, Entity>();
-            this.Entities = new CachedList<Entity>();
+            this.Entities = new ProtectedList<Entity>();
         }
         #endregion
 
@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Gets the entities.
         /// </summary>
-        protected CachedList<Entity> Entities { get; private set; }
+        protected ProtectedList<Entity> Entities { get; private set; }
         /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Entities.Entity"/> at the specified index.
         /// </summary>
@@ -102,7 +102,7 @@ namespace Xemio.GameLibrary.Entities
         {
             logger.Debug("Clearing {0} entities from entity environment.", this.Entities.Count);
 
-            using (this.Entities.StartCaching())
+            using (this.Entities.Protect())
             { 
                 foreach (Entity entity in this.Entities)
                 {
@@ -126,7 +126,7 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
         {
-            using (this.Entities.StartCaching())
+            using (this.Entities.Protect())
             { 
                 foreach (Entity entity in this.Entities)
                 {
@@ -145,7 +145,7 @@ namespace Xemio.GameLibrary.Entities
         {
             var entities = this.AsSortedEntityCollection();
 
-            using (this.Entities.StartCaching())
+            using (this.Entities.Protect())
             { 
                 foreach (Entity entity in entities)
                 {

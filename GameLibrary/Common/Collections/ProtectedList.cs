@@ -9,31 +9,31 @@ using Xemio.GameLibrary.Common.Collections.ListActions;
 
 namespace Xemio.GameLibrary.Common.Collections
 {
-    public class CachedList<T> : IList<T>
+    public class ProtectedList<T> : IList<T>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedList&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ProtectedList{T}"/> class.
         /// </summary>
-        public CachedList()
+        public ProtectedList()
         {
             this._list = new List<T>();
             this._actions = new List<IListAction<T>>();
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedList&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ProtectedList{T}"/> class.
         /// </summary>
         /// <param name="capacity">The capacity.</param>
-        public CachedList(int capacity)
+        public ProtectedList(int capacity)
         {
             this._list = new List<T>(capacity);
             this._actions = new List<IListAction<T>>();
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedList&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ProtectedList{T}"/> class.
         /// </summary>
         /// <param name="collection">The collection.</param>
-        public CachedList(IEnumerable<T> collection)
+        public ProtectedList(IEnumerable<T> collection)
         {
             this._list = new List<T>(collection);
             this._actions = new List<IListAction<T>>();
@@ -43,16 +43,16 @@ namespace Xemio.GameLibrary.Common.Collections
         #region Fields
         private readonly List<T> _list;
         private readonly List<IListAction<T>> _actions;
-        private int _startCachingCount = 0;
+        private int _protectionCount = 0;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether this instance is caching.
+        /// Gets a value indicating whether this instance is protected.
         /// </summary>
-        public bool IsCaching
+        public bool IsProtected
         {
-            get { return this._startCachingCount > 0; }
+            get { return this._protectionCount > 0; }
         }
         #endregion
 
@@ -60,17 +60,17 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <summary>
         /// Starts the caching.
         /// </summary>
-        public IDisposable StartCaching()
+        public IDisposable Protect()
         {
-            this._startCachingCount++;
+            this._protectionCount++;
 
             return new ActionDisposable(() =>
-                                          {
-                                              this._startCachingCount--;
+            {
+                this._protectionCount--;
 
-                                              if (this.IsCaching == false)
-                                                  this.ApplyChanges();
-                                          });
+                if (this.IsProtected == false)
+                    this.ApplyChanges();
+            });
         }
         /// <summary>
         /// Applies the changes.
@@ -110,7 +110,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="item">The item.</param>
         public void Add(T item)
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new AddAction<T>(item));
                 return;
@@ -123,7 +123,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// </summary>
         public void Clear()
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new ClearAction<T>());
                 return;
@@ -154,7 +154,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="item">The item.</param>
         public bool Remove(T item)
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new RemoveAction<T>(item));
                 return true;
@@ -194,7 +194,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="item">The item.</param>
         public void Insert(int index, T item)
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new InsertAction<T>(index, item));
                 return;
@@ -208,7 +208,7 @@ namespace Xemio.GameLibrary.Common.Collections
         /// <param name="index">The index.</param>
         public void RemoveAt(int index)
         {
-            if (this.IsCaching)
+            if (this.IsProtected)
             { 
                 this._actions.Add(new RemoveAtAction<T>(index));
                 return;
@@ -225,7 +225,7 @@ namespace Xemio.GameLibrary.Common.Collections
             get { return this._list[index]; }
             set
             {
-                if (this.IsCaching)
+                if (this.IsProtected)
                 { 
                     this._actions.Add(new IndexerAction<T>(index, value));
                     return;

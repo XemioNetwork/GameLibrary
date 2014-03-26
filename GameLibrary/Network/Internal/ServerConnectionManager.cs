@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Network.Internal
             this.Server = server;
             this.Server.Subscribe(new ServerDisconnectHandler(this));
 
-            this.Connections = new AutoCachedList<IServerConnection>();
+            this.Connections = new AutoProtectedList<IServerConnection>();
         }
         #endregion
         

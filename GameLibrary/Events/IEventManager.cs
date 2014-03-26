@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Plugins;
 
 namespace Xemio.GameLibrary.Events
 {
-    [AbstractComponent]
+    [Abstraction]
     public interface IEventManager : IComponent, IObservable<IEvent>
     {
         /// <summary>

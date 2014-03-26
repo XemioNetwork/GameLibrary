@@ -3,7 +3,7 @@ using Xemio.GameLibrary.Components.Attributes;
 
 namespace Xemio.GameLibrary.Rendering.Surfaces
 {
-    [AbstractComponent]
+    [Abstraction]
     public interface ISurface : IComponent
     {
         /// <summary>

@@ -22,7 +22,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         protected SceneContainer()
         {
-            this.Scenes = new CachedList<Scene>();
+            this.Scenes = new ProtectedList<Scene>();
         }
         #endregion
 
@@ -30,7 +30,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <summary>
         /// Gets the scenes.
         /// </summary>
-        protected CachedList<Scene> Scenes { get; private set; } 
+        protected ProtectedList<Scene> Scenes { get; private set; } 
         /// <summary>
         /// Gets the graphics device.
         /// </summary>
@@ -110,7 +110,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
         {
-            using (this.Scenes.StartCaching())
+            using (this.Scenes.Protect())
             {
                 foreach (Scene scene in this.OrderedTickScenes())
                 {
@@ -127,7 +127,7 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// </summary>
         public virtual void Render()
         {
-            using (this.Scenes.StartCaching())
+            using (this.Scenes.Protect())
             {
                 foreach (Scene scene in this.OrderedRenderScenes())
                 {

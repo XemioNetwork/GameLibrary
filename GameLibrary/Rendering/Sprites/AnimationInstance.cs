@@ -21,20 +21,30 @@ namespace Xemio.GameLibrary.Rendering.Sprites
 
         #region Fields
         private float _elapsed;
-        private int _frameIndex;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets a value indicating whether the animation is finished.
+        /// </summary>
+        public bool IsFinished
+        {
+            get { return !this.Animation.IsLooped && this.Index == this.Animation.Indices.Length - 1; }
+        }
         /// <summary>
         /// Gets the animation.
         /// </summary>
         public Animation Animation { get; private set; }
         /// <summary>
+        /// Gets the index.
+        /// </summary>
+        public int Index { get; private set; }
+        /// <summary>
         /// Gets the index of the sprite.
         /// </summary>
         public int SpriteIndex
         {
-            get { return this.Animation.Indices[this._frameIndex]; }
+            get { return this.Animation.Indices[this.Index]; }
         }
         #endregion
 
@@ -45,7 +55,7 @@ namespace Xemio.GameLibrary.Rendering.Sprites
         public void Reset()
         {
             this._elapsed = 0;
-            this._frameIndex = 0;
+            this.Index = 0;
         }
         /// <summary>
         /// Handles a game tick.
@@ -56,17 +66,17 @@ namespace Xemio.GameLibrary.Rendering.Sprites
             this._elapsed += elapsed;
             while (this._elapsed >= this.Animation.FrameTime && 
                    this.Animation.FrameTime > 0 &&
-                   this._frameIndex < this.Animation.Indices.Length)
+                   this.Index < this.Animation.Indices.Length)
             {
                 this._elapsed -= this.Animation.FrameTime;
-                this._frameIndex++;
+                this.Index++;
 
-                if (this._frameIndex >= this.Animation.Indices.Length)
+                if (this.Index >= this.Animation.Indices.Length)
                 {
                     if (this.Animation.IsLooped)
-                        this._frameIndex = 0;
+                        this.Index = 0;
                     else
-                        this._frameIndex = this.Animation.Indices.Length - 1;
+                        this.Index = this.Animation.Indices.Length - 1;
                 }
             }
         }

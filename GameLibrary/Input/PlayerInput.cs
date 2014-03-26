@@ -24,8 +24,8 @@ namespace Xemio.GameLibrary.Input
 
             this._inputManager = inputManager;
 
-            this._states = new AutoCachedDictionary<string, InputState>();
-            this._previousStates = new AutoCachedDictionary<string, InputState>();
+            this._states = new AutoProtectedDictionary<string, InputState>();
+            this._previousStates = new AutoProtectedDictionary<string, InputState>();
 
             this._adapters = new List<IInputAdapter>();
             this._bindings = new Dictionary<string, IList<string>>();

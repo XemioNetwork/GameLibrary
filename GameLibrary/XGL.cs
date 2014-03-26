@@ -7,6 +7,10 @@ using System.Windows.Forms;
 using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Config;
+using Xemio.GameLibrary.Config.Dependencies;
+using Xemio.GameLibrary.Config.Installers;
+using Xemio.GameLibrary.Config.Validation;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Timing;
@@ -35,7 +39,7 @@ namespace Xemio.GameLibrary
         /// </summary>
         static XGL()
         {
-            XGL.Components = new ComponentManager();
+            XGL.Components = new ComponentCatalog();
         }
         #endregion
 
@@ -43,28 +47,21 @@ namespace Xemio.GameLibrary
         /// <summary>
         /// Gets the component manager.
         /// </summary>
-        public static IComponentManager Components { get; set; }
+        public static IComponentCatalog Components { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Configuration"/> is initialized.
         /// </summary>
-        public static XGLState State { get; internal set; }
+        public static EngineState State { get; internal set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Creates a fluent XGL configuration.
-        /// </summary>
-        public static FluentConfigurator Configure()
-        {
-            return new FluentConfigurator();
-        }
-        /// <summary>
         /// Starts the XGL with the specified configuration.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public static void Run<T>() where T : Configuration, new()
+        /// <param name="fluent">The fluent.</param>
+        public static void Run(FluentConfiguration fluent)
         {
-            XGL.Run(new T());
+            XGL.Run(fluent.GetConfiguration());
         }
         /// <summary>
         /// Starts the XGL with the specified configuration.
@@ -72,160 +69,59 @@ namespace Xemio.GameLibrary
         /// <param name="configuration">The configuration.</param>
         public static void Run(Configuration configuration)
         {
-            if (XGL.State == XGLState.Initialized)
+            if (XGL.State == EngineState.Initialized)
             {
-                logger.Warn("XGL has already been configured.");
+                logger.Warn("The library has already been configured.");
                 return;
             }
 
-            XGL.State = XGLState.Initializing;
+            XGL.State = EngineState.Initializing;
+
+            var dependencyManager = new DependencyManager(configuration);
+            foreach (IInstaller installer in configuration.Installers)
+            {
+                installer.SetupDependencies(dependencyManager);
+            }
+
+            dependencyManager.ResolveDependencies();
+
+            var validationManager = new ValidationManager();
+            foreach (IInstaller installer in configuration.Installers)
+            {
+                installer.SetupConditions(validationManager);
+            }
+
+            var scopes = new[] {ValidationScope.Pre, ValidationScope.Install, ValidationScope.Post};
             
-            logger.Info("Preparing for configuration.");
-
-            configuration.RegisterComponents();
-            foreach (IComponent component in configuration.Components)
+            foreach (var scope in scopes)
             {
-                XGL.Components.Add(component);
-            }
-
-            XGL.Initialize(configuration);
-
-            var gameLoop = XGL.Components.Get<IGameLoop>();
-            if (gameLoop != null)
-            {
-                gameLoop.Run();
-            }
-
-            logger.Info("Done loading configuration.");
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private static void Initialize(Configuration configuration)
-        {
-            XGL.InitializeEventSystem(configuration);
-            XGL.InitializeContent(configuration);
-            XGL.InitializeGraphics(configuration);
-            XGL.InitializeGameLoop(configuration);
-            XGL.InitializeInput(configuration);
-            XGL.Components.Construct();
-
-            XGL.InitializeScenes(configuration);
-            XGL.State = XGLState.Initialized;
-        }
-        /// <summary>
-        /// Initializes the event system.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private static void InitializeEventSystem(Configuration configuration)
-        {
-            var eventManager = XGL.Components.Get<IEventManager>();
-            if (eventManager != null)
-            {
-                eventManager.LoadEventsFromAssemblyOf<XGL>();
-            }
-        }
-        /// <summary>
-        /// Initializes the content.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private static void InitializeContent(Configuration configuration)
-        {
-            var content = XGL.Components.Get<ContentManager>();
-            if (content != null)
-            {
-                content.Format = configuration.ContentFormat;
-                if (configuration.ContentTracking == ContentTracking.Enabled)
+                if (scope == ValidationScope.Post)
                 {
-                    content.EnableTracking();
-                }
-            }
-        }
-        /// <summary>
-        /// Initializes the graphics.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private static void InitializeGraphics(Configuration configuration)
-        {
-            if (configuration.GraphicsProvider != null)
-            {
-                logger.Info("Initializing graphics with {0}.", configuration.GraphicsProvider.GetType().Name);
-
-                if (!configuration.GraphicsProvider.IsAvailable())
-                {
-                    throw new InvalidOperationException(
-                        "The selected graphics initializer is unavailable. Maybe your PC doesn't support the selected graphics engine.");
+                    XGL.Components.Construct();
                 }
 
-                logger.Info("Setting display mode to {0}x{1}.", (int)configuration.BackBufferSize.X, (int)configuration.BackBufferSize.Y);
-
-                var graphicsDevice = new GraphicsDevice
+                foreach (IInstaller installer in configuration.Installers)
                 {
-                    DisplayMode = new DisplayMode(configuration.BackBufferSize)
-                };
-
-                graphicsDevice.Initialize(configuration.GraphicsProvider);
-
-                XGL.Components.Add(graphicsDevice);
-            }
-        }
-        /// <summary>
-        /// Initializes the game loop.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private static void InitializeGameLoop(Configuration configuration)
-        {
-            if (configuration.GameLoop != null)
-            {
-                logger.Info("Initializing game loop with {0}fps", configuration.FrameRate);
-                configuration.GameLoop.TargetFrameTime = 1000 / (double)configuration.FrameRate;
-            }
-        }
-        /// <summary>
-        /// Initializes the input.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private static void InitializeInput(Configuration configuration)
-        {
-            var inputManager = XGL.Components.Get<InputManager>();
-
-            if (inputManager != null && configuration.CreatePlayerInput)
-            {
-                PlayerInput playerInput = inputManager.CreatePlayerInput();
-
-                playerInput.Attach(new MouseAdapter());
-                playerInput.Attach(new KeyboardAdapter());
-            }
-        }
-        /// <summary>
-        /// Initializes the scenes.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private static void InitializeScenes(Configuration configuration)
-        {
-            var sceneManager = XGL.Components.Get<SceneManager>();
-
-            if (sceneManager != null)
-            {
-                logger.Info("Initializing scenes. Count: ", configuration.Scenes.Count);
-
-                configuration.RegisterScenes();
-                if (configuration.SplashScreenEnabled)
-                {
-                    logger.Info("Splash screen is enabled. Creating splash screen.");
-
-                    var splashScreen = new SplashScreen(configuration.Scenes);
-                    sceneManager.Add(splashScreen);
-
-                    return;
+                    switch (scope)
+                    {
+                        case ValidationScope.Pre:
+                            installer.PreInstall(configuration, XGL.Components);
+                            break;
+                        case ValidationScope.Install:
+                            installer.Install(configuration, XGL.Components);
+                            break;
+                        case ValidationScope.Post:
+                            installer.PostInstall(configuration, XGL.Components);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
-
-                sceneManager.Add(configuration.Scenes);
+                
+                validationManager.Validate(scope, configuration, XGL.Components);
             }
+
+            XGL.State = EngineState.Initialized;
         }
         #endregion
     }

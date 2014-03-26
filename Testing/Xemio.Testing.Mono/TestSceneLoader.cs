@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Loading;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Game.Scenes.Transitions;
 using Xemio.GameLibrary.Math;
@@ -27,7 +28,7 @@ namespace Xemio.Testing.Mono
         /// Loads the scene content.
         /// </summary>
         /// <param name="loader">The content loader.</param>
-        public override void LoadContent(ContentLoader loader)
+        public override void LoadContent(IContentLoader loader)
         {
             this._font = this.GraphicsDevice.RenderFactory.CreateFont("Arial", 8);
         }
