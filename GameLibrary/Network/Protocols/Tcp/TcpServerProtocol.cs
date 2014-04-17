@@ -60,10 +60,9 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             this._listener.Stop();
         }
         /// <summary>
-        /// Accepts a new connection.
+        /// Accepts a new channel.
         /// </summary>
-        /// <returns></returns>
-        public IServerConnection AcceptConnection()
+        public IServerChannelProtocol AcceptChannel()
         {
             return new TcpServerConnection(this._listener.AcceptTcpClient(), this._delay);
         }

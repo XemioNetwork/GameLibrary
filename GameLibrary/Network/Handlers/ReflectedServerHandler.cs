@@ -23,50 +23,45 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <summary>
         /// Called when a client joined the server.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="connection">The connection.</param>
-        public void OnClientJoined(IServer server, IServerConnection connection)
+        /// <param name="channel">The channel.</param>
+        public void OnChannelOpened(ServerChannel channel)
         {
-            this.Invoke<OnClientJoinedAttribute>(server, connection);
+            this.Invoke<OnClientJoinedAttribute>(channel);
         }
         /// <summary>
         /// Called when a client left the server.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="connection">The connection.</param>
-        public void OnClientLeft(IServer server, IServerConnection connection)
+        /// <param name="channel">The channel.</param>
+        public void OnChannelClosed(ServerChannel channel)
         {
-            this.Invoke<OnClientLeftAttribute>(server, connection);
+            this.Invoke<OnClientLeftAttribute>(channel);
         }
         /// <summary>
         /// Called when the server receives a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        public void OnReceive(IServer server, Package package, IServerConnection sender)
+        /// <param name="package">The package.</param>
+        public void OnReceive(ServerChannel sender, Package package)
         {
-            this.Invoke<OnReceiveAttribute>(method => this.Matches(method, package), server, package, sender);
+            this.Invoke<OnReceiveAttribute>(method => this.Matches(method, package), sender, package);
         }
         /// <summary>
         /// Called when the server is sending a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public void OnSending(IServer server, Package package, IServerConnection receiver)
+        /// <param name="package">The package.</param>
+        public void OnSending(ServerChannel receiver, Package package)
         {
-            this.Invoke<OnSendingAttribute>(method => this.Matches(method, package), server, package, receiver);
+            this.Invoke<OnSendingAttribute>(method => this.Matches(method, package), receiver, package);
         }
         /// <summary>
         /// Called when the server sent a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public void OnSent(IServer server, Package package, IServerConnection receiver)
+        /// <param name="package">The package.</param>
+        public void OnSent(ServerChannel receiver, Package package)
         {
-            this.Invoke<OnSentAttribute>(method => this.Matches(method, package), server, package, receiver);
+            this.Invoke<OnSentAttribute>(method => this.Matches(method, package), receiver, package);
         }
         #endregion
     }

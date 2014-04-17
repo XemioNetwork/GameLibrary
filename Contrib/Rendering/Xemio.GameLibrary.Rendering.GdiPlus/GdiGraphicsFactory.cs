@@ -37,7 +37,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// Creates the texture writer.
         /// </summary>
         /// <returns></returns>
-        public IWriter CreateTextureWriter()
+        public IContentWriter CreateTextureWriter()
         {
             return new GdiTextureWriter();
         }
@@ -45,7 +45,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// Creates the texture reader.
         /// </summary>
         /// <returns></returns>
-        public IReader CreateTextureReader()
+        public IContentReader CreateTextureReader()
         {
             return new GdiTextureReader();
         }

@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Content.Texts
         protected abstract void Write(Stream stream, StringBuilder builder, T value);
         #endregion
 
-        #region Overrides of Reader<T>, Writer<T>
+        #region Overrides of ContentReader<T>, ContentWriter<T>
         /// <summary>
         /// Reads an instance.
         /// </summary>

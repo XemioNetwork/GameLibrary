@@ -7,37 +7,44 @@ namespace Xemio.GameLibrary.Common.Threads
     {
         #region Fields
         private bool _running;
-        private Task _task;
         private readonly CancellationTokenSource _source;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Worker"/> class.
+        /// Initializes a new instance of the <see cref="Worker" /> class.
         /// </summary>
-        protected Worker()
+        /// <param name="behavior">The behavior.</param>
+        protected Worker(ThreadStartBehavior behavior)
         {
             this._source = new CancellationTokenSource();
+            if (behavior == ThreadStartBehavior.AutoStart)
+            {
+                this.Start();
+            }
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets a value indicating whether this worker is running.
+        /// </summary>
+        public bool IsRunning
+        {
+            get { return this._running && this._source.IsCancellationRequested == false; }
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Determines whether this worker is running.
-        /// </summary>
-        public bool IsRunning()
-        {
-            return this._running && this._source.IsCancellationRequested == false;
-        }
-        /// <summary>
         /// Starts this worker.
         /// </summary>
         public virtual void Start()
         {
-            if (!this.IsRunning())
+            if (!this.IsRunning)
             {
                 this._running = true;
-                this._task = Task.Factory.StartNew(this.Run, this._source.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+                Task.Factory.StartNew(this.Run, this._source.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
         }
         /// <summary>
@@ -45,7 +52,7 @@ namespace Xemio.GameLibrary.Common.Threads
         /// </summary>
         public virtual void Interrupt()
         {
-            if (this.IsRunning())
+            if (this.IsRunning)
             {
                 this._running = false;
                 this._source.Cancel(false);

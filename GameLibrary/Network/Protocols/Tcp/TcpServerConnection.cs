@@ -13,7 +13,7 @@ using Xemio.GameLibrary.Network.Protocols.Streamed;
 
 namespace Xemio.GameLibrary.Network.Protocols.Tcp
 {
-    public class TcpServerConnection : StreamedServerConnection
+    public class TcpServerConnection : StreamedServerChannelProtocol
     {
         #region Constructors
         /// <summary>
@@ -56,7 +56,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             get { return this._address; }
         }
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IServerConnection"/> is connected.
+        /// Gets a value indicating whether this <see cref="IServerChannel"/> is connected.
         /// </summary>
         public override bool Connected
         {
@@ -65,7 +65,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
         /// <summary>
         /// Disconnects the client.
         /// </summary>
-        public override void Disconnect()
+        public override void Close()
         {
             this._tcpClient.Close();
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Xemio.GameLibrary.Config.Installers;
+using Xemio.GameLibrary.Config.Installation;
 
 namespace Xemio.GameLibrary.Config.Dependencies
 {

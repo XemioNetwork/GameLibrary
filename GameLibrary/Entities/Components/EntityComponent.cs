@@ -20,31 +20,38 @@ namespace Xemio.GameLibrary.Entities.Components
         /// Attaches the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public void Attach(Entity entity)
+        public void AttachToEntity(Entity entity)
         {
             this.Entity = entity;
+            this.Entity.Components.Add(this);
+
             this.OnAttached(entity);
         }
         /// <summary>
         /// Detaches the specified entity.
         /// </summary>
-        public void Detach()
+        public void RemoveFromEntity()
         {
             if (this.Entity != null)
             {
                 Entity entity = this.Entity;
 
+                this.Entity.Components.Remove(this);
                 this.Entity = null;
+
                 this.OnDetached(entity);
             }
         }
         /// <summary>
-        /// Gets the entity.
+        /// Converts the entity to the specified type.
         /// </summary>
-        protected T GetEntity<T>() where T : Entity
+        protected T EntityAs<T>() where T : Entity
         {
             return this.Entity as T;
         }
+        #endregion
+
+        #region Event Methods
         /// <summary>
         /// Called when the component got attached to an entity.
         /// </summary>

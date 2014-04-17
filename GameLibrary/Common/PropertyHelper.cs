@@ -15,7 +15,7 @@ namespace Xemio.GameLibrary.Common
         /// <param name="expression">The expression.</param>
         /// <exception cref="System.ArgumentException">
         /// </exception>
-        public static PropertyInfo GetProperty<TInstance, TProperty>(Expression<Func<TInstance, TProperty>> expression)
+        public static PropertyInfo ToProperty<TInstance, TProperty>(Expression<Func<TInstance, TProperty>> expression)
         {
             Type type = typeof(TProperty);
 

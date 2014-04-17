@@ -13,35 +13,30 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <summary>
         /// Called when the server receives a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        void OnReceive(IServer server, Package package, IServerConnection sender);
+        /// <param name="package">The package.</param>
+        void OnReceive(ServerChannel sender, Package package);
         /// <summary>
         /// Called when the server is sending a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void OnSending(IServer server, Package package, IServerConnection receiver);
+        /// <param name="package">The package.</param>
+        void OnSending(ServerChannel receiver, Package package);
         /// <summary>
         /// Called when the server sent a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void OnSent(IServer server, Package package, IServerConnection receiver);
+        /// <param name="package">The package.</param>
+        void OnSent(ServerChannel receiver, Package package);
         /// <summary>
         /// Called when a client joined the server.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="connection">The connection.</param>
-        void OnClientJoined(IServer server, IServerConnection connection);
+        /// <param name="channel">The connection.</param>
+        void OnChannelOpened(ServerChannel channel);
         /// <summary>
         /// Called when a client left the server.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="connection">The connection.</param>
-        void OnClientLeft(IServer server, IServerConnection connection);
+        /// <param name="channel">The connection.</param>
+        void OnChannelClosed(ServerChannel channel);
     }
 }

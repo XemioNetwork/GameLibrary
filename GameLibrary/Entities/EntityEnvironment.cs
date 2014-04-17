@@ -25,7 +25,7 @@ namespace Xemio.GameLibrary.Entities
         public EntityEnvironment()
         {
             this._guidMappings = new Dictionary<Guid, Entity>();
-            this.Entities = new ProtectedList<Entity>();
+            this.Entities = new AutoProtectedList<Entity>();
         }
         #endregion
 
@@ -35,16 +35,20 @@ namespace Xemio.GameLibrary.Entities
 
         #region Properties
         /// <summary>
+        /// Gets the systems.
+        /// </summary>
+        protected ProtectedList<EntitySystem> Systems { get; private set; } 
+        /// <summary>
+        /// Gets the entities.
+        /// </summary>
+        protected ProtectedList<Entity> Entities { get; private set; }
+        /// <summary>
         /// Gets the entity count.
         /// </summary>
         public int Count
         {
             get { return this.Entities.Count; }
         }
-        /// <summary>
-        /// Gets the entities.
-        /// </summary>
-        protected ProtectedList<Entity> Entities { get; private set; }
         /// <summary>
         /// Gets the <see cref="Xemio.GameLibrary.Entities.Entity"/> at the specified index.
         /// </summary>
@@ -74,13 +78,31 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         public virtual void Add(Entity entity)
         {
-            logger.Trace("Added entity {0} to entity environment.", entity.GetType().Name);
-
-            entity.Environment = this;
+            logger.Trace("Added entity {0} to entity environment.", entity);
             entity.Initialize(this);
 
-            this._guidMappings.Add(entity.Guid, entity);
+            this._guidMappings[entity.Guid] = entity;
             this.Entities.Add(entity);
+        }
+        /// <summary>
+        /// Adds the specified system.
+        /// </summary>
+        /// <param name="system">The system.</param>
+        public virtual void Add(EntitySystem system)
+        {
+            logger.Trace("Added systen {0} to entity environment.", system);
+            system.Initialize(this);
+
+            this.Systems.Add(system);
+        }
+
+        /// <summary>
+        /// Removes the entity identified by the specified unique identifier.
+        /// </summary>
+        /// <param name="guid">The unique identifier.</param>
+        public void Remove(Guid guid)
+        {
+            this.Remove(this.GetEntity(guid));
         }
         /// <summary>
         /// Removes the specified entity.
@@ -88,12 +110,28 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="entity">The entity.</param>
         public virtual void Remove(Entity entity)
         {
-            logger.Trace("Removed entity {0} from entity environment.", entity.GetType().Name);
-
-            entity.Environment = null;
+            logger.Trace("Removed entity {0} from entity environment.", entity);
 
             this._guidMappings.Remove(entity.Guid);
             this.Entities.Remove(entity);
+        }
+        /// <summary>
+        /// Removes the specified system.
+        /// </summary>
+        /// <param name="system">The system.</param>
+        public virtual void Remove(EntitySystem system)
+        {
+            logger.Trace("Removed system {0} from entity environment.", system);
+
+            this.Systems.Remove(system);
+        }
+        /// <summary>
+        /// Creates a new entity system of the specified type.
+        /// </summary>
+        /// <typeparam name="T">The system type.</typeparam>
+        public void CreateSystem<T>() where T : EntitySystem, new()
+        {
+            this.Add(new T());
         }
         /// <summary>
         /// Clears this instance.
@@ -113,7 +151,7 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Sorts the entities.
         /// </summary>
-        protected virtual IEnumerable<Entity> AsSortedEntityCollection()
+        protected virtual IEnumerable<Entity> SortEntities()
         {
             return this.Entities;
         }
@@ -126,16 +164,18 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="elapsed">The elapsed.</param>
         public virtual void Tick(float elapsed)
         {
-            using (this.Entities.Protect())
-            { 
-                foreach (Entity entity in this.Entities)
+            foreach (Entity entity in this.Entities)
+            {
+                entity.Tick(elapsed);
+                if (entity.IsDestroyed)
                 {
-                    entity.Tick(elapsed);
-                    if (entity.IsDestroyed)
-                    {
-                        this.Remove(entity);
-                    }
+                    this.Remove(entity);
                 }
+            }
+
+            foreach (EntitySystem system in this.Systems)
+            {
+                system.Tick(elapsed);
             }
         }
         /// <summary>
@@ -143,15 +183,14 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public virtual void Render()
         {
-            var entities = this.AsSortedEntityCollection();
+            foreach (EntitySystem system in this.Systems) 
+                system.PreRender();
 
-            using (this.Entities.Protect())
-            { 
-                foreach (Entity entity in entities)
-                {
-                    entity.Render();
-                }
-            }
+            foreach (Entity entity in this.SortEntities())
+                entity.Render();
+
+            foreach (EntitySystem system in this.Systems)
+                system.PostRender();
         }
         #endregion
 
@@ -161,7 +200,7 @@ namespace Xemio.GameLibrary.Entities
         /// </summary>
         public IEnumerator<Entity> GetEnumerator()
         {
-            return this.AsSortedEntityCollection().GetEnumerator();
+            return this.SortEntities().GetEnumerator();
         }
         /// <summary>
         /// Gets the enumerator.

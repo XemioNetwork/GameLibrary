@@ -14,24 +14,24 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// Called when the client connection got disconnected.
         /// </summary>
         /// <param name="client">The client.</param>
-        void OnDisconnected(IClient client);
+        void OnLostConnection(Client client);
         /// <summary>
         /// Called when a package arrives.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void OnReceive(IClient client, Package package);
+        void OnReceive(Client client, Package package);
         /// <summary>
         /// Called when a package is being sent.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void OnSending(IClient client, Package package);
+        void OnSending(Client client, Package package);
         /// <summary>
         /// Called when a package was sent.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void OnSent(IClient client, Package package);
+        void OnSent(Client client, Package package);
     }
 }

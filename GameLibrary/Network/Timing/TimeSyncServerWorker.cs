@@ -11,7 +11,7 @@ namespace Xemio.GameLibrary.Network.Timing
     public class TimeSyncServerWorker : Worker
     {
         #region Fields
-        private readonly IServer _server;
+        private readonly Server _server;
         private readonly int _syncInterval;
         #endregion
 
@@ -21,7 +21,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// </summary>
         /// <param name="server">The server.</param>
         /// <param name="syncInterval">The synchronize interval.</param>
-        public TimeSyncServerWorker(IServer server, int syncInterval)
+        public TimeSyncServerWorker(Server server, int syncInterval) : base(ThreadStartBehavior.AutoStart)
         {
             this._server = server;
             this._syncInterval = syncInterval;
@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Network.Timing
         /// </summary>
         protected override void Run()
         {
-            while (this.IsRunning())
+            while (this.IsRunning)
             {
                 var syncPackage = new TimeSyncPackage();
                 this._server.Send(syncPackage);

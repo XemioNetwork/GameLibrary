@@ -19,7 +19,7 @@ namespace Xemio.GameLibrary.Rendering.Surfaces
         /// <param name="height">The height.</param>
         public WindowSurface(int width, int height)
         {
-            Form form = new Form
+            var form = new Form
                             {
                                 ClientSize = new Size(width, height),
                                 Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location),
@@ -43,7 +43,7 @@ namespace Xemio.GameLibrary.Rendering.Surfaces
         /// <summary>
         /// Gets the handle.
         /// </summary>
-        public IntPtr Handle { get; private set; }
+        public IntPtr Handle { get; set; }
         /// <summary>
         /// Gets the control.
         /// </summary>

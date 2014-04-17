@@ -36,8 +36,7 @@ namespace Xemio.Testing.ReactiveExtensions
 
             var gameLoop = new GameLoop
             {
-                TargetFrameTime = 1000f/60f,
-                Precision = PrecisionLevel.Highest
+                TargetFrameTime = 1000f/60f
             };
 
             gameLoop.Construct();

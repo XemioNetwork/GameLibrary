@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Texts
 {
-    public abstract class TextWriter<T> : Writer<T>
+    public abstract class TextContentWriter<T> : ContentWriter<T>
     {
         #region Properties
         /// <summary>
@@ -28,7 +28,7 @@ namespace Xemio.GameLibrary.Content.Texts
         protected abstract void Write(StringBuilder builder, T value);
         #endregion
 
-        #region Overrides of Writer<T>
+        #region Overrides of ContentWriter<T>
         /// <summary>
         /// Writes the specified value.
         /// </summary>

@@ -36,6 +36,7 @@ namespace Xemio.GameLibrary.Events
         /// <param name="error">The error.</param>
         public void OnError(Exception error)
         {
+            throw error;
         }
         /// <summary>
         /// Called when an event instance arrives.

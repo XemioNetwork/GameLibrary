@@ -37,7 +37,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="name">The name.</param>
         public void OnChanged(string fullPath, string name)
         {
-            this._contentManager.Unload(fullPath);
+            this._contentManager.Cache.Evict(fullPath);
         }
         /// <summary>
         /// Called when a file system entry was created.
@@ -46,7 +46,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="name">The name.</param>
         public void OnCreated(string fullPath, string name)
         {
-            this._contentManager.Unload(fullPath);
+            this._contentManager.Cache.Evict(fullPath);
         }
         /// <summary>
         /// Called when a file system entry was deleted.
@@ -55,7 +55,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="name">The name.</param>
         public void OnDeleted(string fullPath, string name)
         {
-            if (this._contentManager.IsCached(fullPath))
+            if (this._contentManager.Cache.Contains(fullPath))
             {
                 logger.Warn("File [{0}] was deleted. Keeping old reference to prevent unavailable resource exceptions.");
             }

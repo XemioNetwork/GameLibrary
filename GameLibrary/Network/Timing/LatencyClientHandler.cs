@@ -20,10 +20,10 @@ namespace Xemio.GameLibrary.Network.Timing
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public override void OnReceive(IClient client, LatencyPackage package)
+        public override void OnReceive(Client client, LatencyPackage package)
         {
             logger.Debug("Received latency information: {0}ms", package.Latency);
-            client.Latency = package.Latency;
+            client.Store(new LatencyInformation(package.Latency));
         }
         #endregion
     }

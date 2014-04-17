@@ -23,7 +23,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// Called when the client connection got disconnected.
         /// </summary>
         /// <param name="client">The client.</param>
-        public void OnDisconnected(IClient client)
+        public void OnLostConnection(Client client)
         {
             this.Invoke<OnDisconnectedAttribute>(client);
         }
@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public void OnReceive(IClient client, Package package)
+        public void OnReceive(Client client, Package package)
         {
             this.Invoke<OnReceiveAttribute>(method => this.Matches(method, package), client, package);
         }
@@ -41,7 +41,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public void OnSending(IClient client, Package package)
+        public void OnSending(Client client, Package package)
         {
             this.Invoke<OnSendingAttribute>(method => this.Matches(method, package), client, package);
         }
@@ -50,7 +50,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public void OnSent(IClient client, Package package)
+        public void OnSent(Client client, Package package)
         {
             this.Invoke<OnSendingAttribute>(method => this.Matches(method, package), client, package);
         }

@@ -11,6 +11,15 @@ namespace Xemio.GameLibrary.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionDisposable"/> class.
         /// </summary>
+        /// <param name="preAction">The pre action.</param>
+        /// <param name="postAction">The post action.</param>
+        public ActionDisposable(Action preAction, Action postAction) : this(postAction)
+        {
+            preAction();
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActionDisposable"/> class.
+        /// </summary>
         /// <param name="method">The method.</param>
         public ActionDisposable(Action method)
         {
@@ -32,6 +41,23 @@ namespace Xemio.GameLibrary.Common
         public static IDisposable Empty
         {
             get { return new ActionDisposable(() => { }); }
+        }
+        #endregion
+
+        #region Static Methods
+        /// <summary>
+        /// Combines the specified actions.
+        /// </summary>
+        /// <param name="actions">The actions.</param>
+        public static ActionDisposable Combine(params Action[] actions)
+        {
+            return new ActionDisposable(() =>
+            {
+                foreach (Action action in actions)
+                {
+                    action();
+                }
+            });
         }
         #endregion
 

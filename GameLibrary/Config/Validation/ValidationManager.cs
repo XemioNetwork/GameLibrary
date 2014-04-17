@@ -55,69 +55,39 @@ namespace Xemio.GameLibrary.Config.Validation
         /// Specifies a condition that should be fulfilled.
         /// </summary>
         /// <param name="validator">The validator.</param>
-        public void Condition(IValidator validator)
+        /// <param name="scope">The scope.</param>
+        public void Condition(IValidator validator, ValidationScope scope)
         {
-            this._validators.Add(new ValidationEntry(validator));
+            this._validators.Add(new ValidationEntry(validator, scope));
         }
         /// <summary>
         /// Specifies a condition that should be fulfilled.
         /// </summary>
         /// <param name="validator">The validator.</param>
         /// <param name="errorMessage">The error error message.</param>
-        public void Condition(IValidator validator, string errorMessage)
+        /// <param name="scope">The scope.</param>
+        public void Condition(IValidator validator, string errorMessage, ValidationScope scope)
         {
-            this._validators.Add(new ValidationEntry(validator, errorMessage));
-        }
-        /// <summary>
-        /// Specifies a condition that should not be fulfilled.
-        /// </summary>
-        /// <param name="validator">The validator.</param>
-        public void Not(IValidator validator)
-        {
-            this.Condition(new InversiveValidator(validator));
-        }
-        /// <summary>
-        /// Specifies a condition that should not be fulfilled.
-        /// </summary>
-        /// <param name="validator">The validator.</param>
-        /// <param name="errorMessage">The error message.</param>
-        public void Not(IValidator validator, string errorMessage)
-        {
-            this.Condition(new InversiveValidator(validator), errorMessage);
+            this._validators.Add(new ValidationEntry(validator, errorMessage, scope));
         }
         /// <summary>
         /// Specifies a condition that should be fulfilled.
         /// </summary>
         /// <param name="function">The function.</param>
-        public void Condition(Expression<Func<Configuration, IComponentCatalog, bool>> function)
+        /// <param name="scope">The scope.</param>
+        public void Condition(Expression<Func<Configuration, IComponentCatalog, bool>> function, ValidationScope scope)
         {
-            this.Condition(new FunctionValidator(function));
+            this.Condition(new FunctionValidator(function), scope);
         }
         /// <summary>
         /// Specifies a condition that should be fulfilled.
         /// </summary>
         /// <param name="function">The function.</param>
         /// <param name="errorMessage">The error message.</param>
-        public void Condition(Expression<Func<Configuration, IComponentCatalog, bool>> function, string errorMessage)
+        /// <param name="scope">The scope.</param>
+        public void Condition(Expression<Func<Configuration, IComponentCatalog, bool>> function, string errorMessage, ValidationScope scope)
         {
-            this.Condition(new FunctionValidator(function), errorMessage);
-        }
-        /// <summary>
-        /// Specifies a condition that should not be fulfilled.
-        /// </summary>
-        /// <param name="function">The function.</param>
-        public void Not(Expression<Func<Configuration, IComponentCatalog, bool>> function)
-        {
-            this.Not(new FunctionValidator(function));
-        }
-        /// <summary>
-        /// Specifies a condition that should not be fulfilled.
-        /// </summary>
-        /// <param name="function">The function.</param>
-        /// <param name="errorMessage">The error message.</param>
-        public void Not(Expression<Func<Configuration, IComponentCatalog, bool>> function, string errorMessage)
-        {
-            this.Not(new FunctionValidator(function), errorMessage);
+            this.Condition(new FunctionValidator(function), errorMessage, scope);
         }
         #endregion
     }

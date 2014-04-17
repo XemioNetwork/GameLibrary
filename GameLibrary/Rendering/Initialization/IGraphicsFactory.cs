@@ -17,11 +17,11 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <summary>
         /// Gets the texture writer.
         /// </summary>
-        IWriter CreateTextureWriter();
+        IContentWriter CreateTextureWriter();
         /// <summary>
         /// Gets the texture reader.
         /// </summary>
-        IReader CreateTextureReader();
+        IContentReader CreateTextureReader();
         /// <summary>
         /// Gets the render manager.
         /// </summary>

@@ -12,14 +12,14 @@ namespace Xemio.GameLibrary.Rendering.Initialization.Default
         /// <summary>
         /// Gets the texture writer.
         /// </summary>
-        public IWriter CreateTextureWriter()
+        public IContentWriter CreateTextureWriter()
         {
             return new NullTextureWriter();
         }
         /// <summary>
         /// Gets the texture reader.
         /// </summary>
-        public IReader CreateTextureReader()
+        public IContentReader CreateTextureReader()
         {
             return new NullTextureReader();
         }

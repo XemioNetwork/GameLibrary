@@ -21,16 +21,16 @@ namespace Xemio.GameLibrary.Common.Collections
         /// Removes an item by a specified type.
         /// </summary>
         /// <typeparam name="TItem">The type of the item.</typeparam>
-        void Remove<TItem>() where TItem : class, T;
+        void Remove<TItem>() where TItem : T;
         /// <summary>
         /// Gets an item by a specified type.
         /// </summary>
         /// <typeparam name="TItem">The type of the item.</typeparam>
-        TItem Get<TItem>() where TItem : class, T;
+        TItem Get<TItem>() where TItem : T;
         /// <summary>
         /// Requires the specified item. Throws an exception, if it does not exist.
         /// </summary>
         /// <typeparam name="TItem">The type of the item.</typeparam>
-        TItem Require<TItem>() where TItem : class, T;
+        TItem Require<TItem>() where TItem : T;
     }
 }

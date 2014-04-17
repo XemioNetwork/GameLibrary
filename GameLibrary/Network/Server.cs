@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 using Xemio.GameLibrary.Common;
@@ -15,10 +16,9 @@ using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Network.Events;
 using Xemio.GameLibrary.Events;
 using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Network.Events.Server;
+using Xemio.GameLibrary.Network.Events.Servers;
 using Xemio.GameLibrary.Network.Handlers;
 using Xemio.GameLibrary.Network.Intercetors;
-using Xemio.GameLibrary.Network.Internal;
 using Xemio.GameLibrary.Network.Packages;
 using Xemio.GameLibrary.Network.Timing;
 using Xemio.GameLibrary.Network.Protocols;
@@ -26,7 +26,7 @@ using Xemio.GameLibrary.Game;
 
 namespace Xemio.GameLibrary.Network
 {
-    public class Server : IServer, IComponent
+    public class Server : IDisposable
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -48,187 +48,260 @@ namespace Xemio.GameLibrary.Network
             
             this.Protocol = ProtocolFactory.CreateServerProtocol(url);
             this.Protocol.Server = this;
-            
-            this._connectionManager = new ServerConnectionManager(this);
-            this._connectionManager.Start();
+
+            this.Connections = new AutoProtectedList<ServerChannel>();
+            this.MaxConnections = -1;
 
             this.Subscribe(new TimeSyncServerHandler(this));
+            this.SetupEvents();
+
+            Task.Factory.StartNew(
+                this.AcceptClients, 
+                CancellationToken.None,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
         }
         #endregion
 
         #region Fields
-        private readonly ServerConnectionManager _connectionManager;
-
         private readonly List<IServerHandler> _handlers;
-        private readonly List<IServerInterceptor> _interceptors; 
+        private readonly List<IServerInterceptor> _interceptors;
+
+        private IDisposable _eventDisposable;
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the protocol.
         /// </summary>
-        public IServerProtocol Protocol { get; private set; }
-        /// <summary>
-        /// Gets the event manager.
-        /// </summary>
-        protected IEventManager EventManager
-        {
-            get { return XGL.Components.Get<IEventManager>(); }
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Handles an event.
-        /// </summary>
-        /// <param name="evt">The evt.</param>
-        /// <param name="handlers">The handlers.</param>
-        /// <param name="interceptorAction">The interceptor action.</param>
-        /// <param name="handlerAction">The handler action.</param>
-        private bool HandleEvent(ICancelableEvent evt, IEnumerable<IServerHandler> handlers, Action<IServerInterceptor> interceptorAction, Action<IServerHandler> handlerAction)
-        {
-            foreach (IServerInterceptor interceptor in this._interceptors)
-            {
-                interceptorAction(interceptor);
-            }
-
-            if (!evt.IsCanceled)
-            {
-                foreach (IServerHandler subscriber in handlers)
-                {
-                    handlerAction(subscriber);
-                }
-
-                this.EventManager.Publish(evt);
-            }
-
-            return !evt.IsCanceled;
-        }
-        /// <summary>
-        /// Called when the server received a package.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        /// <param name="connection">The connection.</param>
-        public virtual void OnReceivePackage(Package package, IServerConnection connection)
-        {
-            var evt = new ServerReceivedPackageEvent(this, package, connection);
-
-            this.HandleEvent(
-                evt, this.GetSubscribers(package),
-                interceptor => interceptor.InterceptReceived(evt),
-                subscriber => subscriber.OnReceive(this, package, connection));
-        }
-        /// <summary>
-        /// Called when server is sending a package.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        /// <param name="connection">The connection.</param>
-        public virtual bool OnSendingPackage(Package package, IServerConnection connection)
-        {
-            var evt = new ServerSendingPackageEvent(this, package, connection);
-
-            return this.HandleEvent(
-                evt, this.GetSubscribers(package),
-                interceptor => interceptor.InterceptSending(evt),
-                subscriber => subscriber.OnSending(this, package, connection));
-        }
-        /// <summary>
-        /// Called when server sent a package.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        /// <param name="connection">The connection.</param>
-        public virtual void OnSentPackage(Package package, IServerConnection connection)
-        {
-            var evt = new ServerSentPackageEvent(this, package, connection);
-
-            this.HandleEvent(
-                evt, this.GetSubscribers(package),
-                interceptor => interceptor.InterceptSent(evt),
-                subscriber => subscriber.OnSent(this, package, connection));
-        }
-        /// <summary>
-        /// Called when a client joined the server.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        public virtual bool OnClientJoined(IServerConnection connection)
-        {
-            logger.Info("Client {0} joined.", connection.Address);
-
-            var evt = new ClientJoinedEvent(this, connection);
-
-            return this.HandleEvent(
-                evt, this._handlers,
-                interceptor => interceptor.InterceptClientJoined(evt),
-                subscriber => subscriber.OnClientJoined(this, connection));
-        }
-        /// <summary>
-        /// Called when a client left the server.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        public virtual void OnClientLeft(IServerConnection connection)
-        {
-            logger.Info("Client {0} disconnected.", connection.Address);
-
-            var evt = new ClientLeftEvent(this, connection);
-
-            this.HandleEvent(
-                evt, this._handlers,
-                interceptor => interceptor.InterceptClientLeft(evt),
-                subscriber => subscriber.OnClientLeft(this, connection));
-        }
-        /// <summary>
-        /// Accepts the connection.
-        /// </summary>
-        public virtual IServerConnection AcceptConnection()
-        {
-            return this.Protocol.AcceptConnection();
-        }
-        /// <summary>
-        /// Gets the subscribers.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        private IEnumerable<IServerHandler> GetSubscribers(Package package)
-        {
-            return this._handlers.Where(s => s.PackageType.IsInstanceOfType(package));
-        }
-        #endregion
-        
-        #region Implementation of IServer
+        internal IServerProtocol Protocol { get; private set; }
         /// <summary>
         /// Gets the connections.
         /// </summary>
-        public IList<IServerConnection> Connections
-        {
-            get { return this._connectionManager.Connections; }
-        }
+        public IList<ServerChannel> Connections { get; private set; }
+        /// <summary>
+        /// Gets or sets the maximum connections. Set it to -1 to disable the limitation.
+        /// </summary>
+        public int MaxConnections { get; set; }
         /// <summary>
         /// Gets a value indicating whether the server is alive.
         /// </summary>
         public bool Connected { get; private set; }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Gets the subscribers for the specified package.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        private IEnumerable<IServerHandler> FindSubscribers(Package package)
+        {
+            return this._handlers.Where(s => s.PackageType.IsInstanceOfType(package));
+        }
+        /// <summary>
+        /// Accepts incoming connect requests.
+        /// </summary>
+        private void AcceptClients()
+        {
+            var eventManager = XGL.Components.Require<IEventManager>();
+
+            while (this.Connected)
+            {
+                ServerChannel channel = this.AcceptChannel();
+                
+                var channelEvent = new ChannelOpenedEvent(channel);
+                eventManager.Publish(channelEvent);
+
+                if (this.Connections.Count == this.MaxConnections || channelEvent.IsCanceled)
+                {
+                    channel.Close();
+                    continue;
+                }
+
+                lock (this.Connections)
+                {
+                    this.Connections.Add(channel);
+                }
+            }
+        }
+        #endregion
+
+        #region Private Event Methods
+        /// <summary>
+        /// Sets up event handlers for server events.
+        /// </summary>
+        private void SetupEvents()
+        {
+            var eventManager = XGL.Components.Require<IEventManager>();
+
+            this._eventDisposable = Disposable.Combine(
+                eventManager.Subscribe<ServerReceivedPackageEvent>(this.InterceptServerReceivedPackage),
+                eventManager.Subscribe<ServerSendingPackageEvent>(this.InterceptServerSendingPackage),
+                eventManager.Subscribe<ServerSentPackageEvent>(this.InterceptServerSentPackage),
+                eventManager.Subscribe<ChannelClosedEvent>(this.InterceptChannelClosedEvent),
+                eventManager.Subscribe<ChannelOpenedEvent>(this.InterceptChannelOpened),
+
+                eventManager.Subscribe<ServerReceivedPackageEvent>(this.HandleServerReceivedPackage),
+                eventManager.Subscribe<ServerSendingPackageEvent>(this.HandleServerSendingPackage),
+                eventManager.Subscribe<ServerSentPackageEvent>(this.HandleServerSentPackage),
+                eventManager.Subscribe<ChannelClosedEvent>(this.HandleChannelClosed),
+                eventManager.Subscribe<ChannelOpenedEvent>(this.HandleChannelOpened));
+        }
+        /// <summary>
+        /// Intercepts the specified event.
+        /// </summary>
+        /// <param name="intercept">The intercept method.</param>
+        private void Intercept(Action<IServerInterceptor> intercept)
+        {
+            foreach (IServerInterceptor interceptor in this._interceptors)
+            {
+                intercept(interceptor);
+            }
+        }
+        /// <summary>
+        /// Processes the specified event.
+        /// </summary>
+        /// <param name="handlers">The handlers.</param>
+        /// <param name="handle">The handler action.</param>
+        private void Handle(IEnumerable<IServerHandler> handlers, Action<IServerHandler> handle)
+        {
+            foreach (IServerHandler handler in handlers)
+            {
+                handle(handler);
+            }
+        }
+        /// <summary>
+        /// Intercepts the server received package.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void InterceptServerReceivedPackage(ServerReceivedPackageEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Intercept(interceptor => interceptor.InterceptReceived(evt));
+            }
+        }
+        /// <summary>
+        /// Intercepts the server sending package.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void InterceptServerSendingPackage(ServerSendingPackageEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Intercept(interceptor => interceptor.InterceptSending(evt));
+            }
+        }
+        /// <summary>
+        /// Intercepts the server sent package.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void InterceptServerSentPackage(ServerSentPackageEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Intercept(interceptor => interceptor.InterceptSent(evt));
+            }
+        }
+        /// <summary>
+        /// Intercepts the channel closed event.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void InterceptChannelClosedEvent(ChannelClosedEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Intercept(interceptor => interceptor.InterceptChannelClosed(evt));
+            }
+        }
+        /// <summary>
+        /// Intercepts the channel opened.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void InterceptChannelOpened(ChannelOpenedEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Intercept(interceptor => interceptor.InterceptChannelOpened(evt));
+            }
+        }
+        /// <summary>
+        /// Handles the server received package.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void HandleServerReceivedPackage(ServerReceivedPackageEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Handle(this.FindSubscribers(evt.Package), handler => handler.OnReceive(evt.Channel, evt.Package));
+            }
+        }
+        /// <summary>
+        /// Handles the server sending package.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void HandleServerSendingPackage(ServerSendingPackageEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Handle(this.FindSubscribers(evt.Package), handler => handler.OnSending(evt.Channel, evt.Package));
+            }
+        }
+        /// <summary>
+        /// Handles the server sent package.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void HandleServerSentPackage(ServerSentPackageEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Handle(this.FindSubscribers(evt.Package), handler => handler.OnSent(evt.Channel, evt.Package));
+            }
+        }
+        /// <summary>
+        /// Handles the channel closed.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void HandleChannelClosed(ChannelClosedEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Handle(this._handlers, handler => handler.OnChannelClosed(evt.Channel));
+            }
+        }
+        /// <summary>
+        /// Handles the channel opened.
+        /// </summary>
+        /// <param name="evt">The evt.</param>
+        private void HandleChannelOpened(ChannelOpenedEvent evt)
+        {
+            if (evt.Channel.Server == this)
+            {
+                this.Handle(this._handlers, handler => handler.OnChannelOpened(evt.Channel));
+            }
+        }
+        #endregion
+
+        #region Protected Methods
+        /// <summary>
+        /// Accepts a new server channel.
+        /// </summary>
+        protected virtual ServerChannel AcceptChannel()
+        {
+            return new ServerChannel(this, this.Protocol.AcceptChannel());
+        }
+        #endregion
+        
+        #region Implementation of ISender
         /// <summary>
         /// Sends the specified package to all clients.
         /// </summary>
         /// <param name="package">The package.</param>
         public void Send(Package package)
         {
-            foreach (IServerConnection connection in this.Connections)
+            foreach (ServerChannel channel in this.Connections)
             {
-                this.Send(package, connection);
-            }
-        }
-        /// <summary>
-        /// Sends the specified package to the specified receiver.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        /// <param name="receiver">The receiver.</param>
-        public void Send(Package package, IServerConnection receiver)
-        {
-            logger.Trace("Sending {0} to {1}.", package.GetType().Name, receiver.Address);
-
-            if (this.OnSendingPackage(package, receiver))
-            {
-                this._connectionManager.Enqueue(receiver, package);
-                this.OnSentPackage(package, receiver);
+                channel.Send(package);
             }
         }
         /// <summary>
@@ -268,10 +341,23 @@ namespace Xemio.GameLibrary.Network
         /// </summary>
         public void Close()
         {
-            this._connectionManager.Interrupt();
-
             this.Protocol.Close();
             this.Connected = false;
+        }
+        #endregion
+
+        #region Implementation of IDisposable
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (this.Connected)
+            {
+                this.Close();
+            }
+
+            this._eventDisposable.Dispose();
         }
         #endregion
     }

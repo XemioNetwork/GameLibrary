@@ -10,7 +10,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// Called when the client connection got disconnected.
         /// </summary>
         /// <param name="client">The client.</param>
-        public virtual void OnDisconnected(IClient client)
+        public virtual void OnLostConnection(Client client)
         {
         }
         /// <summary>
@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public virtual void OnReceive(IClient client, T package)
+        public virtual void OnReceive(Client client, T package)
         {
         }
         /// <summary>
@@ -26,15 +26,15 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public virtual void OnBeginSend(IClient client, T package)
+        public virtual void OnBeginSend(Client client, T package)
         {
         }
         /// <summary>
-        /// Posts the send.
+        /// Called when a package was sent.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        public virtual void OnSent(IClient client, T package)
+        public virtual void OnSent(Client client, T package)
         {
         }
         #endregion
@@ -52,7 +52,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientHandler.OnReceive(IClient client, Package package)
+        void IClientHandler.OnReceive(Client client, Package package)
         {
             this.OnReceive(client, package as T);
         }
@@ -61,7 +61,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientHandler.OnSending(IClient client, Package package)
+        void IClientHandler.OnSending(Client client, Package package)
         {
             this.OnBeginSend(client, package as T);
         }
@@ -70,7 +70,7 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="package">The package.</param>
-        void IClientHandler.OnSent(IClient client, Package package)
+        void IClientHandler.OnSent(Client client, Package package)
         {
             this.OnSent(client, package as T);
         }

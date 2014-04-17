@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xemio.GameLibrary.Network.Events.Server;
+using Xemio.GameLibrary.Network.Events.Servers;
 
 namespace Xemio.GameLibrary.Network.Intercetors
 {
@@ -13,12 +13,12 @@ namespace Xemio.GameLibrary.Network.Intercetors
         /// Intercepts the client joined process.
         /// </summary>
         /// <param name="evt">The event.</param>
-        void InterceptClientJoined(ClientJoinedEvent evt);
+        void InterceptChannelOpened(ChannelOpenedEvent evt);
         /// <summary>
         /// Intercepts the client left process.
         /// </summary>
         /// <param name="evt">The event.</param>
-        void InterceptClientLeft(ClientLeftEvent evt);
+        void InterceptChannelClosed(ChannelClosedEvent evt);
         /// <summary>
         /// Intercepts the received process.
         /// </summary>

@@ -43,11 +43,6 @@ namespace Xemio.GameLibrary.Common
         /// <param name="value">The value.</param>
         public virtual void Store(string key, object value)
         {
-            if (!this._values.ContainsKey(key))
-            {
-                this._values.Add(key, value);
-            }
-
             this._values[key] = value;
         }
         /// <summary>

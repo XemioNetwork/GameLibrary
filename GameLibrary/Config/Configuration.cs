@@ -3,33 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xemio.GameLibrary.Common.Collections;
-using Xemio.GameLibrary.Config.Installers;
+using Xemio.GameLibrary.Config.Installation;
 
 namespace Xemio.GameLibrary.Config
 {
-    public class Configuration : ICatalog<IInstaller>
+    public class Configuration : ListCatalog<IInstaller>
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration"/> class.
-        /// </summary>
-        public Configuration()
-        {
-            this._installers = new List<IInstaller>();
-        }
-        #endregion
-
-        #region Fields
-        private readonly IList<IInstaller> _installers; 
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets the installers.
         /// </summary>
         internal IEnumerable<IInstaller> Installers
         {
-            get { return this._installers; }
+            get { return this.Items; }
         } 
         #endregion
 
@@ -39,7 +25,7 @@ namespace Xemio.GameLibrary.Config
         /// </summary>
         /// <typeparam name="T">The installer type.</typeparam>
         /// <param name="installer">The installer.</param>
-        public void Override<T>(T installer) where T : class, IInstaller
+        public void Override<T>(T installer) where T : IInstaller
         {
             this.Remove<T>();
             this.Install(installer);
@@ -48,9 +34,9 @@ namespace Xemio.GameLibrary.Config
         /// Installs the specified installer, if it is not contained inside the current configuration.
         /// </summary>
         /// <typeparam name="T">The installer type.</typeparam>
-        public T GetOrInstall<T>() where T : class, IInstaller, new()
+        public T GetOrInstall<T>() where T : IInstaller, new()
         {
-            if (!this.Has<T>())
+            if (!this.Contains<T>())
             {
                 this.Install(new T());
             }
@@ -61,52 +47,9 @@ namespace Xemio.GameLibrary.Config
         /// Determines whether the specified installer is contained inside this configuration.
         /// </summary>
         /// <typeparam name="T">The installer type.</typeparam>
-        public bool Has<T>() where T : class, IInstaller
+        public bool Contains<T>() where T : IInstaller
         {
-            return this._installers.Any(installer => installer.Unwrap() is T);
-        }
-        #endregion
-
-        #region Implementation of ICatalog<IInstaller>
-        /// <summary>
-        /// Installs the specified installer.
-        /// </summary>
-        /// <param name="installer">The installer.</param>
-        public void Install(IInstaller installer)
-        {
-            this._installers.Add(installer);
-        }
-        /// <summary>
-        /// Removes the specified item.
-        /// </summary>
-        /// <param name="installer">The installer.</param>
-        public void Remove(IInstaller installer)
-        {
-            this._installers.Remove(installer);
-        }
-        /// <summary>
-        /// Removes an item by a specified type.
-        /// </summary>
-        /// <typeparam name="TItem">The type of the item.</typeparam>
-        public void Remove<TItem>() where TItem : class, IInstaller
-        {
-            this._installers.Remove(this._installers.FirstOrDefault(installer => installer.Unwrap() is TItem));
-        }
-        /// <summary>
-        /// Gets an item by a specified type.
-        /// </summary>
-        /// <typeparam name="TItem">The type of the item.</typeparam>
-        public TItem Get<TItem>() where TItem : class, IInstaller
-        {
-            return (TItem)this._installers.FirstOrDefault(installer => installer.Unwrap() is TItem);
-        }
-        /// <summary>
-        /// Requires this instance.
-        /// </summary>
-        /// <typeparam name="TItem">The type of the item.</typeparam>
-        TItem ICatalog<IInstaller>.Require<TItem>()
-        {
-            throw new NotSupportedException();
+            return this.Items.Any(installer => installer.Unwrap() is T);
         }
         #endregion
     }

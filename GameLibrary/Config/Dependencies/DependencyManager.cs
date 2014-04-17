@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xemio.GameLibrary.Config.Installers;
+using Xemio.GameLibrary.Config.Installation;
 
 namespace Xemio.GameLibrary.Config.Dependencies
 {
@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Config.Dependencies
         /// <param name="defaultInstaller">The default installer.</param>
         public void Dependency<T>(Func<T> defaultInstaller) where T : class, IInstaller
         {
-            this._dependencies.Add(new Dependency(this._configuration.Has<T>, defaultInstaller));
+            this._dependencies.Add(new Dependency(this._configuration.Contains<T>, defaultInstaller));
         }
         /// <summary>
         /// Creates the required installers added by using the Dependency method.

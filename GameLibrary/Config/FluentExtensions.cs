@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Xemio.GameLibrary.Config.Installers;
+using Xemio.GameLibrary.Config.Installation;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
@@ -148,14 +148,26 @@ namespace Xemio.GameLibrary.Config
 
         #region Content Methods
         /// <summary>
+        /// Sets the content trackingEnabled enabled or disabled.
+        /// </summary>
+        /// <param name="fluent">The fluent.</param>
+        /// <param name="cacheEnabled">if set to <c>true</c> enables the content cache.</param>
+        public static FluentConfiguration ContentCache(this FluentConfiguration fluent, bool cacheEnabled)
+        {
+            var contentInstaller = fluent.GetConfiguration().GetOrInstall<ContentInstaller>();
+            contentInstaller.IsCachingEnabled = cacheEnabled;
+
+            return fluent;
+        }
+        /// <summary>
         /// Sets the content tracking enabled or disabled.
         /// </summary>
         /// <param name="fluent">The fluent.</param>
-        /// <param name="tracking">The tracking.</param>
-        public static FluentConfiguration ContentTracking(this FluentConfiguration fluent, ContentTracking tracking)
+        /// <param name="trackingEnabled">The tracking.</param>
+        public static FluentConfiguration ContentTracking(this FluentConfiguration fluent, bool trackingEnabled)
         {
             var contentInstaller = fluent.GetConfiguration().GetOrInstall<ContentInstaller>();
-            contentInstaller.Tracking = tracking;
+            contentInstaller.IsTrackingEnabled = trackingEnabled;
 
             return fluent;
         }
@@ -201,6 +213,18 @@ namespace Xemio.GameLibrary.Config
 
         #region Scene Methods
         /// <summary>
+        /// Adds the specified scene to the scene manager.
+        /// </summary>
+        /// <param name="fluent">The fluent.</param>
+        /// <param name="scene">The scene.</param>
+        public static FluentConfiguration Scene(this FluentConfiguration fluent, Scene scene)
+        {
+            var sceneInstaller = fluent.GetConfiguration().GetOrInstall<SceneInstaller>();
+            sceneInstaller.Scenes.Add(scene);
+
+            return fluent;
+        }
+        /// <summary>
         /// Adds the specified scenes to the scene manager.
         /// </summary>
         /// <param name="fluent">The fluent.</param>
@@ -218,7 +242,7 @@ namespace Xemio.GameLibrary.Config
         public static FluentConfiguration Scenes(this FluentConfiguration fluent, IEnumerable<Scene> scenes)
         {
             var sceneInstaller = fluent.GetConfiguration().GetOrInstall<SceneInstaller>();
-            sceneInstaller.Scenes = new List<Scene>(scenes);
+            sceneInstaller.Scenes.AddRange(scenes);
 
             return fluent;
         }

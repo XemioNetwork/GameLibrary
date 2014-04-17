@@ -10,7 +10,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Formats.Binary;
-using Xemio.GameLibrary.Content.Formats.Corrupted;
+using Xemio.GameLibrary.Content.Formats.None;
 using Xemio.GameLibrary.Content.Layouts;
 using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Content.Serialization;
@@ -52,17 +52,17 @@ namespace Xemio.GameLibrary.Content
         /// Gets the content reader for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
-        private IReader GetReader(Type type)
+        private IContentReader GetContentReader(Type type)
         {
-            return this.Get<IReader>(type);
+            return this.Get<IContentReader>(type);
         }
         /// <summary>
         /// Gets the content writer for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
-        private IWriter GetWriter(Type type)
+        private IContentWriter GetContentWriter(Type type)
         {
-            return this.Get<IWriter>(type);
+            return this.Get<IContentWriter>(type);
         }
         #endregion
         
@@ -112,18 +112,16 @@ namespace Xemio.GameLibrary.Content
         /// <param name="format">The format.</param>
         public object Load(Type type, Stream stream, IFormat format)
         {
-            try
+            IContentReader contentReader = this.GetContentReader(type);
+            if (contentReader.BypassFormat)
             {
-                logger.Trace("Loading [{0}] from stream.", type.Name);
-                using (IFormatReader reader = format.CreateReader(stream))
-                {
-                    return this.Load(type, reader);
-                }
+                format = Format.None;
             }
-            catch (Exception ex)
+
+            logger.Trace("Loading [{0}] from stream.", type.Name);
+            using (IFormatReader formatReader = format.CreateReader(stream))
             {
-                logger.Info("Initializing the format reader for {0} failed: Format corrupted.", format.GetType().Name);
-                return this.Load(type, new CorruptedReader(stream, ex));
+                return contentReader.Read(formatReader);
             }
         }
         /// <summary>
@@ -133,7 +131,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="reader">The reader.</param>
         public object Load(Type type, IFormatReader reader)
         {
-            return this.GetReader(type).Read(reader);
+            return this.GetContentReader(type).Read(reader);
         }
         /// <summary>
         /// Saves the specified value.
@@ -152,18 +150,21 @@ namespace Xemio.GameLibrary.Content
         /// <param name="format">The format.</param>
         public void Save(object value, Stream stream, IFormat format)
         {
-            try
+            if (value == null)
             {
-                logger.Trace("Writing [{0}] to stream", value ?? "null");
-                using (IFormatWriter writer = format.CreateWriter(stream))
-                {
-                    this.Save(value, writer);
-                }
+                throw new ArgumentNullException("value");
             }
-            catch (Exception ex)
+
+            IContentWriter contentWriter = this.GetContentWriter(value.GetType());
+            if (contentWriter.BypassFormat)
             {
-                logger.InfoException("Initializing the format writer for " + format.GetType().Name + " failed: Format corrupted.", ex);
-                this.Save(value, new CorruptedWriter(stream, ex));
+                format = Format.None;
+            }
+
+            logger.Trace("Writing [{0}] to stream.", value);
+            using (IFormatWriter formatWriter = format.CreateWriter(stream))
+            {
+                contentWriter.Write(formatWriter, value);
             }
         }
         /// <summary>
@@ -173,7 +174,7 @@ namespace Xemio.GameLibrary.Content
         /// <param name="writer">The writer.</param>
         public void Save(object value, IFormatWriter writer)
         {
-            this.GetWriter(value.GetType()).Write(writer, value);
+            this.GetContentWriter(value.GetType()).Write(writer, value);
         }
         #endregion
     }

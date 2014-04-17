@@ -162,7 +162,7 @@ namespace Xemio.GameLibrary.Components
         /// <summary>
         /// Removes the specified component abstraction.
         /// </summary>
-        public void Remove<T>() where T : class, IComponent
+        public void Remove<T>() where T : IComponent
         {
             this.Remove(this.Get<T>());
         }
@@ -170,7 +170,7 @@ namespace Xemio.GameLibrary.Components
         /// Gets a component by a specified type.
         /// </summary>
         /// <typeparam name="T">The type of the component.</typeparam>
-        public T Get<T>() where T : class, IComponent
+        public T Get<T>() where T : IComponent
         {
             if (XGL.State == EngineState.None)
                 BasicConfigurator.Configure();
@@ -188,11 +188,10 @@ namespace Xemio.GameLibrary.Components
         /// Requires the specified component.
         /// </summary>
         /// <typeparam name="T">The component type.</typeparam>
-        public T Require<T>() where T : class, IComponent
+        public T Require<T>() where T : IComponent
         {
             var component = this.Get<T>();
-
-            if (component == null)
+            if (object.Equals(component, null))
             {
                 throw new MissingComponentException(typeof(T));
             }

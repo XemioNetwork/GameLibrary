@@ -1,5 +1,5 @@
 ﻿using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Config.Installers;
+using Xemio.GameLibrary.Config.Installation;
 
 namespace Xemio.GameLibrary.Config.Validation
 {
@@ -20,7 +20,7 @@ namespace Xemio.GameLibrary.Config.Validation
         /// <param name="catalog">The catalog.</param>
         public bool Validate(Configuration configuration, IComponentCatalog catalog)
         {
-            return configuration.Has<T>();
+            return configuration.Contains<T>();
         }
         #endregion
     }

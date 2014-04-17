@@ -48,7 +48,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
             }
             else if (property.PropertyType == typeof(Guid))
             {
-                container.Add(new GuidElement(tag, "N", property));
+                container.Add(new GuidElement(tag, "D", property));
             }
             else if (property.PropertyType == typeof(int))
             {
@@ -73,6 +73,10 @@ namespace Xemio.GameLibrary.Content.Layouts.Generation
             else if (property.PropertyType == typeof(Vector2))
             {
                 container.Add(new Vector2Element(tag, property));
+            }
+            else if (property.PropertyType == typeof (Type))
+            {
+                container.Add(new TypeElement(tag, property));
             }
             else
             {

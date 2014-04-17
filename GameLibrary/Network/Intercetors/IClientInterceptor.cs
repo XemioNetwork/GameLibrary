@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xemio.GameLibrary.Network.Events.Client;
-using Xemio.GameLibrary.Network.Events.Server;
+using Xemio.GameLibrary.Network.Events.Clients;
 
 namespace Xemio.GameLibrary.Network.Intercetors
 {
@@ -14,7 +13,7 @@ namespace Xemio.GameLibrary.Network.Intercetors
         /// Intercepts the disconnecting process.
         /// </summary>
         /// <param name="evt">The event.</param>
-        void InterceptDisconnect(ClientDisconnectedEvent evt);
+        void InterceptDisconnect(ClientLostConnectionEvent evt);
         /// <summary>
         /// Intercepts the receiving process.
         /// </summary>

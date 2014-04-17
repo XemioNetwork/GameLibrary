@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Streams
 {
-    public abstract class StreamedReader<T> : Reader<T>
+    public abstract class StreamedContentReader<T> : ContentReader<T>
     {
         #region Methods
         /// <summary>
@@ -17,7 +17,7 @@ namespace Xemio.GameLibrary.Content.Streams
         protected abstract T Read(Stream stream);
         #endregion
 
-        #region Overrides of Reader<T>
+        #region Overrides of ContentReader<T>
         /// <summary>
         /// Reads an instance.
         /// </summary>

@@ -11,7 +11,7 @@ using Xemio.GameLibrary.Network.Protocols.Streamed;
 
 namespace Xemio.GameLibrary.Network.Pipes
 {
-    public class NamedPipeServerConnection : StreamedServerConnection
+    public class NamedPipeServerConnection : StreamedServerChannelProtocol
     {
         #region Constructors
         /// <summary>
@@ -33,7 +33,7 @@ namespace Xemio.GameLibrary.Network.Pipes
         /// <summary>
         /// Disconnects this instance.
         /// </summary>
-        public override void Disconnect()
+        public override void Close()
         {
             this._stream.Disconnect();
             this._stream.Dispose();

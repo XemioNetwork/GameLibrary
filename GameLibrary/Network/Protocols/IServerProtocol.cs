@@ -11,9 +11,9 @@ namespace Xemio.GameLibrary.Network.Protocols
     public interface IServerProtocol : IProtocol
     {
         /// <summary>
-        /// Accepts a new connection.
+        /// Accepts a new channel.
         /// </summary>
-        IServerConnection AcceptConnection();
+        IServerChannelProtocol AcceptChannel();
         /// <summary>
         /// Sets the server.
         /// </summary>

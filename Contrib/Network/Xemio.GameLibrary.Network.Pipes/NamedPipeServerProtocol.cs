@@ -43,16 +43,16 @@ namespace Xemio.GameLibrary.Network.Pipes
 
         #region Implementation of IServerProtocol
         /// <summary>
+        /// Sets the server.
+        /// </summary>
+        public Server Server { set; private get; }
+        /// <summary>
         /// Accepts a connection.
         /// </summary>
-        public IServerConnection AcceptConnection()
+        public IServerChannelProtocol AcceptChannel()
         {
             return new NamedPipeServerConnection(this._name);
         }
-        /// <summary>
-        /// Gets or sets the server.
-        /// </summary>
-        public Server Server { get; set; }
         #endregion
     }
 }

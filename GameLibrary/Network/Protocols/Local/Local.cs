@@ -10,24 +10,24 @@ namespace Xemio.GameLibrary.Network.Protocols.Local
     internal class Local
     {
         #region Fields
-        private static readonly Dictionary<string, LocalBridge> _bridges = new Dictionary<string, LocalBridge>();
+        private static readonly Dictionary<string, LocalChannel> _channels = new Dictionary<string, LocalChannel>();
         #endregion
         
         #region Methods
         /// <summary>
-        /// Gets a local bridge for the specified name.
+        /// Gets a local channel for the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
-        public static LocalBridge Bridge(string name)
+        public static LocalChannel GetChannel(string name)
         {
-            lock (_bridges)
+            lock (_channels)
             {
-                if (!_bridges.ContainsKey(name))
+                if (!_channels.ContainsKey(name))
                 {
-                    _bridges[name] = new LocalBridge();
+                    _channels[name] = new LocalChannel();
                 }
 
-                return _bridges[name];
+                return _channels[name];
             }
         }
         #endregion

@@ -18,6 +18,9 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
         public TransitionScene(ITransition transition, Scene current, Scene next)
         {
             this.Transition = transition;
+
+            this.Current = current;
+            this.Next = next;
         }
         #endregion
 

@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Config;
 using Xemio.GameLibrary.Config.Dependencies;
-using Xemio.GameLibrary.Config.Installers;
+using Xemio.GameLibrary.Config.Installation;
 using Xemio.GameLibrary.Config.Validation;
 using Xemio.GameLibrary.Game;
 using Xemio.GameLibrary.Game.Scenes;

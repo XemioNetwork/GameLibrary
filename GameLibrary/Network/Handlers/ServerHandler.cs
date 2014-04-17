@@ -9,44 +9,39 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <summary>
         /// Called when the server receives a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        public virtual void OnReceive(IServer server, T package, IServerConnection sender)
+        /// <param name="package">The package.</param>
+        public virtual void OnReceive(ServerChannel sender, T package)
         {
         }
         /// <summary>
         /// Called when the server is sending a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public virtual void OnBeginSend(IServer server, T package, IServerConnection receiver)
+        /// <param name="package">The package.</param>
+        public virtual void OnSending(ServerChannel receiver, T package)
         {
         }
         /// <summary>
         /// Called when the server sent a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        public virtual void OnSent(IServer server, T package, IServerConnection receiver)
+        /// <param name="package">The package.</param>
+        public virtual void OnSent(ServerChannel receiver, T package)
         {
         }
         /// <summary>
         /// Called when a client left the server.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="connection">The connection.</param>
-        public virtual void OnClientLeft(IServer server, IServerConnection connection)
+        /// <param name="channel">The connection.</param>
+        public virtual void OnChannelClosed(ServerChannel channel)
         {
         }
         /// <summary>
         /// Called when a client joined the server.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="connection">The connection.</param>
-        public virtual void OnClientJoined(IServer server, IServerConnection connection)
+        /// <param name="channel">The channel.</param>
+        public virtual void OnChannelOpened(ServerChannel channel)
         {
         }
         #endregion
@@ -62,32 +57,29 @@ namespace Xemio.GameLibrary.Network.Handlers
         /// <summary>
         /// Called when the server receives a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        void IServerHandler.OnReceive(IServer server, Package package, IServerConnection sender)
+        /// <param name="package">The package.</param>
+        void IServerHandler.OnReceive(ServerChannel sender, Package package)
         {
-            this.OnReceive(server, package as T, sender);
+            this.OnReceive(sender, package as T);
         }
         /// <summary>
         /// Called when the server is sending a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IServerHandler.OnSending(IServer server, Package package, IServerConnection receiver)
+        /// <param name="package">The package.</param>
+        void IServerHandler.OnSending(ServerChannel receiver, Package package)
         {
-            this.OnBeginSend(server, package as T, receiver);
+            this.OnSending(receiver, package as T);
         }
         /// <summary>
         /// Called when the server sent a package.
         /// </summary>
-        /// <param name="server">The server.</param>
-        /// <param name="package">The package.</param>
         /// <param name="receiver">The receiver.</param>
-        void IServerHandler.OnSent(IServer server, Package package, IServerConnection receiver)
+        /// <param name="package">The package.</param>
+        void IServerHandler.OnSent(ServerChannel receiver, Package package)
         {
-            this.OnSent(server, package as T, receiver);
+            this.OnSent(receiver, package as T);
         }
         #endregion
     }

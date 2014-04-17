@@ -18,38 +18,43 @@ namespace Xemio.GameLibrary.Network.Handlers.Forwarding
         /// <summary>
         /// Called when the server receives a package.
         /// </summary>
-        /// <param name="server">The server.</param>
         /// <param name="package">The package.</param>
         /// <param name="sender">The sender.</param>
-        public override void OnReceive(IServer server, Package package, IServerConnection sender)
+        public override void OnReceive(ServerChannel sender, Package package)
         {
             if (package is IForwarded == false)
                 return;
 
             var forwardedPackage = (IForwarded)package;
-            
+
             switch (forwardedPackage.Options)
             {
                 case ForwardingOptions.All:
-                    logger.Trace("Forwarding {0} from {1} to {2} clients.", package.GetType().Name, sender.Address, server.Connections.Count);
-                    server.Send(package);
-                    break;
-                case ForwardingOptions.AllOther:
-                    IList<IServerConnection> connections = server.Connections.Where(f => f != sender).ToList();
-                    logger.Trace("Forwarding {0} from {1} to {2} clients.", package.GetType().Name, sender.Address, connections.Count);
-
-                    foreach (IServerConnection connection in connections)
                     {
-                        server.Send(package, connection);
+                        logger.Trace("Forwarding {0} from {1} to {2} clients.", package.GetType().Name, sender.Address, sender.Server.Connections.Count);
+                        sender.Server.Send(package);
                     }
                     break;
-                case ForwardingOptions.Sender:
-                    logger.Trace("Forwarding {0} from {1} to sender.", package.GetType().Name, sender.Address);
-                    server.Send(package, sender);
+                case ForwardingOptions.AllOther:
+                    {
+                        IList<ServerChannel> connections = sender.Server.Connections.Where(f => f != sender).ToList();
+                        logger.Trace("Forwarding {0} from {1} to {2} clients.", package.GetType().Name, sender.Address, connections.Count);
+
+                        foreach (ServerChannel channel in connections)
+                        {
+                            channel.Send(package);
+                        }
+                    }
+                    break;
+                case ForwardingOptions.Traceback:
+                    {
+                        logger.Trace("Forwarding {0} from {1} to sender.", package.GetType().Name, sender.Address);
+                        sender.Send(package);
+                    }
                     break;
             }
 
-            base.OnReceive(server, package, sender);
+            base.OnReceive(sender, package);
         }
         #endregion
     }

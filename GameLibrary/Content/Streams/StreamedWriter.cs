@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Streams
 {
-    public abstract class StreamedWriter<T> : Writer<T>
+    public abstract class StreamedContentWriter<T> : ContentWriter<T>
     {
         #region Methods
         /// <summary>
@@ -18,7 +18,7 @@ namespace Xemio.GameLibrary.Content.Streams
         protected abstract void Write(Stream stream, T value);
         #endregion
 
-        #region Overrides of Writer<T>
+        #region Overrides of ContentWriter<T>
         /// <summary>
         /// Writes the specified value.
         /// </summary>

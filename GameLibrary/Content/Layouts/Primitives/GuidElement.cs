@@ -39,8 +39,7 @@ namespace Xemio.GameLibrary.Content.Layouts.Primitives
         /// </summary>
         public string GuidFormat { get; private set; }
         #endregion
-
-
+        
         #region Implementation of ILayoutElement
         /// <summary>
         /// Writes property for the specified container.

@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Entities
             entity.Components.Clear();
             foreach (EntityComponent component in components)
             {
-                entity.Add(component);
+                entity.AddComponent(component);
             }
         } 
         #endregion

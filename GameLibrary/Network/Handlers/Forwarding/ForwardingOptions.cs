@@ -19,6 +19,6 @@ namespace Xemio.GameLibrary.Network.Handlers.Forwarding
         /// <summary>
         /// Sends the received package to its sender.
         /// </summary>
-        Sender
+        Traceback
     }
 }

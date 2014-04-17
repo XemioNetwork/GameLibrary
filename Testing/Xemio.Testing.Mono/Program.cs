@@ -41,13 +41,13 @@ namespace Xemio.Testing.Mono
                .Graphics<GdiGraphicsInitializer>()
                .ContentFormat(Format.Xml)
                .Surface(form)
-               .Scenes(new TestSceneLoader())
+               .Scene(new TestSceneLoader())
                .CreatePlayerInput();
 
             XGL.Run(config);
             
-            var server = new Server("local://test");
-            var client = new Client("local://test");
+            var server = new Server("local://a");
+            var client = new Client("local://a");
 
             Application.Run(form);
             Application.Exit();

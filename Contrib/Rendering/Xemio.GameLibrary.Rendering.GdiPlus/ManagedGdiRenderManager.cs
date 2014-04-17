@@ -41,7 +41,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
                 this._hasRegisteredPaintHandler = true;
             }
     
-            control.Invoke((Action)(() => control.Refresh()));
+            control.Invoke((Action)(control.Refresh));
 
             base.Present();
         }

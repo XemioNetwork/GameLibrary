@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Content.Formats;
 
 namespace Xemio.GameLibrary.Content.Texts
 {
-    public abstract class TextReader<T> : Reader<T>
+    public abstract class TextContentReader<T> : ContentReader<T>
     {
         #region Properties
         /// <summary>
@@ -27,7 +27,7 @@ namespace Xemio.GameLibrary.Content.Texts
         protected abstract T Read(string input);
         #endregion
 
-        #region Overrides of Reader<T>
+        #region Overrides of ContentReader<T>
         /// <summary>
         /// Reads an instance.
         /// </summary>

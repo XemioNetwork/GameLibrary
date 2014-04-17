@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Xemio.GameLibrary.Common.References;
 
 namespace Xemio.GameLibrary.Content
 {
-    public class ContentReference<T>
+    public class ContentReference<T> : IReference<T>
     {
         #region Constructors
         /// <summary>

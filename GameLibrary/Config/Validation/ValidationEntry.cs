@@ -9,20 +9,14 @@ namespace Xemio.GameLibrary.Config.Validation
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationEntry"/> class.
+        /// Initializes a new instance of the <see cref="ValidationEntry" /> class.
         /// </summary>
         /// <param name="validator">The validator.</param>
-        public ValidationEntry(IValidator validator)
+        /// <param name="scope">The scope.</param>
+        public ValidationEntry(IValidator validator, ValidationScope scope)
         {
             this.Validator = validator;
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationEntry"/> class.
-        /// </summary>
-        /// <param name="validator">The validator.</param>
-        /// <param name="errorMessage">The error message.</param>
-        public ValidationEntry(IValidator validator, string errorMessage) : this(validator, errorMessage, ValidationScope.Install)
-        {
+            this.Scope = scope;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationEntry" /> class.
