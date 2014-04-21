@@ -82,7 +82,10 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="component">The component.</param>
         public void RemoveComponent(EntityComponent component)
         {
-            component.RemoveFromEntity();
+            if (this.Components.Contains(component))
+            {
+                component.RemoveFromEntity();
+            }
         }
         /// <summary>
         /// Gets the component of the specified type.

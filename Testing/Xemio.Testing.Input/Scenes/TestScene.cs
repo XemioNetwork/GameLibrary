@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Content.Loading;
 using Xemio.GameLibrary.Game.Scenes;
 using Xemio.GameLibrary.Input;
 using Xemio.GameLibrary.Input.Adapters;
@@ -26,7 +27,8 @@ namespace Xemio.Testing.Input.Scenes
         /// <summary>
         /// Loads the scene content.
         /// </summary>
-        public override void LoadContent()
+        /// <param name="loader">The content loader.</param>
+        public override void LoadContent(IContentLoader loader)
         {
             this._texture = this.ContentManager.Get<ITexture>(@"test.png");
             this._color = this.ContentManager.Get<Color>(@"test.color");

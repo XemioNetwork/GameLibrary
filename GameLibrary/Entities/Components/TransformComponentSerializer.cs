@@ -18,6 +18,8 @@ namespace Xemio.GameLibrary.Entities.Components
         public override PersistenceLayout<TransformComponent> CreateLayout()
         {
             return new PersistenceLayout<TransformComponent>()
+                .Element("Rotation", component => component.Rotation)
+                .Element("Scale", component => component.Scale)
                 .Element("Position", component => component.Position);
         }
         #endregion
