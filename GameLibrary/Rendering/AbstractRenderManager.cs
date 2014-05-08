@@ -13,7 +13,7 @@ using Xemio.GameLibrary.Rendering.Effects.Processors;
 
 namespace Xemio.GameLibrary.Rendering
 {
-    public abstract class BaseRenderManager : IRenderManager
+    public abstract class AbstractRenderManager : IRenderManager
     {
         #region Implementation of IRenderManager
         /// <summary>
@@ -21,47 +21,6 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="color">The color.</param>
         public abstract void Clear(Color color);
-        /// <summary>
-        /// Applies the specified effects.
-        /// </summary>
-        /// <param name="effects">The effects.</param>
-        public virtual IDisposable Apply(params IEffect[] effects)
-        {
-            var actions = new Stack<Action>();
-            var implementations = XGL.Components.Get<IImplementationManager>();
-
-            foreach (IEffect effect in effects)
-            {
-                //Access to foreach variable in closure could have different
-                //behavior after compile time => prevented using a copy of the
-                //current iterator variable
-                var currentEffect = effect;
-
-                var processor = implementations.Get<Type, IEffectProcessor>(effect.GetType());
-                if (processor != null)
-                {
-                    processor.Enable(effect, this);
-                    actions.Push(() => processor.Disable(currentEffect, this));
-                }
-
-                var bundle = effect as EffectBundle;
-                if (bundle != null)
-                {
-                    var bundleEffects = bundle.Effects.ToArray();
-                    var dispoable = this.Apply(bundleEffects);
-
-                    actions.Push(dispoable.Dispose);
-                }
-            }
-
-            return new ActionDisposable(() =>
-            {
-                while (actions.Count > 0)
-                {
-                    actions.Pop().Invoke();
-                }
-            });
-        }
         /// <summary>
         /// Renders the specified texture.
         /// </summary>

@@ -6,7 +6,7 @@ using Xemio.GameLibrary.Plugins.Implementations;
 namespace Xemio.GameLibrary.Rendering.Initialization
 {
     [ManuallyLinked]
-    public class NamedInitializer : IGraphicsInitializer
+    public class NamedInitializer : IInitializer
     {
         #region Constructors
         /// <summary>
@@ -23,12 +23,12 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <summary>
         /// Gets the initializer.
         /// </summary>
-        public IGraphicsInitializer Initializer
+        public IInitializer Initializer
         {
             get
             {
                 var implementations = XGL.Components.Require<IImplementationManager>();
-                var initializer = implementations.Get<string, IGraphicsInitializer>(this.Id);
+                var initializer = implementations.Get<string, IInitializer>(this.Id);
 
                 if (initializer == null)
                 {
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <summary>
         /// Gets the factory.
         /// </summary>
-        public IGraphicsFactory Factory
+        public IInitializationFactory Factory
         {
             get { return this.Initializer.Factory; }
         }

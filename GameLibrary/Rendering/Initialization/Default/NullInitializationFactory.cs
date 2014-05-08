@@ -6,7 +6,7 @@ using Xemio.GameLibrary.Rendering.Shapes.Factories;
 
 namespace Xemio.GameLibrary.Rendering.Initialization.Default
 {
-    public class NullGraphicsFactory : IGraphicsFactory
+    public class NullInitializationFactory : IInitializationFactory
     {
         #region Implementation of IGraphicsFactory
         /// <summary>

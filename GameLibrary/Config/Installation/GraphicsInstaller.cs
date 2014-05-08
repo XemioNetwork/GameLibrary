@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Config.Installation
         /// Initializes a new instance of the <see cref="GraphicsInstaller"/> class.
         /// </summary>
         /// <param name="initializer">The initializer.</param>
-        public GraphicsInstaller(IGraphicsInitializer initializer) : this(initializer, InterpolationMode.Bicubic, SmoothingMode.AntiAliased)
+        public GraphicsInstaller(IInitializer initializer) : this(initializer, InterpolationMode.Bicubic, SmoothingMode.AntiAliased)
         {
         }
         /// <summary>
@@ -38,7 +38,7 @@ namespace Xemio.GameLibrary.Config.Installation
         /// <param name="initializer">The initializer.</param>
         /// <param name="interpolation">The interpolation.</param>
         /// <param name="smoothing">The smoothing.</param>
-        public GraphicsInstaller(IGraphicsInitializer initializer, InterpolationMode interpolation, SmoothingMode smoothing)
+        public GraphicsInstaller(IInitializer initializer, InterpolationMode interpolation, SmoothingMode smoothing)
         {
             this.Initializer = initializer;
             this.InterpolationMode = interpolation;
@@ -50,7 +50,7 @@ namespace Xemio.GameLibrary.Config.Installation
         /// <summary>
         /// Gets or sets the initializer.
         /// </summary>
-        public IGraphicsInitializer Initializer { get; set; }
+        public IInitializer Initializer { get; set; }
         /// <summary>
         /// Gets or sets the interpolation mode.
         /// </summary>

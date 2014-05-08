@@ -78,13 +78,13 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
         {
             var graphicsDevice = XGL.Components.Require<GraphicsDevice>();
 
-            using (graphicsDevice.RenderManager.Alpha(1.0f - this._elapsed / this.Duration))
+            using (graphicsDevice.Alpha(1.0f - this._elapsed / this.Duration))
             {
-                graphicsDevice.RenderManager.Render(current, Vector2.Zero);
+                graphicsDevice.Render(current, Vector2.Zero);
             }
-            using (graphicsDevice.RenderManager.Alpha(this._elapsed / this.Duration))
+            using (graphicsDevice.Alpha(this._elapsed / this.Duration))
             {
-                graphicsDevice.RenderManager.Render(next, Vector2.Zero);
+                graphicsDevice.Render(next, Vector2.Zero);
             }
         }
         #endregion

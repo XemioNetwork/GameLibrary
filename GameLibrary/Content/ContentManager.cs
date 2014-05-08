@@ -10,6 +10,7 @@ using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content.Caching;
+using Xemio.GameLibrary.Content.Exceptions;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Metadata;
@@ -244,11 +245,11 @@ namespace Xemio.GameLibrary.Content
             var results = this.Find(meta => meta.Guid == guid).ToList();
             if (results.Count > 1)
             {
-                throw new InvalidOperationException("Invalid meta data files: Multiple files contain the same guid " + guid.ToString("D") + ".");
+                throw new DuplicateGuidException(guid);
             }
             if (results.Count == 0)
             {
-                throw new InvalidOperationException("Guid " + guid.ToString("D") + " not found.");
+                throw new GuidNotFoundException(guid);
             }
 
             return results.Single();

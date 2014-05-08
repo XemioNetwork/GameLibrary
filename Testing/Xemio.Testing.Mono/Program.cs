@@ -38,7 +38,7 @@ namespace Xemio.Testing.Mono
                .BackBuffer(form.ClientSize.Width / 2,
                            form.ClientSize.Height / 2)
                .FramesPerSecond(60)
-               .Graphics<GdiGraphicsInitializer>()
+               .Graphics<GdiInitializer>()
                .ContentFormat(Format.Xml)
                .Surface(form)
                .Scene(new TestSceneLoader())

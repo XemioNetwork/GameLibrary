@@ -9,7 +9,7 @@ using Xemio.GameLibrary.Rendering.Initialization.Default;
 namespace Xemio.GameLibrary.Rendering.Initialization
 {
     [ManuallyLinked]
-    public class PriorizedInitializer : IGraphicsInitializer
+    public class PriorizedInitializer : IInitializer
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -21,13 +21,13 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// </summary>
         public PriorizedInitializer()
         {
-            this._initializers = new List<IGraphicsInitializer>();
+            this._initializers = new List<IInitializer>();
         }
         #endregion
 
         #region Fields
-        private IGraphicsInitializer _current = new NullGraphicsInitializer();
-        private readonly List<IGraphicsInitializer> _initializers; 
+        private IInitializer _current = new NullInitializer();
+        private readonly List<IInitializer> _initializers; 
         #endregion
 
         #region Properties
@@ -42,7 +42,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// Adds the specified provider.
         /// </summary>
         /// <param name="provider">The provider.</param>
-        public void Add(IGraphicsInitializer provider)
+        public void Add(IInitializer provider)
         {
             this._initializers.Add(provider);
         }
@@ -72,7 +72,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <summary>
         /// Gets the factory.
         /// </summary>
-        public IGraphicsFactory Factory
+        public IInitializationFactory Factory
         {
             get { return this._current.Factory; }
         }
@@ -82,7 +82,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <param name="graphicsDevice">The graphics device.</param>
         public void Initialize(GraphicsDevice graphicsDevice)
         {
-            foreach (IGraphicsInitializer initializer in this._initializers)
+            foreach (IInitializer initializer in this._initializers)
             {
                 if (initializer.IsAvailable())
                 {
@@ -101,7 +101,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
                 throw new InvalidOperationException("Your system doesn't support any of the specified rendering providers.");
             }
 
-            logger.Warn("Your system doesn't support any of the specified rendering providers, initializing with NullGraphicsInitializer as fallback.");
+            logger.Warn("Your system doesn't support any of the specified rendering providers, initializing with NullInitializer as fallback.");
         }
         #endregion
 

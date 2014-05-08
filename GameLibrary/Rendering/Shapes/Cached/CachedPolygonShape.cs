@@ -96,30 +96,29 @@ namespace Xemio.GameLibrary.Rendering.Shapes.Cached
         /// <summary>
         /// Renders the shape.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        public override void Render(IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        public override void Render(GraphicsDevice graphicsDevice)
         {
-            var graphicsDevice = XGL.Components.Get<GraphicsDevice>();
             if (this.RenderTarget == null || this.NeedsRenderTarget)
             {
                 this.NeedsRenderTarget = false;
-                this.RenderTarget = graphicsDevice.RenderFactory.CreateTarget((int)this._region.Width, (int)this._region.Height);
+                this.RenderTarget = graphicsDevice.Factory.CreateTarget((int)this._region.Width, (int)this._region.Height);
             }
 
             if (this.NeedsRedraw)
             {
                 this.NeedsRedraw = false;
 
-                using (renderManager.TranslateTo(new Vector2(this._x, this._y)))
+                using (graphicsDevice.TranslateTo(new Vector2(this._x, this._y)))
                 using (graphicsDevice.RenderTo(this.RenderTarget))
                 {
-                    base.Render(renderManager);
+                    base.Render(graphicsDevice);
                 }
             }
 
-            using (renderManager.Translate(new Vector2(-this._x, -this._y)))
+            using (graphicsDevice.Translate(new Vector2(-this._x, -this._y)))
             {
-                renderManager.Render(this.RenderTarget, this._region);
+                graphicsDevice.Render(this.RenderTarget, this._region);
             }
         }
         #endregion

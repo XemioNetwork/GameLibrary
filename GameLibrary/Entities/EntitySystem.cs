@@ -35,13 +35,28 @@ namespace Xemio.GameLibrary.Entities
 
         #region Private Methods
         /// <summary>
+        /// Determines wether the specified entity is matched by the filters.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        protected bool Matches(Entity entity)
+        {
+            return this._typeFilters.All(type => type.IsInstanceOfType(entity)) &&
+                   this._componentFilters.All(component => entity.GetComponent(component) != null);
+        }
+        /// <summary>
+        /// Filters the entities.
+        /// </summary>
+        protected IEnumerable<Entity> GetEntities()
+        {
+            return this.GetEntities(this.Environment);
+        } 
+        /// <summary>
         /// Filters the entities.
         /// </summary>
         /// <param name="entities">The entities.</param>
-        private IEnumerable<Entity> FilterEntities(IEnumerable<Entity> entities)
+        protected IEnumerable<Entity> GetEntities(IEnumerable<Entity> entities)
         {
-            return entities.Where(entity => this._typeFilters.All(type => type.IsInstanceOfType(entity)))
-                           .Where(entity => this._componentFilters.All(component => entity.GetComponent(component) != null));
+            return entities.Where(this.Matches);
         } 
         #endregion
 
@@ -49,10 +64,26 @@ namespace Xemio.GameLibrary.Entities
         /// <summary>
         /// Requires the entities to contain the specified component.
         /// </summary>
+        /// <param name="type">The type.</param>
+        protected void FilterByComponent(Type type)
+        {
+            this._componentFilters.Add(type);
+        }
+        /// <summary>
+        /// Requires the entities to contain the specified component.
+        /// </summary>
         /// <typeparam name="T">The component type.</typeparam>
         protected void FilterByComponent<T>() where T : EntityComponent
         {
             this._componentFilters.Add(typeof(T));
+        }
+        /// <summary>
+        /// Requires the entities to be an instance of the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        protected void FilterByEntityType(Type type)
+        {
+            this._componentFilters.Add(type);
         }
         /// <summary>
         /// Requires the entities to be an instance of the specified type.
@@ -71,21 +102,21 @@ namespace Xemio.GameLibrary.Entities
         /// <param name="elapsed">The elapsed time since last tick.</param>
         public void Tick(float elapsed)
         {
-            this.Tick(this.FilterEntities(this.Environment), elapsed);
+            this.Tick(this.GetEntities(), elapsed);
         }
         /// <summary>
         /// Handles pre render calls.
         /// </summary>
         public void PreRender()
         {
-            this.PreRender(this.FilterEntities(this.Environment));
+            this.PreRender(this.GetEntities());
         }
         /// <summary>
         /// Handles post render calls.
         /// </summary>
         public void PostRender()
         {
-            this.PostRender(this.FilterEntities(this.Environment));
+            this.PostRender(this.GetEntities());
         }
         #endregion
 

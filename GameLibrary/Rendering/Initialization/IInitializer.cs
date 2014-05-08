@@ -3,7 +3,7 @@ using Xemio.GameLibrary.Content;
 
 namespace Xemio.GameLibrary.Rendering.Initialization
 {
-    public interface IGraphicsInitializer : ILinkable<string>
+    public interface IInitializer : ILinkable<string>
     {
         /// <summary>
         /// Gets the display name.
@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Rendering.Initialization
         /// <summary>
         /// Gets the factory.
         /// </summary>
-        IGraphicsFactory Factory { get; }
+        IInitializationFactory Factory { get; }
         /// <summary>
         /// Creates the graphics provider.
         /// </summary>

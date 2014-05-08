@@ -63,16 +63,16 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Renders the shape.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        public virtual void Render(IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        public virtual void Render(GraphicsDevice graphicsDevice)
         {
             if (this.Background != null)
             {
-                renderManager.FillPie(this.Background, this.Region, this.StartAngle, this.SweepAngle);
+                graphicsDevice.FillPie(this.Background, this.Region, this.StartAngle, this.SweepAngle);
             }
             if (this.Outline != null)
             {
-                renderManager.DrawPie(this.Outline, this.Region, this.StartAngle, this.SweepAngle);
+                graphicsDevice.DrawPie(this.Outline, this.Region, this.StartAngle, this.SweepAngle);
             }
         }
         #endregion

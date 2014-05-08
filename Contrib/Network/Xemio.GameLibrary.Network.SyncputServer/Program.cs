@@ -28,7 +28,7 @@ namespace Xemio.GameLibrary.Network.SyncputServer
                 .DefaultComponents()
                 .DefaultInput()
                 .Scenes(new ServerScene())
-                .Graphics<GdiGraphicsInitializer>()
+                .Graphics<GdiInitializer>()
                 .BackBuffer(form.ClientSize)
                 .Surface(form)
                 .FrameRate(60)

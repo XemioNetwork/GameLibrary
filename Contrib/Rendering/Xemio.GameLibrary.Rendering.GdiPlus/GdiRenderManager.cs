@@ -26,7 +26,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
     using Rectangle = Xemio.GameLibrary.Math.Rectangle;
     using Color = System.Drawing.Color;
 
-    public abstract class GdiRenderManager : BaseRenderManager
+    public abstract class GdiRenderManager : AbstractRenderManager
     {
         #region Properties
         /// <summary>
@@ -64,17 +64,9 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
 
         #region Effect Properties
         /// <summary>
-        /// Gets the offset.
-        /// </summary>
-        public Vector2 Offset { get; set; }
-        /// <summary>
         /// Gets or sets the attributes.
         /// </summary>
         public ImageAttributes Attributes { get; set; }
-        #endregion
-
-        #region Private Methods
-        
         #endregion
         
         #region IRenderProvider Member
@@ -94,7 +86,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="end">The end.</param>
         public override void DrawLine(IPen pen, Vector2 start, Vector2 end)
         {
-            this.Graphics.DrawLine(((GdiPen)pen).Pen, start.X + this.Offset.X, start.Y + this.Offset.Y, end.X + this.Offset.X, end.Y + this.Offset.Y);
+            this.Graphics.DrawLine(((GdiPen)pen).Pen, start.X, start.Y, end.X, end.Y);
         }
         /// <summary>
         /// Draws an arc.
@@ -105,7 +97,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="sweepAngle">The sweep angle.</param>
         public override void DrawArc(IPen pen, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Graphics.DrawArc(((GdiPen)pen).Pen, region.X + this.Offset.X, region.Y + this.Offset.Y, region.Width, region.Height, startAngle, sweepAngle);
+            this.Graphics.DrawArc(((GdiPen)pen).Pen, region.X, region.Y, region.Width, region.Height, startAngle, sweepAngle);
         }
         /// <summary>
         /// Fills the specified rectangle.
@@ -114,7 +106,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="rectangle">The rectangle.</param>
         public override void FillRectangle(IBrush brush, Rectangle rectangle)
         {
-            this.Graphics.FillRectangle(((GdiBrush)brush).Brush, rectangle.X + this.Offset.X, rectangle.Y + this.Offset.Y, rectangle.Width, rectangle.Height);
+            this.Graphics.FillRectangle(((GdiBrush)brush).Brush, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
         /// <summary>
         /// Fills a rounded rectangle.
@@ -133,7 +125,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="region">The region.</param>
         public override void FillEllipse(IBrush brush, Rectangle region)
         {
-            this.Graphics.FillEllipse(((GdiBrush)brush).Brush, region.X + this.Offset.X, region.Y + this.Offset.Y, region.Width, region.Height);
+            this.Graphics.FillEllipse(((GdiBrush)brush).Brush, region.X, region.Y, region.Width, region.Height);
         }
         /// <summary>
         /// Fills a polygon.
@@ -142,7 +134,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="vertices">The vertices.</param>
         public override void FillPolygon(IBrush brush, Vector2[] vertices)
         {
-            this.Graphics.FillPolygon(((GdiBrush)brush).Brush, Gdi.Convert(vertices, this.Offset));
+            this.Graphics.FillPolygon(((GdiBrush)brush).Brush, Gdi.Convert(vertices));
         }
         /// <summary>
         /// Fills a pie.
@@ -153,7 +145,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <param name="sweepAngle">The sweep angle.</param>
         public override void FillPie(IBrush brush, Rectangle region, float startAngle, float sweepAngle)
         {
-            this.Graphics.FillPie(((GdiBrush)brush).Brush, region.X + this.Offset.X, region.Y + this.Offset.Y, region.Width, region.Height, startAngle, sweepAngle);
+            this.Graphics.FillPie(((GdiBrush)brush).Brush, region.X, region.Y, region.Width, region.Height, startAngle, sweepAngle);
         }
         /// <summary>
         /// Renders the specified texture.
@@ -177,8 +169,8 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
                 throw new InvalidOperationException("The rendered texture has to be an instance of the GdiTexture class.");
             }
 
-            var x = (int)destination.X + (int)this.Offset.X;
-            var y = (int)destination.Y + (int)this.Offset.Y;
+            var x = (int)destination.X;
+            var y = (int)destination.Y;
             var w = (int)destination.Width;
             var h = (int)destination.Height;
 
@@ -206,7 +198,6 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// </summary>
         public override void Present()
         {
-            this.Offset = Vector2.Zero;
             this.Graphics.Clear(Color.Black);
         }
         #endregion

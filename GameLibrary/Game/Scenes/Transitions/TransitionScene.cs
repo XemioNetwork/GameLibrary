@@ -52,11 +52,11 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
         {
             var graphicsDevice = XGL.Components.Require<GraphicsDevice>();
 
-            this._currentTarget = this._currentTarget ?? graphicsDevice.RenderFactory.CreateTarget(
+            this._currentTarget = this._currentTarget ?? graphicsDevice.Factory.CreateTarget(
                 graphicsDevice.DisplayMode.Width,
                 graphicsDevice.DisplayMode.Height);
 
-            this._nextTarget = this._nextTarget ?? graphicsDevice.RenderFactory.CreateTarget(
+            this._nextTarget = this._nextTarget ?? graphicsDevice.Factory.CreateTarget(
                 graphicsDevice.DisplayMode.Width,
                 graphicsDevice.DisplayMode.Height);
         }

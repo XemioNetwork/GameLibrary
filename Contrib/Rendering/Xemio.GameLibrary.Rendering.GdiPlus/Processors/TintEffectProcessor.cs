@@ -69,21 +69,21 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
         /// Enables the specified effect.
         /// </summary>
         /// <param name="effect">The effect.</param>
-        /// <param name="renderManager">The render manager.</param>
-        protected override void Enable(TintEffect effect, IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        protected override void Enable(TintEffect effect, GraphicsDevice graphicsDevice)
         {
             this.Effects.Add(effect);
-            this.Apply((GdiRenderManager)renderManager);
+            this.Apply((GdiRenderManager)graphicsDevice.RenderManager);
         }
         /// <summary>
         /// Disables the specified effect.
         /// </summary>
         /// <param name="effect">The effect.</param>
-        /// <param name="renderManager">The render manager.</param>
-        protected override void Disable(TintEffect effect, IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        protected override void Disable(TintEffect effect, GraphicsDevice graphicsDevice)
         {
-            this.Effects.RemoveAt(this.Effects.Count - 1);
-            this.Apply((GdiRenderManager)renderManager);
+            this.Effects.Remove(effect);
+            this.Apply((GdiRenderManager)graphicsDevice.RenderManager);
         }
         #endregion
     }

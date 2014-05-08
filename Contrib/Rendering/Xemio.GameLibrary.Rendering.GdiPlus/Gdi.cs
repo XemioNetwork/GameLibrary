@@ -29,7 +29,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         public static extern bool StretchBlt(IntPtr hdcDest, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest, IntPtr hdcSrc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, GdiRasterOperations dwRop);
         #endregion
 
-        #region Methods
+        #region Conversion Methods
         /// <summary>
         /// Converts the specified color.
         /// </summary>
@@ -37,6 +37,14 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         public static Drawing.Color Convert(Color color)
         {
             return Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+        /// <summary>
+        /// Converts the specified GDI color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        public static Color Convert(Drawing.Color color)
+        {
+            return new Color(color.R, color.G, color.B, color.A);
         }
         /// <summary>
         /// Converts the specified rectangle.

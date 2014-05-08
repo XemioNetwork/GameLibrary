@@ -11,13 +11,8 @@
         /// </summary>
         int Height { get; }
         /// <summary>
-        /// Gets the texture data.
+        /// Accesses this texture instance. Changed data will be applied after disposing the accessor.
         /// </summary>
-        byte[] GetData();
-        /// <summary>
-        /// Sets the texture data.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        void SetData(byte[] data);
+        ITextureAccessor Access();
     }
 }

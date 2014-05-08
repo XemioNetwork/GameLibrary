@@ -23,7 +23,6 @@ namespace Xemio.GameLibrary.Rendering.Fonts
             var spriteFont = (SpriteFont)font;
 
             var graphicsDevice = XGL.Components.Require<GraphicsDevice>();
-            var renderManager = graphicsDevice.RenderManager;
             
             string[] lines = value.Replace("\r", string.Empty).Split('\n');
             Vector2 currentPosition = position;
@@ -48,7 +47,7 @@ namespace Xemio.GameLibrary.Rendering.Fonts
                         throw new InvalidOperationException("Cannot render character " + character + " (" + index + ").");
                     }
 
-                    renderManager.Render(texture, new Rectangle(currentPosition.X, currentPosition.Y, texture.Width, texture.Height));
+                    graphicsDevice.Render(texture, new Rectangle(currentPosition.X, currentPosition.Y, texture.Width, texture.Height));
 
                     if (character == ' ')
                     {

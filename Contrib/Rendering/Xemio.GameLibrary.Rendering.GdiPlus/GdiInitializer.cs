@@ -13,15 +13,15 @@ using Xemio.GameLibrary.Rendering.Initialization;
 
 namespace Xemio.GameLibrary.Rendering.GdiPlus
 {
-    public class GdiGraphicsInitializer : IGraphicsInitializer
+    public class GdiInitializer : IInitializer
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GdiGraphicsInitializer"/> class.
+        /// Initializes a new instance of the <see cref="GdiInitializer"/> class.
         /// </summary>
-        public GdiGraphicsInitializer()
+        public GdiInitializer()
         {
-            this.Factory = new GdiGraphicsFactory(this);
+            this.Factory = new GdiInitializationFactory(this);
         }
         #endregion
 
@@ -58,7 +58,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
         /// <summary>
         /// Gets the factory.
         /// </summary>
-        public IGraphicsFactory Factory { get; private set; }
+        public IInitializationFactory Factory { get; private set; }
         #endregion
 
         #region Implementation of ILinkable<string>

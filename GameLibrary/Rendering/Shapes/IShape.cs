@@ -24,7 +24,7 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Renders the shape.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        void Render(IRenderManager renderManager);
+        /// <param name="graphicsDevice">The graphics device.</param>
+        void Render(GraphicsDevice graphicsDevice);
     }
 }

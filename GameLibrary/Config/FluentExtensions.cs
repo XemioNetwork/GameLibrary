@@ -36,7 +36,7 @@ namespace Xemio.GameLibrary.Config
         /// </summary>
         /// <typeparam name="T">The graphics initializer type.</typeparam>
         /// <param name="fluent">The fluent.</param>
-        public static FluentConfiguration Graphics<T>(this FluentConfiguration fluent) where T : IGraphicsInitializer
+        public static FluentConfiguration Graphics<T>(this FluentConfiguration fluent) where T : IInitializer
         {
             fluent.Graphics(typeof(T));
             return fluent;
@@ -48,7 +48,7 @@ namespace Xemio.GameLibrary.Config
         /// <param name="initializerType">Type of the initializer.</param>
         public static FluentConfiguration Graphics(this FluentConfiguration fluent, Type initializerType)
         {
-            fluent.Graphics((IGraphicsInitializer)Activator.CreateInstance(initializerType));
+            fluent.Graphics((IInitializer)Activator.CreateInstance(initializerType));
             return fluent;
         }
         /// <summary>
@@ -56,7 +56,7 @@ namespace Xemio.GameLibrary.Config
         /// </summary>
         /// <param name="fluent">The fluent.</param>
         /// <param name="initializer">The initializer.</param>
-        public static FluentConfiguration Graphics(this FluentConfiguration fluent, IGraphicsInitializer initializer)
+        public static FluentConfiguration Graphics(this FluentConfiguration fluent, IInitializer initializer)
         {
             var graphicsInstaller = fluent.GetConfiguration().GetOrInstall<GraphicsInstaller>();
             graphicsInstaller.Initializer = initializer;

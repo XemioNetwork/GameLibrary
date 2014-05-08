@@ -5,8 +5,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Content.Exceptions;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Layouts.Collections;
+using Xemio.GameLibrary.Content.Layouts.Exceptions;
 using Xemio.GameLibrary.Content.Layouts.Link;
 using Xemio.GameLibrary.Content.Layouts.Primitives;
 using Xemio.GameLibrary.Content.Layouts.References;
@@ -148,9 +150,16 @@ namespace Xemio.GameLibrary.Content.Layouts
             Action<object, object> setter = (container, guid) =>
             {
                 var content = XGL.Components.Require<ContentManager>();
-                var instance = content.Get<TProperty>((Guid)guid).Value;
 
-                propertyInfo.SetValue(container, instance, null);
+                try
+                {
+                    var instance = content.Get<TProperty>((Guid)guid).Value;
+                    propertyInfo.SetValue(container, instance, null);
+                }
+                catch (GuidNotFoundException ex)
+                {
+                    throw new ReferenceNotFoundException(tag, (Guid)guid, ex);
+                }
             };
 
             this.Add(new GuidElement(tag, "D", getter, setter));
@@ -176,9 +185,16 @@ namespace Xemio.GameLibrary.Content.Layouts
             Action<object, object> setter = (container, guid) =>
             {
                 var content = XGL.Components.Require<ContentManager>();
-                var instance = content.Get<TProperty>((Guid)guid).Value;
-
-                setAction((T)container, instance);
+                
+                try
+                {
+                    var instance = content.Get<TProperty>((Guid)guid).Value;
+                    setAction((T)container, instance);
+                }
+                catch (GuidNotFoundException ex)
+                {
+                    throw new ReferenceNotFoundException(tag, (Guid)guid, ex);
+                }
             };
 
             this.Add(new StringElement(tag, getter, setter));

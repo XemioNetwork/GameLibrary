@@ -15,21 +15,21 @@ using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Rendering.GdiPlus
 {
-    public class GdiGraphicsFactory : IGraphicsFactory
+    public class GdiInitializationFactory : IInitializationFactory
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GdiGraphicsFactory"/> class.
+        /// Initializes a new instance of the <see cref="GdiInitializationFactory"/> class.
         /// </summary>
         /// <param name="initializer">The initializer.</param>
-        public GdiGraphicsFactory(GdiGraphicsInitializer initializer)
+        public GdiInitializationFactory(GdiInitializer initializer)
         {
             this._initializer = initializer;
         }
         #endregion
 
         #region Fields
-        private readonly GdiGraphicsInitializer _initializer;
+        private readonly GdiInitializer _initializer;
         #endregion
 
         #region Implementation of IGraphicsFactory

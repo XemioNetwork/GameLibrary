@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Math;
+using Rectangle = Xemio.GameLibrary.Math.Rectangle;
 
 namespace Xemio.GameLibrary.Rendering.Shapes
 {
@@ -67,12 +69,12 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Renders the shape.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        public virtual void Render(IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        public virtual void Render(GraphicsDevice graphicsDevice)
         {
             if (this.Outline != null)
             {
-                renderManager.DrawArc(this.Outline, this.Region, this.StartAngle, this.SweepAngle);
+                graphicsDevice.DrawArc(this.Outline, this.Region, this.StartAngle, this.SweepAngle);
             }
         }
         #endregion

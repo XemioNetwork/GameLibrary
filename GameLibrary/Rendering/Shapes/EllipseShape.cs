@@ -55,16 +55,16 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Renders the shape.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        public virtual void Render(IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        public virtual void Render(GraphicsDevice graphicsDevice)
         {
             if (this.Background != null)
             {
-                renderManager.FillEllipse(this.Background, this.Region);
+                graphicsDevice.FillEllipse(this.Background, this.Region);
             }
             if (this.Outline != null)
             {
-                renderManager.DrawEllipse(this.Outline, this.Region);
+                graphicsDevice.DrawEllipse(this.Outline, this.Region);
             }
         }
         #endregion

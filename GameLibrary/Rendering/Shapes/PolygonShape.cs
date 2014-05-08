@@ -41,16 +41,16 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Renders the shape.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        public virtual void Render(IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        public virtual void Render(GraphicsDevice graphicsDevice)
         {
             if (this.Background != null)
             {
-                renderManager.FillPolygon(this.Background, this.Vertices);
+                graphicsDevice.FillPolygon(this.Background, this.Vertices);
             }
             if (this.Outline != null)
             {
-                renderManager.DrawPolygon(this.Outline, this.Vertices);
+                graphicsDevice.DrawPolygon(this.Outline, this.Vertices);
             }
         }
         #endregion

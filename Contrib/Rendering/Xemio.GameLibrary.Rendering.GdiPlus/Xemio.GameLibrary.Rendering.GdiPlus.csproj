@@ -43,17 +43,16 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GdiGraphicsFactory.cs" />
+    <Compile Include="GdiInitializationFactory.cs" />
     <Compile Include="GdiRenderFactory.cs" />
     <Compile Include="GdiRenderTarget.cs" />
+    <Compile Include="GdiTextureAccessor.cs" />
     <Compile Include="Geometry\GdiBrush.cs" />
-    <Compile Include="GdiGraphicsInitializer.cs" />
+    <Compile Include="GdiInitializer.cs" />
     <Compile Include="GdiRasterOperations.cs" />
     <Compile Include="GdiRenderManager.cs" />
     <Compile Include="GdiTexture.cs" />
     <Compile Include="Geometry\GdiPen.cs" />
-    <Compile Include="Processors\TranslateEffectProcessor.cs" />
-    <Compile Include="Processors\TranslateToEffectProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\GdiTextureReader.cs" />
     <Compile Include="Serialization\GdiTextureWriter.cs" />

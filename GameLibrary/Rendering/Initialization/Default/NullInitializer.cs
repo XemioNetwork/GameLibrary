@@ -1,6 +1,6 @@
 ﻿namespace Xemio.GameLibrary.Rendering.Initialization.Default
 {
-    public class NullGraphicsInitializer : IGraphicsInitializer
+    public class NullInitializer : IInitializer
     {
         #region Implementation of ILinkable<string>
         /// <summary>
@@ -38,9 +38,9 @@
         /// <summary>
         /// Gets the factory.
         /// </summary>
-        public IGraphicsFactory Factory
+        public IInitializationFactory Factory
         {
-            get { return new NullGraphicsFactory(); }
+            get { return new NullInitializationFactory(); }
         }
         /// <summary>
         /// Creates the graphics provider.

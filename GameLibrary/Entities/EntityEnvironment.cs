@@ -25,6 +25,8 @@ namespace Xemio.GameLibrary.Entities
         public EntityEnvironment()
         {
             this._guidMappings = new Dictionary<Guid, Entity>();
+
+            this.Systems = new AutoProtectedList<EntitySystem>();
             this.Entities = new AutoProtectedList<Entity>();
         }
         #endregion
@@ -95,7 +97,6 @@ namespace Xemio.GameLibrary.Entities
 
             this.Systems.Add(system);
         }
-
         /// <summary>
         /// Removes the entity identified by the specified unique identifier.
         /// </summary>

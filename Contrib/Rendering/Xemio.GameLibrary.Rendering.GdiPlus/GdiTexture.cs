@@ -47,24 +47,11 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
             get { return this.Bitmap.Height; }
         }
         /// <summary>
-        /// Gets the texture data.
+        /// Accesses this texture instance. Changed data will be applied after disposing the accessor.
         /// </summary>
-        public byte[] GetData()
+        public ITextureAccessor Access()
         {
-            var stream = new MemoryStream(this.Bitmap.Width * this.Bitmap.Height * 4);
-            this.Bitmap.Save(stream, ImageFormat.Png);
-
-            stream.Position = 0;
-
-            return stream.ToArray();
-        }
-        /// <summary>
-        /// Sets the texture data.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public void SetData(byte[] data)
-        {
-            this.Bitmap = new Bitmap(new MemoryStream(data));
+            return new GdiTextureAccessor(this);
         }
         #endregion
     }

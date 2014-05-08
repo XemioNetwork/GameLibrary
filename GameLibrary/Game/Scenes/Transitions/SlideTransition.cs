@@ -86,10 +86,10 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
             float percentage = this._elapsed / this.Duration;
             Vector2 translation = Vector2.SmoothStep(Vector2.Zero, this.Direction, percentage);
 
-            using (graphicsDevice.RenderManager.Translate(-translation))
+            using (graphicsDevice.Translate(-translation))
             {
-                graphicsDevice.RenderManager.Render(current, Vector2.Zero);
-                graphicsDevice.RenderManager.Render(next, this.Direction);
+                graphicsDevice.Render(current, Vector2.Zero);
+                graphicsDevice.Render(next, this.Direction);
             }
         }
         #endregion

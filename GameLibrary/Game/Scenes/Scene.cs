@@ -91,20 +91,6 @@ namespace Xemio.GameLibrary.Game.Scenes
             get { return XGL.Components.Require<ContentManager>(); }
         }
         /// <summary>
-        /// Gets the render manager.
-        /// </summary>
-        protected IRenderManager RenderManager
-        {
-            get { return this.GraphicsDevice.RenderManager; }
-        }
-        /// <summary>
-        /// Gets the render factory.
-        /// </summary>
-        protected IRenderFactory RenderFactory
-        {
-            get { return this.GraphicsDevice.RenderFactory; }
-        }
-        /// <summary>
         /// Gets the mouse listener.
         /// </summary>
         protected InputManager InputManager

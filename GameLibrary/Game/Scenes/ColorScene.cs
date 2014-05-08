@@ -40,14 +40,14 @@ namespace Xemio.GameLibrary.Game.Scenes
         /// <param name="loader">The content loader.</param>
         public override void LoadContent(IContentLoader loader)
         {
-            this._solidBrush = this.GraphicsDevice.RenderFactory.CreateSolidBrush(this.Color);
+            this._solidBrush = this.GraphicsDevice.Factory.CreateSolidBrush(this.Color);
         }
         /// <summary>
         /// Handles a game render.
         /// </summary>
         public override void Render()
         {
-            this.GraphicsDevice.RenderManager.FillRectangle(this._solidBrush, this.GraphicsDevice.DisplayMode.Bounds);
+            this.GraphicsDevice.FillRectangle(this._solidBrush, this.GraphicsDevice.DisplayMode.Bounds);
         }
         #endregion
     }

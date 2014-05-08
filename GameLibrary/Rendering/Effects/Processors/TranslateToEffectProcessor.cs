@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Xemio.GameLibrary.Math;
-using Xemio.GameLibrary.Rendering.Effects;
-using Xemio.GameLibrary.Rendering.Effects.Processors;
 
-namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
+namespace Xemio.GameLibrary.Rendering.Effects.Processors
 {
     public class TranslateToEffectProcessor : EffectProcessor<TranslateToEffect>
     {
@@ -30,23 +24,23 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus.Processors
         /// Enables the specified effect.
         /// </summary>
         /// <param name="effect">The effect.</param>
-        /// <param name="renderManager">The render manager.</param>
-        protected override void Enable(TranslateToEffect effect, IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        protected override void Enable(TranslateToEffect effect, GraphicsDevice graphicsDevice)
         {
-            var gdiRenderManager = (GdiRenderManager)renderManager;
-            this._previousPositions.Push(gdiRenderManager.Offset);
+            var translateProcessor = this.Find<TranslateEffectProcessor>();
+            this._previousPositions.Push(translateProcessor.Offset);
 
-            gdiRenderManager.Offset = effect.Position;
+            translateProcessor.Offset = effect.Position;
         }
         /// <summary>
         /// Disables the specified effect.
         /// </summary>
         /// <param name="effect">The effect.</param>
-        /// <param name="renderManager">The render manager.</param>
-        protected override void Disable(TranslateToEffect effect, IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        protected override void Disable(TranslateToEffect effect, GraphicsDevice graphicsDevice)
         {
-            var gdiRenderManager = (GdiRenderManager)renderManager;
-            gdiRenderManager.Offset = this._previousPositions.Pop();
+            var translateProcessor = this.Find<TranslateEffectProcessor>();
+            translateProcessor.Offset = this._previousPositions.Pop();
         }
         #endregion
     }

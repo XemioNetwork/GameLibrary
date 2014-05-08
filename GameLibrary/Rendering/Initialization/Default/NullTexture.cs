@@ -31,18 +31,11 @@
         /// </summary>
         public int Height { get; private set; }
         /// <summary>
-        /// Gets the texture data.
+        /// Accesses this texture instance. Changed data will be applied after disposing the accessor.
         /// </summary>
-        public byte[] GetData()
+        public ITextureAccessor Access()
         {
-            return new byte[] {};
-        }
-        /// <summary>
-        /// Sets the texture data.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public void SetData(byte[] data)
-        {
+            return new NullTextureAccessor();
         }
         #endregion
     }

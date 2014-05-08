@@ -12,7 +12,7 @@ using Xemio.GameLibrary.Rendering.Shapes.Factories;
 
 namespace Xemio.GameLibrary.Rendering.Initialization
 {
-    public interface IGraphicsFactory
+    public interface IInitializationFactory
     {
         /// <summary>
         /// Gets the texture writer.

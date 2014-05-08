@@ -154,11 +154,11 @@ namespace Xemio.GameLibrary.Math
 
         #region Methods
         /// <summary>
-        /// Inflates the rectangle by pushing all 4 directions by the according axis-orientated x and y values.
+        /// Expands the rectangle by pushing all 4 directions by the according axis-orientated x and y values.
         /// </summary>
         /// <param name="x">The x value.</param>
         /// <param name="y">The y value.</param>
-        public Rectangle Inflate(float x, float y)
+        public Rectangle Expand(float x, float y)
         {
             this._x -= x;
             this._y -= y;

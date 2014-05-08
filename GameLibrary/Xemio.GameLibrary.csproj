@@ -102,7 +102,10 @@
     <Compile Include="Content\Caching\ContentCache.cs" />
     <Compile Include="Content\Caching\IContentCache.cs" />
     <Compile Include="Content\Caching\InstanceNotCachedException.cs" />
+    <Compile Include="Content\Exceptions\GuidNotFoundException.cs" />
+    <Compile Include="Content\Exceptions\DuplicateGuidException.cs" />
     <Compile Include="Content\Formats\None\FormatlessFormat.cs" />
+    <Compile Include="Content\Layouts\Exceptions\ReferenceNotFoundException.cs" />
     <Compile Include="Content\Layouts\Primitives\TypeElement.cs" />
     <Compile Include="Content\Loading\BatchedContentLoader.cs" />
     <Compile Include="Content\ContentManager.cs" />
@@ -346,19 +349,39 @@
     <Compile Include="Rendering\Effects\FlipEffectOptions.cs" />
     <Compile Include="Rendering\Effects\IEffect.cs" />
     <Compile Include="Rendering\Effects\Processors\IEffectProcessor.cs" />
+    <Compile Include="Rendering\Effects\Processors\ScaleEffectProcessor.cs" />
+    <Compile Include="Rendering\Effects\Processors\TranslateEffectProcessor.cs" />
+    <Compile Include="Rendering\Effects\Processors\TranslateToEffectProcessor.cs" />
     <Compile Include="Rendering\Effects\RotateEffect.cs" />
+    <Compile Include="Rendering\Effects\ScaleEffect.cs" />
     <Compile Include="Rendering\Effects\TintEffect.cs" />
     <Compile Include="Rendering\Effects\BlendMode.cs" />
     <Compile Include="Rendering\Effects\TranslateEffect.cs" />
     <Compile Include="Rendering\Effects\TranslateToEffect.cs" />
+    <Compile Include="Rendering\Events\DrawArcEvent.cs" />
+    <Compile Include="Rendering\Events\DrawEllipseEvent.cs" />
+    <Compile Include="Rendering\Events\DrawLineEvent.cs" />
+    <Compile Include="Rendering\Events\DrawPieEvent.cs" />
+    <Compile Include="Rendering\Events\DrawPolygonEvent.cs" />
+    <Compile Include="Rendering\Events\DrawRectangleEvent.cs" />
+    <Compile Include="Rendering\Events\FillEllipseEvent.cs" />
+    <Compile Include="Rendering\Events\FillPieEvent.cs" />
+    <Compile Include="Rendering\Events\FillPolygonEvent.cs" />
+    <Compile Include="Rendering\Events\FillRectangleEvent.cs" />
+    <Compile Include="Rendering\Events\RegionEvent.cs" />
+    <Compile Include="Rendering\Events\RenderTextEvent.cs" />
+    <Compile Include="Rendering\Events\RenderTextureEvent.cs" />
+    <Compile Include="Rendering\Events\VertexEvent.cs" />
     <Compile Include="Rendering\Fonts\FontStyle.cs" />
     <Compile Include="Rendering\Fonts\IFont.cs" />
     <Compile Include="Rendering\Fonts\ITextRasterizer.cs" />
-    <Compile Include="Rendering\Initialization\IGraphicsFactory.cs" />
+    <Compile Include="Rendering\GraphicsDeviceFeatures.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullTextureAccessor.cs" />
+    <Compile Include="Rendering\Initialization\IInitializationFactory.cs" />
     <Compile Include="Rendering\Initialization\Default\NullBrush.cs" />
     <Compile Include="Rendering\Initialization\Default\NullFont.cs" />
-    <Compile Include="Rendering\Initialization\Default\NullGraphicsFactory.cs" />
-    <Compile Include="Rendering\Initialization\Default\NullGraphicsInitializer.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullInitializationFactory.cs" />
+    <Compile Include="Rendering\Initialization\Default\NullInitializer.cs" />
     <Compile Include="Rendering\Initialization\Default\NullPen.cs" />
     <Compile Include="Rendering\Initialization\Default\NullRenderFactory.cs" />
     <Compile Include="Rendering\Initialization\Default\NullRenderManager.cs" />
@@ -369,7 +392,8 @@
     <Compile Include="Rendering\InterpolationMode.cs" />
     <Compile Include="Rendering\Events\ResolutionChangedEvent.cs" />
     <Compile Include="Rendering\Initialization\NamedInitializer.cs" />
-    <Compile Include="Rendering\BaseRenderManager.cs" />
+    <Compile Include="Rendering\AbstractRenderManager.cs" />
+    <Compile Include="Rendering\ITextureAccessor.cs" />
     <Compile Include="Rendering\Shapes\ArcShape.cs" />
     <Compile Include="Rendering\Shapes\Cached\CachedArcShape.cs" />
     <Compile Include="Rendering\Shapes\Cached\CachedEllipseShape.cs" />
@@ -441,7 +465,7 @@
     <Compile Include="Plugins\Contexts\MultipleAssemblyContext.cs" />
     <Compile Include="Plugins\Contexts\SingleAssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendering\Initialization\IGraphicsInitializer.cs" />
+    <Compile Include="Rendering\Initialization\IInitializer.cs" />
     <Compile Include="Rendering\IRenderTarget.cs" />
     <Compile Include="Rendering\Initialization\PriorizedInitializer.cs" />
     <Compile Include="Rendering\Color.cs" />
@@ -471,6 +495,7 @@
     <Compile Include="Common\Collections\AutoProtectedDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Events\Handles\" />
     <Folder Include="Logging\" />
   </ItemGroup>
   <ItemGroup>

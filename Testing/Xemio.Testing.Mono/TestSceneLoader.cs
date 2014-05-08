@@ -30,7 +30,7 @@ namespace Xemio.Testing.Mono
         /// <param name="loader">The content loader.</param>
         public override void LoadContent(IContentLoader loader)
         {
-            this._font = this.GraphicsDevice.RenderFactory.CreateFont("Arial", 8);
+            this._font = this.GraphicsDevice.Factory.CreateFont("Arial", 8);
         }
         
         /// <summary>

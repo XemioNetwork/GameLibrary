@@ -59,16 +59,16 @@ namespace Xemio.GameLibrary.Rendering.Shapes
         /// <summary>
         /// Renders the shape.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        public virtual void Render(IRenderManager renderManager)
+        /// <param name="graphicsDevice">The graphics device.</param>
+        public virtual void Render(GraphicsDevice graphicsDevice)
         {
             if (this.Background != null)
             {
-                renderManager.FillRectangle(this.Background, this.Region, this.CornerRadius);
+                graphicsDevice.FillRectangle(this.Background, this.Region, this.CornerRadius);
             }
             if (this.Outline != null)
             {
-                renderManager.DrawRectangle(this.Outline, this.Region, this.CornerRadius);
+                graphicsDevice.DrawRectangle(this.Outline, this.Region, this.CornerRadius);
             }
         }
         #endregion

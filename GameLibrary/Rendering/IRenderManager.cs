@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -21,11 +22,6 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="color">The color.</param>
         void Clear(Color color);
-        /// <summary>
-        /// Applies the specified effects.
-        /// </summary>
-        /// <param name="effects">The effects.</param>
-        IDisposable Apply(params IEffect[] effects);
         /// <summary>
         /// Renders the specified texture.
         /// </summary>
@@ -120,90 +116,64 @@ namespace Xemio.GameLibrary.Rendering
         void Present();
     }
 
-    public static class RenderManagerOverloads
-    {
-        #region Render Overloads
-        /// <summary>
-        /// Renders the specified texture.
-        /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        /// <param name="texture">The texture.</param>
-        /// <param name="position">The position.</param>
-        public static void Render(this IRenderManager renderManager, ITexture texture, Vector2 position)
-        {
-            renderManager.Render(texture, new Rectangle(position.X, position.Y, texture.Width, texture.Height));
-        }
-        /// <summary>
-        /// Renders the specified texture.
-        /// </summary>
-        /// <param name="renderManager">The render manager.</param>
-        /// <param name="texture">The texture.</param>
-        /// <param name="destination">The destination.</param>
-        public static void Render(this IRenderManager renderManager, ITexture texture, Rectangle destination)
-        {
-            renderManager.Render(texture, destination, new Rectangle(0, 0, texture.Width, texture.Height));
-        }
-        #endregion
-    }
-
     public static class RenderManagerExtensions
     {
         #region Effect Methods
         /// <summary>
         /// Translates the specified render manager.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
+        /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="offset">The offset.</param>
-        public static IDisposable Translate(this IRenderManager renderManager, Vector2 offset)
+        public static IDisposable Translate(this GraphicsDevice graphicsDevice, Vector2 offset)
         {
-            return renderManager.Apply(new TranslateEffect(offset));
+            return graphicsDevice.Apply(new TranslateEffect(offset));
         }
         /// <summary>
         /// Translates the specified render manager.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
+        /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="x">The x coordinate.</param>
         /// <param name="y">The y coordinate.</param>
-        public static IDisposable Translate(this IRenderManager renderManager, float x, float y)
+        public static IDisposable Translate(this GraphicsDevice graphicsDevice, float x, float y)
         {
-            return renderManager.Apply(new TranslateEffect(new Vector2(x, y)));
+            return graphicsDevice.Apply(new TranslateEffect(new Vector2(x, y)));
         }
         /// <summary>
         /// Translates the render manager to the specified position.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
+        /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="position">The position.</param>
-        public static IDisposable TranslateTo(this IRenderManager renderManager, Vector2 position)
+        public static IDisposable TranslateTo(this GraphicsDevice graphicsDevice, Vector2 position)
         {
-            return renderManager.Apply(new TranslateToEffect(position));
+            return graphicsDevice.Apply(new TranslateToEffect(position));
         }
         /// <summary>
         /// Translates the render manager to the specified position.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
+        /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="x">The x coordinate.</param>
         /// <param name="y">The y coordinate.</param>
-        public static IDisposable TranslateTo(this IRenderManager renderManager, float x, float y)
+        public static IDisposable TranslateTo(this GraphicsDevice graphicsDevice, float x, float y)
         {
-            return renderManager.Apply(new TranslateToEffect(new Vector2(x, y)));
+            return graphicsDevice.Apply(new TranslateToEffect(new Vector2(x, y)));
         }
         /// <summary>
         /// Tints the specified render manager using an alpha channel value.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
+        /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="alpha">The alpha.</param>
-        public static IDisposable Alpha(this IRenderManager renderManager, float alpha)
+        public static IDisposable Alpha(this GraphicsDevice graphicsDevice, float alpha)
         {
-            return renderManager.Apply(new TintEffect(new Color(1.0f, 1.0f, 1.0f, alpha)));
+            return graphicsDevice.Apply(new TintEffect(new Color(1.0f, 1.0f, 1.0f, alpha)));
         }
         /// <summary>
         /// Tints the specified render manager.
         /// </summary>
-        /// <param name="renderManager">The render manager.</param>
+        /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="color">The color.</param>
-        public static IDisposable Tint(this IRenderManager renderManager, Color color)
+        public static IDisposable Tint(this GraphicsDevice graphicsDevice, Color color)
         {
-            return renderManager.Apply(new TintEffect(color));
+            return graphicsDevice.Apply(new TintEffect(color));
         }
         /// <summary>
         /// Tints the specified render manager.
@@ -213,7 +183,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="r">The red channel.</param>
         /// <param name="g">The green channel.</param>
         /// <param name="b">The blue channel.</param>
-        public static IDisposable Tint(this IRenderManager renderManager, float r, float g, float b, float a)
+        public static IDisposable Tint(this GraphicsDevice renderManager, float r, float g, float b, float a)
         {
             return renderManager.Apply(new TintEffect(new Color(r, g, b, a)));
         }
@@ -223,7 +193,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <param name="renderManager">The render manager.</param>
         /// <param name="color">The color.</param>
         /// <param name="blendMode">The blend mode.</param>
-        public static IDisposable Tint(this IRenderManager renderManager, Color color, BlendMode blendMode)
+        public static IDisposable Tint(this GraphicsDevice renderManager, Color color, BlendMode blendMode)
         {
             return renderManager.Apply(new TintEffect(color, blendMode));
         }
@@ -232,7 +202,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="renderManager">The render manager.</param>
         /// <param name="rotation">The rotation.</param>
-        public static IDisposable Rotate(this IRenderManager renderManager, float rotation)
+        public static IDisposable Rotate(this GraphicsDevice renderManager, float rotation)
         {
             return renderManager.Apply(new RotateEffect(rotation));
         }
@@ -241,7 +211,7 @@ namespace Xemio.GameLibrary.Rendering
         /// </summary>
         /// <param name="renderManager">The render manager.</param>
         /// <param name="options">The options.</param>
-        public static IDisposable Flip(this IRenderManager renderManager, FlipEffectOptions options)
+        public static IDisposable Flip(this GraphicsDevice renderManager, FlipEffectOptions options)
         {
             return renderManager.Apply(new FlipEffect(options));
         }

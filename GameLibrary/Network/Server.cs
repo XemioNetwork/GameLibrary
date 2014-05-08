@@ -74,7 +74,7 @@ namespace Xemio.GameLibrary.Network
         /// <summary>
         /// Gets the protocol.
         /// </summary>
-        internal IServerProtocol Protocol { get; private set; }
+        protected internal IServerProtocol Protocol { get; private set; }
         /// <summary>
         /// Gets the connections.
         /// </summary>
