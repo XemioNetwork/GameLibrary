@@ -1,13 +1,13 @@
 ﻿using System;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
     [Require(typeof(IGameLoop))]
 
-    public class GameTime : IConstructable, ITickHandler
+    public class GameTime : IConstructable, ITickSubscriber
     {
         #region Constructors
         /// <summary>
@@ -59,7 +59,7 @@ namespace Xemio.GameLibrary.Game.Timing
                     this.Time = DateTime.Now;
                     break;
                 case GameTimeMode.Simulated:
-                    this.Time += TimeSpan.FromMilliseconds(elapsed / this.DayLength.TotalMilliseconds);
+                    this.Time += TimeSpan.FromSeconds(elapsed / this.DayLength.TotalSeconds);
                     break;
             }
         }

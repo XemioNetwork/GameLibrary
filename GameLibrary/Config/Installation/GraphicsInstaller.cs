@@ -1,8 +1,8 @@
 ﻿using System;
-using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Config.Dependencies;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering;

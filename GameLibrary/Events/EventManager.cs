@@ -8,6 +8,7 @@ using System.IO;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Events.Handles;
 using Xemio.GameLibrary.Plugins;
 using Xemio.GameLibrary.Plugins.Contexts;
 
@@ -29,6 +30,7 @@ namespace Xemio.GameLibrary.Events
         public EventManager(IAssemblyContext context)
         {
             this.LoadEventsFrom(context);
+            this.Subscribe(new HandleObserver());
         }
         #endregion
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Game.Scenes;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Config.Installation
 {

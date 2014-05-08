@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using NLog;
 using Xemio.GameLibrary.Components.Attributes;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Network.Handlers;
 
 namespace Xemio.GameLibrary.Network.Timing

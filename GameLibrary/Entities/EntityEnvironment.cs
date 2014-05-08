@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Collections;
-using NLog;
 using Xemio.GameLibrary.Common.Collections;
+using Xemio.GameLibrary.Events.Handles;
 using Xemio.GameLibrary.Game;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 using Xemio.GameLibrary.Game.Timing;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public class EntityEnvironment : IEnumerable<Entity>, ITickHandler, IRenderHandler
+    public class EntityEnvironment : IEnumerable<Entity>, ITickSubscriber, IRenderSubscriber, IHandleContainer
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -209,6 +210,16 @@ namespace Xemio.GameLibrary.Entities
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+        #endregion
+
+        #region Implementation of IHandleContainer
+        /// <summary>
+        /// Gets an instance list containing handle implementations.
+        /// </summary>
+        IEnumerable IHandleContainer.Children
+        {
+            get { return this.Entities; }
         }
         #endregion
     }

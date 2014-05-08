@@ -33,7 +33,7 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
 
         #region Properties
         /// <summary>
-        /// Gets the direction.
+        /// Gets the direction in seconds.
         /// </summary>
         public Vector2 Direction { get; private set; }
         /// <summary>

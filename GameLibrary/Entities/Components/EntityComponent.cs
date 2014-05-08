@@ -1,11 +1,11 @@
 ﻿using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Game;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 using Xemio.GameLibrary.Game.Timing;
 
 namespace Xemio.GameLibrary.Entities.Components
 {
-    public abstract class EntityComponent : IRenderHandler, ITickHandler
+    public abstract class EntityComponent : IRenderSubscriber, ITickSubscriber
     {
         #region Properties
         /// <summary>

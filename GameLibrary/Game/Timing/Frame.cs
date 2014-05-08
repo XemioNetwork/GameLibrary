@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xemio.GameLibrary.Common;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 
 namespace Xemio.GameLibrary.Game.Timing
 {
-    public class Frame : ITickHandler
+    public class Frame : ITickSubscriber
     {
         #region Constructors
         /// <summary>

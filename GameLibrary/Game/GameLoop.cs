@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Common.Threads;
 using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 using Xemio.GameLibrary.Game.Timing;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Game
 {
@@ -34,7 +34,7 @@ namespace Xemio.GameLibrary.Game
         /// </summary>
         public GameLoop()
         {
-            this._handlers = new AutoProtectedList<IGameHandler>();
+            this._subscribers = new AutoProtectedList<ISubscriber>();
 
             this.LagCompensation = LagCompensation.ExecuteMissedTicks;
             this.Subscribe(Frame.Instance);
@@ -48,7 +48,7 @@ namespace Xemio.GameLibrary.Game
         private CancellationTokenSource _cancellationTokenSource;
         private Stopwatch _gameTime;
 
-        private readonly ProtectedList<IGameHandler> _handlers;
+        private readonly ProtectedList<ISubscriber> _subscribers;
 
         private double _renderTime;
         private double _tickTime;
@@ -112,13 +112,13 @@ namespace Xemio.GameLibrary.Game
         /// <summary>
         /// Gets the tick handlers.
         /// </summary>
-        public IEnumerable<ITickHandler> TickHandlers
+        public IEnumerable<ITickSubscriber> TickHandlers
         {
             get
             {
-                return this._handlers.OfType<ITickHandler>().OrderBy(handler =>
+                return this._subscribers.OfType<ITickSubscriber>().OrderBy(handler =>
                 {
-                    var sortable = handler as ISortableTickHandler;
+                    var sortable = handler as ISortableTickSubscriber;
                     if (sortable != null)
                     {
                         return sortable.TickIndex;
@@ -131,13 +131,13 @@ namespace Xemio.GameLibrary.Game
         /// <summary>
         /// Gets the render handlers.
         /// </summary>
-        public IEnumerable<IRenderHandler> RenderHandlers
+        public IEnumerable<IRenderSubscriber> RenderHandlers
         {
             get
             {
-                return this._handlers.OfType<IRenderHandler>().OrderBy(handler =>
+                return this._subscribers.OfType<IRenderSubscriber>().OrderBy(handler =>
                 {
-                    var sortable = handler as ISortableRenderHandler;
+                    var sortable = handler as ISortableRenderSubscriber;
                     if (sortable != null)
                     {
                         return sortable.RenderIndex;
@@ -163,9 +163,10 @@ namespace Xemio.GameLibrary.Game
             //as frequent as tick
             this.FrameIndex++;
 
-            foreach (ITickHandler gameHandler in this.TickHandlers)
+            foreach (ITickSubscriber subscriber in this.TickHandlers)
             {
-                gameHandler.Tick(elapsed);
+                //Pass in the elapsed time as seconds
+                subscriber.Tick(elapsed / 1000.0f);
             }
 
             tickWatch.Stop();
@@ -174,14 +175,13 @@ namespace Xemio.GameLibrary.Game
         /// <summary>
         /// Called when the game should be rendered.
         /// </summary>
-        /// <param name="elapsed">The elapsed.</param>
-        protected virtual void OnRender(float elapsed)
+        protected virtual void OnRender()
         {
             Stopwatch renderWatch = Stopwatch.StartNew();
 
-            foreach (IRenderHandler gameHandler in this.RenderHandlers)
+            foreach (IRenderSubscriber subscriber in this.RenderHandlers)
             {
-                gameHandler.Render();
+                subscriber.Render();
             }
 
             renderWatch.Stop();
@@ -224,19 +224,19 @@ namespace Xemio.GameLibrary.Game
         /// Subscribes and adds the handler to the gameloop.
         /// </summary>
         /// <param name="handler">The handler.</param>
-        public void Subscribe(IGameHandler handler)
+        public void Subscribe(ISubscriber handler)
         {
             logger.Debug("Subscribed {0} to the game loop.", handler.GetType().Name);
-            this._handlers.Add(handler);
+            this._subscribers.Add(handler);
         }
         /// <summary>
         /// Unsubscribes the gameloop and removes the handler.
         /// </summary>
         /// <param name="handler">The handler.</param>
-        public void Unsubscribe(IGameHandler handler)
+        public void Unsubscribe(ISubscriber handler)
         {
             logger.Debug("Removed {0} from game loop.", handler.GetType().Name);
-            this._handlers.Remove(handler);
+            this._subscribers.Remove(handler);
         }
         /// <summary>
         /// Resets all important fields.
@@ -302,7 +302,7 @@ namespace Xemio.GameLibrary.Game
                 this._elapsedRenderTime = this._gameTime.Elapsed.TotalMilliseconds - this._lastRender;
                 this._lastRender = this._gameTime.Elapsed.TotalMilliseconds;
 
-                this._invoker.Invoke(() => this.OnRender((float)this._elapsedRenderTime));
+                this._invoker.Invoke(this.OnRender);
                 this._requestRender = false;
 
                 logger.Trace("Handled render request with {0}ms frame time.", this._elapsedRenderTime);
@@ -332,7 +332,7 @@ namespace Xemio.GameLibrary.Game
             //If there are unprocessed ticks, call OnTick.
             if (this._unprocessedTicks >= 1)
             {
-                int tickCount = (int)this._unprocessedTicks;
+                var tickCount = (int)this._unprocessedTicks;
 
                 //Subtract unprocessed ticks as an integer, since we want
                 //to keep digits for the next tick. (Example: unprocessedTicks = 3.11, => tickCount = 3)
@@ -350,7 +350,7 @@ namespace Xemio.GameLibrary.Game
                         //as needed for the elapsed tick time.
                         //Example: elapsedTickTime = 32ms, TargetFrameTime = 16ms => call OnTick twice.
 
-                        float tickElapsed = (float)(this._timeSinceLastTick / tickCount);
+                        var tickElapsed = (float)(this._timeSinceLastTick / tickCount);
                         for (int i = 0; i < tickCount; i++)
                         {
                             this._invoker.Invoke(() => this.OnTick(tickElapsed));

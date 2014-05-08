@@ -1,6 +1,6 @@
-﻿namespace Xemio.GameLibrary.Game.Handlers
+﻿namespace Xemio.GameLibrary.Game.Subscribers
 {
-    public interface ITickHandler : IGameHandler
+    public interface ITickSubscriber : ISubscriber
     {
         /// <summary>
         /// Handles a game tick.

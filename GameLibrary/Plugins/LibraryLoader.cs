@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
-using NLog;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Plugins
 {

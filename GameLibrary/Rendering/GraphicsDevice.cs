@@ -4,12 +4,12 @@ using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.IO;
-using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Plugins.Implementations;
 using Xemio.GameLibrary.Rendering.Effects;
 using Xemio.GameLibrary.Rendering.Effects.Processors;
@@ -71,7 +71,7 @@ namespace Xemio.GameLibrary.Rendering
         /// <summary>
         /// Gets the scale.
         /// </summary>
-        public Vector2 Scale
+        public Vector2 ScreenRatio
         {
             get
             {
@@ -539,6 +539,128 @@ namespace Xemio.GameLibrary.Rendering
         public void Construct()
         {
             this.CreateBackBuffer(this.DisplayMode);
+        }
+        #endregion
+    }
+
+    public static class GraphicsDeviceEffectExtensions
+    {
+        #region Effect Methods
+        /// <summary>
+        /// Applies a scale effect.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="scale">The scale.</param>
+        public static IDisposable Scale(this GraphicsDevice graphicsDevice, Vector2 scale)
+        {
+            return graphicsDevice.Apply(new ScaleEffect(scale));
+        }
+        /// <summary>
+        /// Applies a scale effect.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        public static IDisposable Scale(this GraphicsDevice graphicsDevice, float x, float y)
+        {
+            return graphicsDevice.Apply(new ScaleEffect(x, y));
+        }
+        /// <summary>
+        /// Applies a translate effect.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="offset">The offset.</param>
+        public static IDisposable Translate(this GraphicsDevice graphicsDevice, Vector2 offset)
+        {
+            return graphicsDevice.Apply(new TranslateEffect(offset));
+        }
+        /// <summary>
+        /// Applies a translate effect.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        public static IDisposable Translate(this GraphicsDevice graphicsDevice, float x, float y)
+        {
+            return graphicsDevice.Apply(new TranslateEffect(new Vector2(x, y)));
+        }
+        /// <summary>
+        /// Applies a translate effect.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="position">The position.</param>
+        public static IDisposable TranslateTo(this GraphicsDevice graphicsDevice, Vector2 position)
+        {
+            return graphicsDevice.Apply(new TranslateToEffect(position));
+        }
+        /// <summary>
+        /// Applies a translate effect.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        public static IDisposable TranslateTo(this GraphicsDevice graphicsDevice, float x, float y)
+        {
+            return graphicsDevice.Apply(new TranslateToEffect(new Vector2(x, y)));
+        }
+        /// <summary>
+        /// Applies an alpha tint effect.
+        /// Tints the specified render manager using an alpha channel value.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="alpha">The alpha.</param>
+        public static IDisposable Alpha(this GraphicsDevice graphicsDevice, float alpha)
+        {
+            return graphicsDevice.Apply(new TintEffect(new Color(1.0f, 1.0f, 1.0f, alpha)));
+        }
+        /// <summary>
+        /// Applies a tint effect.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="color">The color.</param>
+        public static IDisposable Tint(this GraphicsDevice graphicsDevice, Color color)
+        {
+            return graphicsDevice.Apply(new TintEffect(color));
+        }
+        /// <summary>
+        /// Applies a tint effect.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="a">The alpha channel.</param>
+        /// <param name="r">The red channel.</param>
+        /// <param name="g">The green channel.</param>
+        /// <param name="b">The blue channel.</param>
+        public static IDisposable Tint(this GraphicsDevice renderManager, float r, float g, float b, float a)
+        {
+            return renderManager.Apply(new TintEffect(new Color(r, g, b, a)));
+        }
+        /// <summary>
+        /// Applies a tint effect.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="color">The color.</param>
+        /// <param name="blendMode">The blend mode.</param>
+        public static IDisposable Tint(this GraphicsDevice renderManager, Color color, BlendMode blendMode)
+        {
+            return renderManager.Apply(new TintEffect(color, blendMode));
+        }
+        /// <summary>
+        /// Applies a rotate effect.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="rotation">The rotation.</param>
+        public static IDisposable Rotate(this GraphicsDevice renderManager, float rotation)
+        {
+            return renderManager.Apply(new RotateEffect(rotation));
+        }
+        /// <summary>
+        /// Applies a flip effect.
+        /// </summary>
+        /// <param name="renderManager">The render manager.</param>
+        /// <param name="options">The options.</param>
+        public static IDisposable Flip(this GraphicsDevice renderManager, FlipEffectOptions options)
+        {
+            return renderManager.Apply(new FlipEffect(options));
         }
         #endregion
     }

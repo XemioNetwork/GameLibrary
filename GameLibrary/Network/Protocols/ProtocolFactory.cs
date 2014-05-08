@@ -1,6 +1,6 @@
 ﻿using System;
-using NLog;
 using Xemio.GameLibrary.Common.Link;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Plugins.Implementations;
 
 namespace Xemio.GameLibrary.Network.Protocols

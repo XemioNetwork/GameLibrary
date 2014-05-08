@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Common
 {
@@ -44,7 +44,7 @@ namespace Xemio.GameLibrary.Common
 
             if (exception != this._lastException)
             { 
-                logger.Error(exception);
+                logger.ErrorException("Application exception: ", exception);
                 this._lastException = exception;
             }
         }

@@ -1,6 +1,6 @@
-﻿namespace Xemio.GameLibrary.Game.Handlers
+﻿namespace Xemio.GameLibrary.Game.Subscribers
 {
-    public interface ISortableTickHandler : ITickHandler
+    public interface ISortableTickSubscriber : ITickSubscriber
     {
         /// <summary>
         /// Gets the index of the tick. Default: 0.

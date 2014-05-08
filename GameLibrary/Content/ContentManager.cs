@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
@@ -14,6 +13,7 @@ using Xemio.GameLibrary.Content.Exceptions;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Content.Metadata;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Content
 {

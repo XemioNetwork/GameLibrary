@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using NLog;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Rendering.Surfaces;
@@ -45,7 +45,7 @@ namespace Xemio.GameLibrary.Input.Adapters
 
             if (graphicsDevice != null)
             {
-                divider = graphicsDevice.Scale;
+                divider = graphicsDevice.ScreenRatio;
             }
 
             Vector2 position = new Vector2(e.X, e.Y) / divider;

@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
 using Xemio.GameLibrary.Content.Loading;
-using Xemio.GameLibrary.Game.Handlers;
 using Xemio.GameLibrary.Game.Scenes.Transitions;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Content;
 

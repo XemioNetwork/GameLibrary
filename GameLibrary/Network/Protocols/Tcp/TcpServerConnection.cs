@@ -5,7 +5,6 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Network.Exceptions;
 using Xemio.GameLibrary.Network.Packages;
@@ -56,7 +55,7 @@ namespace Xemio.GameLibrary.Network.Protocols.Tcp
             get { return this._address; }
         }
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IServerChannel"/> is connected.
+        /// Gets a value indicating whether this <see cref="IServerChannelProtocol"/> is connected.
         /// </summary>
         public override bool Connected
         {

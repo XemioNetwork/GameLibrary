@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using NLog;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Content.FileSystem.Compression
 {

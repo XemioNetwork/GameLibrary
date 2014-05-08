@@ -97,6 +97,7 @@ namespace Xemio.GameLibrary.Rendering.GdiPlus
             yield return new TintEffectProcessor();
             yield return new TranslateEffectProcessor();
             yield return new TranslateToEffectProcessor();
+            yield return new ScaleEffectProcessor();
         }
         #endregion
     }

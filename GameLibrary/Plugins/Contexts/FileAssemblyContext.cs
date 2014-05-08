@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.IO;
-using NLog;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Plugins.Contexts
 {
@@ -49,7 +49,7 @@ namespace Xemio.GameLibrary.Plugins.Contexts
                 }
                 catch (Exception exception)
                 {
-                    logger.Error(exception);
+                    logger.ErrorException("Unexpected error occured: ", exception);
                 }
             }
 

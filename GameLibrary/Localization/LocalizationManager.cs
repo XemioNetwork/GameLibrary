@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using NLog;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.FileSystem;
 using Xemio.GameLibrary.Content.Formats;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Localization
 {

@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.IO;
-using NLog;
 using Xemio.GameLibrary.Content;
 using Xemio.GameLibrary.Content.Layouts.Generation;
 using Xemio.GameLibrary.Entities.Components;
 using Xemio.GameLibrary.Entities.Events;
 using Xemio.GameLibrary.Events;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Events.Handles;
+using Xemio.GameLibrary.Game.Subscribers;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Common;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public class Entity : ITickHandler, IRenderHandler
+    public class Entity : ITickSubscriber, IRenderSubscriber, IHandleContainer
     {
         #region Constructors
         /// <summary>
@@ -143,6 +144,16 @@ namespace Xemio.GameLibrary.Entities
                     component.Tick(elapsed);
                 }
             }
+        }
+        #endregion
+
+        #region Implementation of IHandleContainer
+        /// <summary>
+        /// Gets an instance list containing handle implementations.
+        /// </summary>
+        IEnumerable IHandleContainer.Children
+        {
+            get { return this.Components; }
         }
         #endregion
     }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
-using NLog;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Rendering.Surfaces;
 
 namespace Xemio.GameLibrary.Input.Adapters

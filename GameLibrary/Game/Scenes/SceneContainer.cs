@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NLog;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components.Attributes;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Rendering;
 

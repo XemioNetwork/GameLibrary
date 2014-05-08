@@ -1,6 +1,6 @@
 ﻿using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 
 namespace Xemio.GameLibrary.Game
 {
@@ -19,12 +19,12 @@ namespace Xemio.GameLibrary.Game
         /// Subscribes and adds the handler to the gameloop.
         /// </summary>
         /// <param name="handler">The handler.</param>
-        void Subscribe(IGameHandler handler);
+        void Subscribe(ISubscriber handler);
         /// <summary>
         /// Unsubscribes the gameloop and removes the handler.
         /// </summary>
         /// <param name="handler">The handler.</param>
-        void Unsubscribe(IGameHandler handler);
+        void Unsubscribe(ISubscriber handler);
         /// <summary>
         /// Gets or sets the lag compensation. If set to ExecuteMissedTicks, the game loop will
         /// always run at the same tick frequency.

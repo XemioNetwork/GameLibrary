@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using NLog;
 using Xemio.GameLibrary.Content.Layouts.Generation;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Network.Packages;
 
 namespace Xemio.GameLibrary.Network.Protocols.Local

@@ -44,12 +44,12 @@ namespace Xemio.Testing.Mono
             loader.Load("Really long stuff.", () => Thread.Sleep(4000));
 
             loader.Load("Yellow brush",
-                () => this._red = this.RenderFactory.CreateSolidBrush(Color.Yellow));
+                () => this._red = this.GraphicsDevice.Factory.CreateSolidBrush(Color.Yellow));
 
             loader.Load("Really long stuff 2.", () => Thread.Sleep(2000));
 
             loader.Load("Lime brush",
-                () => this._green = this.RenderFactory.CreateSolidBrush(Color.Lime));
+                () => this._green = this.GraphicsDevice.Factory.CreateSolidBrush(Color.Lime));
         }
 
         public override void Tick(float elapsed)
@@ -69,9 +69,9 @@ namespace Xemio.Testing.Mono
 
         public override void Render()
         {
-            using (this.RenderManager.Translate(this._position))
+            using (this.GraphicsDevice.Translate(this._position))
             {
-                this.RenderManager.Render(this._texture, new Rectangle(0, 0, 400, 300));
+                this.GraphicsDevice.Render(this._texture, new Rectangle(0, 0, 400, 300));
             }
         }
     }

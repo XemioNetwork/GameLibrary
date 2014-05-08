@@ -7,7 +7,7 @@ using Xemio.GameLibrary.Common.Collections;
 
 namespace Xemio.GameLibrary.Components
 {
-    public interface IComponentCatalog : ICatalog<IComponent>
+    public interface IComponentCatalog : ICatalog<IComponent>, IEnumerable<IComponent>
     {
         /// <summary>
         /// Constructs all loaded components.

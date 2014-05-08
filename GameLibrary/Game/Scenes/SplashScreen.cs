@@ -53,9 +53,9 @@ namespace Xemio.GameLibrary.Game.Scenes
         public override void Tick(float elapsed)
         {
             this._elapsed += elapsed;
-            if (this._elapsed >= 2000.0f)
+            if (this._elapsed >= 2.0f)
             {
-                this._alpha = MathHelper.Min(this._alpha + 0.025f, 1.0f);
+                this._alpha = MathHelper.Min(this._alpha + elapsed, 1.0f);
                 if (this._alpha >= 1.0f)
                 {
                     this.SceneManager.Remove(this);
@@ -73,7 +73,7 @@ namespace Xemio.GameLibrary.Game.Scenes
             this.GraphicsDevice.Clear(new Color(221, 221, 221));
 
             this.GraphicsDevice.Render(this._texture,
-                                      new Vector2(
+                                       new Vector2(
                                           displayMode.Center.X - this._texture.Width * 0.5f,
                                           displayMode.Center.Y - this._texture.Height * 0.5f));
 

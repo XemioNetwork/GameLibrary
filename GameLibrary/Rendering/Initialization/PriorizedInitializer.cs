@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NLog;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Content;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Rendering.Initialization.Default;
 
 namespace Xemio.GameLibrary.Rendering.Initialization

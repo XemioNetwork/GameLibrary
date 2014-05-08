@@ -4,11 +4,11 @@ using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using Xemio.GameLibrary.Entities.Components;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 
 namespace Xemio.GameLibrary.Entities
 {
-    public abstract class EntitySystem : ITickHandler
+    public abstract class EntitySystem : ITickSubscriber
     {
         #region Constructors
         /// <summary>

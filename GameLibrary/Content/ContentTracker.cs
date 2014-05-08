@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLog;
 using Xemio.GameLibrary.Content.FileSystem;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Content
 {

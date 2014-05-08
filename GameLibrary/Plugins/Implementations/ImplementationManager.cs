@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using NLog;
 using Xemio.GameLibrary.Common.Link;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Plugins.Contexts;
 
 namespace Xemio.GameLibrary.Plugins.Implementations

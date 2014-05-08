@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using NLog;
 using Xemio.GameLibrary.Content.Layouts.Generation;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Entities.Components

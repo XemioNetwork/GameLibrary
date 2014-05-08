@@ -159,7 +159,7 @@ namespace Xemio.GameLibrary.Content.Formats.Xml
         /// <param name="value">The value.</param>
         public void WriteBytes(string tag, byte[] value)
         {
-            this._currentElement.Add(new XElement(tag, Convert.ToBase64String(value)));
+            this._currentElement.Add(new XElement(tag, string.Join(",", value)));
         }
         /// <summary>
         /// Writes the specified character value.

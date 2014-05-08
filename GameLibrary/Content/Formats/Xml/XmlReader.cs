@@ -144,10 +144,10 @@ namespace Xemio.GameLibrary.Content.Formats.Xml
         /// <param name="tag">The tag.</param>
         public byte[] ReadBytes(string tag)
         {
-            var base64 = (string)_currentElement.Next(tag).Element;
-            byte[] data = Convert.FromBase64String(base64);
+            var data = (string)_currentElement.Next(tag).Element;
+            string[] elements = data.Split(',');
 
-            return data;
+            return elements.Select(byte.Parse).ToArray();
         }
         /// <summary>
         /// Reads a character value.

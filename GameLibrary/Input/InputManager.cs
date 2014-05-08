@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NLog;
 using Xemio.GameLibrary.Common.Collections;
 using Xemio.GameLibrary.Components;
 using Xemio.GameLibrary.Components.Attributes;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Events.Handles;
 using Xemio.GameLibrary.Game;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Game.Subscribers;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Input.Adapters;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Input
 {
     [Require(typeof(IGameLoop))]
     [Require(typeof(IEventManager))]
 
-    public class InputManager : IConstructable, ISortableTickHandler
+    public class InputManager : IConstructable, ISortableTickSubscriber, IHandle<InputStateEvent>
     {
         #region Logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -74,18 +75,18 @@ namespace Xemio.GameLibrary.Input
             return playerInput;
         }
         #endregion
-
-        #region Event Handlers
+        
+        #region Implementation of IHandle<in InputStateEvent>
         /// <summary>
-        /// Handles the input event.
+        /// Handles the specified event.
         /// </summary>
-        /// <param name="stateEvent">The key event.</param>
-        private void ProcessState(InputStateEvent stateEvent)
+        /// <param name="evt">The event.</param>
+        public void Handle(InputStateEvent evt)
         {
-            if (stateEvent.Adapter.PlayerIndex >= this._inputs.Count)
+            if (evt.Adapter.PlayerIndex >= this._inputs.Count)
             {
-                logger.Warn("Invalid input state event for player with id {0}.", stateEvent.Adapter.PlayerIndex);
-                stateEvent.Cancel();
+                logger.Warn("Invalid input state event for player with id {0}.", evt.Adapter.PlayerIndex);
+                evt.Cancel();
             }
         }
         #endregion
@@ -96,10 +97,7 @@ namespace Xemio.GameLibrary.Input
         /// </summary>
         public void Construct()
         {
-            var eventManager = XGL.Components.Get<IEventManager>();
             var gameLoop = XGL.Components.Get<IGameLoop>();
-
-            eventManager.Subscribe<InputStateEvent>(this.ProcessState);
             gameLoop.Subscribe(this);
         }
         #endregion

@@ -1,6 +1,6 @@
-﻿namespace Xemio.GameLibrary.Game.Handlers
+﻿namespace Xemio.GameLibrary.Game.Subscribers
 {
-    public interface ISortableRenderHandler : IRenderHandler
+    public interface ISortableRenderSubscriber : IRenderSubscriber
     {
         /// <summary>
         /// Gets the index of the render. Default: 0.

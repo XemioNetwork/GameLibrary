@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using NLog;
 using Xemio.GameLibrary.Components;
+using Xemio.GameLibrary.Logging;
 
 namespace Xemio.GameLibrary.Config.Validation
 {

@@ -13,7 +13,7 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
         /// <summary>
         /// Initializes a new instance of the <see cref="FadeTransition"/> class.
         /// </summary>
-        public FadeTransition() : this(300)
+        public FadeTransition() : this(3.0f)
         {
         }
         /// <summary>
@@ -32,7 +32,7 @@ namespace Xemio.GameLibrary.Game.Scenes.Transitions
 
         #region Properties
         /// <summary>
-        /// Gets or sets the duration in milliseconds.
+        /// Gets or sets the duration in seconds.
         /// </summary>
         public float Duration { get; set; }
         #endregion

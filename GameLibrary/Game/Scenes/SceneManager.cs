@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xemio.GameLibrary.Components;
-using Xemio.GameLibrary.Game.Handlers;
+using Xemio.GameLibrary.Events.Handles;
+using Xemio.GameLibrary.Game.Subscribers;
 using Xemio.GameLibrary.Game.Timing;
 using Xemio.GameLibrary.Rendering;
 using Xemio.GameLibrary.Math;
 
 namespace Xemio.GameLibrary.Game.Scenes
 {
-    public class SceneManager : SceneContainer, IRenderHandler, ITickHandler, IConstructable
+    public class SceneManager : SceneContainer, IRenderSubscriber, ITickSubscriber, IConstructable, IHandleContainer
     {
         #region Properties
         /// <summary>
@@ -63,6 +65,16 @@ namespace Xemio.GameLibrary.Game.Scenes
 
             var loop = XGL.Components.Get<IGameLoop>();
             loop.Subscribe(this);
+        }
+        #endregion
+
+        #region Implementation of IHandleContainer
+        /// <summary>
+        /// Gets an instance list containing handle implementations.
+        /// </summary>
+        IEnumerable IHandleContainer.Children
+        {
+            get { return this.Scenes; }
         }
         #endregion
     }

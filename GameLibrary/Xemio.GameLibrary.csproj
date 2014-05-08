@@ -39,9 +39,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
-    <Reference Include="NLog">
-      <HintPath>..\NLog.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Collections\IStorage.cs" />
@@ -211,14 +208,19 @@
     <Compile Include="Entities\EntitySerializer.cs" />
     <Compile Include="Entities\Components\IPositionModifier.cs" />
     <Compile Include="Entities\EntitySystem.cs" />
+    <Compile Include="Events\Handles\Handle.cs" />
+    <Compile Include="Events\Handles\HandleObserver.cs" />
+    <Compile Include="Events\Handles\IAsyncHandle.cs" />
+    <Compile Include="Events\Handles\IHandle.cs" />
+    <Compile Include="Events\Handles\IHandleContainer.cs" />
     <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Events\ICancelableEvent.cs" />
     <Compile Include="Events\IInstigatedEvent.cs" />
     <Compile Include="Events\InstigatedEvent.cs" />
-    <Compile Include="Game\Handlers\IRenderHandler.cs" />
-    <Compile Include="Game\Handlers\ISortableRenderHandler.cs" />
-    <Compile Include="Game\Handlers\ISortableTickHandler.cs" />
-    <Compile Include="Game\Handlers\ITickHandler.cs" />
+    <Compile Include="Game\Subscribers\IRenderSubscriber.cs" />
+    <Compile Include="Game\Subscribers\ISortableRenderSubscriber.cs" />
+    <Compile Include="Game\Subscribers\ISortableTickSubscriber.cs" />
+    <Compile Include="Game\Subscribers\ITickSubscriber.cs" />
     <Compile Include="Game\Scenes\ColorScene.cs" />
     <Compile Include="Game\Scenes\LoadingScene.cs" />
     <Compile Include="Game\Scenes\SceneContainer.cs" />
@@ -239,6 +241,11 @@
     <Compile Include="Input\InputReference.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\PlayerInput.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\Providers\ILoggingProvider.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogManager.cs" />
+    <Compile Include="Logging\Providers\ConsoleLoggingProvider.cs" />
     <Compile Include="Math\Vector3.cs" />
     <Compile Include="Network\Dispatchers\ClientOutputQueue.cs" />
     <Compile Include="Network\Dispatchers\ServerOutputQueue.cs" />
@@ -424,7 +431,7 @@
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Game\Timing\GameTime.cs" />
     <Compile Include="Game\Timing\GameTimeMode.cs" />
-    <Compile Include="Game\Handlers\IGameHandler.cs" />
+    <Compile Include="Game\Subscribers\ISubscriber.cs" />
     <Compile Include="Input\InputStateEvent.cs" />
     <Compile Include="Input\Adapters\KeyboardAdapter.cs" />
     <Compile Include="Input\Adapters\MouseAdapter.cs" />
@@ -484,8 +491,6 @@
     <Compile Include="Script\CompilerError.cs" />
     <Compile Include="Script\CompilerResult.cs" />
     <Compile Include="Script\DynamicScriptLoader.cs" />
-    <Compile Include="Script\IAsyncHandler.cs" />
-    <Compile Include="Script\IHandler.cs" />
     <Compile Include="Script\IScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
     <Compile Include="Script\ScriptExecutor.cs" />
@@ -494,10 +499,7 @@
     <Compile Include="Common\SystemHelper.cs" />
     <Compile Include="Common\Collections\AutoProtectedDictionary.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\Handles\" />
-    <Folder Include="Logging\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

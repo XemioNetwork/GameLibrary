@@ -1,6 +1,6 @@
-﻿namespace Xemio.GameLibrary.Game.Handlers
+﻿namespace Xemio.GameLibrary.Game.Subscribers
 {
-    public interface IRenderHandler : IGameHandler
+    public interface IRenderSubscriber : ISubscriber
     {
         /// <summary>
         /// Handles render calls.

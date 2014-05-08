@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLog;
 using Xemio.GameLibrary.Common;
 using Xemio.GameLibrary.Math;
 using Xemio.GameLibrary.Plugins.Implementations;

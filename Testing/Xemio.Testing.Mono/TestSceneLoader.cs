@@ -38,7 +38,7 @@ namespace Xemio.Testing.Mono
         /// </summary>
         protected override void OnCompleted()
         {
-            this.TransitionTo(this.Target, new SlideTransition(Vector2.Up + Vector2.Left, 1000));
+            this.TransitionTo(this.Target, new SlideTransition(Vector2.Up + Vector2.Left, 1.0f));
         }
         /// <summary>
         /// Handles a game render.

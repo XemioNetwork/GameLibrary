@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
-using NLog;
 using Xemio.GameLibrary.Common.Threads;
 using Xemio.GameLibrary.Events;
+using Xemio.GameLibrary.Logging;
 using Xemio.GameLibrary.Network.Events.Servers;
 using Xemio.GameLibrary.Network.Exceptions;
 using Xemio.GameLibrary.Network.Packages;
